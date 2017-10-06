@@ -1,0 +1,74 @@
+﻿<footer role="contentinfo" class="text-left">
+    <div>
+        <div id="footer-logo-copy" class="text-left">
+            <a href="/"><img src="/gfx/interface/footer-logo.png" alt="ПОЖАЛУЙСТА"></a><br>
+        </div>
+
+        <div id="footer-menu" class="text-left">
+            <ul>
+                <li><strong style="font-family: Lato-Bold">О программе</strong></li>
+                @*<li>О программе</li>*@
+                <li><a href="/HowItWorks">Как это работает</a></li>
+                <li><a href="/Partners/Register">Стать партнером</a></li>
+                @*<li><a href="~/files/Rules-WeKudrovo_v1.docx">Правила программы</a></li>*@
+                <li><a href="/Rules">Правила программы</a></li>
+            </ul>
+
+            <ul>
+                <li><strong style="font-family: Lato-Bold">Партнеры</strong></li>
+                <li><a href="/Partners">Все партнеры</a></li>
+                <li><a href="/Partners/OnMap">Партнеры на карте</a></li>
+            </ul>
+
+            <ul>
+                <li><strong style="font-family: Lato-Bold">Акции</strong></li>
+                <li><a href="/Actions/New">Новые</a></li>
+                <li><a href="/Actions/Popular">Популярные</a></li>
+            </ul>
+
+            <ul>
+                <li><strong style="font-family: Lato-Bold">Обо мне</strong></li>
+                @if (UserSession.user_id > 0)
+                {
+                <li><a href="/MyCards">Мои карты</a></li>
+                <li><a href="/Favorites">Избранное</a></li>
+                <li><a href="/Profile">Профиль</a></li>
+                }
+                else
+                {
+                    <li><a href="#" data-toggle="modal" data-target="#login-modal">Мои карты</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#login-modal">Избранное</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#login-modal">Профиль</a></li>
+                    
+                }
+            </ul>
+
+            <ul>
+                <li><strong style="font-family: Lato-Bold">Обратная связь</strong></li>
+                <li><a href="/Faq">Часто задаваемы вопросы</a></li>
+                <li><a href="/FeedBack">Написать нам</a></li>
+            </ul>
+
+        </div>
+
+        <div id="footer-apps" class="text-left">
+            <a href="#"><img src="~/gfx/interface/app-appstore-footer.png"></a><br>
+            <a href="#"><img src="~/gfx/interface/app-googleplay-footer.png"></a>
+        </div>
+
+        <div id="footer-contacts" class="text-left">
+            <a class="footer-phone" href="tel:88633090257">8 (863)309-02-57</a><br>
+            <a class="footer-email" href="mailto:info@plizcard.ru">info@plizcard.ru</a>
+            <div class="footer-soc">
+                <a href="https://www.instagram.com/plizcard/"><img src="/gfx/interface/footer-soc-inst.png" alt="Instagram"></a>
+                <a href="https://vk.com/club151917183"><img src="/gfx/interface/footer-soc-vk.png" alt="VKontakte"></a>
+                <a href="https://www.facebook.com/%D0%9F%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0-266712577161876/"><img src="~/gfx/interface/footer-soc-fb.png" alt="Facebook"></a>
+            </div>
+        </div>
+    </div>
+    <div style="font-size:80%;opacity:0.3; font-family:'Lato-Regular'; color: #666666;">
+        2017 год. ООО «Пожалуйста». Все права защищены. <br/> 16+ Информацию об организаторах акций, правилах и сроках их проведения, условиях получения привилегий (бонусы и прочее)- смотрите в соответствующих разделах нашего сайта.
+    </div>
+</footer>
+
+

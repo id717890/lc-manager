@@ -1,0 +1,36 @@
+﻿@foreach (var item in Model)
+{
+    if (item.virt)
+    {
+        <div class="card-line">
+            <div class="card-image">
+                <img src="~/gfx/fish/card1.png" />
+                @*<img src="@item.image" />*@
+            </div>
+            <div class="card-description">
+                <h1>Виртуальная карта</h1>
+                <p class="card-description-main">@item.number</p>
+                <b><i>@item.status<br /></i></b>
+
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="card-line">
+            <div class="card-image">
+                <img src="~/gfx/fish/card1.png" />
+            </div>
+            <div class="card-description">
+                <h1>Пластиковая карта</h1>
+                <p class="card-description-main">@item.number</p>
+                <b><i>@item.status<br /></i></b>
+
+            </div>
+        </div>
+
+    }
+
+
+}

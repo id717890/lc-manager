@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "PersonalActions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="content-medium">
+            @*<h1>Персональные акции</h1>*@
+
+            <div class="actions">
+                @Html.Partial("_campaignsBlock",API.GetPersonalCampaigns())
+            </div>
+            <div class="button-bar">
+                <a href="#"><button class="btn" type="button">Показать ещё</button></a>
+            </div>
+        </section>
+    </main>
+</div>
+
+

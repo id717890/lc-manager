@@ -1,0 +1,574 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=990, initial-scale=1" />
+
+    <!-- insert favicon here - http://realfavicongenerator.net //-->
+
+    <title>Моя красная карта - </title>
+    <meta content="Моя красная карта" name="title" />
+    <meta name="description" content="Описание (description)" />
+    <!--    <script src="js/useragent-html-classes.js"></script>-->
+    <script src="/Scripts/useragent-html-classes.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link href="/Content/print.css" rel="stylesheet"/>
+
+    <link href="/Content/app.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+    <!-- Login -->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login-modal-header">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="login-modal-header" class="modal-title">Авторизация</h1>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-item">
+                        <label for="login-modal-input-user">Номер мобильного телефона или карты</label>
+                        <input type="text" id="login-modal-input-user" name="user">
+                    </div>
+                    <div class="form-item">
+                        <div class="form-right-link"><a href="#" data-toggle="modal" data-dismiss="modal" data-target="#remember-modal">Забыли пароль?</a></div>
+                        <label for="login-modal-input-password">Пароль</label>
+                        <input type="password" id="login-modal-input-password" name="pass">
+                    </div>
+                    <div class="form-buttons">
+                        <div>
+                            <a href="#"><button type="submit" name="login" class="btn">Войти</button></a>
+                        </div>
+                        <div class="social">
+                            Войти через соц. сети<br />
+                            <a href="#"><img src="/gfx/interface/footer-soc-fb.png" alt="Facebook" /></a><a href="#"><img src="/gfx/interface/footer-soc-vk.png" alt="VKontakte" /></a><a href="#"><img src="/gfx/interface/footer-soc-ok.png" alt="Одноклассники" /></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    	<!-- Remember -->
+<div class="modal fade" id="remember-modal" tabindex="-1" role="dialog" aria-labelledby="remember-modal-header">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="remember-modal-header" class="modal-title">Вспомнить пароль</h1>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-item">
+                        <label for="remember-modal-input-phone">Номер мобильного телефона</label>
+                        <input type="text" id="remember-modal-input-phone" name="phone">
+                    </div>
+                    <div class="form-center-item">или</div>
+                    <div class="form-item">
+                        <label for="remember-modal-input-email">Адрес электронной почты</label>
+                        <input type="email" id="remember-modal-input-email" name="email">
+                    </div>
+                    <div class="form-center-item">
+                        <button type="submit" data-toggle="modal" data-dismiss="modal" data-target="#remembercode-modal" name="ok" class="btn">ОК</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Remember code (2) -->
+<div class="modal fade" id="remembercode-modal" tabindex="-1" role="dialog" aria-labelledby="remembercode-modal-header">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="remembercode-modal-header" class="modal-title">Проверочный код</h1>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-item">
+                        <label for="remembercode-modal-input-code">Введите полученный SMS код</label>
+                        <input type="text" id="remembercode-modal-input-code" name="code">
+                    </div>
+                    <div class="form-center-item">
+                        <button type="submit" data-toggle="modal" data-dismiss="modal" data-target="#remembernew-modal" name="ok" class="btn">ОК</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Remember new pass (3) -->
+<div class="modal fade" id="remembernew-modal" tabindex="-1" role="dialog" aria-labelledby="remembernew-modal-header">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="remembernew-modal-header" class="modal-title">Новый пароль</h1>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-item">
+                        <label for="remembernew-modal-input-pass">Введите пароль</label>
+                        <input type="password" id="remembernew-modal-input-pass" name="password">
+                    </div>
+                    <div class="form-item">
+                        <label for="remembernew-modal-input-pass2">Повторите пароль</label>
+                        <input type="password" id="remembernew-modal-input-pass2" name="password2">
+                    </div>
+                    <div class="form-center-item">
+                        <button type="submit" data-dismiss="modal" name="ok" class="btn">ОК</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    	<!-- Register -->
+<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-modal-header">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="register-modal-header" class="modal-title">Регистрация</h1>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-item">
+                        <label for="register-modal-input-name">Ваше имя</label>
+                        <input type="text" id="register-modal-input-name" name="name">
+                    </div>
+                    <div class="form-item">
+                        <label for="register-modal-input-card">Номер карты</label>
+                        <input style="width: 70%; margin-right: 3%;" type="text" id="register-modal-input-card" name="card"><select name="card2" style="width: 27%">
+                            <option value="1">1</option>
+                            <option value="1">2</option>
+                            <option value="1">3</option>
+                        </select>
+                    </div>
+                    <div class="form-item">
+                        <label for="register-modal-input-phone">Номер мобильного телефона</label>
+                        <input type="text" id="register-modal-input-phone" name="phone">
+                    </div>
+                    <div class="form-item">
+                        <label for="register-modal-input-email">Адрес электронной почты</label>
+                        <input type="email" id="register-modal-input-email" name="email">
+                    </div>
+                    <div class="form-item form-item-double">
+                        <div>
+                            <select name="gender" style="width: 10em">
+                                <option value="">Пол</option>
+                                <option value="m">Муж.</option>
+                                <option value="f">Жен.</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="register-modal-input-bd">Дата рождения:</label> <input type="text" class="inverted" id="register-modal-input-bd" name="birthday">
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label for="register-modal-input-pass">Пароль</label>
+                        <input type="password" id="register-modal-input-pass" name="password">
+                    </div>
+                    <div class="form-item">
+                        <label for="register-modal-input-pass2">Повторите пароль</label>
+                        <input type="password" id="register-modal-input-pass2" name="password2">
+                    </div>
+                    <div class="form-center-item">
+                        <button type="submit" data-dismiss="modal" name="ok" class="btn">Продолжить регистрацию</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    	<!-- City select -->
+<div class="modal fade" id="city-select-modal" tabindex="-1" role="dialog" aria-labelledby="city-select-modal-header">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 id="city-select-modal-header" class="modal-title">Выберете город</h1>
+            </div>
+            <div class="modal-body" id="cityselectionlist">
+               
+                    <a href="#" data-dismiss="modal" data='2'>Анапа</a><br />
+    <a href="#" data-dismiss="modal" data='0'>Краснодар</a><br />
+    <a href="#" data-dismiss="modal" data='1'>Сочи</a><br />
+
+
+                 <!--<a href="#" data-dismiss="modal" data="2">Анапа</a><br /><a href="#" data-dismiss="modal" data="0">Краснодар</a><br /><a href="#" data-dismiss="modal" data="1">Сочи</a><br />-->
+            </div>
+        </div>
+    </div>
+</div>
+
+    <header role="banner">
+    <div id="header-line">
+        <div id="header-logo">
+            <div>
+                <a href="/"><img src="/gfx/interface/logo.png" alt="Моя красная карта" /></a>
+                <span class="header-logo-slogan">От слов к делу!</span>
+            </div>
+        </div>
+        <div id="header-contacts">
+            <a class="header-cityselect" data-toggle="modal" data-target="#city-select-modal" href="#" id="currentcity" data="2">Анапа</a>
+            <a class="header-phone" href="tel:+78008000000">+7 (800) 800-00-00</a>
+        </div>
+        <div id="header-user">
+            <a class="header-reg" data-toggle="modal" data-target="#register-modal" href="#">Зарегистрироваться</a>
+            <a class="header-enter" data-toggle="modal" data-target="#login-modal" href="#">Войти</a>
+        </div>
+    </div>
+    <div id="header-menu">
+        <nav role="navigation" id="main-nav">
+            <ul>
+                <li class=""><a href="/">Главная</a></li>
+                <li class=""><a href="/Static/HowItWorks">Как это работает</a></li>
+                <li class=""><a href="/Static/Cards">Карты</a></li>
+                <li class="active"><a href="/Static/Partners">Партнеры</a></li>
+                <li class=""><a href="/Static/Actions">Акции</a></li>
+                <li class=""><a href="/Static/MobileApplication">Мобильное приложение</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+
+    
+
+
+
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+
+        <section class="content-medium">
+
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+
+                    <h1>Партнеры</h1>
+
+                    <div id="map-switch-list" class="block-toggle active">
+                        <a id="map-switch-point" class="header-link action-blocks-toggle" data-toggle-class="block-toggle" href="#">посмотреть на карте</a>
+                        <div class="actions">
+                            <div class="plate plate3">
+    <div class="partners-imageholder">
+        <a href="#"><img src='http://test01.loycon.ru/img/1.jpeg' alt="Партнер" style="max-width:215px;max-height:124px;"></a>
+    </div>
+    <div class="plate-desc">
+        <p class="plate-short">Скидки до 50%</p>
+        <p class="plate-hero">Здоровье в каждый дом</p>
+        <div class="plate-bar">
+            <div>
+                <a href="#" data='4'><button type="button" class="btn">Подробнее</button></a>
+            </div>
+            <div>
+                <div class="star-holder">
+                    <a href="#" data-toggle="tooltip" title="" class="star-empty" data-original-title="Добавить в избранное" data='4'></a>
+                    <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='4'></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="plate plate3">
+    <div class="partners-imageholder">
+        <a href="#"><img src='http://test01.loycon.ru/img/2.jpg' alt="Партнер" style="max-width:215px;max-height:124px;"></a>
+    </div>
+    <div class="plate-desc">
+        <p class="plate-short">Еще больше бонусов</p>
+        <p class="plate-hero">С нами выгодно</p>
+        <div class="plate-bar">
+            <div>
+                <a href="#" data='5'><button type="button" class="btn">Подробнее</button></a>
+            </div>
+            <div>
+                <div class="star-holder">
+                    <a href="#" data-toggle="tooltip" title="" class="star-empty" data-original-title="Добавить в избранное" data='5'></a>
+                    <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='5'></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="plate plate3">
+    <div class="partners-imageholder">
+        <a href="#"><img src='http://test01.loycon.ru/img/3.jpg' alt="Партнер" style="max-width:215px;max-height:124px;"></a>
+    </div>
+    <div class="plate-desc">
+        <p class="plate-short">10% на все товары</p>
+        <p class="plate-hero">Дети цветы жизни</p>
+        <div class="plate-bar">
+            <div>
+                <a href="#" data='6'><button type="button" class="btn">Подробнее</button></a>
+            </div>
+            <div>
+                <div class="star-holder">
+                    <a href="#" data-toggle="tooltip" title="" class="star-empty" data-original-title="Добавить в избранное" data='6'></a>
+                    <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='6'></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="plate plate3">
+    <div class="partners-imageholder">
+        <a href="#"><img src='http://test01.loycon.ru/img/4.jpg' alt="Партнер" style="max-width:215px;max-height:124px;"></a>
+    </div>
+    <div class="plate-desc">
+        <p class="plate-short">До 70% бонусов</p>
+        <p class="plate-hero">В здоровом теле, здоровый дух</p>
+        <div class="plate-bar">
+            <div>
+                <a href="#" data='7'><button type="button" class="btn">Подробнее</button></a>
+            </div>
+            <div>
+                <div class="star-holder">
+                    <a href="#" data-toggle="tooltip" title="" class="star-empty" data-original-title="Добавить в избранное" data='7'></a>
+                    <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='7'></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+                        </div>
+                        <div class="button-bar">
+                            <a href="#"><button class="btn" type="button">Показать ещё</button></a>
+                        </div>
+                    </div>
+
+                    <div id="map-switch-map" class="block-toggle">
+                        <a id="map-switch" class="header-link action-blocks-toggle" data-toggle-class="block-toggle" href="#">Список</a>
+
+                        <div class="content-bg">
+                            <div id="map"><ymaps class="ymaps-map ymaps-i-ua_js_yes" style="z-index: 0; width: 0px; height: 0px;"><ymaps class="ymaps-glass-pane ymaps-events-pane" unselectable="on" style="z-index: 500; position: absolute; width: 0px; height: 0px; left: 0px; top: 0px; -webkit-user-select: none; transform: translate3d(0px, 0px, 0px) scale(1, 1); cursor: url(&quot;https://api-maps.yandex.ru/2.0.44/release/../images/ef50ac9e93aaebe3299791c79f277f8e.cur&quot;) 16 16, url(&quot;https://api-maps.yandex.ru/2.0.44/release/../images/ef50ac9e93aaebe3299791c79f277f8e.cur&quot;), move;"></ymaps><ymaps class="ymaps-layers-pane" style="z-index: 100; position: absolute; left: 0px; top: 0px;"><ymaps style="z-index: 150; position: absolute; transform: translate3d(0px, 0px, 0px) scale(1, 1);"><canvas height="256" width="256" style="position: absolute; width: 256px; height: 256px; left: -128px; top: -128px;"></canvas></ymaps></ymaps><ymaps class="ymaps-copyrights-pane" style="z-index: 1000; position: absolute;"><ymaps><ymaps class="ymaps-copyrights-logo"><ymaps class="ymaps-logotype-div"><a target="_blank" class="ymaps-logo-link ymaps-logo-link-ru" href="https://yandex.ru/maps/?origin=jsapi&amp;ll=37.640000,55.760000&amp;z=10&amp;l="><ymaps class="ymaps-logo-link-wrap"></ymaps></a></ymaps></ymaps><ymaps class="ymaps-copyrights-legend"><ymaps class="ymaps-copyright-legend-container"><ymaps class="ymaps-copyright-legend"><ymaps class="ymaps-copyright-legend-element ymaps-copyright-legend-element-black"><ymaps style="display: inline;">© Яндекс</ymaps></ymaps></ymaps><ymaps class="ymaps-copyright-agreement ymaps-copyright-agreement-black"><a href="https://legal.yandex.ru/maps_termsofuse/?lang=ru" target="_blank">Условия использования</a></ymaps></ymaps></ymaps></ymaps></ymaps><ymaps style="z-index: 850; height: 0px; width: 0px; bottom: 0px; left: 0px; position: absolute;"><ymaps style="bottom: 5px; left: 0px; position: absolute;"><iframe src="https://api-maps.yandex.ru/services/inception/?lang=ru_RU&amp;iframe_id=id_1471197666603921823&amp;api_version=2.0&amp;url=%2Fmap&amp;data=%7B%22mapState%22%3A%7B%22origin%22%3A%22jsapi_2_0%22%2C%22source%22%3A%22api-maps%22%2C%22from%22%3A%22api-maps%22%2C%22host%22%3A%22%22%7D%7D" width="0" height="0" scrolling="no" frameborder="0" style="overflow: hidden;"></iframe></ymaps></ymaps></ymaps></div>
+                        </div>
+
+                    </div>
+
+
+                    <script src="https://api-maps.yandex.ru/2.0-stable/?load=package.standard&amp;lang=ru-RU" type="text/javascript"> </script>
+                    <script>
+							var myMap;
+							ymaps.ready(function () {
+								myMap = new ymaps.Map("map", {
+									center: [55.76, 37.64],
+									zoom: 10
+								});
+
+							});
+                    </script>
+
+                </div>
+
+                <div class="twocolumns-aside">
+
+						<div class="plate plate-map-filter">
+
+							<div class="plate-map-filter-block">
+								<p><strong>Тип партнеров</strong></p>
+								<div class="map-filter-line">
+									<div>
+										<label for="map1" class="icheck-label icheck[md664]"><strong>все</strong></label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[md664]"><input type="checkbox" id="map1" name="x" class="icheck-input icheck[md664]"></div>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<label for="map2" class="icheck-label icheck[23upz]">выдают карты</label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[23upz]"><input type="checkbox" id="map2" name="x" class="icheck-input icheck[23upz]"></div>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<label for="map3" class="icheck-label icheck[blale]">не выдают карты</label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[blale]"><input id="map3" type="checkbox" name="x" class="icheck-input icheck[blale]"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="plate-map-filter-block">
+								<p><strong>Тип партнеров</strong></p>
+								<div class="map-filter-line">
+									<div>
+										<label for="map4" class="icheck-label icheck[2sgfs]"><strong>все</strong></label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[2sgfs]"><input id="map4" type="checkbox" name="x" class="icheck-input icheck[2sgfs]"></div>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<label for="map5" class="icheck-label icheck[lapts]">в интернете</label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[lapts]"><input id="map5" type="checkbox" name="x" class="icheck-input icheck[lapts]"></div>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<label for="map6" class="icheck-label icheck[8knd7]">в городе</label>
+									</div>
+									<div>
+										<div class="amethyst_checkbox icheck-item icheck[8knd7]"><input id="map6" type="checkbox" name="x" class="icheck-input icheck[8knd7]"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="plate-map-filter-block">
+								<p><strong>Категории</strong></p>
+								<div class="map-filter-line">
+									<div>
+										<a href="#"><strong>дом и семья</strong></a>
+									</div>
+									<div>
+										<span class="filter-number filter-number-highlight">9</span>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<a href="#">еда и напитки</a>
+									</div>
+									<div>
+										<span class="filter-number">11</span>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<a href="#">одежда и обувь</a>
+									</div>
+									<div>
+										<span class="filter-number">3</span>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<a href="#">красота</a>
+									</div>
+									<div>
+										<span class="filter-number">2</span>
+									</div>
+								</div>
+
+								<div class="map-filter-line">
+									<div>
+										<a href="#">отдых</a>
+									</div>
+									<div>
+										<span class="filter-number">7</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<section class="aside-apps">
+							<h1>Моя красная карта</h1>
+							<p>Мобильное приложение</p>
+							<a href="#"><img src="/gfx/interface/app-appstore.png"></a><br>
+							<a href="#"><img src="/gfx/interface/app-googleplay.png"></a>
+						</section>
+					</div>
+			</div>
+
+
+
+        </section>
+    </main>
+</div>
+
+    <footer role="contentinfo">
+    <div>
+        <div id="footer-logo-copy">
+            <a href="#"><img src="/gfx/interface/footer-logo.png" alt="Моя красная карта" /></a><br />
+            Копирайт
+        </div>
+        <div id="footer-menu">
+            <ul>
+                <li><strong>О программе</strong></li>
+                <li><a href="/Static/HowItWorks">Как это работает</a></li>
+                <li><a href="/Static/Partners/Register">Стать партнером</a></li>
+                <li><a href="/Static/Rules">Правила</a></li>
+                <li><a href="/Static/Programs">Программы</a></li>
+            </ul>
+            <ul>
+                <li><strong>Партнеры</strong></li>
+                <li><a href="/Static/Partners">Все партнеры</a></li>
+                <li><a href="/Static/Partners/OnMap">Партнеры на карте</a></li>
+            </ul>
+            <ul>
+                <li><strong>Акции</strong></li>
+                <li><a href="/Static/Actions/New">Новые</a></li>
+                <li><a href="/Static/Actions/Popular">Популярные</a></li>
+            </ul>
+            <ul>
+                <li><strong>Обо мне</strong></li>
+                <li><a href="#">Мои карты</a></li>
+                <li><a href="#">Избранное</a></li>
+                <li><a href="#">Профиль</a></li>
+            </ul>
+            <ul>
+                <li><strong>Обратная связь</strong></li>
+                <li><a href="/Static/Faq">Часто задаваемы вопросы</a></li>
+                <li><a href="/Static/FeedBack">Написать нам</a></li>
+            </ul>
+        </div>
+        <div id="footer-apps">
+            <a href="#"><img src="/gfx/interface/app-appstore.png" /></a><br />
+            <a href="#"><img src="/gfx/interface/app-googleplay.png" /></a>
+        </div>
+        <div id="footer-contacts">
+            <a class="footer-phone" href="tel:+78008000000">+7 (800) 800-00-00</a><br />
+            <a class="footer-email" href="mailto:main@myredcard.ru">main@myredcard.ru</a>
+            <div class="footer-soc">
+                <a href="#"><img src="/gfx/interface/footer-soc-fb.png" alt="Facebook" /></a>
+                <a href="#"><img src="/gfx/interface/footer-soc-vk.png" alt="VKontakte" /></a>
+                <a href="#"><img src="/gfx/interface/footer-soc-ok.png" alt="Одноклассники" /></a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+    <script src="https://yastatic.net/jquery/2.2.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js">\x3C/script>')</script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="/Scripts/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+2017-09-28 15:58:22.864 +02:00 [Information] Client login 1 1
+2017-09-28 15:58:23.018 +02:00 [Information] Get Client 1 1

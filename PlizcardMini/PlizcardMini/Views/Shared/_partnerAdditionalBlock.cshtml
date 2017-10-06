@@ -1,0 +1,7 @@
+﻿@foreach(var item in Model)
+{ 
+<div class="plate plate-content">
+    <h1>@item.name</h1>
+    <p>@Html.Raw(item.description)</p>
+</div>
+}

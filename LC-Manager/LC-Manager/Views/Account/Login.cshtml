@@ -1,0 +1,74 @@
+﻿@model LC_Manager.Models.UserModel
+@{
+    Layout = null;
+}
+@*@Html.ValidationSummary()*@
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Login</title>
+        <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
+        <link rel="stylesheet" href="~/Content/Site.css">
+        <link rel="stylesheet" href="~/Content/font-awesome.min.css"/>
+    </head>
+    <body style="background-color: #FCFCFC;">
+        <div class="container container-table">
+            <div class="row vertical-center-row">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="div-contain-align" style="max-height:230px; max-width:376px; font-family: AFuturica; padding-top:10px;">
+                        <p style="font-size: 18px">LC-MANAGER</p>
+                        <p style="font-size: 16px; color:#808080;">
+                            Для авторизации необходимо ввести ваши персональные логин и пароль. В случае возникновения проблем свяжитесь с вашим менеджером или обратитесь в службу технической поддержки удобным для вас способом
+                        </p>
+                        <address style="font-size: 14px; color:#58AFDD">
+                            <i class="fa fa-phone"></i> <span style="vertical-align: 2px;">+</span>7 (909) 786-62-52<br>
+                            <i class="fa fa-envelope"></i>
+                            <a href="mailto:help@lc-manager.ru">help@lc-manager.ru</a>
+                        </address>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">                    
+                    <div style="border: 1px solid #E8E8E8; border-radius: 10px; height:230px; width:376px; background-color: #FAFAFA;">
+                        <p style="padding-left: 15px; padding-top:28px; font-size:16px; font-family:AFuturica;">Авторизация</p>
+                        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken();
+                            <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl"/>
+                            <div class="form-group" style="height:36px;">
+                                <div class="col-xs-12">                                    
+                                    @Html.TextBoxFor(x => x.Phone, new { @class = "form-control AFuturicaBook", @placeholder = "Номер телефона" })                                    
+                                    @*<span class="glyphicon form-control-feedback"><i class="fa fa-check" style="color: #24AA98; display: flex; padding-top: 10px;"></i></span>*@
+                                    @Html.ValidationMessageFor(x => x.Phone, "", new { @style = "color:red;"})
+                                </div>
+                            </div>
+                            <div class="form-group" style="height:36px;">
+                                <div class="col-xs-12">
+                                    @Html.PasswordFor(x => x.Password, new { @class = "form-control AFuturicaBook", @placeholder = "Пароль" })
+                                    @Html.ValidationMessageFor(x => x.Password, "", new { @style = "color:red;" })
+                                </div>
+                            </div>
+                            <div class="form-group vertical-align">
+                                <div class="col-xs-6">
+                                    <button type="submit" style="color:#fff; background:#58AFDD; width:119px; height:36px;" class="btn AFuturicaMedium" >Войти</button>
+                                </div>
+                                <div class="col-xs-6" style="vertical-align: middle;">
+                                    <a href="@Url.Action("ForgetPassword", "Account")" class="pull-right" style="font-family:AFuturicaBook; font-size:14px; padding-top:8px;">Забыли пароль?</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+        <script type="text/javascript">
+            jQuery(function ($) {
+                $("#Phone").mask("+7 (999) 999-99-99");
+            });
+        </script>
+    </body>
+</html>
