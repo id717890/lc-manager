@@ -116,4 +116,150 @@ namespace LC_Manager.Models
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
     }
+
+    public class ChequeMaxSumRedeemRequest
+    {
+        public Int16 Operator { get; set; }
+
+        public Int64 Phone { get; set; }
+
+        public decimal ChequeSum { get; set; }
+    }
+
+    public class ChequeMaxSumRedeemResponse
+    {
+        public decimal MaxSum { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class Item
+    {
+        public int Position { get; set; }
+        public string Code { get; set; }
+        public decimal Price { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Amount { get; set; }
+        public decimal PaidByBonus { get; set; }
+    }
+
+    public class ChequeAddRequest
+    {
+        public long Card { get; set; }
+        public DateTime ChequeTime { get; set; }
+        public long Phone { get; set; }
+        public int Partner { get; set; }
+        public string POS { get; set; }
+        public decimal Amount { get; set; }
+        public decimal PaidByBonus { get; set; }
+        public string Number { get; set; }
+        public List<Item> ItemData { get; set; }
+    }
+
+    public class ChequeAddResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public decimal Bonus { get; set; }
+        public decimal Balance { get; set; }
+    }
+
+    public class RedeemRequest
+    {
+        public long Card { get; set; }
+        public long Phone { get; set; }
+        public int Partner { get; set; }
+        public decimal Bonus { get; set; }
+    }
+
+    public class RedeemResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public decimal Bonus { get; set; }
+        public decimal Balance { get; set; }
+    }
+
+    public class TerminalChequeAddResult
+    {
+        public string Amount { get; set; }
+        public string BonusAdd { get; set; }
+        public string BonusRedeem { get; set; }
+        public string Cash { get; set; }
+    }
+
+    public class Cheque
+    {
+        public Int32 Id { get; set; }
+        public string Number { get; set; }
+        public DateTime Date { get; set; }
+        public string OperationType { get; set; }
+        public decimal Summ { get; set; }
+        public decimal SummDiscount { get; set; }
+        public decimal Bonus { get; set; }
+        public decimal PaidByBonus { get; set; }
+        public decimal Discount { get; set; }
+        public string Partner { get; set; }
+        public string Shop { get; set; }
+        public Int64 CardNumber { get; set; }
+        public string PosName { get; set; }
+        public Cheque() { }
+        public Cheque(Int32 id, string number, DateTime date, string operationtype, decimal summ, decimal summdiscount, decimal bonus, decimal paidbybonus, decimal discount, string partner, string shop, Int64 cardnumber)
+        {
+            Id = id;
+            Number = number;
+            OperationType = operationtype;
+            Summ = summ;
+            SummDiscount = summdiscount;
+            Bonus = bonus;
+            PaidByBonus = paidbybonus;
+            Discount = discount;
+            Partner = partner;
+            Shop = shop;
+            CardNumber = cardnumber;
+        }
+    }
+
+    public class GetChequesByCardRequest
+    {
+        public Int64 CardNumber { get; set; }
+    }
+
+    public class GetChequesByCardResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public List<Cheque> ChequeData { get; set; }
+        public GetChequesByCardResponse()
+        {
+            ChequeData = new List<Cheque>();
+        }
+    }
+
+    public class RefundRequest
+    {
+        public Int64 Card { get; set; }
+        public DateTime ChequeTime { get; set; }
+        public Int64 Phone { get; set; }
+        public Int16 Partner { get; set; }
+        public string Pos { get; set; }
+        public decimal Amount { get; set; }
+        public decimal PaidByBonus { get; set; }
+        public string Number { get; set; }
+        public int PurchaseId { get; set; }
+        public string PurchaseNumber { get; set; }
+        public DateTime? PurchaseDate { get; set; }
+        public string PurchasePos { get; set; }
+        public string PurchaseTerminal { get; set; }
+    }
+
+    public class RefundResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public decimal Added { get; set; }
+        public decimal Balance { get; set; }
+        public decimal Redeemed { get; set; }
+        public decimal Amount { get; set; }
+    }
 }

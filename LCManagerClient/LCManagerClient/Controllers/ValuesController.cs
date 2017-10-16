@@ -424,6 +424,15 @@ namespace LCManagerClient.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        [HttpPost]
+        [Route("ChequeMaxSumRedeem")]
+        public ChequeMaxSumRedeemResponse ChequeMaxSumRedeem(ChequeMaxSumRedeemRequest request)
+        {
+            var result = new ServerChequeMaxSumRedeem();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
         //// GET api/values
         //public IEnumerable<string> Get()
         //{

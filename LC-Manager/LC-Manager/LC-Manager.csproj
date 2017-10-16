@@ -296,7 +296,11 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="img\cal-next.png" />
     <Content Include="img\cal-rew.png" />
+    <Content Include="img\del.png" />
+    <Content Include="img\depos.png" />
     <Content Include="img\doc.png" />
+    <Content Include="img\input-clearable-x.png" />
+    <Content Include="img\mes.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\next.png" />
     <Content Include="img\plus.png" />
@@ -424,6 +428,7 @@
     <Content Include="Views\Home\Sales.cshtml" />
     <Content Include="Views\Home\Terminal.cshtml" />
     <Content Include="Views\Home\Clients.cshtml" />
+    <Content Include="Views\Home\_registrationError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

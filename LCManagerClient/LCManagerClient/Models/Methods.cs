@@ -19,7 +19,6 @@ using System.Web.Script.Serialization;
 
 namespace LCManagerClient.Models
 {
-
     public class GetConfirmCodeRequest
     {
         public long Phone { get; set; }
@@ -3118,6 +3117,34 @@ namespace LCManagerClient.Models
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             reader.Close();
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ChequeMaxSumRedeemRequest
+    {
+        public Int16 Operator { get; set; }
+
+        public Int64 Phone { get; set; }
+
+        public decimal ChequeSum { get; set; }
+    }
+
+    public class ChequeMaxSumRedeemResponse
+    {
+        public decimal MaxSum { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerChequeMaxSumRedeem
+    {
+        public ChequeMaxSumRedeemResponse ProcessRequest(SqlConnection cnn, ChequeMaxSumRedeemRequest request)
+        {
+            var returnValue = new ChequeMaxSumRedeemResponse();
+            cnn.Open();
+            returnValue.MaxSum = request.ChequeSum/10;
             cnn.Close();
             return returnValue;
         }

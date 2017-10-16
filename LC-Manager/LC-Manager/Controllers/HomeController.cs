@@ -31,9 +31,9 @@ namespace LC_Manager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Terminal(RegisterModel model)
+        public string Terminal(RegisterModel model)
         {
-            string connectionstring = ConfigurationManager.ConnectionStrings["Webapi"].ConnectionString;
+            string connectionstring = ConfigurationManager.ConnectionStrings["Client"].ConnectionString;
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(connectionstring);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -108,22 +108,25 @@ namespace LC_Manager.Controllers
                         }
                         else
                         {
-                            return View();
+                            return JsonConvert.SerializeObject(registrationUserResponse);
+                            //return View(registrationUserResponse);
                         }
                     }
                 }
             }
             else
             {
-                return View(confirmResponse);
+                return "";
+                //return View(confirmResponse);
             }
-            return View();
+            return "";
+            //return View();
         }
 
         [HttpPost]
         public ActionResult AjaxRegister(RegisterModel data)
         {
-            string connectionstring = ConfigurationManager.ConnectionStrings["Webapi"].ConnectionString;
+            string connectionstring = ConfigurationManager.ConnectionStrings["Client"].ConnectionString;
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(connectionstring);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -176,7 +179,7 @@ namespace LC_Manager.Controllers
                 catch { }
             }
 
-            string connectionstring = ConfigurationManager.ConnectionStrings["Webapi"].ConnectionString;
+            string connectionstring = ConfigurationManager.ConnectionStrings["Client"].ConnectionString;
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(connectionstring);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -202,6 +205,131 @@ namespace LC_Manager.Controllers
         public ActionResult Clients()
         {
             return View();
+        }
+
+        [HttpPost]
+        public string TerminalMaxSumRedeem(TerminalRedeemSumModel model)
+        {
+            ChequeMaxSumRedeemRequest chequeMaxSumRedeemRequest = new ChequeMaxSumRedeemRequest();
+            chequeMaxSumRedeemRequest.Operator = 2;
+            chequeMaxSumRedeemRequest.Phone = Convert.ToInt64(model.Phone.Substring(4).Replace(")", "").Replace("-", "").Replace(" ", ""));
+            chequeMaxSumRedeemRequest.ChequeSum = Convert.ToDecimal(model.Sum);
+            string connectionstring = ConfigurationManager.ConnectionStrings["Client"].ConnectionString;
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(connectionstring);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.PostAsJsonAsync("api/values/ChequeMaxSumRedeem", chequeMaxSumRedeemRequest).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                ChequeMaxSumRedeemResponse chequeMaxSumRedeemResponse = response.Content.ReadAsAsync<ChequeMaxSumRedeemResponse>().Result;
+                if (chequeMaxSumRedeemResponse.ErrorCode == 0)
+                {
+                    return JsonConvert.SerializeObject(chequeMaxSumRedeemResponse);
+                    //return Json(clientInfoResponse);
+                }
+                return JsonConvert.SerializeObject("Ok");
+            }
+            else
+            {
+                return JsonConvert.SerializeObject("Error");
+            }
+        }
+
+        [HttpPost]
+        public string TerminalChequeAdd(TerminalChequeModel chequeModel)
+        {
+            string lcclient = ConfigurationManager.ConnectionStrings["Partner"].ConnectionString;
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(lcclient);
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));            
+            if(chequeModel.PaidByBonus > 0)
+            {
+                RedeemRequest redeemRequest = new RedeemRequest();
+                redeemRequest.Bonus = chequeModel.PaidByBonus;
+                redeemRequest.Card = chequeModel.Card;
+                redeemRequest.Partner = 2;
+                HttpResponseMessage responseRedeem = httpClient.PostAsJsonAsync("api/values/Redeem", redeemRequest).Result;
+                if(responseRedeem.IsSuccessStatusCode)
+                {
+                    RedeemResponse redeemResponse = responseRedeem.Content.ReadAsAsync<RedeemResponse>().Result;
+                    if(redeemResponse.ErrorCode > 0)
+                    {
+                        return JsonConvert.SerializeObject(redeemResponse);
+                    }
+                }
+            }
+
+            ChequeAddRequest chequeAdd = new ChequeAddRequest();
+            /*номер карты, сумма покупки, сумма списаных бонусов, номер, время, код ТТ*/
+            chequeAdd.Amount = chequeModel.Amount;
+            chequeAdd.Card = chequeModel.Card;
+            chequeAdd.ChequeTime = DateTime.Now;
+            chequeAdd.PaidByBonus = chequeModel.PaidByBonus;
+            chequeAdd.Number = DateTime.Now.ToString("HHmmss");
+            chequeAdd.Partner = 2;
+            HttpResponseMessage responseCheque = httpClient.PostAsJsonAsync("api/values/ChequeAdd", chequeAdd).Result;
+            if(responseCheque.IsSuccessStatusCode)
+            {
+                ChequeAddResponse chequeAddResponse = responseCheque.Content.ReadAsAsync<ChequeAddResponse>().Result;
+                TerminalChequeAddResult result = new TerminalChequeAddResult
+                {
+                    Amount = chequeAdd.Amount.ToString(),
+                    BonusAdd = chequeAddResponse.Bonus.ToString(),
+                    BonusRedeem = chequeAdd.PaidByBonus.ToString(),
+                    Cash = (chequeAdd.Amount - chequeAdd.PaidByBonus).ToString()
+                };
+                return JsonConvert.SerializeObject(result);
+            }
+            return "";
+        }
+
+        [HttpPost]
+        public string TerminalGetCheques(long Card)
+        {
+            string lcpartner = ConfigurationManager.ConnectionStrings["Partner"].ConnectionString;
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(lcpartner);
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            GetChequesByCardRequest chequesByCardRequest = new GetChequesByCardRequest
+            {
+                CardNumber = Card
+            };
+            HttpResponseMessage responseCheques = httpClient.PostAsJsonAsync("api/values/GetChequesByCard", chequesByCardRequest).Result;
+            if(responseCheques.IsSuccessStatusCode)
+            {
+                GetChequesByCardResponse chequesByCardResponse = responseCheques.Content.ReadAsAsync<GetChequesByCardResponse>().Result;
+                return JsonConvert.SerializeObject(chequesByCardResponse);
+            }
+            return "";
+        }
+
+        [HttpPost]
+        public string TerminalRefund(TerminalRefundModel refundModel)
+        {
+            string lcpartner = ConfigurationManager.ConnectionStrings["Partner"].ConnectionString;
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(lcpartner);
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            RefundRequest refundRequest = new RefundRequest
+            {
+                Amount = refundModel.ChequeSum,
+                Card = refundModel.Card,
+                ChequeTime = DateTime.Now,
+                PurchaseNumber = refundModel.ChequeNum,
+                PurchaseDate = refundModel.ChequeDate,
+                Partner = 2
+            };
+            HttpResponseMessage responseRefund = httpClient.PostAsJsonAsync("api/values/Refund", refundRequest).Result;
+            if (responseRefund.IsSuccessStatusCode)
+            {
+                RefundResponse refundResponse = responseRefund.Content.ReadAsAsync<RefundResponse>().Result;
+                return JsonConvert.SerializeObject(refundResponse);
+            }
+            return "";
         }
     }
 }

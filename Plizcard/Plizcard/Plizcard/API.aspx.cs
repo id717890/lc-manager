@@ -1054,6 +1054,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string SetClientPassword(string Phone, string Code, string Password)
         {
+            Log.Information("{Method} with cookie {cookie} and Phone = {Phone} and Code = {Code} and Pasword = {Password}", "SetClientPassword", (string)HttpContext.Current.Request.Headers["Cookie"], Phone, Code, Password);
             long llogin = 0;
             Phone = HttpUtility.UrlDecode(Phone, System.Text.Encoding.Default);
             Phone = Phone.Replace("+", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ", "");
@@ -1071,6 +1072,8 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string SaveProfile1(string Lastname, string Firstname, string Middlename, int Gender, bool Haschildren, DateTime Birthday, string Description)
         {
+            Log.Information("{Method} with cookie {cookie} and Lastname = {Lastname} and Firstname = {Firstname} and Middlename = {Middlename} and Gender = {Gender} and Haschildren = {Haschildren} and Birthday = {Birthday} and Description = {Description}", 
+                            "SetClientPassword", (string)HttpContext.Current.Request.Headers["Cookie"], Lastname, Firstname, Middlename, Gender, Haschildren, Birthday, Description);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var desc = HttpUtility.UrlDecode(Description, System.Text.Encoding.Default);
@@ -1096,6 +1099,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string SaveProfilePhone(string Phone, string Code)
         {
+            Log.Information("{Method} with cookie {cookie} and Phone = {Phone} and Code = {Code}", "SaveProfilePhone", (string)HttpContext.Current.Request.Headers["Cookie"], Phone, Code);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             long llogin = 0;
@@ -1128,6 +1132,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string GetCampaign(int CampaignID)
         {
+            Log.Information("{Method} with cookie {cookie} and CampaignID = {CampaignID}", "GetCampaign", (string)HttpContext.Current.Request.Headers["Cookie"], CampaignID);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var r = ApiConfig.GetCampaign(CampaignID);
@@ -1152,6 +1157,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string GetCampaignInfo(int CampaignID)
         {
+            Log.Information("{Method} with cookie {cookie} and CampaignID = {CampaignID}", "GetCampaignInfo", (string)HttpContext.Current.Request.Headers["Cookie"], CampaignID);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var r = ApiConfig.GetCampaignInfo(CampaignID);
@@ -1168,6 +1174,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string ClientPartners()
         {
+            Log.Information("{Method} with cookie {cookie}", "ClientPartners", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var r = ApiConfig.ClientGetPartners();
@@ -1194,6 +1201,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string ClientCampaigns()
         {
+            Log.Information("{Method} with cookie {cookie}", "ClientCampaigns", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
 
@@ -1236,6 +1244,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string GetSetClientCampaign(int CampaignID, bool Remove = false)
         {
+            Log.Information("{Method} with cookie {cookie} and CampaignID = {CampaignID} and Remove = {Remove}", "GetSetClientCampaign", (string)HttpContext.Current.Request.Headers["Cookie"], CampaignID, Remove);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var personalCampaigns = (List<lcclient.Campaign>)UserSession.get("personalCampaigns");
@@ -1270,6 +1279,7 @@ namespace PlizCard
         [System.Web.Services.WebMethod]
         public static string GetSetClientPartner(int PartnerID, bool Remove = false)
         {
+            Log.Information("{Method} with cookie {cookie} and PartnerID = {PartnerID} and Remove = {Remove}", "GetSetClientPartner", (string)HttpContext.Current.Request.Headers["Cookie"], PartnerID, Remove);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var personalPartners = (List<lcclient.Partner>)UserSession.get("personalPartners");
@@ -1329,6 +1339,7 @@ namespace PlizCard
         [WebMethod]
         public static string getSessionID()
         {
+            Log.Information("{Method} with cookie {cookie}", "getSessionID", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
 
@@ -1338,6 +1349,7 @@ namespace PlizCard
         [WebMethod]
         public static string AddEmail(string Email)
         {
+            Log.Information("{Method} with cookie {cookie} and Email = {Email}", "AddEmail", (string)HttpContext.Current.Request.Headers["Cookie"], Email);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.AddEmail(Email));
@@ -1346,6 +1358,7 @@ namespace PlizCard
         [WebMethod]
         public static string AddIDFB(string idFB)
         {
+            Log.Information("{Method} with cookie {cookie} and idFB = {idFB}", "AddIDFB", (string)HttpContext.Current.Request.Headers["Cookie"], idFB);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.AddIDFB(idFB));
@@ -1354,6 +1367,7 @@ namespace PlizCard
         [WebMethod]
         public static string AddIDVK(string idVK)
         {
+            Log.Information("{Method} with cookie {cookie} and idVK = {idVK}", "AddIDVK", (string)HttpContext.Current.Request.Headers["Cookie"], idVK);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.AddIDVK(idVK));
@@ -1362,6 +1376,7 @@ namespace PlizCard
         [WebMethod]
         public static string AddIDOK(string idOK)
         {
+            Log.Information("{Method} with cookie {cookie} and idOK = {idOK}", "AddIDOK", (string)HttpContext.Current.Request.Headers["Cookie"], idOK);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.AddIDOK(idOK));
@@ -1370,6 +1385,7 @@ namespace PlizCard
         [WebMethod]
         public static string AddPhone(string Phone)
         {
+            Log.Information("{Method} with cookie {cookie} and Phone = {Phone}", "AddPhone", (string)HttpContext.Current.Request.Headers["Cookie"], Phone);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             long llogin = 0;
@@ -1386,6 +1402,7 @@ namespace PlizCard
         [WebMethod]
         public static string GetBalance(string Phone)
         {
+            Log.Information("{Method} with cookie {cookie} and Phone = {Phone}", "GetBalance", (string)HttpContext.Current.Request.Headers["Cookie"], Phone);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             long llogin = 0;
@@ -1401,6 +1418,7 @@ namespace PlizCard
         [WebMethod]
         public static string ClientAddCard(string Card)
         {
+            Log.Information("{Method} with cookie {cookie} and Card = {Card}", "ClientAddCard", (string)HttpContext.Current.Request.Headers["Cookie"], Card);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             long llogin = 0;
@@ -1415,6 +1433,7 @@ namespace PlizCard
         [WebMethod]
         public static string DeletePhone(string Phone)
         {
+            Log.Information("{Method} with cookie {cookie} and Phone = {Phone}", "DeletePhone", (string)HttpContext.Current.Request.Headers["Cookie"], Phone);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             long llogin = 0;
@@ -1430,6 +1449,7 @@ namespace PlizCard
         [WebMethod]
         public static string LeaveMessage(string Subject, string Text)
         {
+            Log.Information("{Method} with cookie {cookie} and Subject = {Subject} and Text = {Text}", "LeaveMessage", (string)HttpContext.Current.Request.Headers["Cookie"], Subject, Text);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.LeaveMessage(Subject, Text));
@@ -1438,6 +1458,7 @@ namespace PlizCard
         [WebMethod]
         public static string SelectPreferences(int CategoryID, bool Remove)
         {
+            Log.Information("{Method} with cookie {cookie} and CategoryID = {CategoryID} and Remove = {Remove}", "SelectPreferences", (string)HttpContext.Current.Request.Headers["Cookie"], CategoryID, Remove);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.SelectPreferences(CategoryID, Remove));
@@ -1446,6 +1467,7 @@ namespace PlizCard
         [WebMethod]
         public static string SendEmailCode(string Email)
         {
+            Log.Information("{Method} with cookie {cookie} and Email = {Email}", "SendEmailCode", (string)HttpContext.Current.Request.Headers["Cookie"], Email);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.SendEmailCode(Email));
@@ -1454,6 +1476,7 @@ namespace PlizCard
         [WebMethod]
         public static string ValidateEmail(string Email, string Code, int Client = 0)
         {
+            Log.Information("{Method} with cookie {cookie} and Email = {Email} and Code = {Code} and Client = {Client}", "ValidateEmail", (string)HttpContext.Current.Request.Headers["Cookie"], Email, Code, Client);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.ValidateEmail(Email, Code, Client));
@@ -1462,6 +1485,7 @@ namespace PlizCard
         [WebMethod]
         public static string ClientAddEmail(string Email, string Code)
         {
+            Log.Information("{Method} with cookie {cookie} and Email = {Email} and Code = {Code}", "ClientAddEmail", (string)HttpContext.Current.Request.Headers["Cookie"], Email, Code);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var ret = new StandartResponse();
@@ -1490,6 +1514,7 @@ namespace PlizCard
         [WebMethod]
         public static string PersonalCampaigns()
         {
+            Log.Information("{Method} with cookie {cookie}", "PersonalCampaigns", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
 
@@ -1514,6 +1539,7 @@ namespace PlizCard
         [WebMethod]
         public static string ChangeClientPassword(string Password)
         {
+            Log.Information("{Method} with cookie {cookie} and Password = {Password}", "ChangeClientPassword", (string)HttpContext.Current.Request.Headers["Cookie"], Password);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var response = ApiConfig.ChangeClientPassword(Password);
@@ -1523,6 +1549,7 @@ namespace PlizCard
         [WebMethod]
         public static string Faq()
         {
+            Log.Information("{Method} with cookie {cookie}", "Faq", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.GetFaq());
@@ -1531,6 +1558,7 @@ namespace PlizCard
         [WebMethod]
         public static string ClientPreferences()
         {
+            Log.Information("{Method} with cookie {cookie}", "ClientPreferences", (string)HttpContext.Current.Request.Headers["Cookie"]);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             return new JavaScriptSerializer().Serialize(ApiConfig.GetClientPreferences());
@@ -1539,6 +1567,7 @@ namespace PlizCard
         [WebMethod]
         public static string AllowSMS(bool allow)
         {
+            Log.Information("{Method} with cookie {cookie} and allow = {allow}", "AllowSMS", (string)HttpContext.Current.Request.Headers["Cookie"], allow);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             UserSession.client.id = UserSession.user_id;
@@ -1551,6 +1580,7 @@ namespace PlizCard
         [WebMethod]
         public static string AllowEMAIL(bool allow)
         {
+            Log.Information("{Method} with cookie {cookie} and allow = {allow}", "AllowEMAIL", (string)HttpContext.Current.Request.Headers["Cookie"], allow);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             UserSession.client.id = UserSession.user_id;
@@ -1563,6 +1593,7 @@ namespace PlizCard
         [WebMethod]
         public static string AllowPUSH(bool allow)
         {
+            Log.Information("{Method} with cookie {cookie} and allow = {allow}", "AllowPUSH", (string)HttpContext.Current.Request.Headers["Cookie"], allow);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             UserSession.client.id = UserSession.user_id;
@@ -1575,6 +1606,7 @@ namespace PlizCard
         [WebMethod]
         public static string ChangeClientProfile(lcclient.Client ClientData)
         {
+            Log.Information("{Method} with cookie {cookie} and ClientData.id = {ClientData.id}", "ChangeClientProfile", (string)HttpContext.Current.Request.Headers["Cookie"], ClientData.id);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             ClientData.id = UserSession.user_id;
@@ -1586,6 +1618,7 @@ namespace PlizCard
         [WebMethod]
         public static string LeaveMessageUnregister(string Email, string Subject, string Text, string Capcha)
         {
+            Log.Information("{Method} with cookie {cookie} and Email = {Email} and Subject = {Subject} and Text = {Text} and Capcha = {Capcha}", "LeaveMessageUnregister", (string)HttpContext.Current.Request.Headers["Cookie"], Email, Subject, Text, Capcha);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var str = (string)UserSession.get("CaptchaImageText");
@@ -1603,6 +1636,7 @@ namespace PlizCard
         [WebMethod]
         public static string GetCampaignDetail(int CampaignID)
         {
+            Log.Information("{Method} with cookie {cookie} and CampaignID = {CampaignID}", "GetCampaignDetail", (string)HttpContext.Current.Request.Headers["Cookie"], CampaignID);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var ret = ApiConfig.GetCampaignDetail(CampaignID);
@@ -1613,6 +1647,7 @@ namespace PlizCard
         [WebMethod]
         public static string SetPreferences(int CategoryID, bool Set)
         {
+            Log.Information("{Method} with cookie {cookie} and CategoryID = {CategoryID} and Set = {Set}", "SetPreferences", (string)HttpContext.Current.Request.Headers["Cookie"], CategoryID, Set);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var ret = ApiConfig.SelectPreferences(CategoryID, !Set);
@@ -1622,6 +1657,7 @@ namespace PlizCard
         [WebMethod]
         public static string ChequeDetails(int ChequeID)
         {
+            Log.Information("{Method} with cookie {cookie} and ChequeID = {ChequeID}", "ChequeDetails", (string)HttpContext.Current.Request.Headers["Cookie"], ChequeID);
             var cs = checkSession();
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var ret = ApiConfig.GetChequeDetails(ChequeID);
@@ -1637,19 +1673,18 @@ namespace PlizCard
         [WebMethod]
         public static string SetClientDevice(string Token, string OSRegistrator)
         {
-            Log.Information("SetClientDevice with cookie" + (string)HttpContext.Current.Request.Headers["Cookie"]);
-            Log.Information("SetClientDevice saved user id " + UserSession.user_id.ToString() + " in session before checksession");
+            Log.Information("{Method} with cookie {cookie} and Token = {Token} and OSRegistrator = {OSRegistrator}", "SetClientDevice", (string)HttpContext.Current.Request.Headers["Cookie"], Token, OSRegistrator);
             var cs = checkSession();
-            Log.Information("SetClientDevice saved user id " + UserSession.user_id.ToString() + " in session after checksession");
             if (cs.ErrorCode != 0) return new JavaScriptSerializer().Serialize(cs);
             var ret = ApiConfig.SetClientDevice(Token, OSRegistrator);  
             return new JavaScriptSerializer().Serialize(ret);
-
         }
 
         [WebMethod]
         public static string BecomePartner(string City, string Site, string GoodsSell, int PosQty, string CashSoftware, string Name, long Phone, string Email)
         {
+            Log.Information("{Method} with cookie {cookie} and City = {City} and Site = {Site} and GoodsSell = {GoodsSell} and PosQty = {PosQty} and CashSoftware = {CashSoftware} and Name = {Name} and Phone = {Phone} and Email = {Email}", 
+                            "BecomePartner", (string)HttpContext.Current.Request.Headers["Cookie"], City, Site, GoodsSell, PosQty, CashSoftware, Name, Phone, Email);
             var ret = ApiConfig.BecomePartner(City, Site, GoodsSell, PosQty, CashSoftware, Name, Phone, Email);            
             return new JavaScriptSerializer().Serialize(ret);
         }

@@ -95,6 +95,129 @@
         @*@Scripts.Render("~/bundles/jquery")*@
         @*@Scripts.Render("~/bundles/bootstrap")*@
         @RenderSection("scripts", required: false)
+
+        <div id="TerminalModalErrorRegister" class="modal">
+
+            <!-- Modal content 
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Some text in the Modal..</p>
+            </div>-->
+
+            <div class="modal_error">
+                <h3 class="modal_ochibka">Произошла ошибка!</h3>
+                <p class="modal_paragraph">Данный клиент уже зарегистирован в Программе</p>
+                <button class="modal_button" id="TerminalModalErrorRegisterClose">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+
+        <div id="TerminalModalSuccessRegister" class="modal">
+            <div class="modal_uspeh1">
+                <div class="modal_uspesho">
+                    <h3 class="modal_success">УСПЕШНО!</h3>
+                    <p class="modal_paragraph">Клиент успешно зарегистирован в Программе</p>
+                </div>
+                <button class="modal_button" id="TerminalModalSuccessRegisterClose">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+
+        <div id="TerminalModalChequeAdd" class="modal">
+            <div class="modal_purchase">
+                <h3 class="modal_success">Успешно!</h3>
+                <table class="modal_pokupca">
+                    <tr>
+                        <td class="modal_td">Покупка, руб.:</td>
+                        <td class="modal_td" id="TerminalModalChequeAddAmount">250 000</td>
+                    </tr>
+                    <tr>
+                        <td class="modal_td">Начислено бонусов:</td>
+                        <td class="modal_td" id="TerminalModalChequeAddBonusAdd">350</td>
+                    </tr>
+                    <tr>
+                        <td class="modal_td">Списано бонусов:</td>
+                        <td class="modal_td" id="TerminalModalChequeAddBonusRedeemed">2 500</td>
+                    </tr>
+                    <tr>
+                        <td class="modal_td">Деньги в кассу, руб.:</td>
+                        <td class="modal_td" id="TerminalModalChequeAddCash">245 000</td>
+                    </tr>
+                </table>
+                <div class="modal_button3">
+                    <button class="modal_button1" id="TerminalModalChequeAddClose">
+                        Закрыть
+                    </button>
+                    <button class="modal_button2" id="TerminalModalChequeAddPrint">
+                        Печать чека
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="TerminalModalHandBonusAdd" class="modal">
+            <div class="modal_form modal_form1">
+                <h3 class="modal_bonus">Ручное начисление бонусов</h3>
+                <form action="" method="post">
+                    <div class="modal_form-terminal__input-bl">
+                        <input type="text" class="modal_form-terminal__input" id="clientIdPurchaseTerminal" placeholder="Введите идентификатор клиента">
+                        <button class="modal_form-terminal__search-btn" id="searchClientPurchaseTerminal"></button>
+                    </div>
+                    <div class="modal_form-terminal__input-bl">
+                        <input type="text" class="modal_form-terminal__input modal_bonus2" id="clientIdPurchaseTerminal" placeholder="Введите количество бонусов">
+                    </div>
+                    <div class="modal_form-terminal__group modal_form-terminal__group_mb modal_bonus1">
+                        <input type="submit" class="modal_form-terminal__submit modal_form-terminal__submit_no-marg" value="Начислить бонусы">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="TerminalModalHandBonusRedeem" class="modal">
+            <div class="modal_form modal_form1">
+                <h3 class="modal_bonus">РУЧНОЕ СПИСАНИЕ БОНУСОВ</h3>
+                <form action="" method="post">
+                    <div class="modal_form-terminal__input-bl">
+                        <input type="text" class="modal_form-terminal__input" id="clientIdPurchaseTerminal" placeholder="Введите идентификатор клиента">
+                        <button class="modal_form-terminal__search-btn" id="searchClientPurchaseTerminal"></button>
+                        <input type="text" class="modal_form-terminal__input  modal_bonus2" id="clientIdPurchaseTerminal" placeholder="Введите количество бонусов">
+                    </div>
+                    <div class="modal_form-terminal__group modal_form-terminal__group_mb  modal_bonus1">
+                        <input type="submit" class="modal_form-terminal__submit modal_form-terminal__submit_no-marg" value="Списать бонусы">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="TerminalModalRefund" class="modal">
+            <div class="modal_purchase">
+                <h3 class="modal_success">УСПЕШНО!</h3>
+                <table class="modal_pokupca">
+                    <tr>
+                        <td class="modal_td">Возврат, руб.:</td>
+                        <td class="modal_td" id="TerminalModalRefundAmount">250 000</td>
+                    </tr>
+                    <tr>
+                        <td class="modal_td">Начислено бонусов:</td>
+                        <td class="modal_td" id="TerminalModalRefundBonusAdd">350</td>
+                    </tr>
+                    <tr>
+                        <td class="modal_td">Списано бонусов:</td>
+                        <td class="modal_td" id="TerminalModalRefundBonusRedeem">2 550</td>
+                    </tr>
+                </table>
+                <div class="modal_button3">
+                    <button class="modal_button1" id="TerminalModalRefundClose">
+                        Закрыть
+                    </button>
+                    <button class="modal_button2">
+                        Печать чека
+                    </button>
+                </div>
+            </div>
+
         </div>        
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
@@ -159,7 +282,7 @@
                     $(this).parent(1).prev('.actions-block-content')[0].style.height = '180px';
                 }
             });
-            
+
             $(".datepicker").datepicker();
             $(".clear-date").click(function () {
                 $('#date2').val('');
@@ -184,7 +307,7 @@
 
             $("#FriendPhone").mask("+7 (999) 999-99-99");
 
-            $("#profilePhone").mask("+7 (999) 999-99-99");            
+            $("#profilePhone").mask("+7 (999) 999-99-99");
 
             $("#sendRegisterCode").click(function (e) {
                 e.preventDefault();
@@ -225,6 +348,16 @@
                                 $("#profileGender").val("1").niceSelect('update');
                             }
                             //document.getElementById("profileBirthDate").value = new Date(parseInt(clientInfoResult.Birthdate.substr(6)));
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("TerminalGetCheques", "Home")",
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                data: '{Card: \'' + clientInfoResult.Card + '\'}',
+                                success: function (cheques) {
+
+                                }
+                            })
                         }
                     }
                 })
@@ -239,10 +372,197 @@
                     data: '{searchClient: \'' + clientinfo + '\'}',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function () {
-                        console.log("logging");
+                    success: function (clientInfoResult) {
+                        if (clientInfoResult.ErrorCode == 0 && clientInfoResult.Message == "") {
+                            $("#profileName").val(clientInfoResult.Name);
+                            $("#profileSurname").val(clientInfoResult.Surname);
+                            document.getElementById("profilePatronymic").value = clientInfoResult.Patronymic;
+                            document.getElementById("profileBirthDate").value = $.format.date(clientInfoResult.Birthdate, "dd.MM.yyyy");
+                            $("#profilePhone").val(clientInfoResult.Phone).mask("+7 (999) 999-99-99");
+                            $("#profileEmail").val(clientInfoResult.Email);
+                            $("#profileCard").val(clientInfoResult.Card);
+                            $("#profileBalance").val(clientInfoResult.FullBalance);
+                            $("#profileLevel").val(clientInfoResult.Condition);
+                            if (clientInfoResult.Gender == 1) {
+                                $("#profileGender").val("1").niceSelect('update');
+                            }
+                            //document.getElementById("profileBirthDate").value = new Date(parseInt(clientInfoResult.Birthdate.substr(6)));
+                            $.ajax({
+                                type: "POST",
+                                url: "@Url.Action("TerminalGetCheques", "Home")",
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                data: '{Card: \'' + clientInfoResult.Card + '\'}',
+                                success: function (cheques) {
+
+                                }
+                            })
+                        }
                     }
                 })
+            });
+
+            $("#TerminalRedeemInBuy").click(function (e) {
+                e.preventDefault();
+                var summBuy = $("#TerminalBuySum").val();
+                var phone = $("#profilePhone").val();
+                if (summBuy > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("TerminalMaxSumRedeem", "Home")",
+                        data: '{Phone: \'' + phone + '\', ' + 'Sum: \'' + summBuy + '\' }',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (maxSumRedeemResult) {
+                            $("#TerminalMaxSumRedeem").val(maxSumRedeemResult.MaxSum);
+                            console.log(maxSumRedeemResult);
+                        },
+                        error: function (message) {
+                            console.log(message);
+                        }
+                    })
+                }
+            });
+
+            $("#TerminalRegisterNewUser").submit(function (e) {
+                e.preventDefault();
+                var url = "@Url.Action("Terminal", "Home")";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    data: $("#TerminalRegisterNewUser").serialize(),
+                    success: function (data) {
+                        console.log(data.ErrorCode);
+                        if (data.ErrorCode > 0) {
+                            console.log("error");
+                            var modal = document.getElementById('TerminalModalErrorRegister');
+
+                            // Get the button that opens the modal
+                            var btn = document.getElementById("TerminalModalErrorRegisterClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        }
+                        else {
+                            console.log("success");
+                            var modal = document.getElementById("TerminalModalSuccessRegister");
+                            modal.style.display = "block";
+                            var btn = document.getElementById("TerminalModalSuccessRegisterClose");
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        }
+
+                    }
+                })
+            });
+
+            $("#TerminalAddBuy").submit(function (e) {
+                e.preventDefault();
+                var url = "@Url.Action("TerminalChequeAdd", "Home")";
+                //$("#profileCard").val
+                var card = document.getElementById("profileCard").value;
+                var amount = document.getElementById("TerminalBuySum").value;
+                var paidbybonus = document.getElementById("TerminalRedeem").value;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: '{Card: \'' + card + '\', Amount: \'' + amount + '\', PaidByBonus: \'' + paidbybonus + '\'}',
+                    success: function (data) {
+                        document.getElementById("TerminalModalChequeAddAmount").innerText = data.Amount;
+                        document.getElementById("TerminalModalChequeAddBonusAdd").innerText = data.BonusAdd;
+                        document.getElementById("TerminalModalChequeAddBonusRedeemed").innerText = data.BonusRedeem;
+                        document.getElementById("TerminalModalChequeAddCash").innerText = data.Cash;
+                        var modal = document.getElementById("TerminalModalChequeAdd");
+                        var btn = document.getElementById("TerminalModalChequeAddClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                })
+            });
+
+            $("#TerminalRefund").submit(function (e) {
+                e.preventDefault();
+                var url = "@Url.Action("TerminalRefund", "Home")";
+                var card = document.getElementById("profileCard").value;
+                var chequesum = document.getElementById("TerminalRefundChequeSum").value;
+                var chequedate = document.getElementById("TerminalRefundDate").value;
+                var chequenum = document.getElementById("TerminalRefundChequeNum").value;
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",
+                    data: '{Card: \'' + card + '\', ChequeDate: \'' + chequedate + '\', ChequeNum: \'' + chequenum + '\', ChequeSum: \'' + chequesum + '\'}',
+                    success: function (data) {
+                        console.log(data);
+                        var refund = JSON.parse(data);
+                        document.getElementById("TerminalModalRefundAmount").innerText = refund.Amount;
+                        document.getElementById("TerminalModalRefundBonusAdd").innerText = refund.Added;
+                        document.getElementById("TerminalModalRefundBonusRedeem").innerText = refund.Redeemed;
+                        var modal = document.getElementById("TerminalModalRefund");
+                        var btn = document.getElementById("TerminalModalRefundClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                })
+            });
+
+            $("#HandBonusAdd").click(function (e) {
+                e.preventDefault();
+                var modal = document.getElementById("TerminalModalHandBonusAdd");
+                //var btn = document.getElementById("")
+                modal.style.display = "block";
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+            });
+
+            $("#HandBonusRedeem").click(function (e) {
+                e.preventDefault();
+                var modal = document.getElementById("TerminalModalHandBonusRedeem");
+                //var btn = document.getElementById("")
+                modal.style.display = "block";
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
             });
         </script>
 </body>

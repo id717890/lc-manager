@@ -43,6 +43,7 @@ namespace LC_Manager.Models
 
     public class RegisterModel
     {
+        [Required]
         public string Phone { get; set; }
 
         public string Name { get; set; }
@@ -59,8 +60,36 @@ namespace LC_Manager.Models
 
         public string BirthDate { get; set; }
 
+        [Required]
         public string Code { get; set; }
 
         public string Gender { get; set; }
+    }
+
+    public class TerminalRedeemSumModel
+    {
+        public string Phone { get; set; }
+
+        public string Sum { get; set; }
+    }
+
+    public class TerminalChequeModel
+    {
+        public long Card { get; set; }
+
+        public decimal Amount { get; set; }
+
+        public decimal PaidByBonus { get; set; }
+    }
+
+    public class TerminalRefundModel
+    {
+        public long Card { get; set; }
+
+        public DateTime ChequeDate { get; set; }
+
+        public string ChequeNum { get; set; }
+
+        public decimal ChequeSum { get; set; }
     }
 }

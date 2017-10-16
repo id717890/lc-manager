@@ -2,7 +2,7 @@
     <header class="content__header">
         <a href="" class="btn-hide-aside"></a>
         <ul class="content__header-nav">
-            <li><a href=""><img src="../img/icon-top-menu/surprise.png" alt="surprise"><span>Поздравить</span></a></li>
+            <li><a href="@Url.Action("Terminal", "Home")"><img src="../img/icon-top-menu/surprise.png" alt="surprise"><span>Терминал</span></a></li>
             <li><a href=""><img src="../img/icon-top-menu/message.png" alt="message"><span>Рассылка</span></a></li>
             <li><a href=""><img src="../img/icon-top-menu/action.png" alt="action"><span>Акция</span></a></li>
             <li><a href=""><img src="../img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>
@@ -30,11 +30,11 @@
         <div class="tabs__links-head">
             <div class="terminal-head">
                 <div class="terminal-head__left">
-                    <a href="" class="terminal-head-link">
+                    <a href="" id="HandBonusAdd" class="terminal-head-link">
                         <img src="../img/plus.png" alt="" class="terminal-head-link__img">
                         <span class="terminal-head-link__text">Начислить бонусы</span>
                     </a>
-                    <a href="" class="terminal-head-link">
+                    <a href="" id="HandBonusRedeem" class="terminal-head-link">
                         <img src="../img/minus.png" alt="" class="terminal-head-link__img">
                         <span class="terminal-head-link__text">Списать бонусы</span>
                     </a>
@@ -52,86 +52,90 @@
             <div class="forms-terminal__col forms-terminal__col_70">
                 <div class="form-terminal">
                     <h4 class="form-terminal__heading">покупка</h4>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <div class="form-terminal__input-bl ">
-                            <input type="text" class="form-terminal__input" id="clientIdPurchaseTerminal" placeholder="Введите идентификатор клиента">
-                            <button class="form-terminal__search-btn" id="searchClientPurchaseTerminal"></button>
+                    <form id="TerminalAddBuy">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <div class="form-terminal__input-bl ">
+                                <input type="text" class="form-terminal__input" id="clientIdPurchaseTerminal" placeholder="Введите идентификатор клиента">
+                                <button class="form-terminal__search-btn" id="searchClientPurchaseTerminal"></button>
+                            </div>
+                            <a href="" class="form-terminal__refresh">
+                                <img src="../img/refresh.png" alt="">
+                            </a>
                         </div>
-                        <a href="" class="form-terminal__refresh">
-                            <img src="../img/refresh.png" alt="">
-                        </a>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input" placeholder="Введите сумму покупки">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalBuySum" placeholder="Введите сумму покупки">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <a href="" class="form-terminal__link">Узнать, сколько можно списать:</a>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <a href="" class="form-terminal__link" id="TerminalRedeemInBuy">Узнать, сколько можно списать:</a>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalMaxSumRedeem" readonly>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <span class="form-terminal__text">Укажите, сколько нужно списать:</span>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <span class="form-terminal__text">Укажите, сколько нужно списать:</span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRedeem">
+                            </div>
                         </div>
-                    </div>
-                    <input type="submit" class="form-terminal__submit" value="Провести покупку">
+                        <input type="submit" class="form-terminal__submit" value="Провести покупку">
+                    </form>
                 </div>
                 <div class="form-terminal">
                     <h4 class="form-terminal__heading">возврат</h4>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <div class="form-terminal__input-bl ">
-                            <input type="text" class="form-terminal__input" id="clientIdRefundTerminal" placeholder="Введите идентификатор клиента">
-                            <button class="form-terminal__search-btn" id="searchClientRefundTerminal"></button>
+                    <form id="TerminalRefund">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <div class="form-terminal__input-bl ">
+                                <input type="text" class="form-terminal__input" id="clientIdRefundTerminal" placeholder="Введите идентификатор клиента">
+                                <button class="form-terminal__search-btn" id="searchClientRefundTerminal"></button>
+                            </div>
+                            <a href="" class="form-terminal__refresh">
+                                <img src="../img/refresh.png" alt="">
+                            </a>
                         </div>
-                        <a href="" class="form-terminal__refresh">
-                            <img src="../img/refresh.png" alt="">
-                        </a>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input" placeholder="Введите сумму возврата">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRefundChequeSum" placeholder="Введите сумму возврата">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input" placeholder="Номер чека покупки">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRefundChequeNum" placeholder="Номер чека покупки">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-terminal__group">
-                        <span class="form-terminal__ico">
-                            <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
-                        </span>
-                        <span class="form-terminal__text">Дата чека покупки:</span>
-                        <div class="form-terminal__input-bl form-terminal__input-bl_mid form-terminal__input-bl_margin-right">
-                            <input type="text" class="form-terminal__input">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                            </span>
+                            <span class="form-terminal__text">Дата чека покупки:</span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_mid form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input datepicker" id="TerminalRefundDate">
+                            </div>
                         </div>
-                    </div>
-                    <input type="submit" class="form-terminal__submit" value="Провести возврат">
+                        <input type="submit" class="form-terminal__submit" value="Провести возврат">
+                    </form>
                 </div>
                 <div class="form-terminal form-terminal_100">
                     <div class="table__content">
@@ -199,7 +203,6 @@
                         <div class="openst">
 
                             <div class="table__content__item" id="open-item">
-
                                 <div class="table__item__datetime"><p>04.02.2015</p><p>17:30</p></div>
                                 <div class="table__item__operacion"><p>Возврат</p></div>
                                 <div class="table__item__chek"><p>122564</p></div>
@@ -209,7 +212,6 @@
                             </div>
 
                             <div class="table__content__item" id="open-item">
-
                                 <div class="table__item__datetime"><p>03.02.2015</p><p>17:30</p></div>
                                 <div class="table__item__operacion"><p>Возврат</p></div>
                                 <div class="table__item__chek"><p>560256</p></div>
@@ -217,8 +219,8 @@
                                 <div class="table__item__achisleno"><p>200.0</p></div>
                                 <div class="table__item__spisano"><p>0</p></div>
                             </div>
-                            <div class="table__content__item" id="open-item">
 
+                            <div class="table__content__item" id="open-item">
                                 <div class="table__item__datetime"><p>03.02.2015</p><p>17:30</p></div>
                                 <div class="table__item__operacion"><p>Покупка</p></div>
                                 <div class="table__item__chek"><p>560256</p></div>
@@ -228,7 +230,6 @@
                             </div>
 
                             <div class="table__content__item" id="open-item">
-
                                 <div class="table__item__datetime"><p>04.02.2015</p><p>17:30</p></div>
                                 <div class="table__item__operacion"><p>Покупка</p></div>
                                 <div class="table__item__chek"><p>560256</p></div>
@@ -238,7 +239,6 @@
                             </div>
 
                             <div class="table__content__item" id="open-item">
-
                                 <div class="table__item__datetime"><p>05.02.2015</p><p>17:30</p></div>
                                 <div class="table__item__operacion"><p>Покупка</p></div>
                                 <div class="table__item__chek"><p>560256</p></div>
@@ -424,8 +424,9 @@
                             </div>
                         </div>
                         <div id="reg">
-                            @using (Html.BeginForm("Terminal", "Home", FormMethod.Post))
-                            {
+                            @*@using (Html.BeginForm("Terminal", "Home", FormMethod.Post))
+                            {*@
+                            <form id="TerminalRegisterNewUser">
                                 <div class="form-terminal__group">
                                     <div class="form-terminal__input-bl ">
                                         <input type="text" class="form-terminal__input" name="Name" placeholder="Имя">
@@ -466,7 +467,7 @@
                                         </select>
                                     </div>
                                     <div class="form-terminal__input-bl">
-                                        <input type="text" class="datepicker" name="BirthDate" placeholder="Дата рождения">
+                                        <input type="text" class="datepicker" name="BirthDate" id="TeminalBirthDate" placeholder="Дата рождения">
                                     </div>
                                 </div>
                                 <div class="form-terminal__group">
@@ -490,7 +491,8 @@
                                 <div class="form-terminal__group form-terminal__group_mb">
                                     <input type="submit" class="form-terminal__submit form-terminal__submit_no-marg" value="Завершить регистрацию">
                                 </div>
-                            }
+                            </form>
+                            @*}*@
                         </div>
                     </div>
 
