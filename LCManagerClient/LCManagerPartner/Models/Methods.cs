@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -3701,6 +3702,171 @@ namespace LCManagerPartner.Models
                 cnn.Close();
             }
 
+            return returnValue;
+        }
+    }
+
+    public class ManagerLoginRequest
+    {
+        public long Phone { get; set; }
+
+        public string Password { get; set; }
+    }
+
+    public class ManagerLoginResponse
+    {
+        public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public string PosCode { get; set; }
+
+        public string RoleName { get; set; }
+
+        public string PermissionCode { get; set; }
+
+        public string Message { get; set; }
+
+        public int ErrorCode { get; set; }
+    }
+
+    public class ServerManagerLogin
+    {
+        public ManagerLoginResponse ProcessRequest(SqlConnection cnn, ManagerLoginRequest request)
+        {
+            var returnValue = new ManagerLoginResponse();
+            cnn.Open();
+
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ManagerLogin";
+            cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters.AddWithValue("@password", request.Password);
+            cmd.Parameters.Add("@operator", SqlDbType.SmallInt);
+            cmd.Parameters["@operator"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@partner", SqlDbType.SmallInt);
+            cmd.Parameters["@partner"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@posCode", SqlDbType.NVarChar, 10);
+            cmd.Parameters["@posCode"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@rolename", SqlDbType.NVarChar, 50);
+            cmd.Parameters["@rolename"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@permissioncode", SqlDbType.NVarChar, 20);
+            cmd.Parameters["@permissioncode"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+
+            if (!DBNull.Value.Equals(cmd.Parameters["@operator"].Value))
+            {
+                returnValue.Operator = Convert.ToInt16(cmd.Parameters["@operator"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@partner"].Value))
+            {
+                returnValue.Partner = Convert.ToInt16(cmd.Parameters["@partner"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@posCode"].Value))
+            {
+                returnValue.PosCode = Convert.ToString(cmd.Parameters["@posCode"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@rolename"].Value))
+            {
+                returnValue.RoleName = Convert.ToString(cmd.Parameters["@rolename"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@permissioncode"].Value))
+            {
+                returnValue.PermissionCode = Convert.ToString(cmd.Parameters["@permissioncode"].Value);
+            }
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ChangeClientRequest
+    {
+        public Client ClientData { get; set; }
+        public Int16 Operator { get; set; }
+    }
+
+    public class ChangeClientResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerChangeClientResponse
+    {
+        public ChangeClientResponse ProcessRequest(SqlConnection cnn, ChangeClientRequest request)
+        {
+            ChangeClientResponse returnValue = new ChangeClientResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientChange";
+            cmd.Parameters.AddWithValue("@client", request.ClientData.id);
+            cmd.Parameters.AddWithValue("@password", request.ClientData.password);
+            cmd.Parameters.AddWithValue("@surname", request.ClientData.lastname);
+            cmd.Parameters.AddWithValue("@name", request.ClientData.firstname);
+            cmd.Parameters.AddWithValue("@patronymic", request.ClientData.middlename);
+            if (request.ClientData.gender == 1) cmd.Parameters.AddWithValue("@gender", true); else if (request.ClientData.gender == -1) cmd.Parameters.AddWithValue("@gender", false); else cmd.Parameters.AddWithValue("@gender", null);
+            if (request.ClientData.birthdate > Convert.ToDateTime("1753-01-01"))
+            {
+                cmd.Parameters.AddWithValue("@birthdate", request.ClientData.birthdate);
+            }
+            cmd.Parameters.AddWithValue("@address", request.ClientData.address);
+            cmd.Parameters.AddWithValue("@haschildren", request.ClientData.haschildren);
+            cmd.Parameters.AddWithValue("@description", request.ClientData.description);
+            cmd.Parameters.AddWithValue("@allowsms", request.ClientData.allowsms);
+            cmd.Parameters.AddWithValue("@allowemail", request.ClientData.allowemail);
+            cmd.Parameters.AddWithValue("@allowpush", request.ClientData.allowpush);
+            if (request.Operator == 0)
+            {
+                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+            }
+            if (request.Operator > 0)
+            {
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+            }
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ChequeMaxSumRedeemRequest
+    {
+        public Int16 Operator { get; set; }
+
+        public Int64 Phone { get; set; }
+
+        public decimal ChequeSum { get; set; }
+    }
+
+    public class ChequeMaxSumRedeemResponse
+    {
+        public decimal MaxSum { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerChequeMaxSumRedeem
+    {
+        public ChequeMaxSumRedeemResponse ProcessRequest(SqlConnection cnn, ChequeMaxSumRedeemRequest request)
+        {
+            var returnValue = new ChequeMaxSumRedeemResponse();
+            cnn.Open();
+            returnValue.MaxSum = request.ChequeSum / 10;
+            cnn.Close();
             return returnValue;
         }
     }

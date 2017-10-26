@@ -1,4 +1,5 @@
 ﻿using LCManagerPartner.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,7 +11,7 @@ using System.Web.Http;
 
 namespace LCManagerPartner.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [RoutePrefix("api/values")]
     public class ValuesController : ApiController
     {
@@ -20,10 +21,12 @@ namespace LCManagerPartner.Controllers
         //public Partner() { cnn.Open(); }
         //~Partner() { cnn.Close(); }
 
+        [Authorize]
         [HttpPost]
         [Route("BalanceGet")]
         public BalanceGetResponse BalanceGet(BalanceGetRequest request)
         {
+            Log.Information("LCManagerPartner BalanceGet {phone}", request.Phone);
             var result = new ServerBalanceGetResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -33,6 +36,7 @@ namespace LCManagerPartner.Controllers
         [Route("Redeem")]
         public RedeemResponse Redeem(RedeemRequest request)
         {
+            Log.Information("LCManagerPartner Redeem {phone}", request.Phone);
             var result = new ServerRedeemResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -42,6 +46,7 @@ namespace LCManagerPartner.Controllers
         [Route("ChequeAdd")]
         public ChequeAddResponse ChequeAdd(ChequeAddRequest request)
         {
+            Log.Information("LCManagerPartner ChequeAdd {phone}", request.Phone);
             var result = new ServerChequeAddResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -50,6 +55,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetAllShopsByPartner")]
         public GetPosesResponse GetAllShopsByPartner(GetPosesRequest request)
         {
+            Log.Information("LCManagerPartner GetAllShopsByPartner {PartnerID}", request.PartnerID);
             var result = new ServerGetPosesResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -59,24 +65,29 @@ namespace LCManagerPartner.Controllers
         [Route("GetCheques")]
         public GetChequesResponse GetCheques(GetChequesRequest request)
         {
+            Log.Information("LCManagerPartner GetCheques {phone}", request.Operator);
             var result = new ServerGetChequesResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetConfirmCode")]
         public GetConfirmCodeResponse GetConfirmCode(GetConfirmCodeRequest request)
         {
+            Log.Information("LCManagerPartner GetConfirmCode {phone}", request.Phone);
             var result = new ServerGetConfirmCodeResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("SetClientPassword")]
         public SetClientPasswordResponse SetClientPassword(SetClientPasswordRequest request)
         {
+            Log.Information("LCManagerPartner SetClientPassword {phone}", request.Phone);
             var result = new ServerSetClientPasswordResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -86,25 +97,40 @@ namespace LCManagerPartner.Controllers
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
         {
+            Log.Information("LCManagerPartner GetRegistrationUser {phone}", request.Phone);
             var result = new ServerGetRegistrationUserResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetSendVerificationCode")]
         public GetSendVerificationCodeResponse GetSendVerificationCode(GetSendVerificationCodeRequest request)
         {
+            Log.Information("LCManagerPartner GetSendVerificationCode {phone}", request.Phone);
             var result = new ServerGetSendVerificationCodeResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("ClientLogin")]
         public ClientLoginResponse ClientLogin(ClientLoginRequest request)
         {
+            Log.Information("LCManagerPartner ClientLogin {Login}", request.Login);
             var result = new ServerClientLoginResponse();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ChangeClient")]
+        public ChangeClientResponse ChangeClient(ChangeClientRequest request)
+        {
+            Log.Information("LCManagerPartner ChangeClient {phone}", request.ClientData.phone);
+            var result = new ServerChangeClientResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
@@ -113,6 +139,7 @@ namespace LCManagerPartner.Controllers
         [Route("SendEmailCode")]
         public SendEmailCodeResponse SendEmailCode(SendEmailCodeRequest request)
         {
+            Log.Information("LCManagerPartner SendEmailCode {Email}", request.Email);
             var result = new ServerSendEmailCodeResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -122,6 +149,7 @@ namespace LCManagerPartner.Controllers
         [Route("ValidateEmail")]
         public ValidateEmailResponse ValidateEmail(ValidateEmailRequest request)
         {
+            Log.Information("LCManagerPartner ValidateEmail {Email}", request.Email);
             var result = new ServerValidateEmailResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -131,6 +159,7 @@ namespace LCManagerPartner.Controllers
         [Route("AddPhone")]
         public AddPhoneResponse AddPhone(AddPhoneRequest request)
         {
+            Log.Information("LCManagerPartner AddPhone {Phone}", request.Phone);
             var result = new ServerAddPhoneResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -140,6 +169,7 @@ namespace LCManagerPartner.Controllers
         [Route("DeletePhone")]
         public DeletePhoneResponse DeletePhone(DeletePhoneRequest request)
         {
+            Log.Information("LCManagerPartner DeletePhone {Phone}", request.Phone);
             var result = new ServerDeletePhoneResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -149,6 +179,7 @@ namespace LCManagerPartner.Controllers
         [Route("PartnerFullInfo")]
         public PartnerFullInfoResponse PartnerFullInfo(PartnerFullInfoRequest request)
         {
+            Log.Information("LCManagerPartner PartnerFullInfo {Partner}", request.Partner);
             var result = new ServerPartnerFullInfoResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -158,6 +189,7 @@ namespace LCManagerPartner.Controllers
         [Route("Refund")]
         public RefundResponse Refund(RefundRequest request)
         {
+            Log.Information("LCManagerPartner Refund {Phone}", request.Phone);
             var result = new ServerRefundResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -167,6 +199,7 @@ namespace LCManagerPartner.Controllers
         [Route("OperatorStatistics")]
         public OperatorStatisticsResponse OperatorStatistics(OperatorStatisticsRequest request)
         {
+            Log.Information("LCManagerPartner OperatorStatistics {Operator}", request.Operator);
             var result = new ServerOperatorStatisticsResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -176,6 +209,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetCampaigns")]
         public GetCampaignsResponse GetCampaigns(GetCampaignsRequest request)
         {
+            Log.Information("LCManagerPartner GetCampaigns {Operator}", request.Operator);
             var result = new ServerGetCampaignsResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -185,6 +219,7 @@ namespace LCManagerPartner.Controllers
         [Route("ClientInfo")]
         public GetClientInfoResponse ClientInfo(GetClientInfoRequest request)
         {
+            Log.Information("LCManagerPartner ClientInfo {Phone}", request.Phone);
             var result = new ServerGetClientInfoResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -194,6 +229,7 @@ namespace LCManagerPartner.Controllers
         [Route("ClientUpdate")]
         public SetClientUpdateResponse ClientUpdate(SetClientUpdateRequest request)
         {
+            Log.Information("LCManagerPartner ClientUpdate {Phone}", request.Phone);
             var result = new ServerSetClientUpdate();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -203,6 +239,7 @@ namespace LCManagerPartner.Controllers
         [Route("CancelLastCheque")]
         public CancelLastChequeResponse CancelLastCheque(CancelLastChequeRequest request)
         {
+            Log.Information("LCManagerPartner CancelLastCheque {Phone}", request.Phone);
             var result = new ServerCancelLastCheque();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -212,6 +249,7 @@ namespace LCManagerPartner.Controllers
         [Route("ClientCreate")]
         public ClientCreateResponse ClientCreate(ClientCreateRequest request)
         {
+            Log.Information("LCManagerPartner ClientCreate {Phone}", request.Phone);
             var result = new ServerClientCreate();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -221,6 +259,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetClient")]
         public GetClientResponse GetClient(GetClientRequest request)
         {
+            Log.Information("LCManagerPartner GetClient {ClientID}", request.ClientID);
             var result = new ServerGetClientResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -230,6 +269,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetChequesByCard")]
         public GetChequesByCardResponse GetChequesByCard(GetChequesByCardRequest request)
         {
+            Log.Information("LCManagerPartner GetChequesByCard {CardNumber}", request.CardNumber);
             var result = new ServerGetChequesByCardResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -239,6 +279,7 @@ namespace LCManagerPartner.Controllers
         [Route("ClientImport")]
         public ClientImportResponse ClientImport(ClientImportRequest request)
         {
+            Log.Information("LCManagerPartner ClientImport {Operator}", request.Operator);
             var result = new ServerClientImportResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -248,6 +289,7 @@ namespace LCManagerPartner.Controllers
         [Route("Merge")]
         public MergeResponse Merge(MergeRequest request)
         {
+            Log.Information("LCManagerPartner Merge {Active}", request.Active);
             var result = new ServerMergeResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -257,6 +299,7 @@ namespace LCManagerPartner.Controllers
         [Route("ClientInfoArray")]
         public GetClientInfoArrayResponse ClientInfoArray(GetClientInfoRequest request)
         {
+            Log.Information("LCManagerPartner ClientInfoArray {Phone}", request.Phone);
             var result = new ServerGetClientInfoArrayResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -266,6 +309,7 @@ namespace LCManagerPartner.Controllers
         [Route("PosStatistics")]
         public PosStatisticsResponse PosStatistics(PosStatisticsRequest request)
         {
+            Log.Information("LCManagerPartner PosStatistics {Pos}", request.Pos);
             var result = new ServerPosStatisticsResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -275,6 +319,7 @@ namespace LCManagerPartner.Controllers
         [Route("ChequeAggregation")]
         public ChequeAggregationResponse ChequeAggregation(ChequeAggregationRequest request)
         {
+            Log.Information("LCManagerPartner ChequeAggregation {Operator}", request.Operator);
             var result = new ServerGetChequeAggregation();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -284,34 +329,27 @@ namespace LCManagerPartner.Controllers
         [Route("ClientAggregation")]
         public ClientAggregationResponse ClientAggregation(ClientAggregationRequest request)
         {
+            Log.Information("LCManagerPartner ClientAggregation {Operator}", request.Operator);
             var result = new ServerClientAggregationResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
-
-        //[SoapHeader("User", Required = true)]
+        
         [HttpPost]
         [Route("BonusAdd")]
         public BonusAddResponse BonusAdd(BonusAddRequest request)
         {
-            //if (User.IsValid(cnn, request.Operator))
-            //{
+            Log.Information("LCManagerPartner BonusAdd {Phone}", request.Phone);
             var result = new ServerBonusAdd();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
-            //}
-            //else
-            //{
-            //    var returnValue = new BonusAddResponse();
-            //    returnValue.Message = "Неправильные логин/пароль";
-            //    return returnValue;
-            //}
         }
 
         [HttpPost]
         [Route("ChequesBonuses")]
         public GetChequesBonusesResponse ChequesBonuses(GetChequesBonusesRequest request)
         {
+            Log.Information("LCManagerPartner ChequesBonuses {Card}", request.Card);
             var result = new ServerGetChequesBonusesResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -321,6 +359,7 @@ namespace LCManagerPartner.Controllers
         [Route("OperatorClients")]
         public OperatorClientResponse OperatorClients(OperatorClientRequest request)
         {
+            Log.Information("LCManagerPartner OperatorClients {Operator}", request.Operator);
             var result = new ServerOperatorClient();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -330,6 +369,7 @@ namespace LCManagerPartner.Controllers
         [Route("BuysImport")]
         public BuysImportResponse BuysImport(BuysImportRequest request)
         {
+            Log.Information("LCManagerPartner BuysImport {Operator}", request.Operator);
             var result = new ServerBuysImport();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -339,6 +379,7 @@ namespace LCManagerPartner.Controllers
         [Route("CardBonuses")]
         public CardBonusesResponse CardBonuses(CardBonusesRequest request)
         {
+            Log.Information("LCManagerPartner CardBonuses {Card}", request.Card);
             var result = new ServerCardBonuses();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -348,6 +389,7 @@ namespace LCManagerPartner.Controllers
         [Route("FastBonus")]
         public FastBonusCreateResponse FastBonus(FastBonusCreateRequest request)
         {
+            Log.Information("LCManagerPartner FastBonus {Operator}", request.Operator);
             var result = new ServerFastBonusCreateResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -357,7 +399,28 @@ namespace LCManagerPartner.Controllers
         [Route("ClientUpdateLevel")]
         public ClientUpdateLevelResponse ClientUpdateLevel(ClientUpdateLevelRequest request)
         {
+            Log.Information("LCManagerPartner ClientUpdateLevel {Operator}", request.Operator);
             var result = new ServerClientUpdateLevel();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ManagerLogin")]
+        public ManagerLoginResponse ManagerLogin(ManagerLoginRequest request)
+        {
+            Log.Information("LCManagerPartner ManagerLogin {Phone}", request.Phone);
+            var result = new ServerManagerLogin();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ChequeMaxSumRedeem")]
+        public ChequeMaxSumRedeemResponse ChequeMaxSumRedeem(ChequeMaxSumRedeemRequest request)
+        {
+            Log.Information("LCManagerPartner ChequeMaxSumRedeem {Phone}", request.Phone);
+            var result = new ServerChequeMaxSumRedeem();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }

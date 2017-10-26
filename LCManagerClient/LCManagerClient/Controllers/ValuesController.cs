@@ -12,7 +12,7 @@ using System.Web.Services;
 
 namespace LCManagerClient.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [RoutePrefix("api/values")]
     public class ValuesController : ApiController
     {        
@@ -23,6 +23,7 @@ namespace LCManagerClient.Controllers
         //~ServiceClient() { cnn.Close(); }
 
         //[WebMethod]
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetConfirmCode")]
         public GetConfirmCodeResponse GetConfirmCode(GetConfirmCodeRequest request)
@@ -34,6 +35,7 @@ namespace LCManagerClient.Controllers
         }
 
         //[WebMethod]
+        [AllowAnonymous]
         [HttpPost]
         [Route("SetClientPassword")]
         public SetClientPasswordResponse SetClientPassword(SetClientPasswordRequest request)
@@ -44,6 +46,7 @@ namespace LCManagerClient.Controllers
         }
 
         //[WebMethod]
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
@@ -55,6 +58,7 @@ namespace LCManagerClient.Controllers
         }
 
         //[WebMethod]
+        [AllowAnonymous]
         [HttpPost]
         [Route("GetSendVerificationCode")]
         public GetSendVerificationCodeResponse GetSendVerificationCode(GetSendVerificationCodeRequest request)
@@ -66,6 +70,7 @@ namespace LCManagerClient.Controllers
         }
 
         //[WebMethod]
+        [AllowAnonymous]
         [HttpPost]
         [Route("ClientLogin")]
         public ClientLoginResponse ClientLogin(ClientLoginRequest request)
