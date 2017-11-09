@@ -335,8 +335,9 @@ namespace LCManagerPartner.Models
         public string Shop { get; set; }
         public Int64 CardNumber { get; set; }
         public string PosName { get; set; }
+        public long Phone { get; set; }
         public Cheque() { }
-        public Cheque(Int32 id, string number, DateTime date, string operationtype, decimal summ, decimal summdiscount, decimal bonus, decimal paidbybonus, decimal discount, string partner, string shop, Int64 cardnumber)
+        public Cheque(Int32 id, string number, DateTime date, string operationtype, decimal summ, decimal summdiscount, decimal bonus, decimal paidbybonus, decimal discount, string partner, string shop, Int64 cardnumber, long phone)
         {
             Id = id;
             Number = number;
@@ -349,6 +350,7 @@ namespace LCManagerPartner.Models
             Partner = partner;
             Shop = shop;
             CardNumber = cardnumber;
+            Phone = phone;
         }
     }
 
@@ -410,6 +412,7 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(9)) cheque.Bonus = reader.GetDecimal(9);
                 if (!reader.IsDBNull(10)) cheque.PaidByBonus = reader.GetDecimal(10);
                 if (!reader.IsDBNull(11)) cheque.PosName = reader.GetString(11);
+                if (!reader.IsDBNull(12)) cheque.Phone = reader.GetInt64(12);
                 returnValue.ChequeData.Add(cheque);
             }
             reader.Close();
@@ -3866,6 +3869,184 @@ namespace LCManagerPartner.Models
             var returnValue = new ChequeMaxSumRedeemResponse();
             cnn.Open();
             returnValue.MaxSum = request.ChequeSum / 10;
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class CardBuysByMonth
+    {
+        public decimal BonusAdded { get; set; }
+
+        public decimal BonusRedeemed { get; set; }
+
+        public decimal AvgCheque { get; set; }
+
+        public decimal ChequeSum { get; set; }
+
+        public int MonthNum { get; set; }
+    }
+
+    public class OperatorClientsManagerBuys
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public long Phone { get; set; }
+
+        public string Email { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public string Gender { get; set; }
+
+        public string ClientType { get; set; }
+
+        public long Card { get; set; }
+
+        public string Level { get; set; }
+
+        public decimal Balance { get; set; }
+
+        public int BuyQty { get; set; }
+
+        public decimal BuySum { get; set; }
+
+        public DateTime LastBuyDate { get; set; }
+
+        public decimal LastBuyAmount { get; set; }
+
+        public int BonusRedeemQty { get; set; }
+
+        public decimal BonusRedeemSum { get; set; }
+
+        public DateTime WelcomeBonusDate { get; set; }
+
+        public decimal WelcomeBonus { get; set; }
+
+        public DateTime PromoBonusDate { get; set; }
+
+        public decimal PromoBonus { get; set; }
+
+        public DateTime OperatorBonusDate { get; set; }
+
+        public decimal OperatorBonus { get; set; }
+
+        public DateTime FriendBonusDate { get; set; }
+
+        public decimal FriendBonus { get; set; }
+
+        public DateTime BirthdayBonusDate { get; set; }
+
+        public decimal BirthdayBonus { get; set; }
+
+        public List<CardBuysByMonth> CardBuys { get; set; }
+
+        public OperatorClientsManagerBuys()
+        {
+            CardBuys = new List<CardBuysByMonth>();
+        }
+    }
+
+    public class OperatorClientsManagerRequest
+    {
+        public Int16 Operator { get; set; }
+
+        public DateTime From { get; set; }
+
+        public DateTime To { get; set; }
+    }
+
+    public class OperatorClientsManagerResponse
+    {
+        public List<OperatorClientsManagerBuys> OperatorClients { get; set; }
+
+        public int ErrorCode { get; set; }
+
+        public string Message { get; set; }
+
+        public OperatorClientsManagerResponse()
+        {
+            OperatorClients = new List<OperatorClientsManagerBuys>();
+        }
+    }
+
+    public class ServerOperatorClientsManager
+    {
+        public OperatorClientsManagerResponse ProcessRequest(SqlConnection cnn, OperatorClientsManagerRequest request)
+        {
+            var returnValue = new OperatorClientsManagerResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "Clients";
+
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                OperatorClientsManagerBuys clientBuys = new OperatorClientsManagerBuys();
+                if (!reader.IsDBNull(0)) clientBuys.Id = reader.GetInt32(0);
+                if (!reader.IsDBNull(1)) clientBuys.Name = reader.GetString(1);
+                if (!reader.IsDBNull(2)) clientBuys.Phone = reader.GetInt64(2);
+                if (!reader.IsDBNull(3)) clientBuys.Email = reader.GetString(3);
+                if (!reader.IsDBNull(4)) clientBuys.BirthDate = reader.GetDateTime(4);
+                if (!reader.IsDBNull(5)) clientBuys.Gender = reader.GetString(5);
+                if (!reader.IsDBNull(6)) clientBuys.ClientType = reader.GetString(6);
+                if (!reader.IsDBNull(7)) clientBuys.Card = reader.GetInt64(7);
+                if (!reader.IsDBNull(8)) clientBuys.Level = reader.GetString(8);
+                if (!reader.IsDBNull(9)) clientBuys.Balance = reader.GetDecimal(9);
+                if (!reader.IsDBNull(10)) clientBuys.BuyQty = reader.GetInt32(10);
+                if (!reader.IsDBNull(11)) clientBuys.BuySum = reader.GetDecimal(11);
+                if (!reader.IsDBNull(12)) clientBuys.LastBuyDate = reader.GetDateTime(12);
+                if (!reader.IsDBNull(13)) clientBuys.LastBuyAmount = reader.GetDecimal(13);
+                if (!reader.IsDBNull(14)) clientBuys.BonusRedeemQty = reader.GetInt32(14);
+                if (!reader.IsDBNull(15)) clientBuys.BonusRedeemSum = reader.GetDecimal(15);
+                if (!reader.IsDBNull(16)) clientBuys.WelcomeBonusDate = reader.GetDateTime(16);
+                if (!reader.IsDBNull(17)) clientBuys.WelcomeBonus = reader.GetDecimal(17);
+                if (!reader.IsDBNull(18)) clientBuys.PromoBonusDate = reader.GetDateTime(18);
+                if (!reader.IsDBNull(19)) clientBuys.PromoBonus = reader.GetDecimal(19);
+                if (!reader.IsDBNull(20)) clientBuys.OperatorBonusDate = reader.GetDateTime(20);
+                if (!reader.IsDBNull(21)) clientBuys.OperatorBonus = reader.GetDecimal(21);
+                if (!reader.IsDBNull(22)) clientBuys.FriendBonusDate = reader.GetDateTime(22);
+                if (!reader.IsDBNull(23)) clientBuys.FriendBonus = reader.GetDecimal(23);
+                if (!reader.IsDBNull(24)) clientBuys.BirthdayBonusDate = reader.GetDateTime(24);
+                if (!reader.IsDBNull(25)) clientBuys.BirthdayBonus = reader.GetDecimal(25);
+                returnValue.OperatorClients.Add(clientBuys);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+
+            foreach (var c in returnValue.OperatorClients)
+            {
+                var cmdCards = cnn.CreateCommand();
+                cmdCards.CommandType = CommandType.StoredProcedure;
+                cmdCards.CommandText = "CardBonusesByMonth";
+                cmdCards.Parameters.AddWithValue("@card", c.Card);
+                cmdCards.Parameters.AddWithValue("@from", request.From);
+                cmdCards.Parameters.AddWithValue("@to", request.To);
+                var readerClients = cmdCards.ExecuteReader();
+                while (readerClients.Read())
+                {
+                    CardBuysByMonth buys = new CardBuysByMonth();
+                    if (!readerClients.IsDBNull(0)) buys.BonusAdded = readerClients.GetDecimal(0);
+                    if (!readerClients.IsDBNull(1)) buys.BonusRedeemed = readerClients.GetDecimal(1);
+                    if (!readerClients.IsDBNull(2)) buys.AvgCheque = readerClients.GetDecimal(2);
+                    if (!readerClients.IsDBNull(3)) buys.ChequeSum = readerClients.GetDecimal(3);
+                    if (!readerClients.IsDBNull(4)) buys.MonthNum = readerClients.GetInt32(4);
+                    c.CardBuys.Add(buys);
+                }
+                readerClients.Close();
+            }
+
             cnn.Close();
             return returnValue;
         }

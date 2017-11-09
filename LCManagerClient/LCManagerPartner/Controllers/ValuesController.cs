@@ -65,7 +65,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetCheques")]
         public GetChequesResponse GetCheques(GetChequesRequest request)
         {
-            Log.Information("LCManagerPartner GetCheques {phone}", request.Operator);
+            Log.Information("LCManagerPartner GetCheques {Operator}", request.Operator);
             var result = new ServerGetChequesResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -425,31 +425,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
-        // GET api/values
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/values/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/values
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpPost]
+        [Route("OperatorClientsManager")]
+        public OperatorClientsManagerResponse OperatorClientsManager(OperatorClientsManagerRequest request)
+        {
+            Log.Information("LCManagerPartner OperatorClients {Operator}", request.Operator);
+            var result = new ServerOperatorClientsManager();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }        
     }
 }
