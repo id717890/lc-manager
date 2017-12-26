@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -49,6 +50,10 @@ namespace LCManagerPos.Models
                 cmd.Parameters["@phone"].Value = request.Phone;
             }
             if (request.PartnerID == 0) cmd.Parameters.AddWithValue("@partner", null); else cmd.Parameters.AddWithValue("@partner", request.PartnerID);
+            if(request.Operator > 0)
+            {
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+            }
             cmd.Parameters.Add("@balance", SqlDbType.Decimal);
             cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
@@ -147,12 +152,16 @@ namespace LCManagerPos.Models
 
     public class Item
     {
-        public int Position { get; set; }
+        public int Id { get; set; }
+        public byte Position { get; set; }
         public string Code { get; set; }
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
         public decimal Amount { get; set; }
         public decimal PaidByBonus { get; set; }
+        public decimal MinPrice { get; set; }
+        public bool NoAdd { get; set; }
+        public bool NoRedeem { get; set; }
         public decimal MaxRedeem { get; set; }
         public decimal Redeemed { get; set; }
         public decimal Added { get; set; }
@@ -167,6 +176,7 @@ namespace LCManagerPos.Models
         public string POS { get; set; }
         public decimal Amount { get; set; }
         public decimal PaidByBonus { get; set; }
+        public decimal Redeemed { get; set; }
         public string Number { get; set; }
         public List<Item> ItemData { get; set; }
         public Int16 Operator { get; set; }
@@ -205,6 +215,10 @@ namespace LCManagerPos.Models
 
             if (request.Card == 0) cmd.Parameters.AddWithValue("@card", null); else cmd.Parameters.AddWithValue("@card", request.Card);
             if (request.Phone == 0) cmd.Parameters.AddWithValue("@phone", null); else cmd.Parameters.AddWithValue("@phone", request.Phone);
+            if(request.ChequeTime < new DateTime(1753, 1, 1))
+            {
+                request.ChequeTime = DateTime.Now;
+            }
             cmd.Parameters.AddWithValue("@chequetime", request.ChequeTime);
             cmd.Parameters.AddWithValue("@partner", request.Partner);
             cmd.Parameters.AddWithValue("@pos", request.POS);
@@ -223,27 +237,43 @@ namespace LCManagerPos.Models
             {
                 using (var table = new DataTable())
                 {
-                    table.Columns.Add("Position", typeof(int));
-                    table.Columns.Add("Code", typeof(string));
-                    table.Columns.Add("Price", typeof(decimal));
-                    table.Columns.Add("Quantity", typeof(decimal));
-                    table.Columns.Add("Amount", typeof(decimal));
+                    table.Columns.Add("id", typeof(int));
+                    table.Columns.Add("position", typeof(byte));
+                    table.Columns.Add("code", typeof(string));
+                    table.Columns.Add("price", typeof(decimal));
+                    table.Columns.Add("quantity", typeof(decimal));
+                    table.Columns.Add("amount", typeof(decimal));
                     table.Columns.Add("paidbybonus", typeof(decimal));
+                    table.Columns.Add("minprice", typeof(decimal));
+                    table.Columns.Add("noadd", typeof(bool));
+                    table.Columns.Add("noredeem", typeof(bool));
+                    table.Columns.Add("maxredeem", typeof(decimal));
+                    table.Columns.Add("added", typeof(decimal));
+                    table.Columns.Add("redeemed", typeof(decimal));
 
                     foreach (var item in request.ItemData)
                     {
                         DataRow row = table.NewRow();
-                        row["Position"] = item.Position;
-                        row["Code"] = item.Code;
-                        row["Price"] = item.Price;
-                        row["Quantity"] = item.Quantity;
-                        row["Amount"] = item.Amount;
+                        row["id"] = item.Id;
+                        row["position"] = item.Position;
+                        row["code"] = item.Code;
+                        row["price"] = item.Price;
+                        row["quantity"] = item.Quantity;
+                        row["amount"] = item.Amount;
                         row["paidbybonus"] = item.PaidByBonus;
+                        row["minprice"] = item.MinPrice;
+                        row["noadd"] = item.NoAdd;
+                        row["noredeem"] = item.NoRedeem;
+                        row["maxredeem"] = item.MaxRedeem;
+                        row["added"] = item.Added;
+                        row["redeemed"] = item.Redeemed;
                         table.Rows.Add(row);
                     }
-                    var items = new SqlParameter("@chequeitems", SqlDbType.Structured);
-                    items.TypeName = "dbo.ChequeItems";
-                    items.Value = table;
+                    var items = new SqlParameter("@chequeitems", SqlDbType.Structured)
+                    {
+                        TypeName = "dbo.ChequeItems",
+                        Value = table
+                    };
                     cmd.Parameters.Add(items);
                 }
             }
@@ -253,7 +283,8 @@ namespace LCManagerPos.Models
             cmd.Parameters.Add("@added", SqlDbType.Decimal);
             cmd.Parameters["@added"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
-            cmd.Parameters["@redeemed"].Direction = ParameterDirection.Output;
+            cmd.Parameters["@redeemed"].Value = request.Redeemed;
+            cmd.Parameters["@redeemed"].Direction = ParameterDirection.InputOutput;
             cmd.Parameters.Add("@maxredeem", SqlDbType.Decimal);
             cmd.Parameters["@maxredeem"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@fullbalance", SqlDbType.Decimal);
@@ -266,21 +297,31 @@ namespace LCManagerPos.Models
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                Item item = new Item();
-                if (!reader.IsDBNull(0)) item.Position = reader.GetInt32(0);
-                if (!reader.IsDBNull(1)) item.Code = reader.GetString(1);
-                if (!reader.IsDBNull(2)) item.Price = reader.GetDecimal(2);
-                if (!reader.IsDBNull(3)) item.Quantity = reader.GetDecimal(3);
-                if (!reader.IsDBNull(4)) item.Amount = reader.GetDecimal(4);
-                if (!reader.IsDBNull(5)) item.MaxRedeem = reader.GetDecimal(5);
-                if (!reader.IsDBNull(6)) item.Redeemed = reader.GetDecimal(6);
-                if (!reader.IsDBNull(7)) item.Added = reader.GetDecimal(7);
-                returnValue.ItemData.Add(item);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Item item = new Item();
+                    if (!reader.IsDBNull(0)) item.Position = reader.GetByte(0);
+                    if (!reader.IsDBNull(1)) item.Code = reader.GetString(1);
+                    if (!reader.IsDBNull(2)) item.Price = reader.GetDecimal(2);
+                    if (!reader.IsDBNull(3)) item.Quantity = reader.GetDecimal(3);
+                    if (!reader.IsDBNull(4)) item.Amount = reader.GetDecimal(4);
+                    if (!reader.IsDBNull(5)) item.MaxRedeem = reader.GetDecimal(5);
+                    if (!reader.IsDBNull(6)) item.Redeemed = reader.GetDecimal(6);
+                    if (!reader.IsDBNull(7)) item.Added = reader.GetDecimal(7);
+                    returnValue.ItemData.Add(item);
+                }
+                reader.Close();
             }
-            reader.Close();
+            catch(Exception ex)
+            {
+                returnValue.ErrorCode = 25;
+                returnValue.Message = ex.Message;
+                Log.Error("LCManagerPos ChequeAdd {Message}", ex.Message);
+                return returnValue;
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             try
@@ -391,7 +432,17 @@ namespace LCManagerPos.Models
             cmd.Parameters.AddWithValue("@purchasedate", request.PurchaseDate);
             cmd.Parameters.AddWithValue("@purchasepos", request.PurchasePos);
             cmd.Parameters.AddWithValue("@purchaseterminal", request.PurchaseTerminal);
-            cmd.ExecuteNonQuery();
+            try
+            { 
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                returnValue.ErrorCode = 25;
+                returnValue.Message = ex.Message;
+                Log.Error("LCManagerPos Refund {Message}", ex.Message);
+                return returnValue;
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             try
@@ -584,6 +635,7 @@ namespace LCManagerPos.Models
         public string AgreePersonalData { get; set; }
         public Int16 Operator { get; set; }
         public Int64? FriendPhone { get; set; }
+        public bool ClientSetPassword { get; set; }
     }
 
     public class GetRegistrationUserResponse
@@ -625,6 +677,7 @@ namespace LCManagerPos.Models
             {
                 cmd.Parameters.AddWithValue("@friend", request.FriendPhone.Value);
             }
+            cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
             cmd.ExecuteNonQuery();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
@@ -848,6 +901,126 @@ namespace LCManagerPos.Models
             cmd.ExecuteNonQuery();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ClientCreateRequest
+    {
+        public Int16 Operator { get; set; }
+        public Int16 Partner { get; set; }
+        public Int64 Card { get; set; }
+        public Int64 Phone { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Patronymic { get; set; }
+        public string Email { get; set; }
+        public DateTime? Birthdate { get; set; }
+        public bool AllowSms { get; set; }
+        public bool AllowEmail { get; set; }
+        public int Gender { get; set; }
+        public bool AgreePersonalData { get; set; }
+        public string PosCode { get; set; }
+        public Int64? FriendPhone { get; set; }
+        public bool ClientSetPassword { get; set; }
+    }
+
+    public class ClientCreateResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public Int64 Phone { get; set; }
+        public Int64 Card { get; set; }
+        public int Client { get; set; }
+    }
+
+    public class ServerClientCreate
+    {
+        public ClientCreateResponse ProcessRequest(SqlConnection cnn, ClientCreateRequest request)
+        {
+            ClientCreateResponse returnValue = new ClientCreateResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientCreate";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.AddWithValue("@partner", request.Partner);
+            cmd.Parameters.AddWithValue("@card", request.Card);
+            cmd.Parameters["@card"].Direction = ParameterDirection.InputOutput;
+            cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters["@phone"].Direction = ParameterDirection.InputOutput;
+            if (!string.IsNullOrEmpty(request.Name))
+            {
+                cmd.Parameters.AddWithValue("@name", request.Name);
+            }
+            if (!string.IsNullOrEmpty(request.Surname))
+            {
+                cmd.Parameters.AddWithValue("@surname", request.Surname);
+            }
+            if (!string.IsNullOrEmpty(request.Patronymic))
+            {
+                cmd.Parameters.AddWithValue("@patronymic", request.Patronymic);
+            }
+            if (!string.IsNullOrEmpty(request.Email))
+            {
+                cmd.Parameters.AddWithValue("@email", request.Email);
+            }
+            if (request.Birthdate.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@birthdate", request.Birthdate);
+            }
+            if (request.Gender == -1)
+            {
+                cmd.Parameters.AddWithValue("@gender", 0);
+            }
+            else if (request.Gender == 1)
+            {
+                cmd.Parameters.AddWithValue("@gender", 1);
+            }
+            cmd.Parameters.AddWithValue("@allowsms", request.AllowSms);
+            cmd.Parameters.AddWithValue("@allowemail", request.AllowEmail);
+            cmd.Parameters.AddWithValue("@agreepersonaldata", request.AgreePersonalData);
+            cmd.Parameters.AddWithValue("@poscode", request.PosCode);
+            if (request.FriendPhone.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@friend", request.FriendPhone.Value);
+            }
+            cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@client", SqlDbType.Int);
+            cmd.Parameters["@client"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            cmd.ExecuteNonQuery();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            try
+            {
+                if (cmd.Parameters["@client"].Value != null)
+                {
+                    returnValue.Client = Convert.ToInt32(cmd.Parameters["@client"].Value);
+                }
+            }
+            catch { }
+            try
+            {
+                if (cmd.Parameters["@phone"].Value != null)
+                {
+                    returnValue.Phone = Convert.ToInt64(cmd.Parameters["@phone"].Value);
+                }
+            }
+            catch { }
+            try
+            {
+                if (cmd.Parameters["@card"].Value != null)
+                {
+                    returnValue.Card = Convert.ToInt64(cmd.Parameters["@card"].Value);
+                }
+            }
+            catch { }
             cnn.Close();
             return returnValue;
         }

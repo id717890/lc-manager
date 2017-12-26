@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -139,12 +140,19 @@ namespace LCManagerPartner.Models
 
     public class Item
     {
-        public int Position { get; set; }
+        public int Id { get; set; }
+        public byte Position { get; set; }
         public string Code { get; set; }
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
         public decimal Amount { get; set; }
         public decimal PaidByBonus { get; set; }
+        public decimal MinPrice { get; set; }
+        public bool NoAdd { get; set; }
+        public bool NoRedeem { get; set; }
+        public decimal MaxRedeem { get; set; }
+        public decimal Redeemed { get; set; }
+        public decimal Added { get; set; }
     }
 
     public class ChequeAddRequest
@@ -156,8 +164,14 @@ namespace LCManagerPartner.Models
         public string POS { get; set; }
         public decimal Amount { get; set; }
         public decimal PaidByBonus { get; set; }
+        public decimal Redeemed { get; set; }
         public string Number { get; set; }
         public List<Item> ItemData { get; set; }
+        public Int16 Operator { get; set; }
+        public bool NoWrite { get; set; }
+        public int BonusId { get; set; }
+        public bool NoAdd { get; set; }
+        public bool NoRedeem { get; set; }
     }
 
     public class ChequeAddResponse
@@ -166,6 +180,15 @@ namespace LCManagerPartner.Models
         public string Message { get; set; }
         public decimal Bonus { get; set; }
         public decimal Balance { get; set; }
+        public decimal Redeemed { get; set; }
+        public decimal MaxRedeem { get; set; }
+        public decimal FullBalance { get; set; }
+        public decimal PurchaseSum { get; set; }
+        public List<Item> ItemData { get; set; }
+        public ChequeAddResponse()
+        {
+            ItemData = new List<Item>();
+        }
     }
 
     public class ServerChequeAddResponse
@@ -180,38 +203,65 @@ namespace LCManagerPartner.Models
 
             if (request.Card == 0) cmd.Parameters.AddWithValue("@card", null); else cmd.Parameters.AddWithValue("@card", request.Card);
             if (request.Phone == 0) cmd.Parameters.AddWithValue("@phone", null); else cmd.Parameters.AddWithValue("@phone", request.Phone);
+            if (request.ChequeTime < new DateTime(1753, 1, 1))
+            {
+                request.ChequeTime = DateTime.Now;
+            }
             cmd.Parameters.AddWithValue("@chequetime", request.ChequeTime);
             cmd.Parameters.AddWithValue("@partner", request.Partner);
             cmd.Parameters.AddWithValue("@pos", request.POS);
             cmd.Parameters.AddWithValue("@amount", request.Amount);
             cmd.Parameters.AddWithValue("@paidbybonus", request.PaidByBonus);
             cmd.Parameters.AddWithValue("@number", request.Number);
+            cmd.Parameters.AddWithValue("@nowrite", request.NoWrite);
+            cmd.Parameters.AddWithValue("@noadd", request.NoAdd);
+            cmd.Parameters.AddWithValue("@noredeem", request.NoRedeem);
+            if (request.BonusId > 0)
+            {
+                cmd.Parameters.AddWithValue("@bonusid", request.BonusId);
+            }
 
             if (request.ItemData != null && request.ItemData.Count > 0)
             {
                 using (var table = new DataTable())
                 {
-                    table.Columns.Add("Position", typeof(int));
-                    table.Columns.Add("Code", typeof(string));
-                    table.Columns.Add("Price", typeof(decimal));
-                    table.Columns.Add("Quantity", typeof(decimal));
-                    table.Columns.Add("Amount", typeof(decimal));
+                    table.Columns.Add("id", typeof(int));
+                    table.Columns.Add("position", typeof(byte));
+                    table.Columns.Add("code", typeof(string));
+                    table.Columns.Add("price", typeof(decimal));
+                    table.Columns.Add("quantity", typeof(decimal));
+                    table.Columns.Add("amount", typeof(decimal));
                     table.Columns.Add("paidbybonus", typeof(decimal));
+                    table.Columns.Add("minprice", typeof(decimal));
+                    table.Columns.Add("noadd", typeof(bool));
+                    table.Columns.Add("noredeem", typeof(bool));
+                    table.Columns.Add("maxredeem", typeof(decimal));
+                    table.Columns.Add("added", typeof(decimal));
+                    table.Columns.Add("redeemed", typeof(decimal));
 
                     foreach (var item in request.ItemData)
                     {
                         DataRow row = table.NewRow();
-                        row["Position"] = item.Position;
-                        row["Code"] = item.Code;
-                        row["Price"] = item.Price;
-                        row["Quantity"] = item.Quantity;
-                        row["Amount"] = item.Amount;
+                        row["id"] = item.Id;
+                        row["position"] = item.Position;
+                        row["code"] = item.Code;
+                        row["price"] = item.Price;
+                        row["quantity"] = item.Quantity;
+                        row["amount"] = item.Amount;
                         row["paidbybonus"] = item.PaidByBonus;
+                        row["minprice"] = item.MinPrice;
+                        row["noadd"] = item.NoAdd;
+                        row["noredeem"] = item.NoRedeem;
+                        row["maxredeem"] = item.MaxRedeem;
+                        row["added"] = item.Added;
+                        row["redeemed"] = item.Redeemed;
                         table.Rows.Add(row);
                     }
-                    var items = new SqlParameter("@chequeitems", SqlDbType.Structured);
-                    items.TypeName = "dbo.ChequeItems";
-                    items.Value = table;
+                    var items = new SqlParameter("@chequeitems", SqlDbType.Structured)
+                    {
+                        TypeName = "dbo.ChequeItems",
+                        Value = table
+                    };
                     cmd.Parameters.Add(items);
                 }
             }
@@ -220,13 +270,46 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@cheque"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@added", SqlDbType.Decimal);
             cmd.Parameters["@added"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
+            cmd.Parameters["@redeemed"].Value = request.Redeemed;
+            cmd.Parameters["@redeemed"].Direction = ParameterDirection.InputOutput;
+            cmd.Parameters.Add("@maxredeem", SqlDbType.Decimal);
+            cmd.Parameters["@maxredeem"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@fullbalance", SqlDbType.Decimal);
+            cmd.Parameters["@fullbalance"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@balance", SqlDbType.Decimal);
             cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@purchasesum", SqlDbType.Decimal);
+            cmd.Parameters["@purchasesum"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            cmd.ExecuteNonQuery();
+            try
+            {
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Item item = new Item();
+                    if (!reader.IsDBNull(0)) item.Position = reader.GetByte(0);
+                    if (!reader.IsDBNull(1)) item.Code = reader.GetString(1);
+                    if (!reader.IsDBNull(2)) item.Price = reader.GetDecimal(2);
+                    if (!reader.IsDBNull(3)) item.Quantity = reader.GetDecimal(3);
+                    if (!reader.IsDBNull(4)) item.Amount = reader.GetDecimal(4);
+                    if (!reader.IsDBNull(5)) item.MaxRedeem = reader.GetDecimal(5);
+                    if (!reader.IsDBNull(6)) item.Redeemed = reader.GetDecimal(6);
+                    if (!reader.IsDBNull(7)) item.Added = reader.GetDecimal(7);
+                    returnValue.ItemData.Add(item);
+                }
+                reader.Close();
+            }
+            catch (Exception ex)
+            {
+                returnValue.ErrorCode = 25;
+                returnValue.Message = ex.Message;
+                Log.Error("LCManagerPartner ChequeAdd {Message}", ex.Message);
+                return returnValue;
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             try
@@ -237,6 +320,26 @@ namespace LCManagerPartner.Models
             try
             {
                 returnValue.Bonus = Convert.ToDecimal(cmd.Parameters["@added"].Value);
+            }
+            catch { }
+            try
+            {
+                returnValue.Redeemed = Convert.ToDecimal(cmd.Parameters["@redeemed"].Value);
+            }
+            catch { }
+            try
+            {
+                returnValue.MaxRedeem = Convert.ToDecimal(cmd.Parameters["@maxredeem"].Value);
+            }
+            catch { }
+            try
+            {
+                returnValue.FullBalance = Convert.ToDecimal(cmd.Parameters["@fullbalance"].Value);
+            }
+            catch { }
+            try
+            {
+                returnValue.PurchaseSum = Convert.ToDecimal(cmd.Parameters["@purchasesum"].Value);
             }
             catch { }
             cnn.Close();
@@ -320,6 +423,16 @@ namespace LCManagerPartner.Models
         }
     }
 
+    public class ChequeItem
+    {
+        public string Code { get; set; }
+        public decimal Price { get; set; }
+        public decimal Qty { get; set; }
+        public decimal Amount { get; set; }
+        public decimal AddedBonus { get; set; }
+        public decimal RedeemedBonus { get; set; }
+    }
+
     public class Cheque
     {
         public Int32 Id { get; set; }
@@ -336,7 +449,11 @@ namespace LCManagerPartner.Models
         public Int64 CardNumber { get; set; }
         public string PosName { get; set; }
         public long Phone { get; set; }
-        public Cheque() { }
+        public List<ChequeItem> Items { get; set; }
+        public Cheque()
+        {
+            Items = new List<ChequeItem>();
+        }
         public Cheque(Int32 id, string number, DateTime date, string operationtype, decimal summ, decimal summdiscount, decimal bonus, decimal paidbybonus, decimal discount, string partner, string shop, Int64 cardnumber, long phone)
         {
             Id = id;
@@ -414,11 +531,39 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(11)) cheque.PosName = reader.GetString(11);
                 if (!reader.IsDBNull(12)) cheque.Phone = reader.GetInt64(12);
                 returnValue.ChequeData.Add(cheque);
-            }
+            }           
             reader.Close();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             returnValue.PageCount = Convert.ToInt32(cmd.Parameters["@pagecount"].Value);
+            try
+            {
+                foreach (var cheque in returnValue.ChequeData)
+                {
+                    SqlCommand cmdItems = con.CreateCommand();
+                    cmdItems.CommandType = CommandType.StoredProcedure;
+                    cmdItems.CommandText = "ChequeItems";
+                    cmdItems.Parameters.AddWithValue("@cheque", cheque.Id);
+                    using (var readerItems = cmdItems.ExecuteReader())
+                    {
+                        while (readerItems.Read())
+                        {
+                            ChequeItem item = new ChequeItem();
+                            if (!readerItems.IsDBNull(0)) item.Code = readerItems.GetString(0);
+                            if (!readerItems.IsDBNull(1)) item.Price = readerItems.GetDecimal(1);
+                            if (!readerItems.IsDBNull(2)) item.Qty = readerItems.GetDecimal(2);
+                            if (!readerItems.IsDBNull(3)) item.Amount = readerItems.GetDecimal(3);
+                            if (!readerItems.IsDBNull(4)) item.RedeemedBonus = readerItems.GetDecimal(4);
+                            if (!readerItems.IsDBNull(5)) item.AddedBonus = readerItems.GetDecimal(5);
+                            cheque.Items.Add(item);
+                        }
+                    }                    
+                }
+            }
+            catch(Exception ex)
+            {
+                returnValue.Message = ex.Message;
+            }
             con.Close();
             return returnValue;
         }
@@ -565,6 +710,8 @@ namespace LCManagerPartner.Models
         public string AgreePersonalData { get; set; }
         public Int16 Operator { get; set; }
         public Int64? FriendPhone { get; set; }
+        public bool ClientSetPassword { get; set; }
+        public string Email { get; set; }
     }
 
     public class GetRegistrationUserResponse
@@ -606,6 +753,8 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@friend", request.FriendPhone.Value);
             }
+            cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
+            cmd.Parameters.AddWithValue("@email", request.Email);
             cmd.ExecuteNonQuery();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
@@ -1084,6 +1233,7 @@ namespace LCManagerPartner.Models
         public DateTime? PurchaseDate { get; set; }
         public string PurchasePos { get; set; }
         public string PurchaseTerminal { get; set; }
+        public Int16 Operator { get; set; }
     }
 
     public class RefundResponse
@@ -1138,13 +1288,20 @@ namespace LCManagerPartner.Models
                 cmd.Parameters.AddWithValue("@purchaseid", request.PurchaseId);
             }
             cmd.Parameters.AddWithValue("@purchasenumber", request.PurchaseNumber);
-            if (request.PurchaseDate.HasValue)
-            {
-                cmd.Parameters.AddWithValue("@purchasedate", request.PurchaseDate);
-            }
+            cmd.Parameters.AddWithValue("@purchasedate", request.PurchaseDate);
             cmd.Parameters.AddWithValue("@purchasepos", request.PurchasePos);
             cmd.Parameters.AddWithValue("@purchaseterminal", request.PurchaseTerminal);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                returnValue.ErrorCode = 25;
+                returnValue.Message = ex.Message;
+                Log.Error("LCManagerPos Refund {Message}", ex.Message);
+                return returnValue;
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             try
@@ -1826,6 +1983,7 @@ namespace LCManagerPartner.Models
         public bool AgreePersonalData { get; set; }
         public string PosCode { get; set; }
         public Int64? FriendPhone { get; set; }
+        public bool ClientSetPassword { get; set; }
     }
 
     public class ClientCreateResponse
@@ -1888,6 +2046,7 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@friend", request.FriendPhone.Value);
             }
+            cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@client", SqlDbType.Int);
@@ -3834,6 +3993,7 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@operator", request.Operator);
             }
+            cmd.Parameters.AddWithValue("@email", request.ClientData.email);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -4047,6 +4207,708 @@ namespace LCManagerPartner.Models
                 readerClients.Close();
             }
 
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class SegmentationAgeRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class SegmentationAgeResponse
+    {
+        public int LessThen25 { get; set; }
+        public int More25Less35 { get; set; }
+        public int More35Less45 { get; set; }
+        public int More45 { get; set; }
+        public int Unknown { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerSegmentationAge
+    {
+        public SegmentationAgeResponse ProcessRequest(SqlConnection cnn, SegmentationAgeRequest request)
+        {
+            SegmentationAgeResponse returnValue = new SegmentationAgeResponse();
+            cnn.Open();
+
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "SegmentationAge";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+
+            cmd.Parameters.Add("@less25", SqlDbType.Int);
+            cmd.Parameters["@less25"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@more25less35", SqlDbType.Int);
+            cmd.Parameters["@more25less35"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@more35less45", SqlDbType.Int);
+            cmd.Parameters["@more35less45"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@more45", SqlDbType.Int);
+            cmd.Parameters["@more45"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@unknown", SqlDbType.Int);
+            cmd.Parameters["@unknown"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            cmd.ExecuteNonQuery();
+
+            returnValue.LessThen25 = Convert.ToInt32(cmd.Parameters["@less25"].Value);
+            returnValue.More25Less35 = Convert.ToInt32(cmd.Parameters["@more25less35"].Value);
+            returnValue.More35Less45 = Convert.ToInt32(cmd.Parameters["@more35less45"].Value);
+            returnValue.More45 = Convert.ToInt32(cmd.Parameters["@more45"].Value);
+            returnValue.Unknown = Convert.ToInt32(cmd.Parameters["@unknown"].Value);
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ClientBaseStructureRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class ClientBaseStructureResponse
+    {
+        public int MenQty { get; set; }
+        public int WomenQty { get; set; }
+        public int UnknownGender { get; set; }
+        public int ClientsWithBuys { get; set; }
+        public int ClientsWithoutBuys { get; set; }
+        public int ClientsWithTenBuys { get; set; }
+        public int ClientsWitnOneBuys { get; set; }
+        public int ClientsWithPhone { get; set; }
+        public int ClientsWithEmail { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerClientBaseStructure
+    {
+        public ClientBaseStructureResponse ProcessRequest(SqlConnection cnn, ClientBaseStructureRequest request)
+        {
+            var returnValue = new ClientBaseStructureResponse();
+            cnn.Open();
+
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientBaseStructure";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@menQty", SqlDbType.Int);
+            cmd.Parameters["@menQty"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@womenQty", SqlDbType.Int);
+            cmd.Parameters["@womenQty"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@unknownGender", SqlDbType.Int);
+            cmd.Parameters["@unknownGender"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithBuys", SqlDbType.Int);
+            cmd.Parameters["@clientsWithBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithoutBuys", SqlDbType.Int);
+            cmd.Parameters["@clientsWithoutBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithTenBuys", SqlDbType.Int);
+            cmd.Parameters["@clientsWithTenBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithOneBuys", SqlDbType.Int);
+            cmd.Parameters["@clientsWithOneBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithPhone", SqlDbType.Int);
+            cmd.Parameters["@clientsWithPhone"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientsWithEmail", SqlDbType.Int);
+            cmd.Parameters["@clientsWithEmail"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            cmd.ExecuteNonQuery();
+
+            returnValue.MenQty = Convert.ToInt32(cmd.Parameters["@menQty"].Value);
+            returnValue.WomenQty = Convert.ToInt32(cmd.Parameters["@womenQty"].Value);
+            returnValue.UnknownGender = Convert.ToInt32(cmd.Parameters["@unknownGender"].Value);
+            returnValue.ClientsWithBuys = Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value);
+            returnValue.ClientsWithoutBuys = Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value);
+            returnValue.ClientsWithTenBuys = Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value);
+            returnValue.ClientsWitnOneBuys = Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value);
+            returnValue.ClientsWithPhone = Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value);
+            returnValue.ClientsWithEmail = Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ClientBaseActiveRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class ClientBaseActiveResponse
+    {
+        public decimal MenBuys { get; set; }
+        public decimal WomenBuys { get; set; }
+        public decimal UnknownGenderBuys { get; set; }
+        public decimal RepeatedBuys { get; set; }
+        public decimal BuysOnClient { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerClientBaseActive
+    {
+        public ClientBaseActiveResponse ProcessRequest(SqlConnection cnn, ClientBaseActiveRequest request)
+        {
+            var returnValue = new ClientBaseActiveResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientBaseActive";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+
+            cmd.Parameters.Add("@menBuys", SqlDbType.Decimal);
+            cmd.Parameters["@menBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@womenBuys", SqlDbType.Decimal);
+            cmd.Parameters["@womenBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@unknownGenderBuys", SqlDbType.Decimal);
+            cmd.Parameters["@unknownGenderBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@repeatedBuys", SqlDbType.Decimal);
+            cmd.Parameters["@repeatedBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@buysOnClient", SqlDbType.Decimal);
+            cmd.Parameters["@buysOnClient"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            cmd.ExecuteNonQuery();
+
+            returnValue.MenBuys = Convert.ToDecimal(cmd.Parameters["@menBuys"].Value);
+            returnValue.WomenBuys = Convert.ToDecimal(cmd.Parameters["@womenBuys"].Value);
+            returnValue.UnknownGenderBuys = Convert.ToDecimal(cmd.Parameters["@unknownGenderBuys"].Value);
+            returnValue.RepeatedBuys = Convert.ToDecimal(cmd.Parameters["@repeatedBuys"].Value);
+            returnValue.BuysOnClient = Convert.ToDecimal(cmd.Parameters["@buysOnClient"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ClientAnalyticMoneyRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class ClientAnalyticMoneyResponse
+    {
+        public int WithBirthDate { get; set; }
+        public int WithoutBirthDate { get; set; }
+        public int WithPhone { get; set; }
+        public int WithEmail { get; set; }
+        public int MoreTenBuys { get; set; }
+        public int WithOneBuy { get; set; }
+        public decimal Gain { get; set; }
+        public decimal AvgCheque { get; set; }
+        public decimal BuysWeekdays { get; set; }
+        public decimal BuysWeekOff { get; set; }
+        public decimal AddedBonus { get; set; }
+        public decimal AvgCharge { get; set; }
+        public decimal RedeemedBonus { get; set; }
+        public decimal AvgRedeem { get; set; }
+        public decimal AvgBalance { get; set; }
+        public decimal AvgDiscount { get; set; }
+        public int ClientQty { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerClientAnalyticMoney
+    {
+        public ClientAnalyticMoneyResponse ProcessRequest(SqlConnection cnn, ClientAnalyticMoneyRequest request)
+        {
+            var returnValue = new ClientAnalyticMoneyResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientAnalyticMoney";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+
+            cmd.Parameters.Add("@withBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withBirthDate"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withoutBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withoutBirthDate"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withPhone", SqlDbType.Int);
+            cmd.Parameters["@withPhone"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withEmail", SqlDbType.Int);
+            cmd.Parameters["@withEmail"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@moreTenBuys", SqlDbType.Int);
+            cmd.Parameters["@moreTenBuys"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withOneBuy", SqlDbType.Int);
+            cmd.Parameters["@withOneBuy"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@gain", SqlDbType.Decimal);
+            cmd.Parameters["@gain"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@avgCheque", SqlDbType.Decimal);
+            cmd.Parameters["@avgCheque"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@buysWeekdays", SqlDbType.Int);
+            cmd.Parameters["@buysWeekdays"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@buysWeekOff", SqlDbType.Int);
+            cmd.Parameters["@buysWeekOff"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@addedBonus", SqlDbType.Decimal);
+            cmd.Parameters["@addedBonus"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@avgCharge", SqlDbType.Decimal);
+            cmd.Parameters["@avgCharge"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@redeemedBonus", SqlDbType.Decimal);
+            cmd.Parameters["@redeemedBonus"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@avgRedeem", SqlDbType.Decimal);
+            cmd.Parameters["@avgRedeem"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@avgBalance", SqlDbType.Decimal);
+            cmd.Parameters["@avgBalance"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@avgDiscount", SqlDbType.Decimal);
+            cmd.Parameters["@avgDiscount"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@clientQty", SqlDbType.Int);
+            cmd.Parameters["@clientQty"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+
+            returnValue.WithBirthDate = Convert.ToInt32(cmd.Parameters["@withBirthDate"].Value);
+            returnValue.WithoutBirthDate = Convert.ToInt32(cmd.Parameters["@withoutBirthDate"].Value);
+            returnValue.WithPhone = Convert.ToInt32(cmd.Parameters["@withPhone"].Value);
+            returnValue.WithEmail = Convert.ToInt32(cmd.Parameters["@withEmail"].Value);
+            returnValue.MoreTenBuys = Convert.ToInt32(cmd.Parameters["@moreTenBuys"].Value);
+            returnValue.WithOneBuy = Convert.ToInt32(cmd.Parameters["@withOneBuy"].Value);
+            returnValue.Gain = Convert.ToDecimal(cmd.Parameters["@gain"].Value);
+            returnValue.AvgCheque = Convert.ToDecimal(cmd.Parameters["@avgCheque"].Value);
+            returnValue.BuysWeekdays = Convert.ToDecimal(cmd.Parameters["@buysWeekdays"].Value);
+            returnValue.BuysWeekOff = Convert.ToDecimal(cmd.Parameters["@buysWeekOff"].Value);
+            returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
+            returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
+            returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
+            returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
+            returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
+            returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
+            returnValue.ClientQty = Convert.ToInt32(cmd.Parameters["@clientQty"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class GainPeriod
+    {
+        public int Month { get; set; }
+        public decimal AvgCheque { get; set; }
+        public decimal Gain { get; set; }
+    }
+
+    public class GainOperatorPeriodRequest
+    {
+        public Int16 Operator { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+    }
+
+    public class GainOperatorPeriodResponse
+    {
+        public List<GainPeriod> GainOperatorPeriod { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public GainOperatorPeriodResponse()
+        {
+            GainOperatorPeriod = new List<GainPeriod>();
+        }
+    }
+
+    public class ServerGainOperatorPeriod
+    {
+        public GainOperatorPeriodResponse ProcessRequest(SqlConnection cnn, GainOperatorPeriodRequest request)
+        {
+            var returnValue = new GainOperatorPeriodResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "GainOperatorPeriod";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.AddWithValue("@from", request.From);
+            cmd.Parameters.AddWithValue("@to", request.To);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                GainPeriod gain = new GainPeriod();
+                if (!reader.IsDBNull(0)) gain.Gain = reader.GetDecimal(0);
+                if (!reader.IsDBNull(1)) gain.AvgCheque = reader.GetDecimal(1);
+                if (!reader.IsDBNull(2)) gain.Month = reader.GetInt32(2);
+                returnValue.GainOperatorPeriod.Add(gain);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class RefundPeriod
+    {
+        public int Month { get; set; }
+        public decimal RefundSum { get; set; }
+    }
+
+    public class RefundOperatorPeriodRequest
+    {
+        public Int16 Operator { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+    }
+
+    public class RefundOperatorPeriodResponse
+    {
+        public List<RefundPeriod> RefundOperatorPeriod { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+
+        public RefundOperatorPeriodResponse()
+        {
+            RefundOperatorPeriod = new List<RefundPeriod>();
+        }
+    }
+
+    public class ServerRefundOperatorPeriod
+    {
+        public RefundOperatorPeriodResponse ProcessRequest(SqlConnection cnn, RefundOperatorPeriodRequest request)
+        {
+            var returnValue = new RefundOperatorPeriodResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "RefundOperatorPeriod";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.AddWithValue("@from", request.From);
+            cmd.Parameters.AddWithValue("@to", request.To);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                RefundPeriod refund = new RefundPeriod();
+                if (!reader.IsDBNull(0)) refund.Month = reader.GetInt32(0);
+                if (!reader.IsDBNull(1)) refund.RefundSum = reader.GetDecimal(1);
+                returnValue.RefundOperatorPeriod.Add(refund);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ClientPeriod
+    {
+        public int Month { get; set; }
+        public int ClientQty { get; set; }
+    }
+
+    public class ClientOperatorPeriodRequest
+    {
+        public Int16 Operator { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+    }
+
+    public class ClientOperatorPeriodResponse
+    {
+        public List<ClientPeriod> ClientOperatorPeriod { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public ClientOperatorPeriodResponse()
+        {
+            ClientOperatorPeriod = new List<ClientPeriod>();
+        }
+    }
+
+    public class ServerClientOperatorPeriod
+    {
+        public ClientOperatorPeriodResponse ProcessRequest(SqlConnection cnn, ClientOperatorPeriodRequest request)
+        {
+            var returnValue = new ClientOperatorPeriodResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientOperatorPeriod";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.AddWithValue("@from", request.From);
+            cmd.Parameters.AddWithValue("@to", request.To);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                ClientPeriod client = new ClientPeriod();
+                if (!reader.IsDBNull(0)) client.Month = reader.GetInt32(0);
+                if (!reader.IsDBNull(1)) client.ClientQty = reader.GetInt32(1);
+                returnValue.ClientOperatorPeriod.Add(client);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+
+            cnn.Close();
+
+            return returnValue;
+        }
+    }
+
+    public class ManagerSendCodeRequest
+    {
+        public long Phone { get; set; }
+    }
+
+    public class ManagerSendCodeResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerManagerSendCode
+    {
+        public ManagerSendCodeResponse ProcessRequest(SqlConnection cnn, ManagerSendCodeRequest request)
+        {
+            ManagerSendCodeResponse returnValue = new ManagerSendCodeResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ManagerSendCode";
+            cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class OperatorInfoRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class OperatorInfoResponse
+    {
+        public string OperatorName { get; set; }
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerOperatorInfo
+    {
+        public OperatorInfoResponse ProcessRequest(SqlConnection cnn, OperatorInfoRequest request)
+        {
+            OperatorInfoResponse returnValue = new OperatorInfoResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorInfoGet";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@operatorname", SqlDbType.NVarChar, 20);
+            cmd.Parameters["@operatorname"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            try
+            {
+                returnValue.OperatorName = Convert.ToString(cmd.Parameters["@operatorname"].Value);
+            }
+            catch { }
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ActivateCardRequest
+    {
+        public Int64 Phone { get; set; }
+        public Int64 Card { get; set; }
+        public string Code { get; set; }
+        public Int16 Operator { get; set; }
+    }
+
+    public class ActivateCardResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerActivateCard
+    {
+        public ActivateCardResponse ProcessRequest(SqlConnection cnn, ActivateCardRequest request)
+        {
+            var returnValue = new ActivateCardResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "CardActivate";
+            cmd.Parameters.AddWithValue("@card", request.Card);
+            if (request.Operator == 0)
+            {
+                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+            }
+            cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters.AddWithValue("@code", request.Code);
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class Good
+    {
+        public string Code { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class OperatorGoodsRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class OperatorGoodsResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public List<Good> OperatorGoods { get; set; }
+        public OperatorGoodsResponse()
+        {
+            OperatorGoods = new List<Good>();
+        }
+    }
+
+    public class ServerOperatorGoods
+    {
+        public OperatorGoodsResponse ProcessRequest(SqlConnection cnn, OperatorGoodsRequest request)
+        {
+            OperatorGoodsResponse returnValue = new OperatorGoodsResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorGetGoods";
+            if (request.Operator == 0)
+            {
+                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+            }
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Good good = new Good();
+                if (!reader.IsDBNull(0)) good.Code = reader.GetString(0);
+                if (!reader.IsDBNull(1)) good.Name = reader.GetString(1);
+                returnValue.OperatorGoods.Add(good);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class OperatorPos
+    {
+        public string Region { get; set; }
+        public string City { get; set; }
+        public string Address { get; set; }
+    }
+
+    public class OperatorPosRequest
+    {
+        public Int16 Operator { get; set; }
+    }
+
+    public class OperatorPosResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public List<OperatorPos> Poses { get; set; }
+        public OperatorPosResponse()
+        {
+            Poses = new List<OperatorPos>();
+        }
+    }
+
+    public class ServerOperatorPos
+    {
+        public OperatorPosResponse ProcessRequest(SqlConnection cnn, OperatorPosRequest request)
+        {
+            var returnValue = new OperatorPosResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorGetPos";
+            if (request.Operator == 0)
+            {
+                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+            }
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                OperatorPos pos = new OperatorPos();
+                if (!reader.IsDBNull(0)) pos.Region = reader.GetString(0);
+                if (!reader.IsDBNull(1)) pos.City = reader.GetString(1);
+                if (!reader.IsDBNull(2)) pos.Address = reader.GetString(2);
+                returnValue.Poses.Add(pos);
+            }
+            reader.Close();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             cnn.Close();
             return returnValue;
         }

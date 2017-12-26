@@ -131,5 +131,15 @@ namespace LCManagerPos.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        [HttpPost]
+        [Route("ClientCreate")]
+        public ClientCreateResponse ClientCreate(ClientCreateRequest request)
+        {
+            Log.Information("LCManagerPos ClientCreate {Phone}", request.Phone);
+            var result = new ServerClientCreate();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
     }
 }

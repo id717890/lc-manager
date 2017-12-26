@@ -433,6 +433,127 @@ namespace LCManagerPartner.Controllers
             var result = new ServerOperatorClientsManager();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
-        }        
+        }
+
+        [HttpPost]
+        [Route("SegmentationAge")]
+        public SegmentationAgeResponse SegmentationAge(SegmentationAgeRequest request)
+        {
+            Log.Information("LCManagerPartner SegmentationAge {Operator}", request.Operator);
+            var result = new ServerSegmentationAge();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ClientBaseStructure")]
+        public ClientBaseStructureResponse ClientBaseStructure(ClientBaseStructureRequest request)
+        {
+            Log.Information("LCManagerPartner ClientBaseStructure {Operator}", request.Operator);
+            var result = new ServerClientBaseStructure();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ClientBaseActive")]
+        public ClientBaseActiveResponse ClientBaseActive(ClientBaseActiveRequest request)
+        {
+            Log.Information("LCManagerPartner ClientBaseActive {Operator}", request.Operator);
+            var result = new ServerClientBaseActive();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ClientAnalyticMoney")]
+        public ClientAnalyticMoneyResponse ClientAnalyticMoney(ClientAnalyticMoneyRequest request)
+        {
+            Log.Information("LCManagerPartner ClientAnalyticMoney {Operator}", request.Operator);
+            var result = new ServerClientAnalyticMoney();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("GainOperatorPeriod")]
+        public GainOperatorPeriodResponse GainOperatorPeriod(GainOperatorPeriodRequest request)
+        {
+            Log.Information("LCManagerPartner GainOperatorPeriod {Operator}", request.Operator);
+            var result = new ServerGainOperatorPeriod();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("RefundOperatorPeriod")]
+        public RefundOperatorPeriodResponse RefundOperatorPeriod(RefundOperatorPeriodRequest request)
+        {
+            Log.Information("LCManagerPartner RefundOperatorPeriod {Operator}", request.Operator);
+            var result = new ServerRefundOperatorPeriod();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("ClientOperatorPeriod")]
+        public ClientOperatorPeriodResponse ClientOperatorPeriod(ClientOperatorPeriodRequest request)
+        {
+            Log.Information("LCManagerPartner ClientOperatorPeriod {Operator}", request.Operator);
+            var result = new ServerClientOperatorPeriod();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("ManagerSendCode")]
+        public ManagerSendCodeResponse ManagerSendCode(ManagerSendCodeRequest request)
+        {
+            Log.Information("LCManagerPartner ManagerSendCode {Phone}", request.Phone);
+            var result = new ServerManagerSendCode();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("OperatorInfo")]
+        public OperatorInfoResponse OperatorInfo(OperatorInfoRequest request)
+        {
+            Log.Information("LCManagerPartner OperatorInfo {Operator}", request.Operator);
+            var result = new ServerOperatorInfo();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("ActivateCard")]
+        public ActivateCardResponse ActivateCard(ActivateCardRequest request)
+        {
+            Log.Information("LCManagerPartner ActivateCard {Operator}", request.Operator);
+            var result = new ServerActivateCard();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("OperatorGoods")]
+        public OperatorGoodsResponse OperatorGoods(OperatorGoodsRequest request)
+        {
+            Log.Information("LCManagerPartner OperatorGoods {Operator}", request.Operator);
+            var result = new ServerOperatorGoods();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("OperatorPos")]
+        public OperatorPosResponse OperatorPos(OperatorPosRequest request)
+        {
+            var result = new ServerOperatorPos();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
     }
 }
