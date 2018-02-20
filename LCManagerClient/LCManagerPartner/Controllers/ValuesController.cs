@@ -17,10 +17,7 @@ namespace LCManagerPartner.Controllers
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
-
-        //public Partner() { cnn.Open(); }
-        //~Partner() { cnn.Close(); }
-
+        
         [Authorize]
         [HttpPost]
         [Route("BalanceGet")]
@@ -65,7 +62,7 @@ namespace LCManagerPartner.Controllers
         [Route("GetCheques")]
         public GetChequesResponse GetCheques(GetChequesRequest request)
         {
-            Log.Information("LCManagerPartner GetCheques {Operator}", request.Operator);
+            Log.Information("LCManagerPartner GetCheques {Operator} and {Partner} and {Pos}", request.Operator, request.PartnerId, request.Pos);
             var result = new ServerGetChequesResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -419,7 +416,7 @@ namespace LCManagerPartner.Controllers
         [Route("ChequeMaxSumRedeem")]
         public ChequeMaxSumRedeemResponse ChequeMaxSumRedeem(ChequeMaxSumRedeemRequest request)
         {
-            Log.Information("LCManagerPartner ChequeMaxSumRedeem {Phone}", request.Phone);
+            Log.Information("LCManagerPartner ChequeMaxSumRedeem {Card}", request.Card);
             var result = new ServerChequeMaxSumRedeem();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;

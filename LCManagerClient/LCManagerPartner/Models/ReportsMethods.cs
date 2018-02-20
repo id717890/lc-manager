@@ -1034,12 +1034,13 @@ namespace LCManagerPartner.Models
             }
             reader.Close();
             cnn.Close();
+            string reportName = string.Format("Отчёт о продажах по программе лояльности с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
                 var worksheet = workbook.Worksheets.Add("Sheet1");
                 worksheet.View.FreezePanes(4, 1);
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по продажам за период с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
+                worksheet.Cells["A1"].Value = reportName;
                 worksheet.Cells["A2:B2"].Merge = true;
                 worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));

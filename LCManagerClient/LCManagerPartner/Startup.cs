@@ -22,7 +22,7 @@ namespace LCManagerPartner
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/ManagerLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
                 Provider = myProvider
             };
             app.UseOAuthAuthorizationServer(options);

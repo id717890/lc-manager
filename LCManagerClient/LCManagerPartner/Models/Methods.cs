@@ -16,6 +16,7 @@ namespace LCManagerPartner.Models
         public long Card { get; set; }
         public long Phone { get; set; }
         public long PartnerID { get; set; }
+        public Int16 Operator { get; set; }
     }
 
     public class BalanceGetResponse
@@ -51,6 +52,10 @@ namespace LCManagerPartner.Models
                 cmd.Parameters["@phone"].Value = request.Phone;
             }
             if (request.PartnerID == 0) cmd.Parameters.AddWithValue("@partner", null); else cmd.Parameters.AddWithValue("@partner", request.PartnerID);
+            if (request.Operator > 0)
+            {
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+            }
             cmd.Parameters.Add("@balance", SqlDbType.Decimal);
             cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
@@ -178,6 +183,7 @@ namespace LCManagerPartner.Models
     {
         public int ErrorCode { get; set; }
         public string Message { get; set; }
+        public decimal Added { get; set; }
         public decimal Bonus { get; set; }
         public decimal Balance { get; set; }
         public decimal Redeemed { get; set; }
@@ -340,6 +346,11 @@ namespace LCManagerPartner.Models
             try
             {
                 returnValue.PurchaseSum = Convert.ToDecimal(cmd.Parameters["@purchasesum"].Value);
+            }
+            catch { }
+            try
+            {
+                returnValue.Added = Convert.ToDecimal(cmd.Parameters["@added"].Value);
             }
             catch { }
             cnn.Close();
@@ -572,6 +583,8 @@ namespace LCManagerPartner.Models
     public class GetChequesByCardRequest
     {
         public Int64 CardNumber { get; set; }
+
+        public Int16 Pos { get; set; }
     }
 
     public class GetChequesByCardResponse
@@ -755,7 +768,18 @@ namespace LCManagerPartner.Models
             }
             cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
             cmd.Parameters.AddWithValue("@email", request.Email);
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "ServerGetRegistrationUserResponse");
+                cnn.Close();
+                returnValue.ErrorCode = 500;
+                returnValue.Message = ex.Message;
+                return returnValue;
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             try
@@ -1273,12 +1297,28 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@amount"].Direction = ParameterDirection.InputOutput;
             cmd.Parameters.AddWithValue("@paidbybonus", request.PaidByBonus);
             cmd.Parameters.AddWithValue("@number", request.Number);
-            cmd.Parameters.Add("@added", SqlDbType.Decimal);
-            cmd.Parameters["@added"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
-            cmd.Parameters["@redeemed"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@balance", SqlDbType.Decimal);
-            cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
+            SqlParameter added = new SqlParameter("@added", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(added);
+            SqlParameter redeemed = new SqlParameter("@redeemed", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemed);
+            SqlParameter balance = new SqlParameter("@balance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(balance);
+
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -1380,27 +1420,76 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@clients_all"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@purchases", SqlDbType.Int);
             cmd.Parameters["@purchases"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@purchasesum", SqlDbType.Decimal);
-            cmd.Parameters["@purchasesum"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@refunds", SqlDbType.Decimal);
-            cmd.Parameters["@refunds"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@refundsum", SqlDbType.Decimal);
-            cmd.Parameters["@refundsum"].Direction = ParameterDirection.Output;
-
-            cmd.Parameters.Add("@spentsum", SqlDbType.Decimal);
-            cmd.Parameters["@spentsum"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@charged", SqlDbType.Decimal);
-            cmd.Parameters["@charged"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
-            cmd.Parameters["@redeemed"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@chargerefund", SqlDbType.Decimal);
-            cmd.Parameters["@chargerefund"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemrefund", SqlDbType.Decimal);
-            cmd.Parameters["@redeemrefund"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@balance", SqlDbType.Decimal);
-            cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@paysum", SqlDbType.Decimal);
-            cmd.Parameters["@paysum"].Direction = ParameterDirection.Output;
+            SqlParameter purchasesum = new SqlParameter("@purchasesum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(purchasesum);
+            SqlParameter refunds = new SqlParameter("@refunds", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(refunds);
+            SqlParameter refundsum = new SqlParameter("@refundsum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(refundsum);
+            SqlParameter spentsum = new SqlParameter("@spentsum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(spentsum);
+            SqlParameter charged = new SqlParameter("@charged", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(charged);
+            SqlParameter redeemed = new SqlParameter("@redeemed", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemed);
+            SqlParameter chargerefund = new SqlParameter("@chargerefund", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(chargerefund);
+            SqlParameter redeemrefund = new SqlParameter("@redeemrefund", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemrefund);
+            SqlParameter balance = new SqlParameter("@balance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(balance);
+            SqlParameter paysum = new SqlParameter("@paysum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(paysum);
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
@@ -1942,8 +2031,13 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@terminal", request.Terminal);
             }
-            cmd.Parameters.Add("@balance", SqlDbType.Decimal);
-            cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
+            SqlParameter balance = new SqlParameter("@balance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(balance);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -2094,7 +2188,7 @@ namespace LCManagerPartner.Models
         public string middlename { get; set; }
         public string lastname { get; set; }
         public int gender { get; set; }
-        public DateTime birthdate { get; set; }
+        public DateTime? birthdate { get; set; }
         public string address { get; set; }
         public bool haschildren { get; set; }
         public string description { get; set; }
@@ -2648,36 +2742,129 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@clients_all"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@purchases", SqlDbType.Int);
             cmd.Parameters["@purchases"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@purchasesum", SqlDbType.Decimal);
-            cmd.Parameters["@purchasesum"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@refunds", SqlDbType.Decimal);
-            cmd.Parameters["@refunds"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@refundsum", SqlDbType.Decimal);
-            cmd.Parameters["@refundsum"].Direction = ParameterDirection.Output;
+            //cmd.Parameters.Add("@purchasesum", SqlDbType.Decimal);
+            //cmd.Parameters["@purchasesum"].Direction = ParameterDirection.Output;
+            SqlParameter purchasesum = new SqlParameter("@purchasesum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(purchasesum);
 
-            cmd.Parameters.Add("@spentsum", SqlDbType.Decimal);
-            cmd.Parameters["@spentsum"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@charged", SqlDbType.Decimal);
-            cmd.Parameters["@charged"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
-            cmd.Parameters["@redeemed"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@chargerefund", SqlDbType.Decimal);
-            cmd.Parameters["@chargerefund"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemrefund", SqlDbType.Decimal);
-            cmd.Parameters["@redeemrefund"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@balance", SqlDbType.Decimal);
-            cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@paysum", SqlDbType.Decimal);
-            cmd.Parameters["@paysum"].Direction = ParameterDirection.Output;
+            //cmd.Parameters.Add("@refunds", SqlDbType.Decimal);
+            //cmd.Parameters["@refunds"].Direction = ParameterDirection.Output;
+            SqlParameter refunds = new SqlParameter("@refunds", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(refunds);
+
+            //cmd.Parameters.Add("@refundsum", SqlDbType.Decimal);
+            //cmd.Parameters["@refundsum"].Direction = ParameterDirection.Output;
+            SqlParameter refundsum = new SqlParameter("@refundsum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(refundsum);
+
+            //cmd.Parameters.Add("@spentsum", SqlDbType.Decimal);
+            //cmd.Parameters["@spentsum"].Direction = ParameterDirection.Output;
+            SqlParameter spentsum = new SqlParameter("@spentsum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(spentsum);
+
+            //cmd.Parameters.Add("@charged", SqlDbType.Decimal);
+            //cmd.Parameters["@charged"].Direction = ParameterDirection.Output;
+            SqlParameter charged = new SqlParameter("@charged", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(charged);
+
+            //cmd.Parameters.Add("@redeemed", SqlDbType.Decimal);
+            //cmd.Parameters["@redeemed"].Direction = ParameterDirection.Output;
+            SqlParameter redeemed = new SqlParameter("@redeemed", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemed);
+
+            //cmd.Parameters.Add("@chargerefund", SqlDbType.Decimal);
+            //cmd.Parameters["@chargerefund"].Direction = ParameterDirection.Output;
+            SqlParameter chargerefund = new SqlParameter("@chargerefund", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(chargerefund);
+
+            //cmd.Parameters.Add("@redeemrefund", SqlDbType.Decimal);
+            //cmd.Parameters["@redeemrefund"].Direction = ParameterDirection.Output;
+            SqlParameter redeemrefund = new SqlParameter("@redeemrefund", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemrefund);
+
+            //cmd.Parameters.Add("@balance", SqlDbType.Decimal);
+            //cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
+            SqlParameter balance = new SqlParameter("@balance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(balance);
+
+            //cmd.Parameters.Add("@paysum", SqlDbType.Decimal);
+            //cmd.Parameters["@paysum"].Direction = ParameterDirection.Output;
+            SqlParameter paysum = new SqlParameter("@paysum", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(paysum);
 
             cmd.Parameters.Add("@purchasesClient", SqlDbType.Int);
             cmd.Parameters["@purchasesClient"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@purchasesumClient", SqlDbType.Decimal);
-            cmd.Parameters["@purchasesumClient"].Direction = ParameterDirection.Output;
+            //cmd.Parameters.Add("@purchasesumClient", SqlDbType.Decimal);
+            //cmd.Parameters["@purchasesumClient"].Direction = ParameterDirection.Output;
+            SqlParameter purchasesumClient = new SqlParameter("@purchasesumClient", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(purchasesumClient);
+
             cmd.Parameters.Add("@refundsClient", SqlDbType.Int);
             cmd.Parameters["@refundsClient"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@refundsumClient", SqlDbType.Decimal);
-            cmd.Parameters["@refundsumClient"].Direction = ParameterDirection.Output;
+            //cmd.Parameters.Add("@refundsumClient", SqlDbType.Decimal);
+            //cmd.Parameters["@refundsumClient"].Direction = ParameterDirection.Output;
+            SqlParameter refundsumClient = new SqlParameter("@refundsumClient", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(refundsumClient);
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
@@ -3365,10 +3552,21 @@ namespace LCManagerPartner.Models
 
                 cmd.Parameters.Add("@cheque", SqlDbType.Int);
                 cmd.Parameters["@cheque"].Direction = ParameterDirection.Output;
-                cmd.Parameters.Add("@added", SqlDbType.Decimal);
-                cmd.Parameters["@added"].Direction = ParameterDirection.Output;
-                cmd.Parameters.Add("@balance", SqlDbType.Decimal);
-                cmd.Parameters["@balance"].Direction = ParameterDirection.Output;
+                SqlParameter added = new SqlParameter("@added", SqlDbType.Decimal)
+                {
+                    Precision = 19,
+                    Scale = 2,
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(added);
+                SqlParameter balance = new SqlParameter("@balance", SqlDbType.Decimal)
+                {
+                    Precision = 19,
+                    Scale = 2,
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(balance);
+
                 cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -3881,6 +4079,8 @@ namespace LCManagerPartner.Models
 
         public Int16 Partner { get; set; }
 
+        public Int16 Pos { get; set; }
+
         public string PosCode { get; set; }
 
         public string RoleName { get; set; }
@@ -3908,6 +4108,8 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@operator"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@partner", SqlDbType.SmallInt);
             cmd.Parameters["@partner"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@pos", SqlDbType.SmallInt);
+            cmd.Parameters["@pos"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@posCode", SqlDbType.NVarChar, 10);
             cmd.Parameters["@posCode"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@rolename", SqlDbType.NVarChar, 50);
@@ -3927,6 +4129,10 @@ namespace LCManagerPartner.Models
             if (!DBNull.Value.Equals(cmd.Parameters["@partner"].Value))
             {
                 returnValue.Partner = Convert.ToInt16(cmd.Parameters["@partner"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@pos"].Value))
+            {
+                returnValue.Pos = Convert.ToInt16(cmd.Parameters["@pos"].Value);
             }
             if (!DBNull.Value.Equals(cmd.Parameters["@posCode"].Value))
             {
@@ -4008,9 +4214,9 @@ namespace LCManagerPartner.Models
 
     public class ChequeMaxSumRedeemRequest
     {
-        public Int16 Operator { get; set; }
+        public Int64 Card { get; set; }
 
-        public Int64 Phone { get; set; }
+        public Int16 Partner { get; set; }
 
         public decimal ChequeSum { get; set; }
     }
@@ -4028,7 +4234,33 @@ namespace LCManagerPartner.Models
         {
             var returnValue = new ChequeMaxSumRedeemResponse();
             cnn.Open();
-            returnValue.MaxSum = request.ChequeSum / 10;
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ChequeAdd";
+            cmd.Parameters.AddWithValue("@card", request.Card);
+            cmd.Parameters.AddWithValue("@chequetime", DateTime.Now);
+            cmd.Parameters.AddWithValue("@partner", request.Partner);
+            cmd.Parameters.AddWithValue("@amount", request.ChequeSum);
+            cmd.Parameters.AddWithValue("@nowrite", true);
+
+            //cmd.Parameters.Add("@maxredeem", SqlDbType.Decimal);
+            //cmd.Parameters["@maxredeem"].Direction = ParameterDirection.Output;
+            SqlParameter maxRedeem = new SqlParameter("@maxredeem", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(maxRedeem);
+
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.ExecuteNonQuery();
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            returnValue.MaxSum = Convert.ToDecimal(cmd.Parameters["@maxredeem"].Value);
             cnn.Close();
             return returnValue;
         }
@@ -4101,6 +4333,14 @@ namespace LCManagerPartner.Models
 
         public decimal BirthdayBonus { get; set; }
 
+        public string PosRegister { get; set; }
+
+        public DateTime DateRegister { get; set; }
+
+        public int RefundQty { get; set; }
+
+        public decimal Refund { get; set; }
+
         public List<CardBuysByMonth> CardBuys { get; set; }
 
         public OperatorClientsManagerBuys()
@@ -4112,6 +4352,10 @@ namespace LCManagerPartner.Models
     public class OperatorClientsManagerRequest
     {
         public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public string Pos { get; set; }
 
         public DateTime From { get; set; }
 
@@ -4143,6 +4387,14 @@ namespace LCManagerPartner.Models
             cmd.CommandText = "Clients";
 
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if(request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if(!string.IsNullOrEmpty(request.Pos))
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -4179,6 +4431,10 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(23)) clientBuys.FriendBonus = reader.GetDecimal(23);
                 if (!reader.IsDBNull(24)) clientBuys.BirthdayBonusDate = reader.GetDateTime(24);
                 if (!reader.IsDBNull(25)) clientBuys.BirthdayBonus = reader.GetDecimal(25);
+                if (!reader.IsDBNull(26)) clientBuys.PosRegister = reader.GetString(26);
+                if (!reader.IsDBNull(27)) clientBuys.DateRegister = reader.GetDateTime(27);
+                if (!reader.IsDBNull(28)) clientBuys.RefundQty = reader.GetInt32(28);
+                if (!reader.IsDBNull(29)) clientBuys.Refund = reader.GetDecimal(29);
                 returnValue.OperatorClients.Add(clientBuys);
             }
             reader.Close();
@@ -4215,6 +4471,10 @@ namespace LCManagerPartner.Models
     public class SegmentationAgeRequest
     {
         public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public Int16 Pos { get; set; }
     }
 
     public class SegmentationAgeResponse
@@ -4239,6 +4499,14 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "SegmentationAge";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
 
             cmd.Parameters.Add("@less25", SqlDbType.Int);
             cmd.Parameters["@less25"].Direction = ParameterDirection.Output;
@@ -4256,16 +4524,24 @@ namespace LCManagerPartner.Models
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
 
-            returnValue.LessThen25 = Convert.ToInt32(cmd.Parameters["@less25"].Value);
-            returnValue.More25Less35 = Convert.ToInt32(cmd.Parameters["@more25less35"].Value);
-            returnValue.More35Less45 = Convert.ToInt32(cmd.Parameters["@more35less45"].Value);
-            returnValue.More45 = Convert.ToInt32(cmd.Parameters["@more45"].Value);
-            returnValue.Unknown = Convert.ToInt32(cmd.Parameters["@unknown"].Value);
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-
+                returnValue.LessThen25 = Convert.ToInt32(cmd.Parameters["@less25"].Value);
+                returnValue.More25Less35 = Convert.ToInt32(cmd.Parameters["@more25less35"].Value);
+                returnValue.More35Less45 = Convert.ToInt32(cmd.Parameters["@more35less45"].Value);
+                returnValue.More45 = Convert.ToInt32(cmd.Parameters["@more45"].Value);
+                returnValue.Unknown = Convert.ToInt32(cmd.Parameters["@unknown"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner SegmentationAge {Message}", ex.Message);
+                returnValue.ErrorCode = 500;
+                returnValue.Message = ex.Message;
+            }
             cnn.Close();
             return returnValue;
         }
@@ -4274,6 +4550,10 @@ namespace LCManagerPartner.Models
     public class ClientBaseStructureRequest
     {
         public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public Int16 Pos { get; set; }
     }
 
     public class ClientBaseStructureResponse
@@ -4302,6 +4582,14 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientBaseStructure";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if(request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if(request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.Add("@menQty", SqlDbType.Int);
             cmd.Parameters["@menQty"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@womenQty", SqlDbType.Int);
@@ -4325,20 +4613,28 @@ namespace LCManagerPartner.Models
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
 
-            returnValue.MenQty = Convert.ToInt32(cmd.Parameters["@menQty"].Value);
-            returnValue.WomenQty = Convert.ToInt32(cmd.Parameters["@womenQty"].Value);
-            returnValue.UnknownGender = Convert.ToInt32(cmd.Parameters["@unknownGender"].Value);
-            returnValue.ClientsWithBuys = Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value);
-            returnValue.ClientsWithoutBuys = Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value);
-            returnValue.ClientsWithTenBuys = Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value);
-            returnValue.ClientsWitnOneBuys = Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value);
-            returnValue.ClientsWithPhone = Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value);
-            returnValue.ClientsWithEmail = Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-
+                returnValue.MenQty = Convert.ToInt32(cmd.Parameters["@menQty"].Value);
+                returnValue.WomenQty = Convert.ToInt32(cmd.Parameters["@womenQty"].Value);
+                returnValue.UnknownGender = Convert.ToInt32(cmd.Parameters["@unknownGender"].Value);
+                returnValue.ClientsWithBuys = Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value);
+                returnValue.ClientsWithoutBuys = Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value);
+                returnValue.ClientsWithTenBuys = Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value);
+                returnValue.ClientsWitnOneBuys = Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value);
+                returnValue.ClientsWithPhone = Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value);
+                returnValue.ClientsWithEmail = Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner ServerClientBaseStructure {Message}", ex.Message);
+                returnValue.Message = ex.Message;
+                returnValue.ErrorCode = 25;
+            }
             cnn.Close();
             return returnValue;
         }
@@ -4347,6 +4643,10 @@ namespace LCManagerPartner.Models
     public class ClientBaseActiveRequest
     {
         public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public Int16 Pos { get; set; }
     }
 
     public class ClientBaseActiveResponse
@@ -4371,31 +4671,79 @@ namespace LCManagerPartner.Models
             cmd.CommandText = "ClientBaseActive";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
 
-            cmd.Parameters.Add("@menBuys", SqlDbType.Decimal);
-            cmd.Parameters["@menBuys"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@womenBuys", SqlDbType.Decimal);
-            cmd.Parameters["@womenBuys"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@unknownGenderBuys", SqlDbType.Decimal);
-            cmd.Parameters["@unknownGenderBuys"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@repeatedBuys", SqlDbType.Decimal);
-            cmd.Parameters["@repeatedBuys"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@buysOnClient", SqlDbType.Decimal);
-            cmd.Parameters["@buysOnClient"].Direction = ParameterDirection.Output;
+            if(request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+
+            if(request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
+            
+            SqlParameter menBuys = new SqlParameter("@menBuys", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(menBuys);
+
+            SqlParameter womenBuys = new SqlParameter("@womenBuys", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(womenBuys);
+            
+            SqlParameter unknownGender = new SqlParameter("@unknownGenderBuys", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(unknownGender);
+            
+            SqlParameter repeatedBuys = new SqlParameter("@repeatedBuys", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(repeatedBuys);
+            
+            SqlParameter buysOnClient = new SqlParameter("@buysOnClient", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(buysOnClient);
+
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
 
-            returnValue.MenBuys = Convert.ToDecimal(cmd.Parameters["@menBuys"].Value);
-            returnValue.WomenBuys = Convert.ToDecimal(cmd.Parameters["@womenBuys"].Value);
-            returnValue.UnknownGenderBuys = Convert.ToDecimal(cmd.Parameters["@unknownGenderBuys"].Value);
-            returnValue.RepeatedBuys = Convert.ToDecimal(cmd.Parameters["@repeatedBuys"].Value);
-            returnValue.BuysOnClient = Convert.ToDecimal(cmd.Parameters["@buysOnClient"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-
+                returnValue.MenBuys = Convert.ToDecimal(cmd.Parameters["@menBuys"].Value);
+                returnValue.WomenBuys = Convert.ToDecimal(cmd.Parameters["@womenBuys"].Value);
+                returnValue.UnknownGenderBuys = Convert.ToDecimal(cmd.Parameters["@unknownGenderBuys"].Value);
+                returnValue.RepeatedBuys = Convert.ToDecimal(cmd.Parameters["@repeatedBuys"].Value);
+                returnValue.BuysOnClient = Convert.ToDecimal(cmd.Parameters["@buysOnClient"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner ServerClientBaseActive");
+                returnValue.ErrorCode = 500;
+                returnValue.Message = ex.Message;
+            }
             cnn.Close();
             return returnValue;
         }
@@ -4404,6 +4752,10 @@ namespace LCManagerPartner.Models
     public class ClientAnalyticMoneyRequest
     {
         public Int16 Operator { get; set; }
+
+        public Int16 Partner { get; set; }
+
+        public Int16 Pos { get; set; }
     }
 
     public class ClientAnalyticMoneyResponse
@@ -4425,6 +4777,7 @@ namespace LCManagerPartner.Models
         public decimal AvgBalance { get; set; }
         public decimal AvgDiscount { get; set; }
         public int ClientQty { get; set; }
+        public int ClientActiveQty { get; set; }
         public int ErrorCode { get; set; }
         public string Message { get; set; }
     }
@@ -4439,7 +4792,14 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientAnalyticMoney";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-
+            if(request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if(request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.Add("@withBirthDate", SqlDbType.Int);
             cmd.Parameters["@withBirthDate"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@withoutBirthDate", SqlDbType.Int);
@@ -4452,59 +4812,118 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@moreTenBuys"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@withOneBuy", SqlDbType.Int);
             cmd.Parameters["@withOneBuy"].Direction = ParameterDirection.Output;
-
-            cmd.Parameters.Add("@gain", SqlDbType.Decimal);
-            cmd.Parameters["@gain"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@avgCheque", SqlDbType.Decimal);
-            cmd.Parameters["@avgCheque"].Direction = ParameterDirection.Output;
+            
+            SqlParameter gain = new SqlParameter("@gain", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(gain);
+            
+            SqlParameter avgCheque = new SqlParameter("@avgCheque", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCheque);
 
             cmd.Parameters.Add("@buysWeekdays", SqlDbType.Int);
             cmd.Parameters["@buysWeekdays"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@buysWeekOff", SqlDbType.Int);
             cmd.Parameters["@buysWeekOff"].Direction = ParameterDirection.Output;
+            
+            SqlParameter addedBonus = new SqlParameter("@addedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(addedBonus);
+            
+            SqlParameter avgCharge = new SqlParameter("@avgCharge", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCharge);
 
-            cmd.Parameters.Add("@addedBonus", SqlDbType.Decimal);
-            cmd.Parameters["@addedBonus"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@avgCharge", SqlDbType.Decimal);
-            cmd.Parameters["@avgCharge"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@redeemedBonus", SqlDbType.Decimal);
-            cmd.Parameters["@redeemedBonus"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@avgRedeem", SqlDbType.Decimal);
-            cmd.Parameters["@avgRedeem"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@avgBalance", SqlDbType.Decimal);
-            cmd.Parameters["@avgBalance"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@avgDiscount", SqlDbType.Decimal);
-            cmd.Parameters["@avgDiscount"].Direction = ParameterDirection.Output;
+            //cmd.Parameters.Add("@redeemedBonus", SqlDbType.Decimal);
+            //cmd.Parameters["@redeemedBonus"].Direction = ParameterDirection.Output;
+            SqlParameter redeemedBonus = new SqlParameter("@redeemedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemedBonus);
+            
+            SqlParameter avgRedeem = new SqlParameter("@avgRedeem", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgRedeem);
+            
+            SqlParameter avgBalance = new SqlParameter("@avgBalance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgBalance);
+            
+            SqlParameter avgDiscount = new SqlParameter("@avgDiscount", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgDiscount);
 
             cmd.Parameters.Add("@clientQty", SqlDbType.Int);
             cmd.Parameters["@clientQty"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientActiveQty", SqlDbType.Int);
+            cmd.Parameters["@clientActiveQty"].Direction = ParameterDirection.Output;
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            cmd.ExecuteNonQuery();
+            try
+            {
+                cmd.ExecuteNonQuery();
 
-            returnValue.WithBirthDate = Convert.ToInt32(cmd.Parameters["@withBirthDate"].Value);
-            returnValue.WithoutBirthDate = Convert.ToInt32(cmd.Parameters["@withoutBirthDate"].Value);
-            returnValue.WithPhone = Convert.ToInt32(cmd.Parameters["@withPhone"].Value);
-            returnValue.WithEmail = Convert.ToInt32(cmd.Parameters["@withEmail"].Value);
-            returnValue.MoreTenBuys = Convert.ToInt32(cmd.Parameters["@moreTenBuys"].Value);
-            returnValue.WithOneBuy = Convert.ToInt32(cmd.Parameters["@withOneBuy"].Value);
-            returnValue.Gain = Convert.ToDecimal(cmd.Parameters["@gain"].Value);
-            returnValue.AvgCheque = Convert.ToDecimal(cmd.Parameters["@avgCheque"].Value);
-            returnValue.BuysWeekdays = Convert.ToDecimal(cmd.Parameters["@buysWeekdays"].Value);
-            returnValue.BuysWeekOff = Convert.ToDecimal(cmd.Parameters["@buysWeekOff"].Value);
-            returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
-            returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
-            returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
-            returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
-            returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
-            returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
-            returnValue.ClientQty = Convert.ToInt32(cmd.Parameters["@clientQty"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-
+                returnValue.WithBirthDate = Convert.ToInt32(cmd.Parameters["@withBirthDate"].Value);
+                returnValue.WithoutBirthDate = Convert.ToInt32(cmd.Parameters["@withoutBirthDate"].Value);
+                returnValue.WithPhone = Convert.ToInt32(cmd.Parameters["@withPhone"].Value);
+                returnValue.WithEmail = Convert.ToInt32(cmd.Parameters["@withEmail"].Value);
+                returnValue.MoreTenBuys = Convert.ToInt32(cmd.Parameters["@moreTenBuys"].Value);
+                returnValue.WithOneBuy = Convert.ToInt32(cmd.Parameters["@withOneBuy"].Value);
+                returnValue.Gain = Convert.ToDecimal(cmd.Parameters["@gain"].Value);
+                returnValue.AvgCheque = Convert.ToDecimal(cmd.Parameters["@avgCheque"].Value);
+                returnValue.BuysWeekdays = Convert.ToDecimal(cmd.Parameters["@buysWeekdays"].Value);
+                returnValue.BuysWeekOff = Convert.ToDecimal(cmd.Parameters["@buysWeekOff"].Value);
+                returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
+                returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
+                returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
+                returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
+                returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
+                returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
+                returnValue.ClientQty = Convert.ToInt32(cmd.Parameters["@clientQty"].Value);
+                returnValue.ClientActiveQty = Convert.ToInt32(cmd.Parameters["@clientActiveQty"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner ClientAnalyticMoney {Message}", ex.Message);
+                returnValue.Message = ex.Message;
+                returnValue.ErrorCode = 500;
+            }
             cnn.Close();
             return returnValue;
         }
@@ -4520,6 +4939,8 @@ namespace LCManagerPartner.Models
     public class GainOperatorPeriodRequest
     {
         public Int16 Operator { get; set; }
+        public Int16 Partner { get; set; }
+        public Int16 Pos { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
     }
@@ -4545,6 +4966,15 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "GainOperatorPeriod";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.AddWithValue("@from", request.From);
             cmd.Parameters.AddWithValue("@to", request.To);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
@@ -4577,6 +5007,8 @@ namespace LCManagerPartner.Models
     public class RefundOperatorPeriodRequest
     {
         public Int16 Operator { get; set; }
+        public Int16 Partner { get; set; }
+        public Int16 Pos { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
     }
@@ -4603,6 +5035,14 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "RefundOperatorPeriod";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.AddWithValue("@from", request.From);
             cmd.Parameters.AddWithValue("@to", request.To);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
@@ -4634,6 +5074,8 @@ namespace LCManagerPartner.Models
     public class ClientOperatorPeriodRequest
     {
         public Int16 Operator { get; set; }
+        public Int16 Partner { get; set; }
+        public Int16 Pos { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
     }
@@ -4659,6 +5101,15 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientOperatorPeriod";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
             cmd.Parameters.AddWithValue("@from", request.From);
             cmd.Parameters.AddWithValue("@to", request.To);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
