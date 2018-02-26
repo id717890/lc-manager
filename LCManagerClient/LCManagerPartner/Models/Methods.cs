@@ -725,6 +725,7 @@ namespace LCManagerPartner.Models
         public Int64? FriendPhone { get; set; }
         public bool ClientSetPassword { get; set; }
         public string Email { get; set; }
+        public string Promocode { get; set; }
     }
 
     public class GetRegistrationUserResponse
@@ -4343,9 +4344,12 @@ namespace LCManagerPartner.Models
 
         public List<CardBuysByMonth> CardBuys { get; set; }
 
+        public List<Cheque> ChequeData { get; set; }
+
         public OperatorClientsManagerBuys()
         {
             CardBuys = new List<CardBuysByMonth>();
+            ChequeData = new List<Cheque>();
         }
     }
 
@@ -4461,6 +4465,37 @@ namespace LCManagerPartner.Models
                     c.CardBuys.Add(buys);
                 }
                 readerClients.Close();
+            }
+
+            foreach(var c in returnValue.OperatorClients)
+            {
+                var cmdCheques = cnn.CreateCommand();
+                cmdCheques.CommandType = CommandType.StoredProcedure;
+                cmdCheques.CommandText = "Cheques";
+                cmdCheques.Parameters.AddWithValue("@card", c.Card);
+                cmdCheques.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+                cmdCheques.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+                cmdCheques.Parameters.Add("@result", SqlDbType.Int);
+                cmdCheques.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                System.Data.SqlClient.SqlDataReader readerCheques = cmdCheques.ExecuteReader();
+                while(readerCheques.Read())
+                {
+                    Cheque cheque = new Cheque();
+                    cheque.Id = readerCheques.GetInt32(0);
+                    if (!readerCheques.IsDBNull(1)) cheque.Number = readerCheques.GetString(1);
+                    if (!readerCheques.IsDBNull(2)) cheque.Date = readerCheques.GetDateTime(2);
+                    cheque.OperationType = "Покупка";
+                    if (!readerCheques.IsDBNull(3)) if (readerCheques.GetBoolean(3) == true) cheque.OperationType = "Возврат";
+                    if (!readerCheques.IsDBNull(4)) cheque.Summ = readerCheques.GetDecimal(4);
+                    if (!readerCheques.IsDBNull(5)) cheque.Discount = readerCheques.GetDecimal(5);
+                    if (!readerCheques.IsDBNull(6)) cheque.Partner = readerCheques.GetString(6);
+                    if (!readerCheques.IsDBNull(11)) cheque.PosName = readerCheques.GetString(11);
+                    if (!readerCheques.IsDBNull(8)) cheque.CardNumber = readerCheques.GetInt64(8);
+                    if (!readerCheques.IsDBNull(9)) cheque.Bonus = readerCheques.GetDecimal(9);
+                    if (!readerCheques.IsDBNull(10)) cheque.PaidByBonus = readerCheques.GetDecimal(10);
+                    c.ChequeData.Add(cheque);
+                }
+                readerCheques.Close();
             }
 
             cnn.Close();
@@ -5361,6 +5396,32 @@ namespace LCManagerPartner.Models
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class VerificationPromocodeRequest
+    {
+        public Int16 Operator { get; set; }
+        public string Promocode { get; set; }
+    }
+
+    public class VerificationPromocodeResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ServerVerificationPromocode
+    {
+        public VerificationPromocodeResponse ProcessRequest(SqlConnection cnn, VerificationPromocodeRequest request)
+        {
+            VerificationPromocodeResponse returnValue = new VerificationPromocodeResponse();
+            if(request.Promocode.Length != 6)
+            {
+                returnValue.ErrorCode = 1;
+                returnValue.Message = "Промокод должен состоять из 6 цифр";
+            }
             return returnValue;
         }
     }

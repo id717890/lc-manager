@@ -10,6 +10,13 @@ using System.Web;
 
 namespace LCManagerPartner.Models
 {
+    public class ReportResponse
+    {
+        public int ErrorCode { get; set; }
+        public string Message { get; set; }
+        public byte[] Report { get; set; }
+    }
+
     public class ClientBuys
     {
         public string Name { get; set; }
@@ -37,20 +44,13 @@ namespace LCManagerPartner.Models
         public Int16 Operator { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
-    }
-
-    public class ClientBuysResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
+    }    
 
     public class ServerClientBuyResponse
     {
-        public ClientBuysResponse ProcessRequest(SqlConnection cnn, ClientBuysRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, ClientBuysRequest request)
         {
-            ClientBuysResponse returnValue = new ClientBuysResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -190,18 +190,11 @@ namespace LCManagerPartner.Models
         public DateTime? To { get; set; }
     }
 
-    public class BuysResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerBuyResponse
     {
-        public BuysResponse ProcessRequest(SqlConnection cnn, BuysRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, BuysRequest request)
         {
-            BuysResponse returnValue = new BuysResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -310,8 +303,9 @@ namespace LCManagerPartner.Models
         public bool AllowSms { get; set; }
         public bool AllowEmail { get; set; }
         public decimal AddedBonusUnbuy { get; set; }
+        public DateTime? RegDate { get; set; }
     }
-
+    
     public class PosClientPeriodRequest
     {
         public Int16 Operator { get; set; }
@@ -321,18 +315,11 @@ namespace LCManagerPartner.Models
         public DateTime? To { get; set; }
     }
 
-    public class PosClientPeriodResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerPosClientPeriodResponse
     {
-        public PosClientPeriodResponse ProcessRequest(SqlConnection cnn, PosClientPeriodRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, PosClientPeriodRequest request)
         {
-            var returnValue = new PosClientPeriodResponse();
+            var returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
@@ -377,6 +364,7 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(17)) posClient.AllowSms = reader.GetBoolean(17);
                 if (!reader.IsDBNull(18)) posClient.AllowEmail = reader.GetBoolean(18);
                 if (!reader.IsDBNull(19)) posClient.AddedBonusUnbuy = reader.GetDecimal(19);
+                if (!reader.IsDBNull(20)) posClient.RegDate = reader.GetDateTime(20);
                 posClients.Add(posClient);
             }
             reader.Close();
@@ -384,101 +372,99 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по клиентам за период с {0} по {1}", request.From.Value.ToString("dd.MM.yyyy"), request.To.Value.ToString("dd.MM.yyyy"));
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#DDDDDD"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Торговая точка Регистратор Участника";
+                string workSheetName = string.Format("с {0} по {1}", request.From.Value.ToString("dd.MM.yyyy"), request.To.Value.ToString("dd.MM.yyyy"));
+                var worksheet = workbook.Worksheets.Add(workSheetName);
 
-                worksheet.Cells["C2:K2"].Merge = true;
-                worksheet.Cells["C2:K2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:K2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:K2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Личные данные Участника";
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Источник регистрации";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["C1"].Value = "Дата регистрации";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "ФИО";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Пол";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "Номер телефона";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "Согласие на смс";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "E-mail";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["I1"].Value = "Согласие на Email";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Номер карты";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["K1"].Value = "Тип участника";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Дата рождения";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Количество покупок";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["N1"].Value = "Cумма покупок";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["O1"].Value = "Начислено бонусов";
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["P1"].Value = "Списано бонусов";
+                worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["L2:T2"].Merge = true;
-                worksheet.Cells["L2:T2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["L2:T2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#00FFFF"));
-                worksheet.Cells["L2:T2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L2"].Value = "Активность участника в торговой точке Программы за период";
+                worksheet.Cells["Q1"].Value = "Бонусы без покупок";
+                worksheet.Cells["Q1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "Согласие на отправку смс";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "E-mail";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Согласие на отправку Email";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I3"].Value = "Номер карты";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Тип участника";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["K3"].Value = "Дата рождения";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Количество покупок";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Cумма покупок";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["N3"].Value = "Начислено бонусов за покупки";
-                worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["O3"].Value = "Списано бонусов за покупки";
-                worksheet.Cells["O3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["R1"].Value = "Кол-во возвратов";
+                worksheet.Cells["R1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["S1"].Value = "Сумма возвратов";
+                worksheet.Cells["S1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["T1"].Value = "Бонусный баланс";
+                worksheet.Cells["T1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["U1"].Value = "Процент начисления";
+                worksheet.Cells["U1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["P3"].Value = "Начислено бонусов не за покупки";
-                worksheet.Cells["P3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["Q3"].Value = "Количество возвратов";
-                worksheet.Cells["Q3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["R3"].Value = "Сумма возвратов";
-                worksheet.Cells["R3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["S3"].Value = "Бонусный баланс";
-                worksheet.Cells["S3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["T3"].Value = "Процент начисления";
-                worksheet.Cells["T3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:T3"].AutoFilter = true;
-                worksheet.Cells["A3:T3"].Style.WrapText = true;
-                worksheet.Cells["A3:T3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:T3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                var color = System.Drawing.ColorTranslator.FromHtml("#99FFCC");
-                worksheet.Cells["A3:T3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:T3"].Style.Fill.BackgroundColor.SetColor(color);
+                //worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                //worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1:U1"].AutoFilter = true;
+                worksheet.Cells["A1:U1"].Style.WrapText = true;
+                worksheet.Cells["A1:U1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:U1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                var color = System.Drawing.ColorTranslator.FromHtml("#0070C0");
+                worksheet.Cells["A1:U1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:U1"].Style.Fill.BackgroundColor.SetColor(color);
+                worksheet.Cells["A1:U1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                worksheet.Cells["A1:U1"].Style.Font.Size = 11;
                 //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.View.FreezePanes(4, 1);
-                for (int i = 1; i < 21; i++)
+                worksheet.View.FreezePanes(2, 1);
+                for (int i = 1; i < 22; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
                 for (int i = 0, n = posClients.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = posClients[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = posClients[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = posClients[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = posClients[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = posClients[i].Name;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    if (posClients[i].RegDate.HasValue)
+                    {
+                        worksheet.Cells["C" + cellNum].Value = posClients[i].RegDate.Value.ToString("dd.MM.yyyy");
+                    }
+                    else
+                    {
+                        worksheet.Cells["C" + cellNum].Value = "Нет даты регистрации";
+                    }
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = posClients[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = posClients[i].Name;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = posClients[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Value = posClients[i].Gender;
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["F" + cellNum].Value = posClients[i].Phone;
+                    worksheet.Cells["F" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeSms = "Нет";
                     if (posClients[i].AllowSms)
@@ -486,11 +472,11 @@ namespace LCManagerPartner.Models
                         agreeSms = "Да";
                     }
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = agreeSms;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Value = agreeSms;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = posClients[i].Email;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = posClients[i].Email;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeEmail = "Нет";
                     if (posClients[i].AllowEmail)
@@ -498,52 +484,53 @@ namespace LCManagerPartner.Models
                         agreeEmail = "Да";
                     }
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = agreeEmail;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = agreeEmail;
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = posClients[i].Card;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = posClients[i].Card;
+                    worksheet.Cells["J" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = posClients[i].ClientType;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Value = posClients[i].ClientType;
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     if (posClients[i].BirthDate.HasValue)
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
+                        worksheet.Cells["L" + cellNum].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
                     }
                     else
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = "Не указана дата рождения";
+                        worksheet.Cells["L" + cellNum].Value = "Не указана дата рождения";
                     }
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = posClients[i].QtyBuysPeriod;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = posClients[i].QtyBuysPeriod;
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = posClients[i].SumAmountPeriod;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["N" + cellNum].Value = posClients[i].SumAmountPeriod;
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["N" + (i + 4).ToString()].Value = posClients[i].AddedBonus;
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["O" + cellNum].Value = posClients[i].AddedBonus;
+                    worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["O" + (i + 4).ToString()].Value = posClients[i].SubstractBonus;
-                    worksheet.Cells["O" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["P" + cellNum].Value = posClients[i].SubstractBonus;
+                    worksheet.Cells["P" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["P" + (i + 4).ToString()].Value = posClients[i].AddedBonusUnbuy;
-                    worksheet.Cells["P" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["Q" + cellNum].Value = posClients[i].AddedBonusUnbuy;
+                    worksheet.Cells["Q" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["Q" + (i + 4).ToString()].Value = posClients[i].QtyRefundPeriod;
-                    worksheet.Cells["Q" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["R" + cellNum].Value = posClients[i].QtyRefundPeriod;
+                    worksheet.Cells["R" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["R" + (i + 4).ToString()].Value = posClients[i].SumRefundPeriod;
-                    worksheet.Cells["R" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["S" + cellNum].Value = posClients[i].SumRefundPeriod;
+                    worksheet.Cells["S" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["S" + (i + 4).ToString()].Value = posClients[i].Balance;
-                    worksheet.Cells["S" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["T" + cellNum].Value = posClients[i].Balance;
+                    worksheet.Cells["T" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["T" + (i + 4).ToString()].Value = posClients[i].LevelCondition;
-                    worksheet.Cells["T" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["U" + cellNum].Value = posClients[i].LevelCondition;
+                    worksheet.Cells["U" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["A" + cellNum + ":" + "U" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -571,9 +558,9 @@ namespace LCManagerPartner.Models
 
     public class ServerPosSalePeriodResponse
     {
-        public PosClientPeriodResponse ProcessRequest(SqlConnection cnn, PosClientPeriodRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, PosClientPeriodRequest request)
         {
-            PosClientPeriodResponse returnValue = new PosClientPeriodResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -615,120 +602,113 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.View.FreezePanes(4, 1);
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по продажам за период с {0} по {1}", request.From.Value.ToString("dd.MM.yyyy"), request.To.Value.ToString("dd.MM.yyyy"));
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Партнёр";
+                string workSheetName = string.Format("с {0} по {1}", request.From.Value.ToString("dd.MM.yyyy"), request.To.Value.ToString("dd.MM.yyyy"));
+                var worksheet = workbook.Worksheets.Add(workSheetName);
+                worksheet.View.FreezePanes(2, 1);
 
-                worksheet.Cells["C2:H2"].Merge = true;
-                worksheet.Cells["C2:H2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:H2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:H2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Участник";
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Торговая точка";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["I2:N2"].Merge = true;
-                worksheet.Cells["I2:N2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["I2:N2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["I2:N2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I2"].Value = "Операции Участника за период";
+                worksheet.Cells["C1"].Value = "ФИО";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "Пол";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Номер телефона";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "E-mail";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "Номер карты";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "Тип участника";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["I1"].Value = "Регистрация в моей ТТ";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Дата операции";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["K1"].Value = "Операция";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Сумма операции";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "E-mail";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "Номер карты";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Тип участника";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Деньги в кассу";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["I3"].Value = "Регистрация в моей ТТ";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Дата операции";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["K3"].Value = "Операция";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Сумма операции";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Начислено бонусов";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["N3"].Value = "Списано бонусов";
-                worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:N2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:N2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:N3"].AutoFilter = true;
-                worksheet.Cells["A3:N3"].Style.WrapText = true;
-                worksheet.Cells["A3:N3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:N3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                var color = System.Drawing.ColorTranslator.FromHtml("#F2F2F2");
-                worksheet.Cells["A3:N3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:N3"].Style.Fill.BackgroundColor.SetColor(color);
-                //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                for (int i = 1; i < 15; i++)
+                worksheet.Cells["N1"].Value = "Начислено бонусов";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["O1"].Value = "Списано бонусов";
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                
+                worksheet.Cells["A1:O1"].AutoFilter = true;
+                worksheet.Cells["A1:O1"].Style.WrapText = true;
+                worksheet.Cells["A1:O1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:O1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                var color = System.Drawing.ColorTranslator.FromHtml("#0070C0");
+                worksheet.Cells["A1:O1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:O1"].Style.Fill.BackgroundColor.SetColor(color);
+                worksheet.Cells["A1:O1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                worksheet.Cells["A1:O1"].Style.Font.Size = 11;
+                for (int i = 1; i < 16; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
+                worksheet.Column(9).Width = 25;
                 for (int i = 0, n = posSales.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = posSales[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = posSales[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = posSales[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = posSales[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = posSales[i].ClientName;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["C" + cellNum].Value = posSales[i].ClientName;
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = posSales[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = posSales[i].Gender;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = posSales[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["E" + cellNum].Value = posSales[i].Phone;
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = posSales[i].Email;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["F" + cellNum].Value = posSales[i].Email;
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = posSales[i].Card;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["G" + cellNum].Value = posSales[i].Card;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = posSales[i].ClientType;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = posSales[i].ClientType;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = posSales[i].ThisPosRegister;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = posSales[i].ThisPosRegister;
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = posSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = posSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["K" + (i + 4).ToString()].Value = posSales[i].OperationType;
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Value = posSales[i].OperationType;
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = posSales[i].Amount;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Value = posSales[i].Amount;
+                    worksheet.Cells["L" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = posSales[i].AddedBonus;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = posSales[i].Amount - posSales[i].SubstractBonus;
+                    worksheet.Cells["M" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["N" + (i + 4).ToString()].Value = posSales[i].SubstractBonus;
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["N" + cellNum].Value = posSales[i].AddedBonus;
+                    worksheet.Cells["N" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["O" + cellNum].Value = posSales[i].SubstractBonus;
+                    worksheet.Cells["O" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["A" + cellNum + ":" + "O" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -740,29 +720,28 @@ namespace LCManagerPartner.Models
     public class ReportOperatorClientRequest
     {
         public Int16 Operator { get; set; }
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
-    }
-
-    public class ReportOperatorClientResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
     }
 
     public class ReportServerOperatorClient
     {
-        public ReportOperatorClientResponse ProcessRequest(SqlConnection cnn, ReportOperatorClientRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, ReportOperatorClientRequest request)
         {
-            ReportOperatorClientResponse returnValue = new ReportOperatorClientResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "Reports.OperatorClient";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-            cmd.Parameters.AddWithValue("@from", request.From);
-            cmd.Parameters.AddWithValue("@to", request.To);
+            if (request.From.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@from", request.From.Value);
+            }
+            if (request.To.HasValue)
+            {
+                cmd.Parameters.AddWithValue("@to", request.To.Value);
+            }
             cmd.Parameters.Add("@errormessage", System.Data.SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -792,6 +771,7 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(17)) posClient.AllowSms = reader.GetBoolean(17);
                 if (!reader.IsDBNull(18)) posClient.AllowEmail = reader.GetBoolean(18);
                 if (!reader.IsDBNull(19)) posClient.AddedBonusUnbuy = reader.GetDecimal(19);
+                if (!reader.IsDBNull(20)) posClient.RegDate = reader.GetDateTime(20);
                 posClients.Add(posClient);
             }
             reader.Close();
@@ -799,100 +779,102 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по клиентам за период с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
+                string workSheetName = "Клиентская база";
+                var worksheet = workbook.Worksheets.Add(workSheetName);
 
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#DDDDDD"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Торговая точка Регистратор Участника";
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Источник регистрации";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["C1"].Value = "Дата регистрации";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "ФИО";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Пол";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "Номер телефона";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "Согласие на смс";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "E-mail";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["I1"].Value = "Согласие на Email";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Номер карты";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["K1"].Value = "Тип участника";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Дата рождения";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Количество покупок";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["N1"].Value = "Cумма покупок";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["O1"].Value = "Деньги в кассу";
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["P1"].Value = "Начислено бонусов";
+                worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["Q1"].Value = "Списано бонусов";
+                worksheet.Cells["Q1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["C2:K2"].Merge = true;
-                worksheet.Cells["C2:K2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:K2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:K2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Личные данные Участника";
+                worksheet.Cells["R1"].Value = "Бонусы без покупок";
+                worksheet.Cells["R1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["L2:S2"].Merge = true;
-                worksheet.Cells["L2:S2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["L2:S2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#00FFFF"));
-                worksheet.Cells["L2:S2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L2"].Value = "Активность участника в торговой точке Программы за период";
+                worksheet.Cells["S1"].Value = "Кол-во возвратов";
+                worksheet.Cells["S1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["T1"].Value = "Сумма возвратов";
+                worksheet.Cells["T1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["U1"].Value = "Бонусный баланс";
+                worksheet.Cells["U1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["V1"].Value = "Процент начисления";
+                worksheet.Cells["V1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "Согласие на отправку смс";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "E-mail";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Согласие на отправку Email";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I3"].Value = "Номер карты";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Тип участника";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["K3"].Value = "Дата рождения";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Количество покупок";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Cумма покупок";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["N3"].Value = "Начислено бонусов";
-                worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["O3"].Value = "Списано бонусов";
-                worksheet.Cells["O3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["P3"].Value = "Начислено бонусов не за покупки";
-                worksheet.Cells["P3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["Q3"].Value = "Количество возвратов";
-                worksheet.Cells["Q3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["R3"].Value = "Сумма возвратов";
-                worksheet.Cells["R3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["S3"].Value = "Бонусный баланс";
-                worksheet.Cells["S3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["T3"].Value = "Процент начисления";
-                worksheet.Cells["T3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:T3"].AutoFilter = true;
-                worksheet.Cells["A3:T3"].Style.WrapText = true;
-                worksheet.Cells["A3:T3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:T3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                var color = System.Drawing.ColorTranslator.FromHtml("#99FFCC");
-                worksheet.Cells["A3:T3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:T3"].Style.Fill.BackgroundColor.SetColor(color);
+                //worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                //worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1:V1"].AutoFilter = true;
+                worksheet.Cells["A1:V1"].Style.WrapText = true;
+                worksheet.Cells["A1:V1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:V1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                var color = System.Drawing.ColorTranslator.FromHtml("#0070C0");
+                worksheet.Cells["A1:V1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:V1"].Style.Fill.BackgroundColor.SetColor(color);
+                worksheet.Cells["A1:V1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                worksheet.Cells["A1:V1"].Style.Font.Size = 11;
                 //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.View.FreezePanes(4, 1);
-                for (int i = 1; i < 21; i++)
+                worksheet.View.FreezePanes(2, 1);
+                for (int i = 1; i < 23; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
+                worksheet.Column(2).Width = 22;
                 for (int i = 0, n = posClients.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = posClients[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = posClients[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = posClients[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = posClients[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = posClients[i].Name;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    if (posClients[i].RegDate.HasValue)
+                    {
+                        worksheet.Cells["C" + cellNum].Value = posClients[i].RegDate.Value.ToString("dd.MM.yyyy");
+                    }
+                    else
+                    {
+                        worksheet.Cells["C" + cellNum].Value = "Нет даты регистрации";
+                    }
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = posClients[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = posClients[i].Name;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = posClients[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Value = posClients[i].Gender;
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["F" + cellNum].Value = posClients[i].Phone;
+                    worksheet.Cells["F" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeSms = "Нет";
                     if (posClients[i].AllowSms)
@@ -900,11 +882,11 @@ namespace LCManagerPartner.Models
                         agreeSms = "Да";
                     }
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = agreeSms;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Value = agreeSms;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = posClients[i].Email;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = posClients[i].Email;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeEmail = "Нет";
                     if (posClients[i].AllowEmail)
@@ -912,52 +894,56 @@ namespace LCManagerPartner.Models
                         agreeEmail = "Да";
                     }
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = agreeEmail;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = agreeEmail;
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = posClients[i].Card;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = posClients[i].Card;
+                    worksheet.Cells["J" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = posClients[i].ClientType;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Value = posClients[i].ClientType;
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     if (posClients[i].BirthDate.HasValue)
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
+                        worksheet.Cells["L" + cellNum].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
                     }
                     else
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = "Не указана дата рождения";
+                        worksheet.Cells["L" + cellNum].Value = "Не указана дата рождения";
                     }
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = posClients[i].QtyBuysPeriod;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = posClients[i].QtyBuysPeriod;
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = posClients[i].SumAmountPeriod;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["N" + cellNum].Value = posClients[i].SumAmountPeriod;
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["N" + (i + 4).ToString()].Value = posClients[i].AddedBonus;
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["O" + cellNum].Value = posClients[i].SumAmountPeriod - posClients[i].SubstractBonus;
+                    worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["O" + (i + 4).ToString()].Value = posClients[i].SubstractBonus;
-                    worksheet.Cells["O" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["P" + cellNum].Value = posClients[i].AddedBonus;
+                    worksheet.Cells["P" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["P" + (i + 4).ToString()].Value = posClients[i].AddedBonusUnbuy;
-                    worksheet.Cells["P" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["Q" + cellNum].Value = posClients[i].SubstractBonus;
+                    worksheet.Cells["Q" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["Q" + (i + 4).ToString()].Value = posClients[i].QtyRefundPeriod;
-                    worksheet.Cells["Q" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["R" + cellNum].Value = posClients[i].AddedBonusUnbuy;
+                    worksheet.Cells["R" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["R" + (i + 4).ToString()].Value = posClients[i].SumRefundPeriod;
-                    worksheet.Cells["R" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["S" + cellNum].Value = posClients[i].QtyRefundPeriod;
+                    worksheet.Cells["S" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["S" + (i + 4).ToString()].Value = posClients[i].Balance;
-                    worksheet.Cells["S" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["T" + cellNum].Value = posClients[i].SumRefundPeriod;
+                    worksheet.Cells["T" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["T" + (i + 4).ToString()].Value = posClients[i].LevelCondition;
-                    worksheet.Cells["T" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["U" + cellNum].Value = posClients[i].Balance;
+                    worksheet.Cells["U" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["V" + cellNum].Value = posClients[i].LevelCondition;
+                    worksheet.Cells["V" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["A" + cellNum + ":" + "V" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -989,18 +975,11 @@ namespace LCManagerPartner.Models
         public DateTime To { get; set; }
     }
 
-    public class OperatorSalesResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerOperatorSales
     {
-        public OperatorSalesResponse ProcessRequest(SqlConnection cnn, OperatorSalesRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, OperatorSalesRequest request)
         {
-            OperatorSalesResponse returnValue = new OperatorSalesResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -1038,116 +1017,105 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.View.FreezePanes(4, 1);
-                worksheet.Cells["A1"].Value = reportName;
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Партнёр";
+                string workSheetName = string.Format("с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
+                var worksheet = workbook.Worksheets.Add(workSheetName);
+                worksheet.View.FreezePanes(2, 1);
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Торговая точка";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["C2:H2"].Merge = true;
-                worksheet.Cells["C2:H2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:H2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:H2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Личные данные Участника";
+                worksheet.Cells["C1"].Value = "ФИО";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "Пол";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Номер телефона";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "E-mail";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "Номер карты";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "Тип участника";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["I2:M2"].Merge = true;
-                worksheet.Cells["I2:M2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["I2:M2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["I2:M2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I2"].Value = "Операции Участников за период";
+                worksheet.Cells["I1"].Value = "Дата операции";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Операция";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "E-mail";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "Номер карты";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Тип участника";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["I3"].Value = "Дата операции";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Операция";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["K3"].Value = "Сумма операции";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Начислено бонусов";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Списано бонусов";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:M2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:M2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:M3"].AutoFilter = true;
-                worksheet.Cells["A3:M3"].Style.WrapText = true;
-                worksheet.Cells["A3:M3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:M3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                var color = System.Drawing.ColorTranslator.FromHtml("#F2F2F2");
-                worksheet.Cells["A3:M3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:M3"].Style.Fill.BackgroundColor.SetColor(color);
-                //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                for (int i = 1; i < 15; i++)
+                worksheet.Cells["K1"].Value = "Сумма операции";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Деньги в кассу";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Начислено бонусов";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["N1"].Value = "Списано бонусов";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                
+                worksheet.Cells["A1:N1"].AutoFilter = true;
+                worksheet.Cells["A1:N1"].Style.WrapText = true;
+                worksheet.Cells["A1:N1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:N1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                var color = System.Drawing.ColorTranslator.FromHtml("#0070C0");
+                worksheet.Cells["A1:N1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:N1"].Style.Fill.BackgroundColor.SetColor(color);
+                worksheet.Cells["A1:N1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                worksheet.Cells["A1:N1"].Style.Font.Size = 11;
+                for (int i = 1; i < 16; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
                 for (int i = 0, n = operatorSales.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = operatorSales[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = operatorSales[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = operatorSales[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = operatorSales[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = operatorSales[i].ClientName;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["C" + cellNum].Value = operatorSales[i].ClientName;
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = operatorSales[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = operatorSales[i].Gender;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = operatorSales[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["E" + cellNum].Value = operatorSales[i].Phone;
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = operatorSales[i].Email;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["F" + cellNum].Value = operatorSales[i].Email;
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = operatorSales[i].Card;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["G" + cellNum].Value = operatorSales[i].Card;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = operatorSales[i].ClientType;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = operatorSales[i].ClientType;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = operatorSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = operatorSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = operatorSales[i].OperationType;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = operatorSales[i].OperationType;
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["K" + (i + 4).ToString()].Value = operatorSales[i].Amount;
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Value = operatorSales[i].Amount;
+                    worksheet.Cells["K" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = operatorSales[i].AddedBonus;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Value = operatorSales[i].Amount - operatorSales[i].SubstractBonus;
+                    worksheet.Cells["L" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = operatorSales[i].SubstractBonus;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = operatorSales[i].AddedBonus;
+                    worksheet.Cells["M" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["N" + cellNum].Value = operatorSales[i].SubstractBonus;
+                    worksheet.Cells["N" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["A" + cellNum + ":" + "N" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -1186,18 +1154,11 @@ namespace LCManagerPartner.Models
         public DateTime To { get; set; }
     }
 
-    public class OperatorBookkeepingResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerOperatorBookkeeping
     {
-        public OperatorBookkeepingResponse ProcessRequest(SqlConnection cnn, OperatorBookkeepingRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, OperatorBookkeepingRequest request)
         {
-            OperatorBookkeepingResponse returnValue = new OperatorBookkeepingResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -1417,18 +1378,11 @@ namespace LCManagerPartner.Models
         public DateTime To { get; set; }
     }
 
-    public class PartnerBookkeepingResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerPartnerBookkeeping
     {
-        public PartnerBookkeepingResponse ProcessRequest(SqlConnection cnn, PartnerBookkeepingRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, PartnerBookkeepingRequest request)
         {
-            PartnerBookkeepingResponse returnValue = new PartnerBookkeepingResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -1558,18 +1512,11 @@ namespace LCManagerPartner.Models
         public DateTime To { get; set; }
     }
 
-    public class PartnerClientResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerPartnerClient
     {
-        public PartnerClientResponse ProcessRequest(SqlConnection cnn, PartnerClientRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, PartnerClientRequest request)
         {
-            PartnerClientResponse returnValue = new PartnerClientResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -1614,100 +1561,85 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по клиентам за период с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#DDDDDD"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Торговая точка Регистратор Участника";
+                string workSheetName = string.Format("с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
+                var worksheet = workbook.Worksheets.Add(workSheetName);
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Источник регистрации";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["C1"].Value = "ФИО";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "Пол";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Номер телефона";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "Согласие на смс";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "E-mail";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "Согласие на Email";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["I1"].Value = "Номер карты";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Тип участника";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["K1"].Value = "Дата рождения";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Количество покупок";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Cумма покупок";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["N1"].Value = "Начислено бонусов";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["O1"].Value = "Списано бонусов";
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["P1"].Value = "Начислено бонусов не за покупки";
+                worksheet.Cells["P1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["C2:K2"].Merge = true;
-                worksheet.Cells["C2:K2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:K2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:K2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Личные данные Участника";
+                worksheet.Cells["Q1"].Value = "Кол-во возвратов";
+                worksheet.Cells["Q1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["R1"].Value = "Сумма возвратов";
+                worksheet.Cells["R1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["S1"].Value = "Бонусный баланс";
+                worksheet.Cells["S1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["T1"].Value = "Процент начисления";
+                worksheet.Cells["T1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["L2:S2"].Merge = true;
-                worksheet.Cells["L2:S2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["L2:S2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#00FFFF"));
-                worksheet.Cells["L2:S2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L2"].Value = "Активность участника в торговой точке Программы за период";
-
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "Согласие на отправку смс";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "E-mail";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Согласие на отправку Email";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I3"].Value = "Номер карты";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Тип участника";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["K3"].Value = "Дата рождения";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Количество покупок";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Cумма покупок";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["N3"].Value = "Начислено бонусов";
-                worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["O3"].Value = "Списано бонусов";
-                worksheet.Cells["O3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["P3"].Value = "Начислено бонусов не за покупки";
-                worksheet.Cells["P3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["Q3"].Value = "Количество возвратов";
-                worksheet.Cells["Q3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["R3"].Value = "Сумма возвратов";
-                worksheet.Cells["R3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["S3"].Value = "Бонусный баланс";
-                worksheet.Cells["S3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["T3"].Value = "Процент начисления";
-                worksheet.Cells["T3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:T3"].AutoFilter = true;
-                worksheet.Cells["A3:T3"].Style.WrapText = true;
-                worksheet.Cells["A3:T3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:T3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                var color = System.Drawing.ColorTranslator.FromHtml("#99FFCC");
-                worksheet.Cells["A3:T3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:T3"].Style.Fill.BackgroundColor.SetColor(color);
+                //worksheet.Cells["A2:T2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                //worksheet.Cells["A2:T2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["A1:T1"].AutoFilter = true;
+                worksheet.Cells["A1:T1"].Style.WrapText = true;
+                worksheet.Cells["A1:T1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:T1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                var color = System.Drawing.ColorTranslator.FromHtml("#0070C0");
+                worksheet.Cells["A1:T1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:T1"].Style.Fill.BackgroundColor.SetColor(color);
+                worksheet.Cells["A1:T1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                worksheet.Cells["A1:T1"].Style.Font.Size = 11;
                 //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.View.FreezePanes(4, 1);
+                worksheet.View.FreezePanes(2, 1);
                 for (int i = 1; i < 21; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
                 for (int i = 0, n = posClients.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = posClients[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = posClients[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = posClients[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = posClients[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = posClients[i].Name;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["C" + cellNum].Value = posClients[i].Name;
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = posClients[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = posClients[i].Gender;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = posClients[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Value = posClients[i].Phone;
+                    worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeSms = "Нет";
                     if (posClients[i].AllowSms)
@@ -1715,11 +1647,11 @@ namespace LCManagerPartner.Models
                         agreeSms = "Да";
                     }
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = agreeSms;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["F" + cellNum].Value = agreeSms;
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = posClients[i].Email;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Value = posClients[i].Email;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     string agreeEmail = "Нет";
                     if (posClients[i].AllowEmail)
@@ -1727,52 +1659,54 @@ namespace LCManagerPartner.Models
                         agreeEmail = "Да";
                     }
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = agreeEmail;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = agreeEmail;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = posClients[i].Card;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = posClients[i].Card;
+                    worksheet.Cells["I" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = posClients[i].ClientType;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = posClients[i].ClientType;
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     if (posClients[i].BirthDate.HasValue)
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
+                        worksheet.Cells["K" + cellNum].Value = posClients[i].BirthDate.Value.ToString("dd.MM.yyyy");
                     }
                     else
                     {
-                        worksheet.Cells["K" + (i + 4).ToString()].Value = "Не указана дата рождения";
+                        worksheet.Cells["K" + cellNum].Value = "Не указана дата рождения";
                     }
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = posClients[i].QtyBuysPeriod;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Value = posClients[i].QtyBuysPeriod;
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = posClients[i].SumAmountPeriod;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = posClients[i].SumAmountPeriod;
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["N" + (i + 4).ToString()].Value = posClients[i].AddedBonus;
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["N" + cellNum].Value = posClients[i].AddedBonus;
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["O" + (i + 4).ToString()].Value = posClients[i].SubstractBonus;
-                    worksheet.Cells["O" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["O" + cellNum].Value = posClients[i].SubstractBonus;
+                    worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["P" + (i + 4).ToString()].Value = posClients[i].AddedBonusUnbuy;
-                    worksheet.Cells["P" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["P" + cellNum].Value = posClients[i].AddedBonusUnbuy;
+                    worksheet.Cells["P" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["Q" + (i + 4).ToString()].Value = posClients[i].QtyRefundPeriod;
-                    worksheet.Cells["Q" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["Q" + cellNum].Value = posClients[i].QtyRefundPeriod;
+                    worksheet.Cells["Q" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["R" + (i + 4).ToString()].Value = posClients[i].SumRefundPeriod;
-                    worksheet.Cells["R" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["R" + cellNum].Value = posClients[i].SumRefundPeriod;
+                    worksheet.Cells["R" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["S" + (i + 4).ToString()].Value = posClients[i].Balance;
-                    worksheet.Cells["S" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["S" + cellNum].Value = posClients[i].Balance;
+                    worksheet.Cells["S" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["T" + (i + 4).ToString()].Value = posClients[i].LevelCondition;
-                    worksheet.Cells["T" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["T" + cellNum].Value = posClients[i].LevelCondition;
+                    worksheet.Cells["T" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["A" + cellNum + ":" + "T" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -1782,9 +1716,9 @@ namespace LCManagerPartner.Models
 
     public class ServerPartnerSalePeriodResponse
     {
-        public PosClientPeriodResponse ProcessRequest(SqlConnection cnn, PartnerClientRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, PartnerClientRequest request)
         {
-            PosClientPeriodResponse returnValue = new PosClientPeriodResponse();
+            ReportResponse returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -1825,120 +1759,108 @@ namespace LCManagerPartner.Models
             using (var package = new ExcelPackage())
             {
                 var workbook = package.Workbook;
-                var worksheet = workbook.Worksheets.Add("Sheet1");
-                worksheet.View.FreezePanes(4, 1);
-                worksheet.Cells["A1"].Value = string.Format("Отчёт по продажам за период с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
-                worksheet.Cells["A2:B2"].Merge = true;
-                worksheet.Cells["A2:B2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A2:B2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["A2:B2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["A2"].Value = "Партнёр";
+                string workSheetName = string.Format("Отчёт по продажам за период с {0} по {1}", request.From.ToString("dd.MM.yyyy"), request.To.ToString("dd.MM.yyyy"));
+                var worksheet = workbook.Worksheets.Add(workSheetName);
+                worksheet.View.FreezePanes(2, 1);
+                
+                worksheet.Cells["A1"].Value = "Бренд";
+                worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["B1"].Value = "Торговая точка";
+                worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["C2:H2"].Merge = true;
-                worksheet.Cells["C2:H2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["C2:H2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#FFFF99"));
-                worksheet.Cells["C2:H2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["C2"].Value = "Участник";
+                worksheet.Cells["C1"].Value = "ФИО";
+                worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["D1"].Value = "Пол";
+                worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["E1"].Value = "Номер телефона";
+                worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["F1"].Value = "E-mail";
+                worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["G1"].Value = "Номер карты";
+                worksheet.Cells["G1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["H1"].Value = "Тип участника";
+                worksheet.Cells["H1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                worksheet.Cells["I2:N2"].Merge = true;
-                worksheet.Cells["I2:N2"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["I2:N2"].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#A6FA98"));
-                worksheet.Cells["I2:N2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["I2"].Value = "Операции Участника за период";
-
-                worksheet.Cells["A3"].Value = "Бренд";
-                worksheet.Cells["A3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["B3"].Value = "Торговая точка";
-                worksheet.Cells["B3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["C3"].Value = "ФИО";
-                worksheet.Cells["C3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["D3"].Value = "Пол";
-                worksheet.Cells["D3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["E3"].Value = "Номер телефона";
-                worksheet.Cells["E3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["F3"].Value = "E-mail";
-                worksheet.Cells["F3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["G3"].Value = "Номер карты";
-                worksheet.Cells["G3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["H3"].Value = "Тип участника";
-                worksheet.Cells["H3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["I3"].Value = "Регистрация в моей ТТ";
-                worksheet.Cells["I3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["J3"].Value = "Дата операции";
-                worksheet.Cells["J3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["K3"].Value = "Операция";
-                worksheet.Cells["K3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["L3"].Value = "Сумма операции";
-                worksheet.Cells["L3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["M3"].Value = "Начислено бонусов";
-                worksheet.Cells["M3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                worksheet.Cells["N3"].Value = "Списано бонусов";
-                worksheet.Cells["N3"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                worksheet.Cells["A2:N2"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A2:N2"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                worksheet.Cells["A3:N3"].AutoFilter = true;
-                worksheet.Cells["A3:N3"].Style.WrapText = true;
-                worksheet.Cells["A3:N3"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                worksheet.Cells["A3:N3"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                worksheet.Cells["I1"].Value = "Регистрация в моей ТТ";
+                worksheet.Cells["I1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["J1"].Value = "Дата операции";
+                worksheet.Cells["J1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["K1"].Value = "Операция";
+                worksheet.Cells["K1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["L1"].Value = "Сумма операции";
+                worksheet.Cells["L1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["M1"].Value = "Деньги в кассу";
+                worksheet.Cells["M1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["N1"].Value = "Начислено бонусов";
+                worksheet.Cells["N1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["O1"].Value = "Списано бонусов";
+                worksheet.Cells["O1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                
+                worksheet.Cells["A1:O1"].AutoFilter = true;
+                worksheet.Cells["A1:O1"].Style.WrapText = true;
+                worksheet.Cells["A1:O1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                worksheet.Cells["A1:O1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 var color = System.Drawing.ColorTranslator.FromHtml("#F2F2F2");
-                worksheet.Cells["A3:N3"].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells["A3:N3"].Style.Fill.BackgroundColor.SetColor(color);
-                //worksheet.Cells["A2:O2"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                worksheet.Cells["A1:O1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells["A1:O1"].Style.Fill.BackgroundColor.SetColor(color);
                 for (int i = 1; i < 15; i++)
                 {
                     worksheet.Column(i).Width = 20;
                 }
                 for (int i = 0, n = posSales.Count; i < n; i++)
                 {
-                    worksheet.Cells["A" + (i + 4).ToString()].Value = posSales[i].Brand;
-                    worksheet.Cells["A" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    string cellNum = (i + 2).ToString();
+                    worksheet.Cells["A" + cellNum].Value = posSales[i].Brand;
+                    worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["B" + (i + 4).ToString()].Value = posSales[i].Address;
-                    worksheet.Cells["B" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B" + cellNum].Value = posSales[i].Address;
+                    worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["C" + (i + 4).ToString()].Value = posSales[i].ClientName;
-                    worksheet.Cells["C" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["C" + cellNum].Value = posSales[i].ClientName;
+                    worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["D" + (i + 4).ToString()].Value = posSales[i].Gender;
-                    worksheet.Cells["D" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D" + cellNum].Value = posSales[i].Gender;
+                    worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["E" + (i + 4).ToString()].Value = posSales[i].Phone;
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["E" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["E" + cellNum].Value = posSales[i].Phone;
+                    worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["F" + (i + 4).ToString()].Value = posSales[i].Email;
-                    worksheet.Cells["F" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["F" + cellNum].Value = posSales[i].Email;
+                    worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["G" + (i + 4).ToString()].Value = posSales[i].Card;
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-                    worksheet.Cells["G" + (i + 4).ToString()].Style.Numberformat.Format = "0";
+                    worksheet.Cells["G" + cellNum].Value = posSales[i].Card;
+                    worksheet.Cells["G" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["G" + cellNum].Style.Numberformat.Format = "0";
 
-                    worksheet.Cells["H" + (i + 4).ToString()].Value = posSales[i].ClientType;
-                    worksheet.Cells["H" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["H" + cellNum].Value = posSales[i].ClientType;
+                    worksheet.Cells["H" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["I" + (i + 4).ToString()].Value = posSales[i].ThisPosRegister;
-                    worksheet.Cells["I" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["I" + cellNum].Value = posSales[i].ThisPosRegister;
+                    worksheet.Cells["I" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["J" + (i + 4).ToString()].Value = posSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
-                    worksheet.Cells["J" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["J" + cellNum].Value = posSales[i].ChequeTime.ToString("dd.MM.yyyy HH:mm"); ;
+                    worksheet.Cells["J" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["K" + (i + 4).ToString()].Value = posSales[i].OperationType;
-                    worksheet.Cells["K" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["K" + cellNum].Value = posSales[i].OperationType;
+                    worksheet.Cells["K" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["L" + (i + 4).ToString()].Value = posSales[i].Amount;
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["L" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["L" + cellNum].Value = posSales[i].Amount;
+                    worksheet.Cells["L" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["L" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["M" + (i + 4).ToString()].Value = posSales[i].AddedBonus;
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["M" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["M" + cellNum].Value = posSales[i].Amount - posSales[i].SubstractBonus;
+                    worksheet.Cells["M" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["M" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["N" + (i + 4).ToString()].Value = posSales[i].SubstractBonus;
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Numberformat.Format = "0";
-                    worksheet.Cells["N" + (i + 4).ToString()].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["N" + cellNum].Value = posSales[i].AddedBonus;
+                    worksheet.Cells["N" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["O" + cellNum].Value = posSales[i].SubstractBonus;
+                    worksheet.Cells["O" + cellNum].Style.Numberformat.Format = "0";
+                    worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["A" + cellNum + ":" + "O" + cellNum].Style.Font.Size = 10;
                 }
                 returnValue.Report = package.GetAsByteArray();
             }
@@ -1968,18 +1890,11 @@ namespace LCManagerPartner.Models
         public DateTime To { get; set; }
     }
 
-    public class OperatorBonusSourceResponse
-    {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public byte[] Report { get; set; }
-    }
-
     public class ServerOperatorBonusSource
     {
-        public OperatorBonusSourceResponse ProcessRequest(SqlConnection cnn, OperatorBonusSourceRequest request)
+        public ReportResponse ProcessRequest(SqlConnection cnn, OperatorBonusSourceRequest request)
         {
-            var returnValue = new OperatorBonusSourceResponse();
+            var returnValue = new ReportResponse();
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = System.Data.CommandType.StoredProcedure;

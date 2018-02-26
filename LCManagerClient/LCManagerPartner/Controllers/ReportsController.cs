@@ -22,7 +22,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("ClientBuys")]
-        public ClientBuysResponse ClientBuys(ClientBuysRequest request)
+        public ReportResponse ClientBuys(ClientBuysRequest request)
         {
             var result = new ServerClientBuyResponse();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -31,16 +31,21 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("Buys")]
-        public BuysResponse Buys(BuysRequest request)
+        public ReportResponse Buys(BuysRequest request)
         {
             var result = new ServerBuyResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
 
+        /// <summary>
+        /// Отчёт по клиентам ТТ за период
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("PosClientPeriod")]
-        public PosClientPeriodResponse PosClientPeriod(PosClientPeriodRequest request)
+        public ReportResponse PosClientPeriod(PosClientPeriodRequest request)
         {
             var result = new ServerPosClientPeriodResponse();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -49,7 +54,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("PosSalePeriod")]
-        public PosClientPeriodResponse PosSalePeriod(PosClientPeriodRequest request)
+        public ReportResponse PosSalePeriod(PosClientPeriodRequest request)
         {
             var result = new ServerPosSalePeriodResponse();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -58,7 +63,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("OperatorClient")]
-        public ReportOperatorClientResponse OperatorClient(ReportOperatorClientRequest request)
+        public ReportResponse OperatorClient(ReportOperatorClientRequest request)
         {
             var result = new ReportServerOperatorClient();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -67,7 +72,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("OperatorSales")]
-        public OperatorSalesResponse OperatorSales(OperatorSalesRequest request)
+        public ReportResponse OperatorSales(OperatorSalesRequest request)
         {
             var result = new ServerOperatorSales();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -76,7 +81,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("OperatorBookkeeping")]
-        public OperatorBookkeepingResponse OperatorBookkeeping(OperatorBookkeepingRequest request)
+        public ReportResponse OperatorBookkeeping(OperatorBookkeepingRequest request)
         {
             var result = new ServerOperatorBookkeeping();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -85,7 +90,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("PartnerClient")]
-        public PartnerClientResponse PartnerClient(PartnerClientRequest request)
+        public ReportResponse PartnerClient(PartnerClientRequest request)
         {
             var result = new ServerPartnerClient();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -94,7 +99,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("PartnerSales")]
-        public PosClientPeriodResponse PartnerSales(PartnerClientRequest request)
+        public ReportResponse PartnerSales(PartnerClientRequest request)
         {
             var result = new ServerPartnerSalePeriodResponse();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -103,7 +108,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("PartnerBookkeeping")]
-        public PartnerBookkeepingResponse PartnerBookkeeping(PartnerBookkeepingRequest request)
+        public ReportResponse PartnerBookkeeping(PartnerBookkeepingRequest request)
         {
             var result = new ServerPartnerBookkeeping();
             var returnValue = result.ProcessRequest(cnn, request);
@@ -112,7 +117,7 @@ namespace LCManagerPartner.Controllers
 
         [HttpPost]
         [Route("OperatorBonus")]
-        public OperatorBonusSourceResponse OperatorBonus(OperatorBonusSourceRequest request)
+        public ReportResponse OperatorBonus(OperatorBonusSourceRequest request)
         {
             var result = new ServerOperatorBonusSource();
             var returnValue = result.ProcessRequest(cnn, request);

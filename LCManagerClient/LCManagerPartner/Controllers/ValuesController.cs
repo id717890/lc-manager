@@ -18,6 +18,11 @@ namespace LCManagerPartner.Controllers
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
         
+        /// <summary>
+        /// Получение баланса пользователя
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Authorize]
         [HttpPost]
         [Route("BalanceGet")]
@@ -549,6 +554,15 @@ namespace LCManagerPartner.Controllers
         public OperatorPosResponse OperatorPos(OperatorPosRequest request)
         {
             var result = new ServerOperatorPos();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        [HttpPost]
+        [Route("VerificationPromocode")]
+        public VerificationPromocodeResponse VerificationPromocode(VerificationPromocodeRequest request)
+        {
+            var result = new ServerVerificationPromocode();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
