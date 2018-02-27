@@ -14,23 +14,11 @@ using Microsoft.Owin.Security.Jwt;
 
 namespace LCManagerPartner
 {
-    public class Startup
+    public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            var issuer = ConfigurationManager.AppSettings["issuer"];
-            var secret = TextEncodings.Base64Url.Decode(ConfigurationManager.AppSettings["secret"]);
-
-            app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
-            {
-                AuthenticationMode = AuthenticationMode.Active,
-                AllowedAudiences = new[] { ConfigurationManager.AppSettings["audience"] },
-                IssuerSecurityTokenProviders = new IIssuerSecurityTokenProvider[]
-                {
-                    new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
-                }
-            });
-
+            ConfigureOAuth(app);
             // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
             //enable cors origin requests
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
@@ -42,7 +30,7 @@ namespace LCManagerPartner
                 TokenEndpointPath = new PathString("/ManagerLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
                 Provider = myProvider,
-                AccessTokenFormat = new Implementation.JwtFormat(issuer)
+                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
             };
             app.UseOAuthAuthorizationServer(options);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
