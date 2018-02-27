@@ -28,7 +28,7 @@ namespace LCManagerPartner
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/ManagerLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(365),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(Convert.ToInt32(ConfigurationManager.AppSettings["expiration"])),
                 Provider = myProvider,
                 AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
             };

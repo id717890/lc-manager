@@ -37,7 +37,12 @@ namespace LCManagerPartner
             {
                 identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.RoleName));
                 //identity.AddClaim(new Claim("username", context.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.MobilePhone, context.UserName));
+                identity.AddClaim(new Claim("user", context.UserName));
+                identity.AddClaim(new Claim("oper",  authentificationResult.Operator.ToString()));
+                identity.AddClaim(new Claim("partner",  authentificationResult.Partner.ToString()));
+                identity.AddClaim(new Claim("pos",  authentificationResult.Pos.ToString()));
+                identity.AddClaim(new Claim("poscode",  authentificationResult.PosCode));
+                identity.AddClaim(new Claim("permissioncode",  authentificationResult.PermissionCode));
                 context.Validated(identity);
             }
             else
