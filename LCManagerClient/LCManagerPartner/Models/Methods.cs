@@ -4280,6 +4280,19 @@ namespace LCManagerPartner.Models
         public int MonthNum { get; set; }
     }
 
+    public class Bonus
+    {
+        public string BonusSource { get; set; }
+
+        public DateTime? BonusDate { get; set; }
+
+        public decimal BonusAdded { get; set; }
+
+        public decimal BonusRedeemed { get; set; }
+
+        public decimal BonusBurn { get; set; }
+    }
+
     public class OperatorClientsManagerBuys
     {
         public int Id { get; set; }
@@ -4346,10 +4359,13 @@ namespace LCManagerPartner.Models
 
         public List<Cheque> ChequeData { get; set; }
 
+        public List<Bonus> Bonuses { get; set; }
+
         public OperatorClientsManagerBuys()
         {
             CardBuys = new List<CardBuysByMonth>();
             ChequeData = new List<Cheque>();
+            Bonuses = new List<Bonus>();
         }
     }
 
@@ -4496,6 +4512,65 @@ namespace LCManagerPartner.Models
                     c.ChequeData.Add(cheque);
                 }
                 readerCheques.Close();
+            }
+
+            foreach(var c in returnValue.OperatorClients)
+            {
+                var cmdBonuses = cnn.CreateCommand();
+                cmdBonuses.CommandType = CommandType.StoredProcedure;
+                cmdBonuses.CommandText = "CardBonusesType";
+                cmdBonuses.Parameters.AddWithValue("@card", c.Card);
+                cmdBonuses.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+                cmdBonuses.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+                cmdBonuses.Parameters.Add("@result", SqlDbType.Int);
+                cmdBonuses.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                SqlDataReader readerBonuses = cmdBonuses.ExecuteReader();
+                while(readerBonuses.Read())
+                {
+                    Bonus bonus = new Bonus();
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(0)) bonus.BonusSource = readerBonuses.GetString(0);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus source {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(1)) bonus.BonusDate = readerBonuses.GetDateTime(1);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus date {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(2)) bonus.BonusAdded = readerBonuses.GetDecimal(2);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus added {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(3)) bonus.BonusRedeemed = readerBonuses.GetDecimal(3);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus redeemed {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(4)) bonus.BonusBurn = readerBonuses.GetDecimal(4);
+                    }
+                    catch(Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus burn {0}", c.Card);
+                    }
+                    c.Bonuses.Add(bonus);
+                }
+                readerBonuses.Close();
             }
 
             cnn.Close();
