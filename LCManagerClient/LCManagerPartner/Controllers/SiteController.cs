@@ -16,6 +16,14 @@ namespace LCManagerPartner.Controllers
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
 
+        [Authorize(Roles = "Writer, Admin")]
+        [HttpGet]
+        [Route("test1")]
+        public HttpResponseMessage Test()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, "tes1");
+        }
+
         //Дублирующиеся методы: GetCampaigns, GetPoses, GetClient
 
         [HttpPost]
