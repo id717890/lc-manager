@@ -38,38 +38,36 @@ namespace LCManagerPartner
                 identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.RoleName));
                 //identity.AddClaim(new Claim("username", context.UserName));
                 identity.AddClaim(new Claim("user", context.UserName));
-                identity.AddClaim(new Claim("oper",  authentificationResult.Operator.ToString()));
-                identity.AddClaim(new Claim("partner",  authentificationResult.Partner.ToString()));
-                identity.AddClaim(new Claim("pos",  authentificationResult.Pos.ToString()));
-                identity.AddClaim(new Claim("poscode",  authentificationResult.PosCode));
+                if (authentificationResult.Operator > 0)
+                {
+                    identity.AddClaim(new Claim("oper", authentificationResult.Operator.ToString()));
+                }
+                if (authentificationResult.Partner > 0)
+                {
+                    identity.AddClaim(new Claim("partner", authentificationResult.Partner.ToString()));
+                }
+                if (authentificationResult.Pos > 0)
+                {
+                    identity.AddClaim(new Claim("pos", authentificationResult.Pos.ToString()));
+                }
+                if (!string.IsNullOrEmpty(authentificationResult.PosCode))
+                {
+                    identity.AddClaim(new Claim("poscode", authentificationResult.PosCode));
+                }
                 identity.AddClaim(new Claim("permissioncode",  authentificationResult.PermissionCode));
                 context.Validated(identity);
             }
             else
             {
-                context.SetError("invalid_grant", "Provided username and password is incorrect");
-                return;
-            }
-
-            //if (context.UserName == "admin" && context.Password == "admin")
-            //{
-            //    identity.AddClaim(new Claim(ClaimTypes.Role, "admin"));
-            //    identity.AddClaim(new Claim("username", "admin"));
-            //    identity.AddClaim(new Claim(ClaimTypes.Name, "Alexander Smirnov"));
-            //    context.Validated(identity);
-            //}
-            //else if(context.UserName == "user" && context.Password == "user")
-            //{
-            //    identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
-            //    identity.AddClaim(new Claim("username", "user"));
-            //    identity.AddClaim(new Claim(ClaimTypes.Name, "Vasya Pupkin"));
-            //    context.Validated(identity);
-            //}
-            //else
-            //{
-            //    context.SetError("invalid_grant", "Provided username and password is incorrect");
-            //    return;
-            //}
+                context.SetError("invalid_grant", "Provided username and password is incorrect", "401");
+                //context.Response.StatusCode = 401;
+                //context.Response.ReasonPhrase = "Provided username and password is incorrect";
+                //return new System.Net.Http.HttpResponseMessage
+                //{
+                //    StatusCode = System.Net.HttpStatusCode.Forbidden,
+                //    Content = new System.Net.Http.StringContent("You are unauthorized to access this resource")
+                //}; ;
+            }            
         }
     }
 }
