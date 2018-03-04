@@ -18,6 +18,14 @@ namespace LCManagerPartner.Controllers
 
         //Дублирующиеся методы: GetCampaigns, GetPoses, GetClient
 
+        [Authorize(Roles = "Writer, Admin")]
+        [HttpGet]
+        [Route("test1")]
+        public HttpResponseMessage Test()
+        {
+            return Request.CreateResponse(HttpStatusCode.OK, "tes1");
+        }
+
         /// <summary>
         /// Получение списка сегментов
         /// </summary>

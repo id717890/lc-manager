@@ -702,7 +702,7 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(11)) cheque.PosName = reader.GetString(11);
                 if (!reader.IsDBNull(12)) cheque.Phone = reader.GetInt64(12);
                 returnValue.ChequeData.Add(cheque);
-            }           
+            }
             reader.Close();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
@@ -728,10 +728,10 @@ namespace LCManagerPartner.Models
                             if (!readerItems.IsDBNull(5)) item.AddedBonus = readerItems.GetDecimal(5);
                             cheque.Items.Add(item);
                         }
-                    }                    
+                    }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 returnValue.Message = ex.Message;
             }
@@ -977,7 +977,7 @@ namespace LCManagerPartner.Models
             {
                 cmd.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "ServerGetRegistrationUserResponse");
                 cnn.Close();
@@ -4884,6 +4884,19 @@ namespace LCManagerPartner.Models
         public int MonthNum { get; set; }
     }
 
+    public class Bonus
+    {
+        public string BonusSource { get; set; }
+
+        public DateTime? BonusDate { get; set; }
+
+        public decimal BonusAdded { get; set; }
+
+        public decimal BonusRedeemed { get; set; }
+
+        public decimal BonusBurn { get; set; }
+    }
+
     public class OperatorClientsManagerBuys
     {
         public int Id { get; set; }
@@ -4960,10 +4973,13 @@ namespace LCManagerPartner.Models
 
         public List<Cheque> ChequeData { get; set; }
 
+        public List<Bonus> Bonuses { get; set; }
+
         public OperatorClientsManagerBuys()
         {
             CardBuys = new List<CardBuysByMonth>();
             ChequeData = new List<Cheque>();
+            Bonuses = new List<Bonus>();
         }
     }
 
@@ -5012,11 +5028,11 @@ namespace LCManagerPartner.Models
             cmd.CommandText = "Clients";
 
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-            if(request.Partner > 0)
+            if (request.Partner > 0)
             {
                 cmd.Parameters.AddWithValue("@partner", request.Partner);
             }
-            if(!string.IsNullOrEmpty(request.Pos))
+            if (!string.IsNullOrEmpty(request.Pos))
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
@@ -5088,7 +5104,7 @@ namespace LCManagerPartner.Models
                 readerClients.Close();
             }
 
-            foreach(var c in returnValue.OperatorClients)
+            foreach (var c in returnValue.OperatorClients)
             {
                 var cmdCheques = cnn.CreateCommand();
                 cmdCheques.CommandType = CommandType.StoredProcedure;
@@ -5099,7 +5115,7 @@ namespace LCManagerPartner.Models
                 cmdCheques.Parameters.Add("@result", SqlDbType.Int);
                 cmdCheques.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
                 System.Data.SqlClient.SqlDataReader readerCheques = cmdCheques.ExecuteReader();
-                while(readerCheques.Read())
+                while (readerCheques.Read())
                 {
                     Cheque cheque = new Cheque();
                     cheque.Id = readerCheques.GetInt32(0);
@@ -5118,7 +5134,64 @@ namespace LCManagerPartner.Models
                 }
                 readerCheques.Close();
             }
-
+            foreach (var c in returnValue.OperatorClients)
+            {
+                var cmdBonuses = cnn.CreateCommand();
+                cmdBonuses.CommandType = CommandType.StoredProcedure;
+                cmdBonuses.CommandText = "CardBonusesType";
+                cmdBonuses.Parameters.AddWithValue("@card", c.Card);
+                cmdBonuses.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+                cmdBonuses.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+                cmdBonuses.Parameters.Add("@result", SqlDbType.Int);
+                cmdBonuses.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                SqlDataReader readerBonuses = cmdBonuses.ExecuteReader();
+                while (readerBonuses.Read())
+                {
+                    Bonus bonus = new Bonus();
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(0)) bonus.BonusSource = readerBonuses.GetString(0);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus source {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(1)) bonus.BonusDate = readerBonuses.GetDateTime(1);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus date {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(2)) bonus.BonusAdded = readerBonuses.GetDecimal(2);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus added {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(3)) bonus.BonusRedeemed = readerBonuses.GetDecimal(3);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus redeemed {0}", c.Card);
+                    }
+                    try
+                    {
+                        if (!readerBonuses.IsDBNull(4)) bonus.BonusBurn = readerBonuses.GetDecimal(4);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "ServerOperatorClientsManager getting bonus burn {0}", c.Card);
+                    }
+                    c.Bonuses.Add(bonus);
+                }
+                readerBonuses.Close();
+            }
             cnn.Close();
             return returnValue;
         }
@@ -5201,7 +5274,7 @@ namespace LCManagerPartner.Models
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "LCManagerPartner SegmentationAge {Message}", ex.Message);
                 returnValue.ErrorCode = 500;
@@ -5256,11 +5329,11 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientBaseStructure";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-            if(request.Partner > 0)
+            if (request.Partner > 0)
             {
                 cmd.Parameters.AddWithValue("@partner", request.Partner);
             }
-            if(request.Pos > 0)
+            if (request.Pos > 0)
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
@@ -5303,7 +5376,7 @@ namespace LCManagerPartner.Models
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "LCManagerPartner ServerClientBaseStructure {Message}", ex.Message);
                 returnValue.Message = ex.Message;
@@ -5354,16 +5427,16 @@ namespace LCManagerPartner.Models
             cmd.CommandText = "ClientBaseActive";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
 
-            if(request.Partner > 0)
+            if (request.Partner > 0)
             {
                 cmd.Parameters.AddWithValue("@partner", request.Partner);
             }
 
-            if(request.Pos > 0)
+            if (request.Pos > 0)
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
-            
+
             SqlParameter menBuys = new SqlParameter("@menBuys", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5379,7 +5452,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(womenBuys);
-            
+
             SqlParameter unknownGender = new SqlParameter("@unknownGenderBuys", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5387,7 +5460,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(unknownGender);
-            
+
             SqlParameter repeatedBuys = new SqlParameter("@repeatedBuys", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5395,7 +5468,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(repeatedBuys);
-            
+
             SqlParameter buysOnClient = new SqlParameter("@buysOnClient", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5421,7 +5494,7 @@ namespace LCManagerPartner.Models
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "LCManagerPartner ServerClientBaseActive");
                 returnValue.ErrorCode = 500;
@@ -5484,11 +5557,11 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientAnalyticMoney";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-            if(request.Partner > 0)
+            if (request.Partner > 0)
             {
                 cmd.Parameters.AddWithValue("@partner", request.Partner);
             }
-            if(request.Pos > 0)
+            if (request.Pos > 0)
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
@@ -5504,7 +5577,7 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@moreTenBuys"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@withOneBuy", SqlDbType.Int);
             cmd.Parameters["@withOneBuy"].Direction = ParameterDirection.Output;
-            
+
             SqlParameter gain = new SqlParameter("@gain", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5512,7 +5585,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(gain);
-            
+
             SqlParameter avgCheque = new SqlParameter("@avgCheque", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5525,7 +5598,7 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@buysWeekdays"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@buysWeekOff", SqlDbType.Int);
             cmd.Parameters["@buysWeekOff"].Direction = ParameterDirection.Output;
-            
+
             SqlParameter addedBonus = new SqlParameter("@addedBonus", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5533,7 +5606,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(addedBonus);
-            
+
             SqlParameter avgCharge = new SqlParameter("@avgCharge", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5551,7 +5624,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(redeemedBonus);
-            
+
             SqlParameter avgRedeem = new SqlParameter("@avgRedeem", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5559,7 +5632,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(avgRedeem);
-            
+
             SqlParameter avgBalance = new SqlParameter("@avgBalance", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5567,7 +5640,7 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(avgBalance);
-            
+
             SqlParameter avgDiscount = new SqlParameter("@avgDiscount", SqlDbType.Decimal)
             {
                 Precision = 19,
@@ -5610,7 +5683,7 @@ namespace LCManagerPartner.Models
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "LCManagerPartner ClientAnalyticMoney {Message}", ex.Message);
                 returnValue.Message = ex.Message;
@@ -6156,7 +6229,7 @@ namespace LCManagerPartner.Models
         public VerificationPromocodeResponse ProcessRequest(SqlConnection cnn, VerificationPromocodeRequest request)
         {
             VerificationPromocodeResponse returnValue = new VerificationPromocodeResponse();
-            if(request.Promocode.Length != 6)
+            if (request.Promocode.Length != 6)
             {
                 returnValue.ErrorCode = 1;
                 returnValue.Message = "Промокод должен состоять из 6 цифр";
