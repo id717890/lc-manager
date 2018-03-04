@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -10,7 +11,13 @@ namespace LCManagerPartner.Models
 {
     public class Segment
     {
+        /// <summary>
+        /// ID сегмента
+        /// </summary>
         public int id { get; set; }
+        /// <summary>
+        /// наименование сегмента
+        /// </summary>
         public string name { get; set; }
         public Segment() { }
         public Segment(int Id, string Name)
@@ -22,13 +29,26 @@ namespace LCManagerPartner.Models
 
     public class GetSegmentsRequest
     {
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetSegmentsResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// список сегментов
+        /// </summary>
         public List<Segment> SegmentData { get; set; }
         public GetSegmentsResponse()
         {
@@ -72,9 +92,21 @@ namespace LCManagerPartner.Models
 
     public class Category
     {
+        /// <summary>
+        /// ID категории
+        /// </summary>
         public int id { get; set; }
+        /// <summary>
+        /// наименование категории
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public int partners { get; set; }
+        /// <summary>
+        /// ID акции
+        /// </summary>
         public int campaigns { get; set; }
         public Category() { }
         public Category(int Id, string Name, int Partners, int Campaigns)
@@ -88,13 +120,26 @@ namespace LCManagerPartner.Models
 
     public class GetCategoriesRequest
     {
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetCategoriesResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// список акций
+        /// </summary>
         public List<Category> CategoryData { get; set; }
         public GetCategoriesResponse()
         {
@@ -140,8 +185,17 @@ namespace LCManagerPartner.Models
 
     public class City
     {
+        /// <summary>
+        /// ID города
+        /// </summary>
         public int id { get; set; }
+        /// <summary>
+        /// город
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// регион
+        /// </summary>
         public string region { get; set; }
         public City() { }
         public City(int Id, string Name, string Region)
@@ -154,12 +208,22 @@ namespace LCManagerPartner.Models
 
     public class GetCitiesRequest
     {
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetCitiesResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
         public List<City> CityData { get; set; }
         public GetCitiesResponse()
@@ -205,21 +269,61 @@ namespace LCManagerPartner.Models
 
     public class Partner
     {
+        /// <summary>
+        /// идентификатор Партнера программы лояльности
+        /// </summary>
         public int id { get; set; }
+        /// <summary>
+        /// название
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// ссылка на логотип
+        /// </summary>
         public string logo { get; set; }
+        /// <summary>
+        /// описание
+        /// </summary>
         public string description { get; set; }
+        /// <summary>
+        /// состояние
+        /// </summary>
         public string condition { get; set; }
+        /// <summary>
+        /// список тегов
+        /// </summary>
         public string tagline { get; set; }
+        /// <summary>
+        /// адрес интернет магазина
+        /// </summary>
         public string internetshop { get; set; }
+        /// <summary>
+        /// Есть карты?
+        /// </summary>
         public bool isCardIssue { get; set; }
-        public bool isInCity { get; set; }
+        /// <summary>
+        /// Есть торговая точка в городе?
+        /// </summary>
+        public bool isInCity { get; set;}
+        /// <summary>
+        /// Есть интернет магазин?
+        /// </summary>
         public bool isInInternet { get; set; }
+        /// <summary>
+        /// Список подходящих категорий
+        /// </summary>
         public List<int> categoryId { get; set; }
-
+        /// <summary>
+        /// Популярный? 
+        /// </summary>
         public bool isFav { get; set; }
+        /// <summary>
+        /// общая ссылка?
+        /// </summary>
         public string share_url { get; set; }
-
+        /// <summary>
+        /// логотип
+        /// </summary>
         public string biglogo { get; set; }
 
         public Partner() { }
@@ -242,21 +346,55 @@ namespace LCManagerPartner.Models
 
     public class GetPartnersRequest
     {
+        /// <summary>
+        /// Главная страница?
+        /// </summary>
         public bool IsMainPage { get; set; }
+        /// <summary>
+        /// ID города
+        /// </summary>
         public int CityID { get; set; }
+        /// <summary>
+        /// ID сегмента
+        /// </summary>
         public int SegmentID { get; set; }
+        /// <summary>
+        /// ID категории
+        /// </summary>
         public int CategoryID { get; set; }
+        /// <summary>
+        /// Есть карты?
+        /// </summary>
         public bool IsCardIssue { get; set; }
+        /// <summary>
+        /// Есть ТТ в городе?
+        /// </summary>
         public bool IsInCity { get; set; }
+        /// <summary>
+        /// Есть интеренет магазин?
+        /// </summary>
         public bool IsInInternet { get; set; }
 
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetPartnersResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// список партнеров с детализацией
+        /// </summary>
         public List<Partner> PartnerData { get; set; }
         public GetPartnersResponse()
         {
@@ -339,12 +477,22 @@ namespace LCManagerPartner.Models
 
     public class GetPartnerRequest
     {
+        /// <summary>
+        /// идентификатор Партнера программы лояльности
+        /// </summary>
+        [Required]
         public int PartnerID { get; set; }
     }
 
     public class GetPartnerResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
         public Partner PartnerData { get; set; }
         public GetPartnerResponse()
@@ -541,8 +689,17 @@ namespace LCManagerPartner.Models
 
     public class GetCampaignResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// детализированная информация об акции
+        /// </summary>
         public Campaign CampaignData { get; set; }
         public GetCampaignResponse()
         {
@@ -685,7 +842,13 @@ namespace LCManagerPartner.Models
 
     public class PartnerInfo
     {
+        /// <summary>
+        /// наименование
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// описание
+        /// </summary>
         public string description { get; set; }
         public PartnerInfo() { }
         public PartnerInfo(string Name, string Description)
@@ -697,13 +860,26 @@ namespace LCManagerPartner.Models
 
     public class GetPartnerInfoRequest
     {
+        /// <summary>
+        /// идентификатор Партнера программы лояльности
+        /// </summary>
+        [Required]
         public int PartnerID { get; set; }
     }
 
     public class GetPartnerInfoResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// Информация о партнере
+        /// </summary>
         public List<PartnerInfo> PartnerInfoData { get; set; }
         public GetPartnerInfoResponse()
         {
@@ -743,11 +919,17 @@ namespace LCManagerPartner.Models
 
     public class CampaignInfo
     {
+        /// <summary>
+        /// наименование акции
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// описание акции
+        /// </summary>
         public string description { get; set; }
         public CampaignInfo() { }
         public CampaignInfo(string Name, string Description)
-        {
+        {    
             name = Name;
             description = Description;
         }
@@ -755,13 +937,26 @@ namespace LCManagerPartner.Models
 
     public class GetCampaignInfoRequest
     {
+        /// <summary>
+        /// идентификатор акции
+        /// </summary>
+        [Required]
         public int CampaignID { get; set; }
     }
 
     public class GetCampaignInfoResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// список акций
+        /// </summary>
         public List<CampaignInfo> CampaignInfoData { get; set; }
         public GetCampaignInfoResponse()
         {
@@ -895,15 +1090,33 @@ namespace LCManagerPartner.Models
 
     public class LeaveMessageRequest
     {
+        /// <summary>
+        /// адрес электронной почты участника программы лояльности
+        /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// тема письма
+        /// </summary>
         public string Subject { get; set; }
+        /// <summary>
+        /// тело письма
+        /// </summary>
         public string Text { get; set; }
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
         public Int16 Operator { get; set; }
     }
 
     public class LeaveMessageResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
     }
 
@@ -942,19 +1155,37 @@ namespace LCManagerPartner.Models
 
     public class GetFaq
     {
+        /// <summary>
+        /// вопрос
+        /// </summary>
         public string Question { get; set; }
+        /// <summary>
+        /// ответ
+        /// </summary>
         public string Answer { get; set; }
     }
 
     public class GetFaqRequest
     {
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
         public Int16 Operator { get; set; }
     }
 
     public class GetFaqResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// список популярных вопросов и ответы на них
+        /// </summary>
         public List<GetFaq> FaqData { get; set; }
         public GetFaqResponse()
         {
@@ -998,13 +1229,37 @@ namespace LCManagerPartner.Models
 
     public class CampaignDetail
     {
+        /// <summary>
+        /// ID акции
+        /// </summary>
         public int id { get; set; }
+        /// <summary>
+        /// наименование акции
+        /// </summary>
         public string campaign { get; set; }
+        /// <summary>
+        /// регион
+        /// </summary>
         public string region { get; set; }
+        /// <summary>
+        /// город
+        /// </summary>
         public string city { get; set; }
+        /// <summary>
+        /// адрес
+        /// </summary>
         public string address { get; set; }
+        /// <summary>
+        /// номер телефона
+        /// </summary>
         public string phone { get; set; }
+        /// <summary>
+        /// координаты на картах
+        /// </summary>
         public string mapposition { get; set; }
+        /// <summary>
+        /// проблема с картой?
+        /// </summary>
         public bool isCardIssue { get; set; }
         public CampaignDetail()
         { }
@@ -1023,13 +1278,26 @@ namespace LCManagerPartner.Models
 
     public class CampaignDetailRequest
     {
+        /// <summary>
+        /// идентификатор Акции программы лояльности
+        /// </summary>
+        [Required]
         public int CampaignID { get; set; }
     }
 
     public class CampaignDetailResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// детализированная информация об акции
+        /// </summary>
         public List<CampaignDetail> CampaignDetailData { get; set; }
         public CampaignDetailResponse()
         {
@@ -1073,20 +1341,54 @@ namespace LCManagerPartner.Models
 
     public class BecomePartnerRequest
     {
+        /// <summary>
+        /// город партнера
+        /// </summary>
         public string City { get; set; }
+        /// <summary>
+        /// сайт партнера
+        /// </summary>
         public string Site { get; set; }
+        /// <summary>
+        /// что продают?
+        /// </summary>
         public string GoodsSell { get; set; }
+        /// <summary>
+        /// Количество ТТ
+        /// </summary>
         public int? PosQty { get; set; }
+        /// <summary>
+        /// Наименование кассового ПО
+        /// </summary>
         public string CashSoftware { get; set; }
+        /// <summary>
+        /// Имя
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Номер телефона
+        /// </summary>
         public Int64 Phone { get; set; }
+        /// <summary>
+        /// Адрес электронной почты
+        /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// Идентификатор Оператора программы лояльности
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class BecomePartnerResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
     }
 

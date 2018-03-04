@@ -20,6 +20,11 @@ namespace LCManagerPartner.Controllers
         //public Reports() { cnn.Open(); }
         //~Reports() { cnn.Close(); }
 
+        /// <summary>
+        /// Очтёт о покупках клиента Оператора за период
+        /// </summary>
+
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientBuys")]
         public ReportResponse ClientBuys(ClientBuysRequest request)
@@ -28,6 +33,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Очтёт о покупках Оператора за период
+        /// </summary>
 
         [HttpPost]
         [Route("Buys")]
@@ -41,7 +50,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Отчёт по клиентам ТТ за период
         /// </summary>
-        /// <param name="request"></param>
+
         /// <returns></returns>
         [HttpPost]
         [Route("PosClientPeriod")]
@@ -52,6 +61,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отчёт по продажам ТТ за период
+        /// </summary>
+
+        /// <returns></returns>
         [HttpPost]
         [Route("PosSalePeriod")]
         public ReportResponse PosSalePeriod(PosClientPeriodRequest request)
@@ -60,6 +74,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Отчёт по продажам за период у оператора
+        /// </summary>
 
         [HttpPost]
         [Route("OperatorClient")]
@@ -70,6 +88,10 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отчёт о продажах по программе лояльности оператора
+        /// </summary>
+
         [HttpPost]
         [Route("OperatorSales")]
         public ReportResponse OperatorSales(OperatorSalesRequest request)
@@ -78,6 +100,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Отчёт для бухгалтерии оператора за период
+        /// </summary>
 
         [HttpPost]
         [Route("OperatorBookkeeping")]
@@ -88,6 +114,10 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отчёт по продажам за период у партнера
+        /// </summary>
+
         [HttpPost]
         [Route("PartnerClient")]
         public ReportResponse PartnerClient(PartnerClientRequest request)
@@ -96,6 +126,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Очтёт о начисление и списание бонусов у партнера
+        /// </summary>
 
         [HttpPost]
         [Route("PartnerSales")]
@@ -106,6 +140,10 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отчёт для бухгалтерии партнера за период
+        /// </summary>
+
         [HttpPost]
         [Route("PartnerBookkeeping")]
         public ReportResponse PartnerBookkeeping(PartnerBookkeepingRequest request)
@@ -114,6 +152,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Отчёт по бонусам не за покупки за период у оператора
+        /// </summary>
 
         [HttpPost]
         [Route("OperatorBonus")]
