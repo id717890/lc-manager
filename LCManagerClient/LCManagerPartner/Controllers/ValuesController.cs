@@ -17,15 +17,17 @@ namespace LCManagerPartner.Controllers
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
-        
+
+
         /// <summary>
-        /// Получение баланса пользователя
+        /// Получение баланса бонусных баллов по номеру карты, либо по номеру телефонаУчастника программы лояльности.
         /// </summary>
-        /// <param name="request"></param>
+
         /// <returns></returns>
         [Authorize]
         [HttpPost]
         [Route("BalanceGet")]
+       
         public BalanceGetResponse BalanceGet(BalanceGetRequest request)
         {
             Log.Information("LCManagerPartner BalanceGet {phone}", request.Phone);
@@ -33,7 +35,9 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
-
+        /// <summary>
+        /// Отправка запроса на списание бонусных баллов Участника программы лояльности.
+        /// </summary>
         [HttpPost]
         [Route("Redeem")]
         public RedeemResponse Redeem(RedeemRequest request)
@@ -43,7 +47,26 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
-
+        /// <summary>
+        /// Регистрация чека покупки на Процессинге
+        /// </summary>
+        /// <param name="Card">номер карты</param>
+        /// <param name="ChequeTime">дата и время чека</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльности</param>
+        /// <param name="POS">код Торговой точки Партнера</param>
+        /// <param name="Amount">сумма чека</param>
+        /// <param name="PaidByBonus">оплачено бонусными баллами</param>
+        /// <param name="Number">номер чека</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="ItemData">список позиций чека</param>
+        /// <param name="Position">номер позиции</param>
+        /// <param name="Code">код позиции</param>
+        /// <param name="Price">цена</param>
+        /// <param name="Quantity">количество</param>
+        /// <param name="Amount">итоговая сумма</param>
+        /// <param name="PaidByBonus">оплачено бонусными баллами</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ChequeAdd")]
         public ChequeAddResponse ChequeAdd(ChequeAddRequest request)
@@ -53,6 +76,12 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Получение списка магазинов Партнёра
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetAllShopsByPartner")]
         public GetPosesResponse GetAllShopsByPartner(GetPosesRequest request)
@@ -63,6 +92,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение чеков по заданному номеру карты.
+        /// </summary>
+        /// <param name="CardNumber">номер карты Участника программы лояльности</param>
+        /// <param name="ClientId">идентификатор Участника программы лояльности</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>  
+        /// <returns></returns>
         [HttpPost]
         [Route("GetCheques")]
         public GetChequesResponse GetCheques(GetChequesRequest request)
@@ -73,6 +109,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Проверка кода и валидация номера телефона.
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Code">полученный в SMS сообщении проверочный код</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("GetConfirmCode")]
@@ -84,6 +126,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Установка/изменение пароля Участника.
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Code">проверочный код</param>
+        /// <param name="Password">новый пароль</param>
+        /// <param name="ClientID">идентификатор Участника</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("SetClientPassword")]
@@ -95,6 +145,17 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Регистрация Участника в ЛКУ программы лояльности
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="PartnerID">идентификатор Партнера программы лояльности</param>
+        /// <param name="PosCode">код Торговой точки в которой производится регистрация</param>
+        /// <param name="AgreePersonalData">согласие на обработку персональных данных</param>
+        /// <param name="Operator">идентификатор Оператора програмы лояльности</param>
+        /// <param name="FriendPhone">телефон друга/подруги для механики “Приведи друга”</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
@@ -105,6 +166,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка проверечного кода в SMS сообщении на указанный номер телефона
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльности</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("GetSendVerificationCode")]
@@ -116,6 +184,16 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Авторизация Участника в ЛКУ по логину/паролю или через привязанный аккаунт социальной сети.
+        /// </summary>
+        /// <param name="Login">номер телефона или номер карты</param>
+        /// <param name="Password">пароль</param>
+        /// <param name="IdFB">токен (временный код) Участника в социальной сети “Facebook”</param>
+        /// <param name="IdOK">токен (временный код) Участника в “Одноклассники”</param>
+        /// <param name="IdVK">токен (временный код) Участника в “ВКонтакте”</param>
+        /// <param name="Operator">идентификатор Оператора Программы лояльности</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("ClientLogin")]
@@ -127,6 +205,29 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Изменение данных Участника по заданному идентификатору
+        /// </summary>
+        /// <param name="id">идентификатор Участника программы лояльности</param>
+        /// <param name="password">пароль</param>
+        /// <param name="firstname">имя</param>
+        /// <param name="middlename">отчетсво</param>
+        /// <param name="lastname">фамилия</param>
+        /// <param name="gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
+        /// <param name="birthdate">дата рождения</param>
+        /// <param name="address">адрес</param>
+        /// <param name="haschildren">признак наличия детей</param>
+        /// <param name="description">произвольное описание</param>
+        /// <param name="phone">номер телефона</param>
+        /// <param name="email">электронная почта</param>
+        /// <param name="allowsms">получать уведомления по SMS</param>
+        /// <param name="allowemail">получать уведомления по E-mail</param>
+        /// <param name="balance">активный баланс бонусных баллов</param>
+        /// <param name="allowpush">получать push-уведомления</param>
+        /// <param name="lasturchaseamount">сумма последней покупки</param>
+        /// <param name="lastpurchasedate">дата последней покупки</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ChangeClient")]
         public ChangeClientResponse ChangeClient(ChangeClientRequest request)
@@ -137,6 +238,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка проверечного кода на указанный адрес электронной почты.
+        /// </summary>
+        /// <param name="Email">электронная почта</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendEmailCode")]
         public SendEmailCodeResponse SendEmailCode(SendEmailCodeRequest request)
@@ -147,6 +253,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Проверка кода и валидация электронной почты
+        /// </summary>
+        /// <param name="Email">электронная почта</param>
+        /// <param name="Client">идентификатор Участника при валидации электронной почты по ссылке</param>
+        /// <param name="Code"> полученный в сообщении проверочный код</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ValidateEmail")]
         public ValidateEmailResponse ValidateEmail(ValidateEmailRequest request)
@@ -157,6 +270,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Привязывает номер телефона к заданному Участнику, устанавливает заданный номер телефона как коммуникационный.
+        /// </summary>
+        /// <param name="ClientID">идентификатор Участника</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddPhone")]
         public AddPhoneResponse AddPhone(AddPhoneRequest request)
@@ -167,6 +286,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Удаляет заданный номер телефона.
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("DeletePhone")]
         public DeletePhoneResponse DeletePhone(DeletePhoneRequest request)
@@ -176,7 +300,9 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
-
+        /// <summary>
+        /// Получение полной информации по Партнёру за период
+        /// </summary>
         [HttpPost]
         [Route("PartnerFullInfo")]
         public PartnerFullInfoResponse PartnerFullInfo(PartnerFullInfoRequest request)
@@ -186,6 +312,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Регистрация чека возврата на Процессинге.
+        /// </summary>
 
         [HttpPost]
         [Route("Refund")]
@@ -197,6 +327,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение полной информации по Оператору за период
+        /// </summary>
+        /// <param name="Operator">оператор</param>
+        /// <param name="Start_date">начало периода</param>
+        /// <param name="End_date">конец приода</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OperatorStatistics")]
         public OperatorStatisticsResponse OperatorStatistics(OperatorStatisticsRequest request)
@@ -207,6 +344,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение Акций по заданному идентификатору Участника программы лояльности.
+        /// </summary>
+        /// <param name="ClientID">идентификатор Участника программы лояльности</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetCampaigns")]
         public GetCampaignsResponse GetCampaigns(GetCampaignsRequest request)
@@ -217,6 +360,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение данных Участника по заданному номеру телефона или номеру карты.
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientInfo")]
         public GetClientInfoResponse ClientInfo(GetClientInfoRequest request)
@@ -227,6 +377,21 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Обновление профиля Участника программы лояльности.
+        /// </summary>
+        /// <param name="Client">идентификатор Участника программы лояльности</param>
+        /// <param name="Name">имя</param>
+        /// <param name="Surname">фамилия</param>
+        /// <param name="Patronymic">отчество</param>
+        /// <param name="AllowSms">получать уведомления по SMS</param>
+        /// <param name="AllowEmail">получать уведомления по E-mail</param>
+        /// <param name="Birthdate">дата рождения</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Email">электронная почта</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientUpdate")]
         public SetClientUpdateResponse ClientUpdate(SetClientUpdateRequest request)
@@ -237,6 +402,18 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отмена последнего зарегистрированного чека на Процессинге.
+        /// </summary>
+        /// <param name="Partner">идентификатор Партнера программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="ChequeTime">дата чека</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="Number">номер чека</param>
+        /// <param name="Terminal">код терминала Торговой точки</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CancelLastCheque")]
         public CancelLastChequeResponse CancelLastCheque(CancelLastChequeRequest request)
@@ -247,6 +424,24 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Создание профиля Участника программы лояльности
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Name">имя</param>
+        /// <param name="Surname">фамилия</param>
+        /// <param name="Patronymic">отчество</param>
+        /// <param name="Email">адрес электронной почты?</param>
+        /// <param name="Birthdate">идентификатор Участника программы лояльности</param>
+        /// <param name="AllowSms">получать уведомления по SMS</param>
+        /// <param name="AllowEmail">получать уведомления по E-mail</param>
+        /// <param name="Gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
+        /// <param name="AgreePersonalData">согласие на обработку персональных данных</param>
+        /// <param name="PosCode">код Торговой точки в которой производится создание</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientCreate")]
         public ClientCreateResponse ClientCreate(ClientCreateRequest request)
@@ -257,6 +452,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение информации о картах Участника.
+        /// </summary>
+        /// <param name="ClientID">идентификатор Участника программы лояльности</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetClient")]
         public GetClientResponse GetClient(GetClientRequest request)
@@ -267,6 +468,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение информации о чеках привязанных к карте
+        /// </summary>
+        /// <param name="CardNumber">номер карты</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetChequesByCard")]
         public GetChequesByCardResponse GetChequesByCard(GetChequesByCardRequest request)
@@ -277,6 +484,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Импорт клиентской базы
+        /// </summary>
+        /// <param name="ExcelFile">файл базы</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientImport")]
         public ClientImportResponse ClientImport(ClientImportRequest request)
@@ -287,6 +501,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Замена карты клиента
+        /// </summary>
+        /// <param name="Active">Номер актуальной карты</param>
+        /// <param name="Merged">Номер устаревшей карты</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Merge")]
         public MergeResponse Merge(MergeRequest request)
@@ -297,6 +517,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Запрос информации о клиенте
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientInfoArray")]
         public GetClientInfoArrayResponse ClientInfoArray(GetClientInfoRequest request)
@@ -307,6 +534,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по торговой точке за период
+        /// </summary>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="Start_date">начало периода</param>
+        /// <param name="End_date">конец периода</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("PosStatistics")]
         public PosStatisticsResponse PosStatistics(PosStatisticsRequest request)
@@ -317,6 +551,16 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по чекам за период
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">начало периода</param>
+        /// <param name="To">конец периода</param>
+        /// <param name="Layout">форма агрегирования</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ChequeAggregation")]
         public ChequeAggregationResponse ChequeAggregation(ChequeAggregationRequest request)
@@ -327,6 +571,16 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по клиентам за период
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">начало периода</param>
+        /// <param name="To">конец периода</param>
+        /// <param name="Layout">форма агрегирования</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientAggregation")]
         public ClientAggregationResponse ClientAggregation(ClientAggregationRequest request)
@@ -336,7 +590,15 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
-        
+
+        /// <summary>
+        /// Ручное начисление бонусов
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Bonus">размер бонуса</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("BonusAdd")]
         public BonusAddResponse BonusAdd(BonusAddRequest request)
@@ -347,6 +609,17 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по начислению бонусов
+        /// </summary>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Client">клиент</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="Page">страница</param>
+        /// <param name="PageSize">размер страницы</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ChequesBonuses")]
         public GetChequesBonusesResponse ChequesBonuses(GetChequesBonusesRequest request)
@@ -357,6 +630,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по клиентам Оператора
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OperatorClients")]
         public OperatorClientResponse OperatorClients(OperatorClientRequest request)
@@ -367,6 +645,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Импорт базы проведённых чеков
+        /// </summary>
+        /// <param name="ExcelFile">файл базы</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("BuysImport")]
         public BuysImportResponse BuysImport(BuysImportRequest request)
@@ -377,6 +662,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение бонусов карты не относящиеся к чекам.
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Card">номер карты</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CardBonuses")]
         public CardBonusesResponse CardBonuses(CardBonusesRequest request)
@@ -387,6 +678,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Создание "быстрых бонусов"
+        /// </summary>
+        /// <param name="ExcelFile">файл базы</param>
+        /// <param name="FastBonusName">именование "быстрых бонусов"</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("FastBonus")]
         public FastBonusCreateResponse FastBonus(FastBonusCreateRequest request)
@@ -397,6 +696,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Импорт базы уровней клиентов
+        /// </summary>
+        /// <param name="ExcelFile">файл базы</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Level">уровень клиента</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientUpdateLevel")]
         public ClientUpdateLevelResponse ClientUpdateLevel(ClientUpdateLevelRequest request)
@@ -407,6 +714,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Авторизация на WebApi
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Password">пароль</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ManagerLogin")]
         public ManagerLoginResponse ManagerLogin(ManagerLoginRequest request)
@@ -417,6 +730,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает максимальную сумму списания в чек
+        /// </summary>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="ChequeSum">сумма по чеку</param>
         [HttpPost]
         [Route("ChequeMaxSumRedeem")]
         public ChequeMaxSumRedeemResponse ChequeMaxSumRedeem(ChequeMaxSumRedeemRequest request)
@@ -427,6 +746,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возращает информацию о клиентах на страницу клиентов Оператора
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">конец периода</param>
+        /// <param name="To">начало периода</param>
         [HttpPost]
         [Route("OperatorClientsManager")]
         public OperatorClientsManagerResponse OperatorClientsManager(OperatorClientsManagerRequest request)
@@ -437,6 +764,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Данные для страницы Аналитика LCManager
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
         [HttpPost]
         [Route("SegmentationAge")]
         public SegmentationAgeResponse SegmentationAge(SegmentationAgeRequest request)
@@ -447,6 +780,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Данные для страницы Аналитика LCManager
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
         [HttpPost]
         [Route("ClientBaseStructure")]
         public ClientBaseStructureResponse ClientBaseStructure(ClientBaseStructureRequest request)
@@ -457,6 +796,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Данные для страницы Аналитика LCManager
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
         [HttpPost]
         [Route("ClientBaseActive")]
         public ClientBaseActiveResponse ClientBaseActive(ClientBaseActiveRequest request)
@@ -467,6 +812,13 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Данные для страницы Аналитика LCManager
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientAnalyticMoney")]
         public ClientAnalyticMoneyResponse ClientAnalyticMoney(ClientAnalyticMoneyRequest request)
@@ -477,6 +829,15 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возращает средний чек и выручку Оператора\Партнёра\ТТ по месяцам
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">начало периода</param>
+        /// <param name="To">конец периода</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GainOperatorPeriod")]
         public GainOperatorPeriodResponse GainOperatorPeriod(GainOperatorPeriodRequest request)
@@ -487,6 +848,15 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возращает сумму возратов Оператора\Партнёра\ТТ по месяцам
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">начало периода</param>
+        /// <param name="To">конец периода</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("RefundOperatorPeriod")]
         public RefundOperatorPeriodResponse RefundOperatorPeriod(RefundOperatorPeriodRequest request)
@@ -497,6 +867,15 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает количество зарегестрированных клиентов Оператора\Партнёра\ТТ по месяцам
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+        /// <param name="Pos">код Торговой точки Партнера</param>
+        /// <param name="From">начало периода</param>
+        /// <param name="To">конец периода</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientOperatorPeriod")]
         public ClientOperatorPeriodResponse ClientOperatorPeriod(ClientOperatorPeriodRequest request)
@@ -507,6 +886,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка кода подтверждения менеджером
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("ManagerSendCode")]
@@ -518,6 +902,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Информация об операторе
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OperatorInfo")]
         public OperatorInfoResponse OperatorInfo(OperatorInfoRequest request)
@@ -528,6 +917,14 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Активация карты на списание
+        /// </summary>
+        /// <param name="Phone">номер телефона</param>
+        /// <param name="Card">номер карты</param>
+        /// <param name="Code">код подтверждения</param>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("ActivateCard")]
@@ -539,6 +936,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Выборка товаров Оператора
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OperatorGoods")]
         public OperatorGoodsResponse OperatorGoods(OperatorGoodsRequest request)
@@ -549,6 +951,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Выборка торговых точек Оператора
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("OperatorPos")]
         public OperatorPosResponse OperatorPos(OperatorPosRequest request)
@@ -558,6 +965,12 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Проверка промокода
+        /// </summary>
+        /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+        /// <param name="Promocode">промо-код</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("VerificationPromocode")]
         public VerificationPromocodeResponse VerificationPromocode(VerificationPromocodeRequest request)

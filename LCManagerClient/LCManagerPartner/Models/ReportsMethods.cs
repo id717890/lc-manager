@@ -7,13 +7,26 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace LCManagerPartner.Models
 {
     public class ReportResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
+        [Required]
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
+        [Required]
         public string Message { get; set; }
+        /// <summary>
+        /// Файл отчёта
+        /// </summary>
+        [Required]
         public byte[] Report { get; set; }
     }
 
@@ -41,8 +54,18 @@ namespace LCManagerPartner.Models
 
     public class ClientBuysRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }    
 
@@ -185,13 +208,24 @@ namespace LCManagerPartner.Models
 
     public class BuysRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime? From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime? To { get; set; }
     }
 
     public class ServerBuyResponse
     {
+
         public ReportResponse ProcessRequest(SqlConnection cnn, BuysRequest request)
         {
             ReportResponse returnValue = new ReportResponse();
@@ -308,10 +342,26 @@ namespace LCManagerPartner.Models
     
     public class PosClientPeriodRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public Int16 Partner { get; set; }
+        /// <summary>
+        /// ID торгового терминала
+        /// </summary>
         public string Pos { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime? From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime? To { get; set; }
     }
 
@@ -719,8 +769,18 @@ namespace LCManagerPartner.Models
 
     public class ReportOperatorClientRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime? From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime? To { get; set; }
     }
 
@@ -751,6 +811,7 @@ namespace LCManagerPartner.Models
             while (reader.Read())
             {
                 PosClient posClient = new PosClient();
+
                 if (!reader.IsDBNull(0)) posClient.Brand = reader.GetString(0);
                 if (!reader.IsDBNull(1)) posClient.Address = reader.GetString(1);
                 if (!reader.IsDBNull(2)) posClient.Name = reader.GetString(2);
@@ -781,7 +842,6 @@ namespace LCManagerPartner.Models
                 var workbook = package.Workbook;
                 string workSheetName = "Клиентская база";
                 var worksheet = workbook.Worksheets.Add(workSheetName);
-
                 worksheet.Cells["A1"].Value = "Бренд";
                 worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
                 worksheet.Cells["B1"].Value = "Источник регистрации";
@@ -970,8 +1030,18 @@ namespace LCManagerPartner.Models
 
     public class OperatorSalesRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }
 
@@ -1149,8 +1219,18 @@ namespace LCManagerPartner.Models
 
     public class OperatorBookkeepingRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }
 
@@ -1372,9 +1452,22 @@ namespace LCManagerPartner.Models
 
     public class PartnerBookkeepingRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public Int16 Partner { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }
 
@@ -1504,11 +1597,31 @@ namespace LCManagerPartner.Models
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Operator">идентификатор Оператора программы лояльности</param>
+    /// <param name="Partner">идентификатор Партнера программы лояльност</param>
+    /// <param name="From">начало периода</param>
+    /// <param name="To">конце периода</param>
     public class PartnerClientRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public Int16 Partner { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }
 
@@ -1885,8 +1998,18 @@ namespace LCManagerPartner.Models
 
     public class OperatorBonusSourceRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Дата начала периода
+        /// </summary>
         public DateTime From { get; set; }
+        /// <summary>
+        /// Дата окончания периода
+        /// </summary>
         public DateTime To { get; set; }
     }
 

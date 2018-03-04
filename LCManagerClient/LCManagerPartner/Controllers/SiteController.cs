@@ -16,16 +16,11 @@ namespace LCManagerPartner.Controllers
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
 
-        [Authorize(Roles = "Writer, Admin")]
-        [HttpGet]
-        [Route("test1")]
-        public HttpResponseMessage Test()
-        {
-            return Request.CreateResponse(HttpStatusCode.OK, "tes1");
-        }
-
         //Дублирующиеся методы: GetCampaigns, GetPoses, GetClient
 
+        /// <summary>
+        /// Получение списка сегментов
+        /// </summary>
         [HttpPost]
         [Route("GetSegments")]
         public GetSegmentsResponse GetSegments(GetSegmentsRequest request)
@@ -35,6 +30,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получения списка категорий?
+        /// </summary>
         [HttpPost]
         [Route("GetCategories")]
         public GetCategoriesResponse GetCategories(GetCategoriesRequest request)
@@ -44,6 +42,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение списка городов
+        /// </summary>
         [HttpPost]
         [Route("GetCities")]
         public GetCitiesResponse GetCities(GetCitiesRequest request)
@@ -53,6 +54,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение списка партнеров по заданным параметрам
+        /// </summary>
         [HttpPost]
         [Route("GetPartners")]
         public GetPartnersResponse GetPartners(GetPartnersRequest request)
@@ -62,6 +66,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение подробной информации о партнере
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetPartner")]
         public GetPartnerResponse GetPartner(GetPartnerRequest request)
@@ -71,6 +80,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение списка акций
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("GetCampaigns")]
         public GetCampaignsResponse GetCampaigns(GetCampaignsRequest request)
@@ -79,6 +93,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Получение подробной информации об акции
+        /// </summary>
 
         [HttpPost]
         [Route("GetCampaign")]
@@ -89,6 +107,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение списка торговых терминалов
+        /// </summary>
         [HttpPost]
         [Route("GetPoses")]
         public GetPosesResponse GetPoses(GetPosesRequest request)
@@ -98,6 +119,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение информации о партнере
+        /// </summary>
         [HttpPost]
         [Route("GetPartnerInfo")]
         public GetPartnerInfoResponse GetPartnerInfo(GetPartnerInfoRequest request)
@@ -107,6 +131,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение информации об акции
+        /// </summary>
         [HttpPost]
         [Route("GetCampaignInfo")]
         public GetCampaignInfoResponse GetCampaignInfo(GetCampaignInfoRequest request)
@@ -116,6 +143,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение информации об участнике программы лояльности
+        /// </summary>
         [HttpPost]
         [Route("GetClient")]
         public GetClientResponse GetClient(GetClientRequest request)
@@ -125,6 +155,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка сообщения по электронной почте
+        /// </summary>
         [HttpPost]
         [Route("LeaveMessage")]
         public LeaveMessageResponse LeaveMessage(LeaveMessageRequest request)
@@ -134,6 +167,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение FAQ
+        /// </summary>
         [HttpPost]
         [Route("GetFaq")]
         public GetFaqResponse GetFaq(GetFaqRequest request)
@@ -143,6 +179,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение детализированной информации об акции
+        /// </summary>
         [HttpPost]
         [Route("GetCampaignDetail")]
         public CampaignDetailResponse GetCampaignDetail(CampaignDetailRequest request)
@@ -152,6 +191,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Регистрация нового партнера программы лояльности
+        /// </summary>
         [HttpPost]
         [Route("BecomePartner")]
         public BecomePartnerResponse BecomePartner(BecomePartnerRequest request)
