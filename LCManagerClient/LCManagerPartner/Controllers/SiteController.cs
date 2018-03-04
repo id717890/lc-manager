@@ -27,6 +27,7 @@ namespace LCManagerPartner.Controllers
         //Дублирующиеся методы: GetCampaigns, GetPoses, GetClient
 
         [HttpPost]
+        [Route("GetSegments")]
         public GetSegmentsResponse GetSegments(GetSegmentsRequest request)
         {
             var result = new ServerGetSegmentsResponse();
@@ -35,6 +36,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCategories")]
         public GetCategoriesResponse GetCategories(GetCategoriesRequest request)
         {
             var result = new ServerGetCategoriesResponse();
@@ -43,6 +45,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCities")]
         public GetCitiesResponse GetCities(GetCitiesRequest request)
         {
             var result = new ServerGetCitiesResponse();
@@ -51,6 +54,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetPartners")]
         public GetPartnersResponse GetPartners(GetPartnersRequest request)
         {
             var result = new ServerGetPartnersResponse();
@@ -59,6 +63,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetPartner")]
         public GetPartnerResponse GetPartner(GetPartnerRequest request)
         {
             var result = new ServerGetPartnerResponse();
@@ -67,6 +72,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCampaigns")]
         public GetCampaignsResponse GetCampaigns(GetCampaignsRequest request)
         {
             var result = new ServerGetCampaignsResponse();
@@ -75,6 +81,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCampaign")]
         public GetCampaignResponse GetCampaign(GetCampaignRequest request)
         {
             var result = new ServerGetCampaignResponse();
@@ -83,6 +90,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetPoses")]
         public GetPosesResponse GetPoses(GetPosesRequest request)
         {
             var result = new ServerGetPosesResponse();
@@ -91,6 +99,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetPartnerInfo")]
         public GetPartnerInfoResponse GetPartnerInfo(GetPartnerInfoRequest request)
         {
             var result = new ServerGetPartnerInfoResponse();
@@ -99,6 +108,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCampaignInfo")]
         public GetCampaignInfoResponse GetCampaignInfo(GetCampaignInfoRequest request)
         {
             var result = new ServerGetCampaignInfoResponse();
@@ -107,6 +117,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetClient")]
         public GetClientResponse GetClient(GetClientRequest request)
         {
             var result = new ServerGetClientResponse();
@@ -115,6 +126,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("LeaveMessage")]
         public LeaveMessageResponse LeaveMessage(LeaveMessageRequest request)
         {
             var result = new ServerLeaveMessageResponse();
@@ -123,6 +135,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetFaq")]
         public GetFaqResponse GetFaq(GetFaqRequest request)
         {
             var result = new ServerFaqResponse();
@@ -131,6 +144,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("GetCampaignDetail")]
         public CampaignDetailResponse GetCampaignDetail(CampaignDetailRequest request)
         {
             var result = new ServerCampaignDetailResponse();
@@ -139,6 +153,7 @@ namespace LCManagerPartner.Controllers
         }
 
         [HttpPost]
+        [Route("BecomePartner")]
         public BecomePartnerResponse BecomePartner(BecomePartnerRequest request)
         {
             var result = new ServerBecomePartner();
