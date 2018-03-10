@@ -1,0 +1,450 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+        @*<section class="header-image">
+            <img src="~/gfx/interface/header-settings.png" />
+        </section>*@
+        <section class="content-medium">
+            @*<h1>Профиль и настройка</h1>*@
+            <div class="plate plate-settings" style="background: none;">
+                <div>
+                    <div class="form-wrapper">
+                        <form action="#" method="post">
+                            <p class="form-heading"><a href="#" class="form-edit form-edit-switch">Основное <img class="form-cancel-img" src="/gfx/interface/cancel.png" /><img class="form-edit-img" src="/gfx/interface/edit.png" /></a></p>
+                            <p class="form-label">Фамилия</p>
+                            <p class="form-static" id="ulname">@UserSession.client.lastname</p>
+                            <div class="form-input"><input type="text" id="lname" name="lname" value='@UserSession.client.lastname' /></div>
+                            <p class="form-label">Имя</p>
+                            <p class="form-static" id="ufname">@UserSession.client.firstname</p>
+                            <div class="form-input"><input type="text" id="fname" name="fname" value='@UserSession.client.firstname' /></div>
+                            <p class="form-label">Отчество</p>
+                            <p class="form-static" id="umname">@UserSession.client.middlename</p>
+                            <div class="form-input"><input type="text" id="mname" name="mname" value='@UserSession.client.middlename' /></div>
+                            <div class="threecolumns-thirds">
+                                <div>
+                                    <p class="form-label">Пол</p>
+                                    <p class="form-static" id="ugender">@{ 
+                                        string gender = "";
+                                        if (UserSession.client.gender == 1) {
+                                            gender = "Муж.";
+                                        }
+                                        if (UserSession.client.gender == -1) {
+                                            gender = "Жен.";
+                                        }
+                                        if (UserSession.client.gender == 0)
+                                        {
+                                            gender = "-";
+                                        }
+                                        }
+                                    @gender</p>
+                                    <div class="form-input">
+                                        <select name="gender" id="f4" style="width: 100%">
+                                            <option value="0">-</option>
+                                            <option @((UserSession.client.gender==1)?"selected":"") value="1">Муж.</option>
+                                            <option @((UserSession.client.gender==-1)?"selected":"") value="-1">Жен.</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="form-label">Дети</p>
+                                    <p class="form-static" id="uhaschildren">@((UserSession.client.haschildren) ? "Да" : "Нет")</p>
+                                    <div class="form-input">
+                                        <select name="children" id="f5" style="width: 100%">
+                                            <option value="">-</option>
+                                            <option @((UserSession.client.haschildren)?"selected":"") value="true">Да</option>
+                                            <option @((UserSession.client.haschildren)?"":"selected") value="false">Нет</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="form-label">Дата рождения</p>
+                                    <p class="form-static" id="ubirthdate">@UserSession.client.birthdate.ToString("dd.MM.yyyy")</p>
+                                    <div class="form-input"><input type="text" value='@UserSession.client.birthdate.ToString("dd.MM.yyyy")' class="inverted dateonly-pick" id="f6" name="birthday"></div>
+                                </div>
+                            </div>
+                            <p class="form-label">Коротко о себе</p>
+                            <p class="form-static" id="ubio">@UserSession.client.description</p>
+                            <div class="form-input"><textarea name="bio" id="bio">@UserSession.client.description</textarea></div>
+                            <div class="form-buttonsbar form-buttons-edit">
+                                <div>
+                                    <a href="#" class="form-edit"><button type="button" class="btn">Изменить</button></a>
+                                </div>
+                                <div>
+                                    <div class="form-result">Данные успешно обновлены</div>
+                                </div>
+                            </div>
+                            <div class="form-buttonsbar form-button-save">
+                                <div>
+                                    <a href="#" class="form-save" ><button type="button" class="btn">Сохранить</button></a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form-wrapper form-wrapper-horizontal">
+                        <form action="#" method="post">
+                            <p class="form-label">Телефон</p>
+                            <div class="form-input-horizontal">
+                                <div>
+                                    <p class="form-static" id="uphone">@UserSession.client.phone.ToString("+7 (###) ###-##-##")</p>
+                                    <div class="form-input">
+                                        <input type="text" id="f7" class="masked-phone" value='@UserSession.client.phone.ToString("+# (###) ###-##-##")' name="phone" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="form-buttons-edit">
+                                        <a href="#" class="form-edit"><img src="/gfx/interface/edit.png" /></a>
+                                    </div>
+                                    <div class="form-button-save">
+                                        <a href="#" class="form-cancel"><img src="/gfx/interface/cancel.png" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-buttonsbar form-buttons-save">
+                                <div>
+                                    <a href="#" class="form-save-first"><button type="button" class="btn">Сохранить</button></a>
+                                </div>
+                                <div>
+                                    <div class="form-result">На телефон отправлен<br />код подтверждения</div>
+                                </div>
+                            </div>
+                            <div class="form-second-step">
+                                <p class="form-label">Код</p>
+                                <div class="form-input-horizontal">
+                                    <div>
+                                        <div class="form-input">
+                                            <input type="text" value="" name="code" id="ucode" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="form-buttonsbar form-buttons-save">
+                                    <div>
+                                        <a href="#" class="form-save-second"><button type="button" class="btn">Сохранить</button></a>
+                                    </div>
+                                    <div>
+                                        <div class="form-result-second">Ваш номер телефона успешно<br />изменен</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form-wrapper form-wrapper-horizontal">
+                        <form action="#" method="post" id="profile-email-form">
+                            <p class="form-label">E-mail</p>
+                            <div class="form-input-horizontal">
+                                <div>
+                                    <p class="form-static" id="profile-email-caption">@UserSession.client.email</p>
+                                    <div class="form-input">
+                                        <input type="text" class="masked-email" value='@UserSession.client.email' name="email" id="profile-email" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="form-buttons-edit">
+                                        <a href="#" class="form-edit"><img src="/gfx/interface/edit.png" /></a>
+                                    </div>
+                                    <div class="form-button-save">
+                                        <a href="#" class="form-cancel"><img src="/gfx/interface/cancel.png" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-buttonsbar form-buttons-save">
+                                <div>
+                                    <a href="#" class="form-save-first" id="profile-email-change"><button type="button" class="btn" >Сохранить</button></a>
+                                </div>
+                                <div>
+                                    <div class="form-result">На ваш адрес email выслано письмо<br />с кодом для подтверждения</div>
+                                </div>
+                            </div>
+                            <div class="form-second-step">
+                                <p class="form-label">Код</p>
+                                <div class="form-input-horizontal">
+                                    <div>
+                                        <div class="form-input">
+                                            <input type="text" value="" name="code" id="profile-email-code" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        &nbsp;
+                                    </div>
+                                </div>
+                                <div class="form-buttonsbar form-buttons-save">
+                                    <div>
+                                        <a href="#" class="form-save-second" id="profile-email-code-change"><button type="button" class="btn">Сохранить</button></a>
+                                    </div>
+                                    <div>
+                                        <div class="form-result-second">Ваш email успешно изменен</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form-wrapper form-wrapper-horizontal">
+                        <form action="#" method="post">
+                            <p class="form-label">Пароль</p>
+                            <div class="form-input-horizontal">
+                                <div>
+                                    <p class="form-static">*********</p>
+                                    <div class="form-input">
+                                        <input type="password" class="masked-email" name="pass1" id="change-client-pass1" />
+                                    </div>
+                                    <div class="form-input">
+                                        <p class="form-label">Новый пароль</p>
+                                        <input type="password" class="masked-email" name="pass1" id="change-client-pass2" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="form-buttons-edit">
+                                        <a href="#" class="form-edit"><img src="/gfx/interface/edit.png" /></a>
+                                    </div>
+                                    <div class="form-button-save">
+                                        <a href="#" class="form-cancel"><img src="/gfx/interface/cancel.png" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-buttonsbar form-buttons-save">
+                                <div>
+                                    <a href="#" class="form-save-first" id="profile-password-change"><button type="button" class="btn">Сохранить</button></a>
+                                </div>
+                                <div>
+                                    <div class="form-result">Пароль успешно изменен</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div>
+                    <form action="#" method="post">
+                        <p class="plate-section-heading">Уведомления</p>
+                        <div class="twocolumns-first-full">
+                            <div>
+                                <p class="form-label">Получать уведомление по SMS</p>
+                            </div>
+                            <div>
+                                <div class='form-switch @((UserSession.client.allowsms)?"form-switch-checked":"")' id="profile-allow-sms">
+                                    <div>
+                                        <a href="#" class='switch-check'>да</a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class='switch-uncheck'>нет</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="twocolumns-first-full">
+                            <div>
+                                <p class="form-label">Получать сообщения по электронной почте</p>
+                            </div>
+                            <div>
+                                <div class='form-switch @((UserSession.client.allowemail)?"form-switch-checked":"")' id="profile-allow-email">
+                                    <div>
+                                        <a href="#" class='switch-check'>да</a>
+                                    </div>
+                                    <div>
+                                        <a href="#" class='switch-uncheck'>нет</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="plate-section-heading">Привязать аккаунты соц. сетей</p>
+                        <div class="form-social">
+                            <a href="#" id="soc-fb-btn"><img src="/gfx/interface/footer-soc-fb.png" alt="Facebook" /></a>
+                            <a href="#" id="soc-vk-btn"><img src="/gfx/interface/footer-soc-vk.png" alt="VKontakte" /></a>
+                            <a href="#" id="soc-ok-btn"><img src="/gfx/interface/footer-soc-ok.png" alt="Одноклассники" /></a>
+                        </div>
+                        <div style="display:block;position:absolute;display:none">
+                            <p class="plate-section-heading"><strong>VKontakte</strong></p>
+                            <div class="form-social-entry">
+                                Имя Фамилия
+                                <a href="#">x</a>
+                            </div>
+                            </div>
+                            <p class="plate-section-heading">Предпочтения</p>
+                            @Html.Partial("_preferencesBlock", ApiConfig.GetClientPreferences().ClientPreferencesData.ToList())
+
+                            <!--
+        <div class="button-bar-left">
+            <a href="#"><button type="button" class="btn">Сохранить</button></a>
+        </div>
+        </form>
+
+        <section class="content-apps">
+            <div>
+                <a href="#"><img src="gfx/interface/app-appstore.png" /></a><br />
+                <a href="#"><img src="gfx/interface/app-googleplay.png" /></a>
+            </div>
+            <div>
+                <h1>ПОЖАЛУЙСТА</h1>
+                <p>Мобильное приложение</p>
+            </div>
+        </section>
+        //-->
+                        </div>
+            </div>
+        </section>
+    </main>
+</div>
+<input type="hidden" id="addokvalue" value=""/>
+<input type="hidden" id="addvkvalue" value="" />
+<input type="hidden" id="addfbvalue" value="" />
+<script>
+    $(function () {
+
+
+        $("#profile-email-change").click(
+
+            function () {
+                var $this = $(this);
+                var email = $("#profile-email").val();
+                if (checkEmailFormat(email)) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/API.aspx/SendEmailCode',
+                        data: '{Email:\'' + email + '\'}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            var rs = JSON.parse(data.d);
+                            if (rs.ErrorCode != 0) {
+                                customAlert("Ошибка", rs.Message);
+                            } else {
+                                var $wrapper = $($this).closest('.form-wrapper');
+                                $wrapper.addClass('form-saved form-saved-first');
+
+                            }
+
+                            //                    location.reload();
+                        }
+                    });
+                } else {
+                    customAlert("Ошибка", "Неправльный формат e-mail.");
+                }
+                event.preventDefault();
+                return false;
+            });
+        $("#profile-email-code-change").click(function () {
+            var $this = $(this);
+            var email = $("#profile-email").val();
+            var code = $("#profile-email-code").val();
+            if (checkEmailFormat(email)) {
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/ClientAddEmail',
+                    data: '{Email:\'' + email + '\', Code:\''+code+'\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            customAlert("Успешно", "Ваш e-mail адрес изменен.");
+                            $("#profile-email-caption").text(email);
+                            $("#profile-email").val(email);
+                            $("#profile-email-form").find("A.form-cancel").trigger("click");
+                            $("#profile-email-form>.form-saved-first").removeClass("form-saved-first").removeClass("form-saved");
+                        }
+
+//                                            location.reload();
+                    }
+                });
+            } else {
+                customAlert("Ошибка", "Неправльный формат e-mail.");
+            }
+            event.preventDefault();
+            return false;
+        });
+
+
+
+
+
+        $("#soc-fb-btn").click(function (event) {
+            event.preventDefault();
+            var url = 'https://www.facebook.com/v2.8/dialog/oauth?client_id=443853319342275&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())%3Ffb=1&response_type=code%20token';
+            var pop = window.open(url, "fbauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+        });
+
+        $("#addfbvalue").on("change", function (event) {
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/AddIDFB',
+                data: '{idFB:\'' + $("#addfbvalue").val() + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        customAlert("Успешно", "Теперь вы можете входить на сайт через соцсеть.");
+                    }
+
+                    //                    location.reload();
+                }
+            });
+        });
+
+
+
+        $("#soc-vk-btn").click(function (event) {
+            event.preventDefault();
+            var url = 'https://oauth.vk.com/authorize?client_id=6145065&display=page&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())&scope=&response_type=code&v=5.59';
+            var pop = window.open(url, "vkauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+        });
+
+        $("#addvkvalue").on("change", function (event) {
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/AddIDVK',
+                data: '{idVK:\'' + $("#addvkvalue").val() + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        customAlert("Успешно", "Теперь вы можете входить на сайт через соцсеть.");
+                    }
+
+                    //                    location.reload();
+                }
+            });
+        });
+
+
+
+        $("#soc-ok-btn").click(function (event) {
+            event.preventDefault();
+            var pop = window.open('https://connect.ok.ru/oauth/authorize?client_id=1253652224&scope=VALUABLE_ACCESS&response_type=code&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())%3Fok=1', "okauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+        });
+
+        $("#addokvalue").on("change", function (event) {
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/AddIDOK',
+                data: '{idOK:\'' + $("#addokvalue").val() + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        customAlert("Успешно", "Теперь вы можете входить на сайт через соцсеть.");
+                    }
+
+                    //                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+

@@ -1,0 +1,365 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var s_IsCardIssue = UserSession.get("PartnerIsCardIssueFilter");
+    var s_IsInCity = UserSession.get("PartnerIsInCityFilter");
+    var s_IsInInternet = UserSession.get("PartnerIsInInternetFilter");
+
+    bool IsCardIssue = false;
+    bool IsInCity = false;
+    bool IsInInternet = false;
+
+    if (s_IsCardIssue != null) { IsCardIssue = (bool)s_IsCardIssue; }
+    if (s_IsInCity != null) { IsInCity = (bool)s_IsInCity; }
+    if (s_IsInInternet != null) { IsInInternet = (bool)s_IsInInternet; }
+}
+
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+
+        <section class="content-medium">
+
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+
+                    @*<h1>Партнеры</h1>*@
+                    <br/><br/>
+                    <div id="map-switch-list" class="block-toggle active">
+                        <a id="map-switch-point" class="header-link action-blocks-toggle" data-toggle-class="block-toggle" href="#">посмотреть на карте</a>
+                        <div class="actions" id="block-partners" style="padding-top:7px;">
+                            @Html.Partial("_partnerBlock_min", API.getPartners(true,0,6))
+                        </div>
+                        <div class="button-bar">
+                            <a href="#" id="btn-partners-more" data-start="6"><button class="btn" type="button">Показать ещё</button></a>
+                        </div>
+                    </div>
+
+                    <div id="map-switch-map" class="block-toggle">
+                        <a id="map-switch" class="header-link action-blocks-toggle" data-toggle-class="block-toggle" href="#">Список</a>
+
+                        <div class="content-bg">
+                            <div id="map"><ymaps class="ymaps-map ymaps-i-ua_js_yes" style="z-index: 0; width: 0px; height: 0px;"><ymaps class="ymaps-glass-pane ymaps-events-pane" unselectable="on" style="z-index: 500; position: absolute; width: 0px; height: 0px; left: 0px; top: 0px; -webkit-user-select: none; transform: translate3d(0px, 0px, 0px) scale(1, 1); cursor: url(&quot;https://api-maps.yandex.ru/2.0.44/release/../images/ef50ac9e93aaebe3299791c79f277f8e.cur&quot;) 16 16, url(&quot;https://api-maps.yandex.ru/2.0.44/release/../images/ef50ac9e93aaebe3299791c79f277f8e.cur&quot;), move;"></ymaps><ymaps class="ymaps-layers-pane" style="z-index: 100; position: absolute; left: 0px; top: 0px;"><ymaps style="z-index: 150; position: absolute; transform: translate3d(0px, 0px, 0px) scale(1, 1);"><canvas height="256" width="256" style="position: absolute; width: 256px; height: 256px; left: -128px; top: -128px;"></canvas></ymaps></ymaps><ymaps class="ymaps-copyrights-pane" style="z-index: 1000; position: absolute;"><ymaps><ymaps class="ymaps-copyrights-logo"><ymaps class="ymaps-logotype-div"><a target="_blank" class="ymaps-logo-link ymaps-logo-link-ru" href="https://yandex.ru/maps/?origin=jsapi&amp;ll=37.640000,55.760000&amp;z=10&amp;l="><ymaps class="ymaps-logo-link-wrap"></ymaps></a></ymaps></ymaps><ymaps class="ymaps-copyrights-legend"><ymaps class="ymaps-copyright-legend-container"><ymaps class="ymaps-copyright-legend"><ymaps class="ymaps-copyright-legend-element ymaps-copyright-legend-element-black"><ymaps style="display: inline;">© Яндекс</ymaps></ymaps></ymaps><ymaps class="ymaps-copyright-agreement ymaps-copyright-agreement-black"><a href="https://legal.yandex.ru/maps_termsofuse/?lang=ru" target="_blank">Условия использования</a></ymaps></ymaps></ymaps></ymaps></ymaps><ymaps style="z-index: 850; height: 0px; width: 0px; bottom: 0px; left: 0px; position: absolute;"><ymaps style="bottom: 5px; left: 0px; position: absolute;"><iframe src="https://api-maps.yandex.ru/services/inception/?lang=ru_RU&amp;iframe_id=id_1471197666603921823&amp;api_version=2.0&amp;url=%2Fmap&amp;data=%7B%22mapState%22%3A%7B%22origin%22%3A%22jsapi_2_0%22%2C%22source%22%3A%22api-maps%22%2C%22from%22%3A%22api-maps%22%2C%22host%22%3A%22%22%7D%7D" width="0" height="0" scrolling="no" frameborder="0" style="overflow: hidden;"></iframe></ymaps></ymaps></ymaps></div>
+                        </div>
+
+                    </div>
+
+                    <div style="display:none">
+                        @Html.Partial("_posesBlock", API.GetPoses(0))
+                    </div>
+
+                    <script src="https://api-maps.yandex.ru/2.0-stable/?load=package.standard&amp;lang=ru-RU" type="text/javascript"> </script>
+                    <script>
+							var myMap;
+							ymaps.ready(function () {
+								myMap = new ymaps.Map("map", {
+								    center: [59.907577, 30.512033],
+									zoom: 13,
+								},{suppressMapOpenBlock: true});
+
+								myMap.controls.add("mapTools")
+                                .add("zoomControl");
+
+
+								$("span.getcoords").each(function () {
+								    var c = $(this).text().replace(" ", "");
+								    var cc = c.split(",");
+								    console.log(cc);
+								    var placemark = new ymaps.Placemark(cc, {
+								        balloonContent: $(this).attr("data")
+								    });
+								    //									    placemark.name = "Акция";
+								    //								    placemark.description = $(this).attr("data");
+								    myMap.geoObjects.add(placemark);
+								});
+
+
+								var url = window.location.href;
+								if (url.match(/OnMap/gi)) {
+								    $('.block-toggle').toggle();
+								    $('.filter-list').toggle();
+								    //$('#onMapApp').hide();
+                                }
+							});
+                    </script>
+
+                </div>
+
+                <div class="twocolumns-aside">
+                    <div class="block-toggle">
+                        @Html.Partial("_leftcolumnActions")
+                    </div>
+                    <div class="block-toggle active">
+                        <div class="plate plate-map-filter">
+
+                            @*<div class="plate-map-filter-block">
+                                <p><strong>Тип партнеров</strong></p>
+                                <div class="map-filter-line">
+                                    <div>
+                                        <label for="map1"><strong>все</strong></label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="map1" name="x" @((IsCardIssue) ? "" : " checked") />
+                                    </div>
+                                </div>
+
+                                <div class="map-filter-line">
+                                    <div>
+                                        <label for="map2">выдают карты</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="map2" name="x" @((IsCardIssue) ? " checked" : "") />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="plate-map-filter-block">
+                                <p><strong>Где действуют</strong></p>
+
+                                <div class="map-filter-line">
+                                    <div>
+                                        <label for="map5">в интернете</label>
+                                    </div>
+                                    <div>
+                                        <input id="map5" type="checkbox" name="x" @((IsInInternet) ? " checked" : "") />
+                                    </div>
+                                </div>
+
+                                <div class="map-filter-line">
+                                    <div>
+                                        <label for="map6">в городе</label>
+                                    </div>
+                                    <div>
+                                        <input id="map6" type="checkbox" name="x" @((IsInCity) ? " checked" : "") />
+                                    </div>
+                                </div>
+                            </div>*@
+
+                            <div class="plate-map-filter-block">
+                                <p>Категории</p>
+                                @Html.Partial("_categories_partners", API.getCategoriesPartners())
+                            </div>
+                        </div>
+                    </div>
+                   <section class="aside-apps" id="onMapApp">
+                        @*<h1>ПОЖАЛУЙСТА</h1>*@
+                        <img style="max-height: 100%; max-width: 100%;" src="~/gfx/interface/logo.png"/>
+                        <p>МОБИЛЬНОЕ ПРИЛОЖЕНИЕ</p>
+                        <a href="https://itunes.apple.com/ru/app/%D0%9C%D1%8B%20%D0%9A%D1%83%D0%B4%D1%80%D0%BE%D0%B2%D0%BE/id1252524354?mt=8"><img src="/gfx/interface/app-appstore.png"></a><br>
+                        <a href="https://play.google.com/store/apps/details?id=com.app.wkdr"><img src="/gfx/interface/app-googleplay.png"></a>
+                    </section>
+                </div>
+			</div>
+
+
+
+        </section>
+    </main>
+</div>
+
+<template id="partnerBlockTmplunregistered">
+        <div class="plate plate3">
+            <div class="partners-imageholder">
+                <a href='' class="logo-link"><img src='' class="logo" alt="Партнер" style="width:100%"></a>
+            </div>
+            <div class="plate-desc">
+                <p class="plate-short"></p>
+                <p class="plate-hero"></p>
+                <div class="plate-bar">
+                    <div>
+                        <a href='' class="more-link"><button type="button" class="btn">Подробнее</button></a>
+                    </div>
+                    <div>
+                        <div class='star-holder star-unauth'>
+                            <a href="#" data-toggle="modal" data-target="#login-modal" class="star-half" dtype="partners"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</template>
+
+<template id="partnerBlockTmplregistered">
+    <div class="plate plate3">
+        <div class="partners-imageholder">
+            <a href='' class="logo-link"><img src='' class="logo" alt="Партнер" style="width:100%"></a>
+        </div>
+        <div class="plate-desc">
+            <p class="plate-short"></p>
+            <p class="plate-hero"></p>
+            <div class="plate-bar">
+                <div>
+                    <a href='' class="more-link"><button type="button" class="btn">Подробнее</button></a>
+                </div>
+                <div>
+                    <div class="star-holder">
+                        <a href="#" data-toggle="tooltip" title="" class="star-half" data-original-title="Добавить в избранное"></a>
+                        <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script>
+    $(function () {
+
+        function setFilter1()
+        {
+            var d1 = $('#map1').icheck('data').checked;
+            var d2 = $('#map2').icheck('data').checked;
+
+            if (d1 == d2) return;
+            if (d1) {
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/SetPartnerIsCardIssueFilter',
+                    data: '{value:\'false\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+            if (d2) {
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/SetPartnerIsCardIssueFilter',
+                    data: '{value:\'true\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        }
+
+      
+        $('#map1').on('ifToggled', function (event) {
+            var d1 = $('#map1').icheck('data').checked;
+            var d2 = $('#map2').icheck('data').checked;
+
+            if (d1 == d2) {
+                $('#map2').icheck('toggle');
+                setFilter1();
+            }
+        });
+
+        $('#map2').on('ifToggled', function (event) {
+            var d1 = $('#map1').icheck('data').checked;
+            var d2 = $('#map2').icheck('data').checked;
+
+            if (d1 == d2) {
+                $('#map1').icheck('toggle');
+                setFilter1();
+            }
+        });
+
+
+
+
+
+        $('#map5').on('ifToggled', function (event) {
+            var d1 = $('#map5').icheck('data').checked;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/SetPartnerIsInInternetFilter',
+                data: '{value:\''+((d1)?'true':'false')+'\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+
+        });
+
+        $('#map6').on('ifToggled', function (event) {
+            var d1 = $('#map6').icheck('data').checked;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/SetPartnerIsInCityFilter',
+                data: '{value:\'' + ((d1) ? 'true' : 'false') + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+
+        $("#btn-partners-more").click(function (event) {
+            event.preventDefault();
+            var _this = $(this);
+            var st = $(this).attr("data-start")*1;
+            var cnt = 6;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/PartnersCnt',
+                data: '{start:' + st + ',cnt:'+cnt+'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    _this.attr("data-start", cnt + st);
+                    var bl = $("#block-partners").find("div.plate3:empty:first");
+                    var blout = $("#btn-logout");
+                    if (rs.length == 0) {
+                        $(_this).remove();
+                        return;
+                    }
+                    for (i = 0; i < rs.length; i++) {
+                        var t = "";
+                        if (blout.length > 0) {
+                            t = $("#partnerBlockTmplregistered");
+                        } else {
+                            t = $("#partnerBlockTmplunregistered");
+                        }
+                        t = $(t.html());
+
+                        t.find("a.logo-link").attr('href', '/Partners/Details/' + rs[i].id);
+                        t.find("img.logo").attr('src', rs[i].logo);
+                        t.find("p.plate-short").text(rs[i].condition);
+                        t.find("p.plate-hero").text(rs[i].tagline);
+                        t.find("a.more-link").attr('href', '/Partners/Details/' + rs[i].id).attr('data', rs[i].id);
+                        if (rs[i].isFav) {
+                            t.find("div.star-holder").addClass("star-checked");
+                            t.find("a.star-half").attr('data', rs[i].id);
+                            t.find("a.star-full").attr('data', rs[i].id);
+                        }
+                        bl.before(t);
+                    }
+                }
+            });
+
+        });
+
+    })
+</script>

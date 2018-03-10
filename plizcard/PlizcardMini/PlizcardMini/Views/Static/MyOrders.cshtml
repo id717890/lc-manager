@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewBag.Title = "MyOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var chrecs = API.GetCheque();
+    decimal pages = Math.Ceiling((decimal)(chrecs.Count / 20));
+
+    int currentPage = 1;
+
+    if (Request.QueryString["page"]!=null)
+    {
+        try
+        {
+            currentPage = int.Parse(Request.QueryString["page"]);
+        }catch(Exception ex)
+        {
+            currentPage = 1;
+        }
+    }
+    if (currentPage < 1)
+    {
+        currentPage = 1;
+    }
+
+    var next = chrecs.Count - (currentPage - 1) * 20;
+    if (next > 20)
+    {
+        next = 20;
+    }
+
+    var filteredRecs = chrecs.GetRange((currentPage - 1) * 20, next);
+
+    if (pages < 1)
+    {
+        pages = 1;
+    }
+
+}
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="header-image">
+            <img src="/gfx/interface/header-cart.jpg" alt="" />
+        </section>
+        <section class="content-medium">
+            @*<h1>Мои покупки</h1>*@
+            <div class="plate fontlatoregular" style="background: none;">
+                <div class="cart-header">
+                    <div>
+<!--
+                        <select name="by">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+-->
+                    </div>
+                    <div>
+                        <label for="cart-search">Поиск:</label><input id="cart-search" type="text" name="search" placeholder="" /> 
+                    </div>
+                </div>
+                <div class="tablewrapper">
+                    @Html.Partial("_chequeRecord", filteredRecs)
+                    <div class="paginator">
+                        @if (currentPage > 1) {
+                            <a href="/MyOrders/?page=@(currentPage - 1)">&lt;</a> 
+                        }
+                        @currentPage/@pages 
+                        @if (currentPage < pages)
+                        {
+                        <a href="/MyOrders/?page=@(currentPage+1)">&gt;</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    $(function () {
+        var ctout = 0;
+        var ctout1 = 0;
+        function srchTimeOut()
+        {
+            console.log($("#cart-search").val());
+        }
+        $("#cart-search").on("keypress", function () {
+            clearTimeout(ctout1);
+            var ctout = setTimeout(srchTimeOut, 1000);
+            ctout1 = ctout;
+        });
+    });
+</script>
+
+

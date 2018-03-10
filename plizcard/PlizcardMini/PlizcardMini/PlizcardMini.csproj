@@ -1,0 +1,601 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F79953FC-B79A-4E75-96AC-1E8FB9C86437}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MyRedCard</RootNamespace>
+    <AssemblyName>MyRedCard</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="API.aspx.cs">
+      <DependentUpon>API.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="API.aspx.designer.cs">
+      <DependentUpon>API.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\ApiConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\UserSession.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Capcha.aspx.cs">
+      <DependentUpon>Capcha.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Capcha.aspx.designer.cs">
+      <DependentUpon>Capcha.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StaticController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="oauth.aspx.cs">
+      <DependentUpon>oauth.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="oauth.aspx.designer.cs">
+      <DependentUpon>oauth.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestClient.cs" />
+    <Compile Include="Service References\lcclient\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\lcsite\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="API.aspx" />
+    <Content Include="Capcha.aspx" />
+    <Content Include="Content\app.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\print.css" />
+    <Content Include="crossdomain.xml" />
+    <Content Include="favicon.ico" />
+    <Content Include="gfx\fish\5Avenue.png" />
+    <Content Include="gfx\fish\5Avenue_campaign.png" />
+    <Content Include="gfx\fish\card1.png" />
+    <Content Include="gfx\fish\Atlant.png" />
+    <Content Include="gfx\fish\MirTehnikiCampaign.png" />
+    <Content Include="gfx\fish\MozartHouse.png" />
+    <Content Include="gfx\fish\Sovremennik_campaign.png" />
+    <Content Include="gfx\fish\Sovremennik_logo.png" />
+    <Content Include="gfx\interface\app-appstore-footer.png" />
+    <Content Include="gfx\interface\app-appstore.png" />
+    <Content Include="gfx\interface\app-googleplay-footer.png" />
+    <Content Include="gfx\interface\app-googleplay.png" />
+    <Content Include="gfx\interface\ava-blank.png" />
+    <Content Include="gfx\interface\briefcase.png" />
+    <Content Include="gfx\interface\cancel.png" />
+    <Content Include="gfx\interface\card.png" />
+    <Content Include="gfx\interface\check-dots.png" />
+    <Content Include="gfx\interface\check.png" />
+    <Content Include="gfx\interface\Currency.png" />
+    <Content Include="gfx\interface\datetime.png" />
+    <Content Include="gfx\interface\dropdown.png" />
+    <Content Include="gfx\interface\edit.png" />
+    <Content Include="gfx\interface\enter.png" />
+    <Content Include="gfx\interface\exit.png" />
+    <Content Include="gfx\interface\footer-email.png" />
+    <Content Include="gfx\interface\footer-logo.png" />
+    <Content Include="gfx\interface\footer-phone.png" />
+    <Content Include="gfx\interface\footer-soc-fb.png" />
+    <Content Include="gfx\interface\footer-soc-inst.png" />
+    <Content Include="gfx\interface\footer-soc-ok.png" />
+    <Content Include="gfx\interface\footer-soc-vk.png" />
+    <Content Include="gfx\interface\header-card.png" />
+    <Content Include="gfx\interface\header-cart.jpg" />
+    <Content Include="gfx\interface\header-faq.jpg" />
+    <Content Include="gfx\interface\header-howitworks.png" />
+    <Content Include="gfx\interface\header-main.png" />
+    <Content Include="gfx\interface\header-partners.png" />
+    <Content Include="gfx\interface\header-settings.png" />
+    <Content Include="gfx\interface\header-write.jpg" />
+    <Content Include="gfx\interface\header_feedback.jpg" />
+    <Content Include="gfx\interface\info.png" />
+    <Content Include="gfx\interface\logo.png" />
+    <Content Include="gfx\interface\LogoOk128.png" />
+    <Content Include="gfx\interface\LogoOk1280.png" />
+    <Content Include="gfx\interface\LogoOk18.png" />
+    <Content Include="gfx\interface\mappoint.png" />
+    <Content Include="gfx\interface\mob1.png" />
+    <Content Include="gfx\interface\mob2.png" />
+    <Content Include="gfx\interface\olli.png" />
+    <Content Include="gfx\interface\phone.png" />
+    <Content Include="gfx\interface\phonenumber.png" />
+    <Content Include="gfx\interface\registerprogram.png" />
+    <Content Include="gfx\interface\select-bg-inverted.png" />
+    <Content Include="gfx\interface\select-bg-red.png" />
+    <Content Include="gfx\interface\select-bg.png" />
+    <Content Include="gfx\interface\slide_2.png" />
+    <Content Include="gfx\interface\slide_3.png" />
+    <Content Include="gfx\interface\star-bonus.png" />
+    <Content Include="gfx\interface\star-empty.jpg" />
+    <Content Include="gfx\interface\star-full.png" />
+    <Content Include="gfx\interface\star-half.png" />
+    <Content Include="gfx\interface\star_small.png" />
+    <Content Include="gfx\interface\thumbsup.png" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="img\fon.png" />
+    <Content Include="oauth.aspx" />
+    <Content Include="robots.txt" />
+    <Content Include="Scripts\api.js" />
+    <Content Include="Scripts\app.js" />
+    <Content Include="Scripts\app.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="fonts\bold.woff" />
+    <Content Include="fonts\regular.woff" />
+    <Content Include="files\PartnersForm-WeKudrovo.docx" />
+    <Content Include="files\Rules-WeKudrovo_v1.docx" />
+    <Content Include="fonts\9625.ttf" />
+    <Content Include="fonts\Lato-Bold.woff" />
+    <Content Include="fonts\Lato-Light.woff" />
+    <Content Include="fonts\Lato-Regular.woff" />
+    <Content Include="fonts\AFuturica.woff" />
+    <None Include="Properties\PublishProfiles\Plizcardmini.pubxml" />
+    <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\oksdk.js" />
+    <Content Include="Scripts\openapi.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\useragent-html-classes.js" />
+    <Content Include="Scripts\_references.js" />
+    <None Include="Service References\lcclient\loyconclient.disco" />
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetClientResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetCampaignsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetPartnersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.LeaveMessageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddDeviceResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddEmailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddIDFBResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddIDOKResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddIDVKResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.AddPhoneResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.BalanceGetResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ChangeClientResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ChequeDetailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientAddCardResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientCampaignSelectResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientLoginResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientPartnerSelectResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientPreferencesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.DeletePhoneResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetChequesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetClientCardsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetConfirmCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetPersonalCampaignsResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetRegistrationUserResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetSendVerificationCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.SelectPreferencesResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.SendEmailCodeResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.SetClientPasswordResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ValidateEmailResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.CardAggregationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.CardStatisticsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientBonusesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientCreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientPasswordChangeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.ClientUpdateCommunicationResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.GetClientInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.SendPushResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.SetClientUpdateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcclient\MyRedCard.lcclient.CardBonusesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\lcclient\loyconclient.wsdl" />
+    <None Include="Service References\lcsite\configuration91.svcinfo">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\lcsite\configuration.svcinfo">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\lcclient\configuration91.svcinfo">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\lcclient\configuration.svcinfo">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\lcclient\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\lcsite\loyconsite.disco" />
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetCampaignInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetCampaignResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetCampaignsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetCategoriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetCitiesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetClientResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetPartnerInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetPartnerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetPartnersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetPosesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetSegmentsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.GetFaqResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.LeaveMessageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.CampaignDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\lcsite\MyRedCard.lcsite.BecomePartnerResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\lcsite\loyconsite.wsdl" />
+    <None Include="Service References\lcsite\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Static\Index.cshtml" />
+    <Content Include="Views\loginForm.cshtml" />
+    <Content Include="Views\rememberLogin.cshtml" />
+    <Content Include="Views\registerForm.cshtml" />
+    <Content Include="Views\headerSelectCity.cshtml" />
+    <Content Include="Views\headerMain.cshtml" />
+    <Content Include="Views\footerMain.cshtml" />
+    <Content Include="Views\Static\HowItWorks.cshtml" />
+    <Content Include="Views\Static\Cards.cshtml" />
+    <Content Include="Views\Static\Partners.cshtml" />
+    <Content Include="Views\Static\Actions.cshtml" />
+    <Content Include="Views\Static\MobileApplication.cshtml" />
+    <Content Include="Views\Static\Rules.cshtml" />
+    <Content Include="Views\Static\Faq.cshtml" />
+    <Content Include="Views\Static\FeedBack.cshtml" />
+    <Content Include="Views\Static\Programs.cshtml" />
+    <Content Include="Views\Shared\_partnerRecord.cshtml" />
+    <Content Include="Views\Shared\_citySelectionRecord.cshtml" />
+    <Content Include="Views\Shared\_partnerBlock.cshtml" />
+    <Content Include="Views\Shared\_partnerBlock_min.cshtml" />
+    <Content Include="Views\Shared\_campaignsBlock.cshtml" />
+    <Content Include="Views\Static\Partner.cshtml" />
+    <Content Include="Views\Shared\_partnerAdditionalBlock.cshtml" />
+    <Content Include="Views\Shared\_leftcolumnActions.cshtml" />
+    <Content Include="Views\Shared\_leftcolumnActions_rec.cshtml" />
+    <Content Include="Views\Static\PartnerRegister.cshtml" />
+    <Content Include="Views\Static\Action.cshtml" />
+    <Content Include="Views\Static\Profile.cshtml" />
+    <Content Include="Views\Shared\_categories.cshtml" />
+    <Content Include="Views\Static\Favorites.cshtml" />
+    <Content Include="Views\Static\MyCards.cshtml" />
+    <Content Include="Views\Static\MyOrders.cshtml" />
+    <Content Include="Views\Static\PersonalActions.cshtml" />
+    <Content Include="Views\Static\Poses.cshtml" />
+    <Content Include="Views\Shared\_posesBlock.cshtml" />
+    <Content Include="Views\Shared\_partnerOption.cshtml" />
+    <Content Include="Views\Shared\_categories_partners.cshtml" />
+    <Content Include="Views\Shared\_chequeRecord.cshtml" />
+    <Content Include="Views\Shared\_cardsRecord.cshtml" />
+    <Content Include="Views\modalMessage.cshtml" />
+    <Content Include="Views\Shared\_actionAdditionalBlock.cshtml" />
+    <Content Include="Views\Shared\_preferencesBlock.cshtml" />
+    <Content Include="Views\Static\OrderDetails.cshtml" />
+    <Content Include="Views\Static\ActionPoses.cshtml" />
+    <Content Include="Views\Shared\socialheaders.cshtml" />
+    <Content Include="Views\becomePartner.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="LOG\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\Hidden\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\lcclient\" />
+    <WCFMetadataStorage Include="Service References\lcsite\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49624</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49625/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "MyCards";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+        @*<section class="header-image">
+            <img src="~/gfx/interface/header-card.png" alt="" />
+        </section>*@
+        <section class="content-medium">
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+                    @*<h1>Мои карты</h1>*@
+                    <div class="content-bg">
+                        @Html.Partial("_cardsRecord",API.GetClientCards())
+                    </div>
+                </div>
+                <div class="twocolumns-aside">
+                    @Html.Partial("_leftcolumnActions")
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+

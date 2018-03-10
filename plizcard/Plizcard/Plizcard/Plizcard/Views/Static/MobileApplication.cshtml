@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="content-medium">
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+                    @*<h1>Мобильное приложение</h1>*@
+                    <div class="content-bg">
+                        <img style="padding-right: 10px;" src="~/gfx/interface/mob1.png" /><img style="padding-left: 10px;" src="~/gfx/interface/mob2.png" />                        
+                        <div class="mobile-download">
+                            <br/>
+                            <p>Скачать</p>
+                            <a href="https://itunes.apple.com/us/app/%D0%BA%D0%B0%D1%80%D1%82%D0%B0-%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0/id1298271662?l=ru&ls=1&mt=8"><img src="/gfx/interface/app-appstore.png" /></a>&nbsp;<a href="https://play.google.com/store/apps/details?id=com.app.pleasecard"><img src="/gfx/interface/app-googleplay.png" /></a>
+                        </div>
+                        @*<h2>ПОЖАЛУЙСТА</h2>*@
+                        <p class="fontlatoregular">Вся информациях о Бонусах, текущих и новых акциях, персональных предложениях, партнерах в одном приложении. Накапливайте бонусы, делитесь с друзьями понравившимися акциями и партнерами, указывайте свои предпочтения.</p>
+
+                        <p class="fontlatoregular">Загрузите мобильное приложение «ПОЖАЛУЙСТА» и будьте всегда в курсе актуальных мероприятий, акций и новостей проекта!</p>
+
+                    </div>
+                </div>
+                <div class="twocolumns-aside" style="padding-top: 13px;">
+                    @Html.Partial("_leftcolumnActions")
+                </div>
+            </div>
+        </section>
+    </main>
+</div>

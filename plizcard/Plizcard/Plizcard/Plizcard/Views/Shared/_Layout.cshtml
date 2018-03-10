@@ -1,0 +1,560 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=990, initial-scale=1" />
+
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
+
+    @{ 
+        SocialMeta social;
+        if(ViewContext.RouteData.Values.ContainsKey("action") && ViewContext.RouteData.Values.ContainsKey("subaction") && ViewContext.RouteData.Values.ContainsKey("id"))
+        {
+            social = new SocialMeta(ViewContext.RouteData.Values["action"].ToString().ToLower(), int.Parse(ViewContext.RouteData.Values["id"].ToString()));
+        }
+        else
+        {
+            social = new SocialMeta();
+        }
+    }
+
+
+    @Html.Partial("socialheaders", social)
+
+    <!--    <script src="js/useragent-html-classes.js"></script>-->
+    @Scripts.Render("~/Scripts/useragent-html-classes.js")
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    @Styles.Render("~/Content/print.css")
+    @*<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&amp;subset=latin,cyrillic' rel='stylesheet' media="screen, projection" />*@
+    @*<link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,cyrillic' rel='stylesheet' type='text/css'>*@
+    @Styles.Render("~/Content/app.css")
+    @*@Styles.Render("~/fonts/9625.ttf")*@
+    @*<link href="~/fonts/9625.ttf" rel="stylesheet", media="screen, projection"/>*@
+    <script src="https://yastatic.net/jquery/2.2.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js">\x3C/script>')</script>
+</head>
+
+<body> 
+    @Html.Partial("~/Views/loginForm.cshtml")
+    @Html.Partial("~/Views/rememberLogin.cshtml")
+    @Html.Partial("~/Views/registerForm.cshtml")
+    @Html.Partial("~/Views/headerSelectCity.cshtml")
+    @Html.Partial("~/Views/modalMessage.cshtml")
+    @Html.Partial("~/Views/headerMain.cshtml")
+    @Html.Partial("~/Views/becomePartner.cshtml")
+
+    @RenderBody()
+
+    @Html.Partial("~/Views/footerMain.cshtml")
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <div style="position: absolute; z-index: 100;"><div class="datepicker datepicker-dateonly" style="width: auto; display: none;"><div class="datepicker_header"><a class="icon-home" title="Today"><div></div></a><a class="icon-close"><div></div></a><a title="Previous month" class="icon-prevmonth"></a><span>2016 . Август</span><a title="Next month" class="icon-nextmonth"></a></div><div class="datepicker_inner_container"><div class="datepicker_calendar"><table class="datepicker_table"><tbody><tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td class="wday_sat">6</td><td class="wday_sun">7</td></tr><tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td class="wday_sat">13</td><td class="wday_sun">14</td></tr><tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td class="wday_sat">20</td><td class="wday_sun">21</td></tr><tr><td class="active today">22</td><td>23</td><td>24</td><td>25</td><td>26</td><td class="wday_sat">27</td><td class="wday_sun">28</td></tr><tr><td>29</td><td>30</td><td>31</td><td class="day_another_month">1</td><td class="day_another_month">2</td><td class="day_another_month wday_sat">3</td><td class="day_another_month wday_sun">4</td></tr></tbody></table></div><div class="scroll-wrapper datepicker_timelist" style="position: absolute;"><div class="datepicker_timelist scroll-content" style="display: none; margin-bottom: 0px; margin-right: 0px;"></div><div class="scroll-element scroll-x"><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_track"></div>    <div class="scroll-bar"></div></div></div><div class="scroll-element scroll-y"><div class="scroll-element_outer">    <div class="scroll-element_size"></div>    <div class="scroll-element_track"></div>    <div class="scroll-bar"></div></div></div></div></div></div></div>
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"><div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div></div>
+
+    @Scripts.Render("~/Scripts/app.js")
+
+    <script>
+        window.onload = function () {
+            if (window.location.hash == '#successvalidateimail') {
+                customAlert('Подтверждение email', 'Ваш email успешно подтверждён');
+                history.pushState(null, null, "/")
+            }            
+        };
+
+        $(function () {
+            /*
+                        $.ajax({
+                            type: "POST",
+                            url: '/API.aspx/getCities',
+                            data: '',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                        });
+            */
+            $("#cityselectionlist>a").click(function (ev) {
+                curElm = $(ev.target);
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/setCurrentCity',
+                    data: '{id:' + curElm.attr("data") + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#currentcity").attr("data", curElm.attr("data")).text(curElm.text());
+                        location.reload();
+                    }
+                });
+            });
+
+            $("#logintosite").submit(function (ev) {
+                ev.preventDefault();
+                var login = $("#login-modal-input-user").val();
+                var passw = $("#login-modal-input-password").val();
+                var idFB = $("#login-modal-input-fb").val();
+                var idVK = $("#login-modal-input-vk").val();
+                var idOK = $("#login-modal-input-ok").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/ClientLogin',
+                    data: '{login:\'' + escape(login) + '\', passw:\'' + escape(passw) + '\', idFB:\''+idFB+'\', idVK:\''+idVK+'\', idOK: \''+idOK+'\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var res = JSON.parse(data.d);
+                        if (res.ErrorCode == 0 && res.Message == "") {
+
+                            // Logged in... redirect or replace login form
+                            location = "/MyCards";
+                        } else {
+                            //Error
+                            customAlert("Ошибка", res.Message);
+                            $("#login-modal-input-ok").val("");
+                            $("#login-modal-input-vk").val("");
+                            $("#login-modal-input-fb").val("");
+                        }
+                    }
+                });
+                return false;
+            });
+
+            $("#btn-logout").click(function (ev) {
+                ev.preventDefault();
+                customConfirm("Подтверждение", "Подтвердите выход из личного кабинета","Выйти", function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '/API.aspx/ClientLogout',
+                        data: '{}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            location = "/";
+                        }
+                    });
+                });
+            });
+
+            $("#partnersoptions").change(function () {
+                var val = $(this).val();
+                if (val == "all")
+                {
+                    val = -1;
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/SetActionPartnerFilter',
+                    data: '{id:\'' + val + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
+
+            $("A.actions_category_filter").click(function (event) {
+                var val = $(this).attr("data");
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/SetActionCategoryFilter',
+                    data: '{id:\'' + val + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            })
+
+            $("A.partners_category_filter").click(function (event) {
+                var val = $(this).attr("data");
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/SetPartnerCategoryFilter',
+                    data: '{id:\'' + val + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            })
+
+
+            $("#complete-registration").click(function (event) {
+                event.preventDefault();
+                var valthis = $(this).closest('FORM').find(".masked-phone").first().val();
+                var phone = valthis.replace("+7", "").replace(/\D/g, "");
+
+                var code = $("#sms-code-field").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/GetConfirmCode',
+                    data: '{Phone:\'' + phone + '\',Code:\''+code+'\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var res = JSON.parse(data.d);
+                        if (res.ErrorCode == 0 && res.Message == "") {
+                            // Logged in... redirect or replace login form
+
+                            var data = {};
+                            data.client = {};
+                            data.client.id = -1;
+
+                            data.client.firstname = $("#register-firstname").val();
+                            data.client.lastname = $("#register-lastname").val();
+                            data.client.middlename = $("#register-middlename").val();
+                            data.client.phone = phone;
+                            data.client.email = $("#register-email").val();
+                            data.client.allowsms = false;
+                            data.client.allowemail = false;
+                            data.client.description = "";
+                            /*
+                            data.client.phone = $("#register-havecard").val();
+                            data.client.phone = $("#register-cardnum").val();
+                            */
+                            data.client.gender = $("#register-gender").val();
+
+                            var Card = 0;
+                            //if ($("#havecard").val() == "yes") Card = $("#register-cardnum").val();
+
+                            var bd = $("#register-modal-input-bd").val();
+                            var arr = bd.split(".");
+
+                            data.client.birthdate = arr[1] + "." + arr[0] + "." + arr[2] + " 00:00:00";
+                            data.client.password = $("#register-password").val();
+
+                            var c = "{client:"+JSON.stringify(data.client)+", card:"+Card+"}";
+
+                            $.ajax({
+                                type: "POST",
+                                url: '/API.aspx/GetRegistrationUser',
+                                data: c,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (data) {
+                                    var rs = JSON.parse(data.d);
+                                    if (rs.ErrorCode == 0 && rs.Message == "") {
+                                        customAlert("Сообщение", "Вы успешно зарегистрировались!");
+
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: '/API.aspx/ClientLogin',
+                                            data: '{login:\'' + escape(phone) + '\', passw:\'' + escape($("#register-password").val()) + '\', idFB:\'\', idVK:\'\', idOK: \'\'}',
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            success: function (data) {
+                                                var res = JSON.parse(data.d);
+                                                if (res.ErrorCode == 0 && res.Message == "") {
+
+                                                    // Logged in... redirect or replace login form
+                                                    window.location = "/Profile";
+                                                } else {
+                                                    //Error
+                                                    customAlert("Ошибка", res.Message);
+                                                }
+                                            }
+                                        });
+
+
+                                    } else {
+                                        customAlert("Ошибка", rs.Message);
+                                    }
+                                }
+                            });
+
+                        } else {
+                            //Error
+                            customAlert("Ошибка",res.Message);
+                        }
+                    }
+                });
+
+            });
+
+            var val = $("#register-agree").val();
+            if (val == "yes") {
+                $("#register-continue").removeClass("disabled");
+                $("#register-continue").prop('disabled', false);
+            } else {
+                $("#register-continue").addClass("disabled");
+                $("#register-continue").prop('disabled', true);
+            }
+
+            $("#register-agree").change(function () {
+                var val = $(this).val();
+                if (val == "yes") {
+                    $("#register-continue").removeClass("disabled");
+                    $("#register-continue").prop('disabled', false);
+                } else {
+                    $("#register-continue").addClass("disabled");
+                    $("#register-continue").prop('disabled', true);
+                }
+            });
+
+            $("#request-again").click(function (event) {
+                var valthis = $(this).closest('FORM').find(".masked-phone").first().val();
+                var val = valthis.replace("+7", "").replace(/\D/g, "");
+                /*
+                    SEND CODE
+                */
+
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/GetVerificationCode',
+                    data: '{Phone:\'' + val + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        }
+                        $("#register-continue").prop('disabled', true);
+                        //                    location.reload();
+                    }
+                });
+
+
+                initTimer();
+            });
+
+            $("#remember-step1").submit(function (ev) {
+                ev.preventDefault();
+
+                var phone = $("#remember-modal-input-phone").val().replace("+7", "").replace(/\D/g, "");;
+                var email = $("#remember-modal-input-email").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/GetVerificationCode',
+                    data: '{Phone:\'' + phone + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            $("#remember-modal").modal('hide');
+                            $("#remembercode-modal").modal('show');
+                        }
+
+                        //                    location.reload();
+                    }
+                });
+
+                return false;
+            });
+
+            $("#remember-step2").submit(function (ev) {
+                ev.preventDefault();
+
+                var phone = $("#remember-modal-input-phone").val().replace("+7", "").replace(/\D/g, "");;
+                var email = $("#remember-modal-input-email").val();
+                var code = $("#remembercode-modal-input-code").val();
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/GetConfirmCode',
+                    data: '{Phone:\'' + phone + '\',Code:\''+code+'\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            $("#remembercode-modal").modal('hide');
+                            $("#remembernew-modal").modal('show');
+                        }
+
+                        //                    location.reload();
+                    }
+                });
+
+                return false;
+            });
+
+            $("#remember-step3").submit(function (ev) {
+                ev.preventDefault();
+
+                var phone = $("#remember-modal-input-phone").val().replace("+7", "").replace(/\D/g, "");
+                var email = $("#remember-modal-input-email").val();
+                var code = $("#remembercode-modal-input-code").val();
+
+                var p1 = $("#remembernew-modal-input-pass");
+                var p2 = $("#remembernew-modal-input-pass2");
+
+                var idFB = "";
+                var idVK = "";
+                var idOK = "";
+
+                var error = false;
+                if (p1.val() != p2.val())
+                {
+                    error = true;
+                    customAlert("Внимание!", "Пароли не совпадают!");
+                }
+                if (p1.val().length < 6) {
+                    error = true;
+                    customAlert("Внимание!", "Минимальная длина пароля 6 символов!");
+                }
+                if (!error) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/API.aspx/SetClientPassword',
+                        data: '{Phone:\'' + phone + '\',Code:\'' + code + '\', Password:\'' + escape(p1.val()) + '\', idFB:\'' + idFB + '\', idVK:\'' + idVK + '\', idOK: \'' + idOK + '\'}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            var rs = JSON.parse(data.d);
+                            if (rs.ErrorCode != 0) {
+                                customAlert("Ошибка", rs.Message);
+                            } else {
+                                customAlert("Успешно", "Ваш пароль изменен. Вы можете зайти на сайт с использованием нового пароля.");
+                                $("#remembernew-modal").modal('hide');
+
+                            }
+
+                            //                    location.reload();
+                        }
+                    });
+                }
+                return false;
+            });
+            /*
+            $("A.cheque-record-info").click(function () {
+                event.preventDefault();
+                var dat = $(this).attr('data')*1;
+                if (dat > 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/API.aspx/ChequeDetails',
+                        data: '{ChequeID:' + dat + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            var rs = JSON.parse(data.d);
+                            if (rs.ErrorCode != 0) {
+                                customAlert("Ошибка", rs.Message);
+                            } else {
+
+                                console.log(rs);
+                            }
+
+                            //                    location.reload();
+                        }
+                    });
+                }
+            });*/
+
+        });
+
+        function customAlert(header,body)
+        {
+            $("#message-modal-header").text(header);
+            $("#message-modal-body").html(body);
+            $("#message-modal").modal('show');
+        }
+
+        function customConfirm(header,body,button,onconfirm)
+        {
+            $("#confirm-modal-header").text(header);
+            $("#confirm-modal-body").html(body);
+            $("#delete").val(button);
+            $('#confirm-modal').modal({ backdrop: 'static', keyboard: false })
+                .one('click', '#delete', onconfirm);
+            // .one() is NOT a typo of .on()
+        }
+
+        
+
+
+
+        $(document).ready(function () {
+
+            function checkLoginStateFB() {
+                $("#login-modal-input-ok").val("");
+                $("#login-modal-input-vk").val("");
+                $("#login-modal-input-fb").val("");
+
+                // open a popup window with same html as we are, with an argument to proceed with OAUTH
+                var url = 'https://www.facebook.com/v2.8/dialog/oauth?client_id=443853319342275&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())%3Ffb=1&response_type=code%20token';
+                var pop = window.open(url, "fbauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+            }
+            $('#fb-login').click(checkLoginStateFB);
+                });
+    </script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            
+            /*     
+            VK.init({
+                apiId: 5656908
+            });     
+              
+            function checkLoginStateVK() {
+                VK.Auth.getLoginStatus(function (response) {
+                    if (response.session) { 
+                   
+                        $("#login-modal-input-vk").val("web"+response.session.sid);
+                        $("#logintosite").submit(); 
+                    } else {
+                    
+                        VK.Auth.login(function (response) {
+                            if (response.session) {
+                                $("#login-modal-input-vk").val("web" + response.session.sid);
+                                $("#logintosite").submit(); 
+                            } else {
+                                customAlert("Ошибка!", "Вы не авторизовались в VK");
+                            }
+                        });
+                    }
+                });  
+            }*/
+            function checkLoginStateVK() {
+                $("#login-modal-input-ok").val("");
+                $("#login-modal-input-vk").val("");
+                $("#login-modal-input-fb").val("");
+
+                // open a popup window with same html as we are, with an argument to proceed with OAUTH
+                var url = 'https://oauth.vk.com/authorize?client_id=6145065&display=page&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())&scope=&response_type=code&v=5.59';
+                var pop = window.open(url, "vkauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+            }
+
+            $('#vk-login').click(checkLoginStateVK);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            function checkLoginStateOK() {
+                $("#login-modal-input-ok").val("");
+                $("#login-modal-input-vk").val("");
+                $("#login-modal-input-fb").val("");
+
+                    // open a popup window with same html as we are, with an argument to proceed with OAUTH
+                var pop = window.open('https://connect.ok.ru/oauth/authorize?client_id=1253652224&scope=VALUABLE_ACCESS&response_type=code&redirect_uri=@(System.Web.Configuration.WebConfigurationManager.AppSettings["SocialNetwork"].ToString())%3Fok=1', "okauth", "width=500,height=430,resizable=yes,scrollbars=yes,status=yes");
+            }
+
+                $('#ok-login').click(checkLoginStateOK);
+        });
+    </script>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46310283 = new Ya.Metrika({ id:46310283, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/46310283" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+
+
+</body>
+</html>

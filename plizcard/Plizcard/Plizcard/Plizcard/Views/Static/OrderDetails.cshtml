@@ -1,0 +1,79 @@
+﻿<div id="contentwrapper">
+    <main role="main" id="main">
+
+        <section class="content-medium">
+
+            <div class="twocolumns">
+                <div class="twocolumns-content fontlatoregular">
+
+                    <h1>Мои покупки / Чек № @Model.Number</h1>
+
+                    <div class="plate plate-check" style="background:none; box-shadow:none;">
+                        <h2>№ @Model.Number</h2>
+                        <div class="check-line-simple">
+                            <strong>Дата/время чека</strong> <span>@Model.Date.ToString("dd.MM.yyyy")</span>
+                        </div>
+                        <div class="check-line-simple">
+                            <strong>Тип операции</strong> <span>@Model.OperationType</span>
+                        </div>
+                        <div class="check-line-simple">
+                            <strong>Партнер</strong> <span>@Model.Partner</span>
+                        </div>
+                        <div class="check-line-simple">
+                            <strong>Торговая точка</strong> <span>@Model.Shop</span>
+                        </div>
+
+                        <h3>Товары</h3>
+
+                        @foreach (PlizCard.lcclient.ChequeDetailItems item in Model.items)
+                        {
+
+                        <div class="check-line-dotted">
+                            <span>Артикул товара №@item.code</span> <strong>@item.amount</strong>
+                        </div>
+
+                        }
+
+                        <h3>Акции</h3>
+                        @foreach (string item in Model.Campaigns)
+                        {
+                        <div class="check-line">
+                            <a href="#">@item</a>
+                        </div>
+                        }
+
+                        <div class="check-line-dotted">&nbsp;</div>
+
+                        <div class="check-total">
+                            Итого: @Model.SummDiscount
+                        </div>
+
+                        <div class="check-line-dotted">
+                            <span>Сумма чека</span> <p>@Model.Summ</p>
+                        </div>
+
+                        <div class="check-line-dotted">
+                            <span>Сумма чека cо скидкой</span> <p>@Model.SummDiscount</p>
+                        </div>
+
+                        <div class="check-line-dotted">
+                            <span>Всего начислено</span> <p>@Model.Bonus</p>
+                        </div>
+
+                        <div class="check-line-dotted">
+                            <span>Всего списано</span> <p>@Model.PaidByBonus</p>
+                        </div>
+
+                        <div class="check-line-dotted">
+                            <span>Скидка</span> <p>@Model.Discount</p>
+                        </div>
+                    </div>
+
+                </div>       
+                <div class="twocolumns-aside">
+                        @Html.Partial("_leftcolumnActions")
+                </div>
+            </div>
+        </section>
+    </main>
+</div>

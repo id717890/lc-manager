@@ -1,0 +1,131 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rn = new Random();
+}
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="header-image">
+            <img src="/gfx/interface/header_feedback.jpg" />
+        </section>
+        <section class="content-narrow">
+            <h1>Написать нам</h1>
+            <form action="#" method="post">
+            @if (UserSession.user_id <= 0)
+            {
+                <input type="text" name="name" id="feedback-name" placeholder="Ф.И.О." />
+                <input type="text" name="email" id="feedback-email" placeholder="E-mail" />
+            }
+                <select name="subject" placeholder="Тема письма" id="feedback-subject">
+                    <option value="Не начислены/не списаны звезды">Не начислены/не списаны Бонусы</option>
+                    <option value="Благодарность/отзыв">Благодарность/отзыв</option>
+                    <option value="Претензия">Претензия</option>
+                    <option value="Вопрос">Вопрос</option>
+                    <option value="Стать Партнером">Стать Партнером</option>
+                    </select>
+                <textarea name="message" placeholder="Текст сообщения" id="feedback-message"></textarea>
+                @if (UserSession.user_id <= 0)
+                {
+                <div class="form-captcha">
+                    <div>
+                        <img src="/Capcha.aspx?r=@rn.Next().ToString()" id="capcha-img" style="cursor:pointer"/>
+                    </div>
+                    <div>
+                        <input type="text" name="captcha" placeholder="Введите код с картинки" id="feedback-capcha"/>
+                    </div>
+                </div>
+                <button type="submit" class="btn" id="feedback-send-btn-u">Отправить</button>
+                }else { 
+                    <button type="submit" class="btn" id="feedback-send-btn">Отправить</button>
+                }
+            </form>
+        </section>
+    </main>
+</div>
+
+<script>
+    $(function () {
+        $("#capcha-img").click(function () {
+            $(this).attr("src", "Capcha.aspx?r=" + Math.random());
+        });
+
+        $("#feedback-send-btn-u").click(function () {
+            var subject = $("#feedback-subject").val();
+            var message = $("#feedback-message").val();
+            var fio = $("#feedback-name").val();
+            var email = $("#feedback-email").val();
+            var capcha = $("#feedback-capcha").val();
+
+            if (message.length == 0) {
+                customAlert("Внимание!", "Пустое сообщение!");
+            } else if(fio.length == 0) {
+                customAlert("Внимание!", "Пустое поле Ф.И.О.!");
+            } else if (email.length == 0) {
+                customAlert("Внимание!", "Пустое поле Email!");
+            } else if (capcha.length == 0) {
+                customAlert("Внимание!", "Вы не ввели код с картинки!");
+            } else if (!checkEmailFormat(email)) {
+                customAlert("Внимание!", "Неправильный формат адреса email!");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/LeaveMessageUnregister',
+                    data: '{Email:\'' + email + '\',Subject:\'' + subject + '\',Text:\''+ name +' '+ message +'\',Capcha:\''+escape(capcha)+'\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                            if (rs.ErrorCode == 123) {
+                                $("#capcha-img").click();
+                            }
+                        } else {
+                            customAlert("Спасибо!", "Ваше сообщение отправлено.");
+                            $("#feedback-message").val("");
+                            $("#feedback-subject").prop('selectedIndex', 0);
+
+                        }
+
+                        //                    location.reload();
+                    }
+                });
+            }
+            event.preventDefault();
+            return;
+            
+        });
+
+        $("#feedback-send-btn").click(function () {
+            var subject = $("#feedback-subject").val();
+            var message = $("#feedback-message").val();
+
+            if (message.length == 0) {
+                customAlert("Внимание!", "Пустое сообщение!");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '/API.aspx/LeaveMessage',
+                    data: '{Subject:\'' + escape(subject) + '\',Text:\'' + escape(message) + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var rs = JSON.parse(data.d);
+                        if (rs.ErrorCode != 0) {
+                            customAlert("Ошибка", rs.Message);
+                        } else {
+                            customAlert("Спасибо!", "Ваше сообщение отправлено.");
+                            $("#feedback-message").val("");
+                            $("#feedback-subject").prop('selectedIndex', 0);
+
+                        }
+
+                        //                    location.reload();
+                    }
+                });
+            }
+            event.preventDefault();
+            return false;
+        });
+    });
+</script>

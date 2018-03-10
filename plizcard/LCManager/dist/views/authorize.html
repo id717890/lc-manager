@@ -1,0 +1,45 @@
+
+        <div class="container">
+            <div class="row row-content" ng-controller="AuthorizeController">
+                <div class="col-xs-12 col-sm-6">
+                    <div class="pull-right text-left-xs" style="max-height:230px; max-width:376px; font-family: AFuturica; padding-top:10px;">
+                        <p style="font-size: 18px">LC-MANAGER</p>
+                        <p style="font-size: 16px; color:#808080;">
+                            Для авторизации необходимо ввести ваши персональные логин и пароль. В случае возникновения проблем свяжитесь с вашим менеджером или обратитесь в службу технической поддержки удобным для вас способом
+                        </p>
+                        <address style="font-size: 100%; color:#58AFDD">                        
+                            <i class="fa fa-phone"></i> +7 (909) 786-62-52<br>
+                            <i class="fa fa-envelope"></i> 
+                            <a href="mailto:help@lc-manager.ru">help@lc-manager.ru</a>
+                        </address>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <div style="border: 1px solid #E8E8E8; border-radius: 10px; height:230px; width:376px;">
+                        <p style="padding-left: 28px; padding-top:28px; font-size:16px; font-family:AFuturica;">Авторизация</p>
+                        <form style="padding-left:28px; padding-right:28px; padding-top:10px;" class="form-horizontal" role="form" name="authorizeForm" ng-submit="submitAuth()">
+                            <div class="form-group" style="height:36px;" ng-class="{ 'has-error' : feedbackForm.firstname.$error.required && !feedbackForm.firstname.$pristine }">
+                                <div class="col-xs-12">
+                                    <input type="text" class="form-control" id="phone" name="phone" ui-mask="'(999) 999-9999'" placeholder="Номер телефона" ng-model="authorize.phone" required>
+                                </div>
+                            </div>
+                            <div class="form-group" style="height:36px;" ng-class="{ 'has-error' : feedbackForm.firstname.$error.required && !feedbackForm.firstname.$pristine }">
+                                <div class="col-xs-12">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" ng-model="authorize.password" required>
+                                </div>
+                            </div>
+                            <div class="form-group vertical-align">
+                                <div class="col-xs-6">
+                                    <button type="submit" style="color:#fff; background:#58AFDD; width:119px; height:36px;" class="btn" ng-disabled="feedbackForm.$invalid">Войти</button>
+                                </div>
+                                <div class="col-xs-6">                                    
+                                    <a href="#" class="pull-right" style="font-family:AFuturicaBook; font-size:14px;">Забыли пароль?</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>        
+        </div>
+        
+        

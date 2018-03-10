@@ -1,0 +1,220 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var s_actionisnew = UserSession.get("ActionIsNewFilter");
+    var s_actionispopular = UserSession.get("ActionIsPopularFilter");
+
+    bool actionisnew = false;
+    bool actionispopular = false;
+
+    if (s_actionisnew != null) { actionisnew = (bool)s_actionisnew; }
+    if (s_actionispopular != null) { actionispopular = (bool)s_actionispopular; }
+}
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="content-medium">
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+                    @*<h1>Акции</h1>*@
+                    <br /><br />
+                    <div class="actions" id="block-actions" style="padding-top:7px;">
+                        @Html.Partial("_campaignsBlock", API.GetCampaigns(false,true,0,6))
+                    </div>
+
+                    <div class="button-bar">
+                        <a href="#" id="btn-actions-more"  data-start="6"><button class="btn" type="button">Показать ещё</button></a>
+                    </div>
+                </div>
+                <div class="twocolumns-aside">
+
+                    <div class="plate plate-map-filter">
+
+                        <div class="plate-map-filter-block">
+                            <p>Сортировать</p>
+
+                            <div class="map-filter-line">
+                                <div>
+                                    <label for="map2">Новые</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="actions-sort-filter-new" name="x"  @((actionisnew) ? "checked" : "") />
+                                </div>
+                            </div>
+
+                            <div class="map-filter-line">
+                                <div>
+                                    <label for="map3">Популярные</label>
+                                </div>
+                                <div>
+                                    <input id="actions-sort-filter-popular" type="checkbox" name="x"  @((actionispopular) ? "checked" : "")/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="plate-map-filter-block">
+                            <p>Партнеры</p>
+                            <div>
+                                <select style="width: 100%;" name="partners" id="partnersoptions">
+                                    <option value="all">Все</option>
+                                    @Html.Partial("_partnerOption",API.getPartners(false,0,1000))
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="plate-map-filter-block">
+                            <p>Категории</p>
+
+
+                            @Html.Partial("_categories",API.getCategoriesCampaigns())
+                        </div>
+                    </div>
+
+                    <section class="aside-apps">
+                        @*<h1>ПОЖАЛУЙСТА</h1>*@
+                        <img style="max-height: 100%; max-width: 100%;" src="~/gfx/interface/logo.png" />
+                        <p>МОБИЛЬНОЕ ПРИЛОЖЕНИЕ</p>
+                        <a href="https://itunes.apple.com/us/app/%D0%BA%D0%B0%D1%80%D1%82%D0%B0-%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0/id1298271662?l=ru&ls=1&mt=8"><img src="/gfx/interface/app-appstore.png"></a><br>
+                        <a href="https://play.google.com/store/apps/details?id=com.app.pleasecard"><img src="/gfx/interface/app-googleplay.png"></a>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+
+<template id="actionBlockTmplunregistered">
+    <div class="plate plate3">
+        <div class="partners-imageholder">
+            <a href='' class="logo-link"><img src='' class="logo" alt="Партнер" style="width:100%"></a>
+        </div>
+        <div class="plate-desc">
+            <p class="plate-short"></p>
+            <p class="plate-hero"></p>
+            <div class="plate-bar">
+                <div>
+                    <a href='' class="more-link"><button type="button" class="btn">Подробнее</button></a>
+                </div>
+                <div>
+                    <div class='star-holder star-unauth'>
+                        <a href="#" data-toggle="modal" data-target="#login-modal" class="star-half" dtype="partners"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="actionBlockTmplregistered">
+    <div class="plate plate3">
+        <div class="partners-imageholder">
+            <a href='' class="logo-link"><img src='' class="logo" alt="Партнер" style="width:100%"></a>
+        </div>
+        <div class="plate-desc">
+            <p class="plate-short"></p>
+            <p class="plate-hero"></p>
+            <div class="plate-bar">
+                <div>
+                    <a href='' class="more-link"><button type="button" class="btn">Подробнее</button></a>
+                </div>
+                <div>
+                    <div class="star-holder">
+                        <a href="#" data-toggle="tooltip" title="" class="star-half" data-original-title="Добавить в избранное"></a>
+                        <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+<script>
+    $(function () {
+        $("#actions-sort-filter-new").on('ifToggled', function (event) {
+            var d1 = $('#actions-sort-filter-new').icheck('data').checked;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/SetActionIsNewFilter',
+                data: '{value:\'' + ((d1) ? 'true' : 'false') + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+        $("#actions-sort-filter-popular").on('ifToggled', function (event) {
+            var d1 = $('#actions-sort-filter-popular').icheck('data').checked;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/SetActionIsPopularFilter',
+                data: '{value:\'' + ((d1) ? 'true' : 'false') + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    if (rs.ErrorCode != 0) {
+                        customAlert("Ошибка", rs.Message);
+                    } else {
+                        location.reload();
+                    }
+                }
+            });
+        });
+
+
+        $("#btn-actions-more").click(function (event) {
+            event.preventDefault();
+            var _this = $(this);
+            var st = $(this).attr("data-start") * 1;
+            var cnt = 6;
+            $.ajax({
+                type: "POST",
+                url: '/API.aspx/CampaignsCnt',
+                data: '{start:' + st + ',cnt:' + cnt + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var rs = JSON.parse(data.d);
+                    _this.attr("data-start", cnt + st);
+                    var bl = $("#block-actions").find("div.plate3:empty:first");
+                    var blout = $("#btn-logout");
+                    if (rs.length == 0) {
+                        $(_this).remove();
+                        return;
+                    }
+                    for (i = 0; i < rs.length; i++) {
+                        var t = "";
+                        if (blout.length > 0) {
+                            t = $("#actionBlockTmplregistered");
+                        } else {
+                            t = $("#actionBlockTmplunregistered");
+                        }
+                        t = $(t.html());
+
+                        t.find("a.logo-link").attr('href', '/Actions/Details/' + rs[i].id);
+                        t.find("img.logo").attr('src', rs[i].logo);
+                        t.find("p.plate-short").text(rs[i].condition);
+                        t.find("p.plate-hero").text(rs[i].tagline);
+                        t.find("a.more-link").attr('href', '/Actions/Details/' + rs[i].id).attr('data', rs[i].id);
+                        if (rs[i].isFav) {
+                            t.find("div.star-holder").addClass("star-checked");
+                            t.find("a.star-half").attr('data', rs[i].id);
+                            t.find("a.star-full").attr('data', rs[i].id);
+                        }
+                        bl.before(t);
+                    }
+                }
+            });
+
+        });
+    });
+</script>
