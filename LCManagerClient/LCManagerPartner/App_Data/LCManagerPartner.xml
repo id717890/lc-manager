@@ -531,10 +531,39 @@
             Получение баланса бонусных баллов по номеру карты, либо по номеру телефона Участника программы лояльности.
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.GetPartners(LCManagerPartner.Models.GetPartnersRequest)">
+            <summary>
+            Возвращает информацию о Партнере
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.GetCampaigns(LCManagerPartner.Models.GetCampaignsRequest)">
+            <summary>
+            Возвращает информацию об акции
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientPartnerSelect(LCManagerPartner.Models.ClientPartnerSelectRequest)">
+            <summary>
+            Добавление\удаление клиента у партнера
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientCampaignSelect(LCManagerPartner.Models.ClientCampaignSelectRequest)">
+            <summary>
+            Добавление\удаление клиента из акции
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.ClientAddCard(LCManagerPartner.Models.ClientAddCardRequest)">
             <summary>
             Добавление карты для Участника программы лояльности
             </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.LeaveMessage(LCManagerPartner.Models.LeaveMessageRequest)">
+            <summary>
+            Отправка сообщения по электронной почте
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.SendEmailCode(LCManagerPartner.Models.SendEmailCodeRequest)">
             <summary>
@@ -571,9 +600,24 @@
             Удаляет заданный номер телефона.
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.GetPersonalCampaigns(LCManagerPartner.Models.GetPersonalCampaignsRequest)">
+            <summary>
+            Возвращает персональное предложение Участника (потерялся public class Campaing).
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.SelectPreferences(LCManagerPartner.Models.SelectPreferencesRequest)">
+            <summary>
+            Возвращает "любимые" категории товаров
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.AddPhone(LCManagerPartner.Models.AddPhoneRequest)">
             <summary>
             Привязывает номер телефона к заданному Участнику, устанавливает заданный номер телефона как коммуникационный.
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientGetPreferences(LCManagerPartner.Models.ClientPreferencesRequest)">
+            <summary>
+            Возвращает "любимые" категории товаров Участника
             </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.GetChequeDetail(LCManagerPartner.Models.ChequeDetailRequest)">
@@ -581,14 +625,60 @@
             Запрос детализации чека по заданному ID чека
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.SetClientDevice(LCManagerPartner.Models.AddDeviceRequest)">
+            <summary>
+            Записать данные об устройстве Участника для отправки PUSH-уведомлений
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.SendPush(LCManagerPartner.Models.SendPushRequest)">
+            <summary>
+            Отправка PUSH-уведомления
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.SendPushApple(LCManagerPartner.Models.SendPushRequest)">
+            <summary>
+            Отправка PUSH-уведомления на устройства Apple
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.CardStatistics(LCManagerPartner.Models.CardStatisticsRequest)">
+            <summary>
+            Получение статистики по карте
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.ClientInfo(LCManagerPartner.Models.GetClientInfoRequest)">
             <summary>
             Получение данных Участника по заданному номеру телефона или номеру карты.
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.CardAggregation(LCManagerPartner.Models.CardAggregationRequest)">
+            <summary>
+            Статистика по картам за периода
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.ClientCreate(LCManagerPartner.Models.ClientCreateRequest)">
             <summary>
             Создание профиля Участника программы лояльности
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientUpdate(LCManagerPartner.Models.SetClientUpdateRequest)">
+            <summary>
+            Обновление профиля Участника программы лояльности
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientPasswordChange(LCManagerPartner.Models.ClientPasswordChangeRequest)">
+            <summary>
+            Обновление пароля Участника программы лояльности
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.ClientUpdateCommunication(LCManagerPartner.Models.ClientUpdateCommunicationRequest)">
+            <summary>
+            Обновление способа связи с клиентов
             </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.ClientBonuses(LCManagerPartner.Models.ClientBonusesRequest)">
@@ -747,7 +837,6 @@
             <summary>
             Получение баланса бонусных баллов по номеру карты, либо по номеру телефонаУчастника программы лояльности.
             </summary>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.Redeem(LCManagerPartner.Models.RedeemRequest)">
             <summary>
@@ -758,147 +847,66 @@
             <summary>
             Регистрация чека покупки на Процессинге
             </summary>
-            <param name="Card">номер карты</param>
-            <param name="ChequeTime">дата и время чека</param>
-            <param name="Phone">номер телефона</param>
-            <param name="Partner">идентификатор Партнера программы лояльности</param>
-            <param name="POS">код Торговой точки Партнера</param>
-            <param name="Amount">сумма чека</param>
-            <param name="PaidByBonus">оплачено бонусными баллами</param>
-            <param name="Number">номер чека</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="ItemData">список позиций чека</param>
-            <param name="Position">номер позиции</param>
-            <param name="Code">код позиции</param>
-            <param name="Price">цена</param>
-            <param name="Quantity">количество</param>
-            <param name="Amount">итоговая сумма</param>
-            <param name="PaidByBonus">оплачено бонусными баллами</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetAllShopsByPartner(LCManagerPartner.Models.GetPosesRequest)">
             <summary>
             Получение списка магазинов Партнёра
             </summary>
-            <param name="request"></param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetCheques(LCManagerPartner.Models.GetChequesRequest)">
             <summary>
             Получение чеков по заданному номеру карты.
             </summary>
-            <param name="CardNumber">номер карты Участника программы лояльности</param>
-            <param name="ClientId">идентификатор Участника программы лояльности</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>  
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetConfirmCode(LCManagerPartner.Models.GetConfirmCodeRequest)">
             <summary>
             Проверка кода и валидация номера телефона.
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Code">полученный в SMS сообщении проверочный код</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.SetClientPassword(LCManagerPartner.Models.SetClientPasswordRequest)">
             <summary>
             Установка/изменение пароля Участника.
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Code">проверочный код</param>
-            <param name="Password">новый пароль</param>
-            <param name="ClientID">идентификатор Участника</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetRegistrationUser(LCManagerPartner.Models.GetRegistrationUserRequest)">
             <summary>
             Регистрация Участника в ЛКУ программы лояльности
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Card">номер карты</param>
-            <param name="PartnerID">идентификатор Партнера программы лояльности</param>
-            <param name="PosCode">код Торговой точки в которой производится регистрация</param>
-            <param name="AgreePersonalData">согласие на обработку персональных данных</param>
-            <param name="Operator">идентификатор Оператора програмы лояльности</param>
-            <param name="FriendPhone">телефон друга/подруги для механики “Приведи друга”</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetSendVerificationCode(LCManagerPartner.Models.GetSendVerificationCodeRequest)">
             <summary>
             Отправка проверечного кода в SMS сообщении на указанный номер телефона
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Partner">идентификатор Партнера программы лояльности</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientLogin(LCManagerPartner.Models.ClientLoginRequest)">
             <summary>
             Авторизация Участника в ЛКУ по логину/паролю или через привязанный аккаунт социальной сети.
             </summary>
-            <param name="Login">номер телефона или номер карты</param>
-            <param name="Password">пароль</param>
-            <param name="IdFB">токен (временный код) Участника в социальной сети “Facebook”</param>
-            <param name="IdOK">токен (временный код) Участника в “Одноклассники”</param>
-            <param name="IdVK">токен (временный код) Участника в “ВКонтакте”</param>
-            <param name="Operator">идентификатор Оператора Программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ChangeClient(LCManagerPartner.Models.ChangeClientRequest)">
             <summary>
             Изменение данных Участника по заданному идентификатору
             </summary>
-            <param name="id">идентификатор Участника программы лояльности</param>
-            <param name="password">пароль</param>
-            <param name="firstname">имя</param>
-            <param name="middlename">отчетсво</param>
-            <param name="lastname">фамилия</param>
-            <param name="gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
-            <param name="birthdate">дата рождения</param>
-            <param name="address">адрес</param>
-            <param name="haschildren">признак наличия детей</param>
-            <param name="description">произвольное описание</param>
-            <param name="phone">номер телефона</param>
-            <param name="email">электронная почта</param>
-            <param name="allowsms">получать уведомления по SMS</param>
-            <param name="allowemail">получать уведомления по E-mail</param>
-            <param name="balance">активный баланс бонусных баллов</param>
-            <param name="allowpush">получать push-уведомления</param>
-            <param name="lasturchaseamount">сумма последней покупки</param>
-            <param name="lastpurchasedate">дата последней покупки</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.SendEmailCode(LCManagerPartner.Models.SendEmailCodeRequest)">
             <summary>
             Отправка проверечного кода на указанный адрес электронной почты.
             </summary>
-            <param name="Email">электронная почта</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ValidateEmail(LCManagerPartner.Models.ValidateEmailRequest)">
             <summary>
             Проверка кода и валидация электронной почты
             </summary>
-            <param name="Email">электронная почта</param>
-            <param name="Client">идентификатор Участника при валидации электронной почты по ссылке</param>
-            <param name="Code"> полученный в сообщении проверочный код</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.AddPhone(LCManagerPartner.Models.AddPhoneRequest)">
             <summary>
             Привязывает номер телефона к заданному Участнику, устанавливает заданный номер телефона как коммуникационный.
             </summary>
-            <param name="ClientID">идентификатор Участника</param>
-            <param name="Phone">номер телефона</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.DeletePhone(LCManagerPartner.Models.DeletePhoneRequest)">
             <summary>
             Удаляет заданный номер телефона.
             </summary>
-            <param name="Phone">номер телефона</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.PartnerFullInfo(LCManagerPartner.Models.PartnerFullInfoRequest)">
             <summary>
@@ -914,362 +922,608 @@
             <summary>
             Получение полной информации по Оператору за период
             </summary>
-            <param name="Operator">оператор</param>
-            <param name="Start_date">начало периода</param>
-            <param name="End_date">конец приода</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetCampaigns(LCManagerPartner.Models.GetCampaignsRequest)">
             <summary>
             Получение Акций по заданному идентификатору Участника программы лояльности.
             </summary>
-            <param name="ClientID">идентификатор Участника программы лояльности</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientInfo(LCManagerPartner.Models.GetClientInfoRequest)">
             <summary>
             Получение данных Участника по заданному номеру телефона или номеру карты.
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <param name="Phone">номер телефона</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientUpdate(LCManagerPartner.Models.SetClientUpdateRequest)">
             <summary>
             Обновление профиля Участника программы лояльности.
             </summary>
-            <param name="Client">идентификатор Участника программы лояльности</param>
-            <param name="Name">имя</param>
-            <param name="Surname">фамилия</param>
-            <param name="Patronymic">отчество</param>
-            <param name="AllowSms">получать уведомления по SMS</param>
-            <param name="AllowEmail">получать уведомления по E-mail</param>
-            <param name="Birthdate">дата рождения</param>
-            <param name="Phone">номер телефона</param>
-            <param name="Email">электронная почта</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.CancelLastCheque(LCManagerPartner.Models.CancelLastChequeRequest)">
             <summary>
             Отмена последнего зарегистрированного чека на Процессинге.
             </summary>
-            <param name="Partner">идентификатор Партнера программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <param name="ChequeTime">дата чека</param>
-            <param name="Phone">номер телефона</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="Number">номер чека</param>
-            <param name="Terminal">код терминала Торговой точки</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientCreate(LCManagerPartner.Models.ClientCreateRequest)">
             <summary>
             Создание профиля Участника программы лояльности
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <param name="Phone">номер телефона</param>
-            <param name="Name">имя</param>
-            <param name="Surname">фамилия</param>
-            <param name="Patronymic">отчество</param>
-            <param name="Email">адрес электронной почты?</param>
-            <param name="Birthdate">идентификатор Участника программы лояльности</param>
-            <param name="AllowSms">получать уведомления по SMS</param>
-            <param name="AllowEmail">получать уведомления по E-mail</param>
-            <param name="Gender">пол (1 - муж., -1 - жен., 0 - не определен)</param>
-            <param name="AgreePersonalData">согласие на обработку персональных данных</param>
-            <param name="PosCode">код Торговой точки в которой производится создание</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetClient(LCManagerPartner.Models.GetClientRequest)">
             <summary>
             Получение информации о картах Участника.
             </summary>
-            <param name="ClientID">идентификатор Участника программы лояльности</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GetChequesByCard(LCManagerPartner.Models.GetChequesByCardRequest)">
             <summary>
             Получение информации о чеках привязанных к карте
             </summary>
-            <param name="CardNumber">номер карты</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientImport(LCManagerPartner.Models.ClientImportRequest)">
             <summary>
             Импорт клиентской базы
             </summary>
-            <param name="ExcelFile">файл базы</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.Merge(LCManagerPartner.Models.MergeRequest)">
             <summary>
             Замена карты клиента
             </summary>
-            <param name="Active">Номер актуальной карты</param>
-            <param name="Merged">Номер устаревшей карты</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientInfoArray(LCManagerPartner.Models.GetClientInfoRequest)">
             <summary>
             Запрос информации о клиенте
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <param name="Phone">номер телефона</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.PosStatistics(LCManagerPartner.Models.PosStatisticsRequest)">
             <summary>
             Статистика по торговой точке за период
             </summary>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="Start_date">начало периода</param>
-            <param name="End_date">конец периода</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ChequeAggregation(LCManagerPartner.Models.ChequeAggregationRequest)">
             <summary>
             Статистика по чекам за период
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">начало периода</param>
-            <param name="To">конец периода</param>
-            <param name="Layout">форма агрегирования</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientAggregation(LCManagerPartner.Models.ClientAggregationRequest)">
             <summary>
             Статистика по клиентам за период
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">начало периода</param>
-            <param name="To">конец периода</param>
-            <param name="Layout">форма агрегирования</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.BonusAdd(LCManagerPartner.Models.BonusAddRequest)">
             <summary>
             Ручное начисление бонусов
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <param name="Phone">номер телефона</param>
-            <param name="Bonus">размер бонуса</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ChequesBonuses(LCManagerPartner.Models.GetChequesBonusesRequest)">
             <summary>
             Статистика по начислению бонусов
             </summary>
-            <param name="Card">номер карты</param>
-            <param name="Client">клиент</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="Page">страница</param>
-            <param name="PageSize">размер страницы</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorClients(LCManagerPartner.Models.OperatorClientRequest)">
             <summary>
             Статистика по клиентам Оператора
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.BuysImport(LCManagerPartner.Models.BuysImportRequest)">
             <summary>
             Импорт базы проведённых чеков
             </summary>
-            <param name="ExcelFile">файл базы</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.CardBonuses(LCManagerPartner.Models.CardBonusesRequest)">
             <summary>
             Получение бонусов карты не относящиеся к чекам.
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Card">номер карты</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.FastBonus(LCManagerPartner.Models.FastBonusCreateRequest)">
             <summary>
             Создание "быстрых бонусов"
             </summary>
-            <param name="ExcelFile">файл базы</param>
-            <param name="FastBonusName">именование "быстрых бонусов"</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientUpdateLevel(LCManagerPartner.Models.ClientUpdateLevelRequest)">
             <summary>
             Импорт базы уровней клиентов
             </summary>
-            <param name="ExcelFile">файл базы</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Level">уровень клиента</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ManagerLogin(LCManagerPartner.Models.ManagerLoginRequest)">
             <summary>
             Авторизация на WebApi
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Password">пароль</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ChequeMaxSumRedeem(LCManagerPartner.Models.ChequeMaxSumRedeemRequest)">
             <summary>
             Возвращает максимальную сумму списания в чек
             </summary>
-            <param name="Card">номер карты</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="ChequeSum">сумма по чеку</param>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorClientsManager(LCManagerPartner.Models.OperatorClientsManagerRequest)">
             <summary>
             Возращает информацию о клиентах на страницу клиентов Оператора
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">конец периода</param>
-            <param name="To">начало периода</param>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.SegmentationAge(LCManagerPartner.Models.SegmentationAgeRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientBaseStructure(LCManagerPartner.Models.ClientBaseStructureRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientBaseActive(LCManagerPartner.Models.ClientBaseActiveRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientAnalyticMoney(LCManagerPartner.Models.ClientAnalyticMoneyRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
             <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.GainOperatorPeriod(LCManagerPartner.Models.GainOperatorPeriodRequest)">
             <summary>
             Возращает средний чек и выручку Оператора\Партнёра\ТТ по месяцам
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">начало периода</param>
-            <param name="To">конец периода</param>
             <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.RefundOperatorPeriod(LCManagerPartner.Models.RefundOperatorPeriodRequest)">
             <summary>
             Возращает сумму возратов Оператора\Партнёра\ТТ по месяцам
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">начало периода</param>
-            <param name="To">конец периода</param>
             <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientOperatorPeriod(LCManagerPartner.Models.ClientOperatorPeriodRequest)">
             <summary>
             Возвращает количество зарегестрированных клиентов Оператора\Партнёра\ТТ по месяцам
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Partner">идентификатор Партнера программы лояльност</param>
-            <param name="Pos">код Торговой точки Партнера</param>
-            <param name="From">начало периода</param>
-            <param name="To">конец периода</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ManagerSendCode(LCManagerPartner.Models.ManagerSendCodeRequest)">
             <summary>
             Отправка кода подтверждения менеджером
             </summary>
-            <param name="Phone">номер телефона</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorInfo(LCManagerPartner.Models.OperatorInfoRequest)">
             <summary>
             Информация об операторе
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ActivateCard(LCManagerPartner.Models.ActivateCardRequest)">
             <summary>
             Активация карты на списание
             </summary>
-            <param name="Phone">номер телефона</param>
-            <param name="Card">номер карты</param>
-            <param name="Code">код подтверждения</param>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoods(LCManagerPartner.Models.OperatorGoodsRequest)">
             <summary>
             Выборка товаров Оператора
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorPos(LCManagerPartner.Models.OperatorPosRequest)">
             <summary>
-            Выборка торговых точек Оператора
+            Выборка адресов торговых точек Оператора
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.VerificationPromocode(LCManagerPartner.Models.VerificationPromocodeRequest)">
             <summary>
             Проверка промокода
             </summary>
-            <param name="Operator">идентификатор Оператора программы лояльности</param>
-            <param name="Promocode">промо-код</param>
-            <returns></returns>
+        </member>
+        <member name="P:LCManagerPartner.Models.Card.number">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Card.status">
+            <summary>
+            статус
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Card.virt">
+            <summary>
+            виртуальная?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Card.image">
+            <summary>
+            ссылка на изображение
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Card.oper">
+            <summary>
+            oper?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientCardsRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientCardsRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientCardsResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientCardsResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientCardsResponse.CardData">
+            <summary>
+            детализация информации по картам
+            </summary>
         </member>
         <member name="T:LCManagerPartner.Models.ServerGetClientCardsResponse">
             <summary>
             Заглушка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPartnerSelectRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPartnerSelectRequest.PartnerID">
+            <summary>
+            ID партнера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPartnerSelectRequest.Remove">
+            <summary>
+            Добавление \ удаление? (1 - отвязка, 0 - привязка)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPartnerSelectResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPartnerSelectResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCampaignSelectRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCampaignSelectRequest.CampaignID">
+            <summary>
+            ID акции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCampaignSelectRequest.Remove">
+            <summary>
+            Добавление \ удаление?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCampaignSelectResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCampaignSelectResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAddCardRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAddCardRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAddCardRequest.PartnerID">
+            <summary>
+            ID партнера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAddCardResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAddCardResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddEmailRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddEmailRequest.Email">
+            <summary>
+            адрес электронной почты участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddEmailRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddEmailResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddEmailResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDFBRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDFBResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDFBResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.FBUser.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDOKRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OKUser.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDOKResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDOKResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDVKRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.VKUser.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDVKResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddIDVKResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetPersonalCampaignsRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetPersonalCampaignsRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetPersonalCampaignsResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetPersonalCampaignsResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetPersonalCampaignsResponse.CampaignData">
+            <summary>
+            список акций
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Models.GetPersonalCampaignsResponse.#ctor">
+            <summary>
+            список акций
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SelectPreferencesRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SelectPreferencesRequest.CategoryID">
+            <summary>
+            ID категории
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SelectPreferencesRequest.Remove">
+            <summary>
+            Удалено?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SelectPreferencesResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SelectPreferencesResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Models.SelectPreferencesResponse.#ctor">
+            <summary>
+            Предпочтения участника
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferences.CategoryId">
+            <summary>
+            ID категории
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferences.CategoryName">
+            <summary>
+            Наименование категории
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferences.SwitchOn">
+            <summary>
+            Включено?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferencesRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferencesRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferencesResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPreferencesResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Id">
+            <summary>
+            ID чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Number">
+            <summary>
+            номер чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Date">
+            <summary>
+            дата чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.OperationType">
+            <summary>
+            тип операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Summ">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.SummDiscount">
+            <summary>
+            сумма скидки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Bonus">
+            <summary>
+            начисленно бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.PaidByBonus">
+            <summary>
+            оплачено бонусами
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Discount">
+            <summary>
+            скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Partner">
+            <summary>
+             Партнер
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Shop">
+            <summary>
+            торговая точка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.CardNumber">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.items">
+            <summary>
+            детализация покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetail.Campaigns">
+            <summary>
+            детализация акций
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailItems.position">
+            <summary>
+            позиция
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailItems.code">
+            <summary>
+            код
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailItems.price">
+            <summary>
+            цена
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailItems.quantity">
+            <summary>
+            количество
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailItems.amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailRequest.ChequeID">
+            <summary>
+            ID чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeDetailResponse.Message">
+            <summary>
+            Сообщение об ошибке
             </summary>
         </member>
         <member name="M:LCManagerPartner.Models.ServerChequeDetailResponse.ProcessRequest(System.Data.SqlClient.SqlConnection,LCManagerPartner.Models.ChequeDetailRequest)">
@@ -1279,6 +1533,286 @@
             <param name="cnn"></param>
             <param name="request"></param>
             <returns></returns>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceRequest.Device_token">
+            <summary>
+            Token устройства
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceRequest.OSRegistrator">
+            <summary>
+            зарегестрированная операционная система
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceRequest.Client">
+            <summary>
+            ID клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddDeviceResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SendPushRequest.DeviceID">
+            <summary>
+            ID устройства
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SendPushRequest.Message">
+            <summary>
+            сообщение
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Level">
+            <summary>
+            уровень карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Condition">
+            <summary>
+            состояние карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Balance">
+            <summary>
+            баланс карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.FullBalance">
+            <summary>
+            полный баланс?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Purchases">
+            <summary>
+            количество покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Purchasesum">
+            <summary>
+            сумма покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Refunds">
+            <summary>
+            количество возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.RefundSum">
+            <summary>
+            сумма возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.SpentSum">
+            <summary>
+            всего потрачено
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Charged">
+            <summary>
+            начисленно балов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Redeemed">
+            <summary>
+            списано баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.ChargeRefund">
+            <summary>
+            начисленно за возвраты?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.RedeemRefund">
+            <summary>
+            списано балов за возрат?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.FullDiscount">
+            <summary>
+            итоговая скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardStatisticsResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.Amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.BonusAdded">
+            <summary>
+            начислено баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.BonusRedeemed">
+            <summary>
+            списано баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.ChequeQty">
+            <summary>
+            количество чеков
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.ChequeQtyWithoutRefund">
+            <summary>
+            количество чеков без возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.MonthWeekNum">
+            <summary>
+            тип агрегации
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregation.ChequeDate">
+            <summary>
+            время чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.Partner">
+            <summary>
+            ID партнера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.Pos">
+            <summary>
+            Код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.From">
+            <summary>
+            Начало периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.To">
+            <summary>
+            Конец периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationRequest.Layout">
+            <summary>
+            тип агрегации
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardAggregationResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Models.CardAggregationResponse.#ctor">
+            <summary>
+            статистика по картам
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeRequest.OldPassword">
+            <summary>
+            стары пароль
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeRequest.NewPassword">
+            <summary>
+            новый пароль
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeRequest.Client">
+            <summary>
+            ID клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPasswordChangeResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationRequest.Operator">
+            <summary>
+            ID оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationRequest.Client">
+            <summary>
+            ID участника
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationRequest.AllowSms">
+            <summary>
+            Разрешение на получение SMS
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationRequest.AllowEmail">
+            <summary>
+            Разрешение на получение писем по электронной почте
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateCommunicationResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBonusesResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBonusesResponse.Message">
+            <summary>
+            Сообщение об ошибке
+            </summary>
         </member>
         <member name="P:LCManagerPartner.Models.BalanceGetRequest.Card">
             <summary>
@@ -1515,6 +2049,101 @@
             Список ТТ
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.Code">
+            <summary>
+            код товара
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.Price">
+            <summary>
+            цена за еденицу
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.Qty">
+            <summary>
+            количество товара
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.Amount">
+            <summary>
+            сумма чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.AddedBonus">
+            <summary>
+            начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeItem.RedeemedBonus">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Id">
+            <summary>
+            идентификатор
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Number">
+            <summary>
+            номер
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Date">
+            <summary>
+            дата
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.OperationType">
+            <summary>
+            тип операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Summ">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.SummDiscount">
+            <summary>
+            сумма скидки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Bonus">
+            <summary>
+            бонусов с чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.PaidByBonus">
+            <summary>
+            оплачено бонусами
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Discount">
+            <summary>
+            скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.Shop">
+            <summary>
+            магазин? (интернет\обычный?)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.CardNumber">
+            <summary>
+            номер карты участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Cheque.PosName">
+            <summary>
+            наименование торговой точки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.Cheque.Phone">
             <summary>
             номер телефона
@@ -1523,6 +2152,26 @@
         <member name="P:LCManagerPartner.Models.GetChequesRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.PartnerId">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Page">
+            <summary>
+            номер страниц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.PageSize">
+            <summary>
+            количество строк на странице
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetChequesResponse.ErrorCode">
@@ -1535,6 +2184,26 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetChequesResponse.PageCount">
+            <summary>
+            количество страниц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesResponse.ChequeData">
+            <summary>
+            детализация по чекам
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesByCardRequest.CardNumber">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesByCardRequest.Pos">
+            <summary>
+            код Торговой точки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetChequesByCardResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1543,6 +2212,11 @@
         <member name="P:LCManagerPartner.Models.GetChequesByCardResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesByCardResponse.ChequeData">
+            <summary>
+            информация по чеку
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetConfirmCodeRequest.Phone">
@@ -1570,6 +2244,21 @@
             номер телефона
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SetClientPasswordRequest.Code">
+            <summary>
+            код подтверждения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientPasswordRequest.Password">
+            <summary>
+            пароль
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientPasswordRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SetClientPasswordResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1590,9 +2279,44 @@
             номер карты
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.PartnerID">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.PosCode">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.AgreePersonalData">
+            <summary>
+            согласие на обработку персональных данных
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.FriendPhone">
+            <summary>
+            телефон друга/подруги для механики “Приведи друга”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.ClientSetPassword">
+            <summary>
+            задать пароль?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.Email">
+            <summary>
+            адрес электронной почты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserRequest.Promocode">
+            <summary>
+            промокод
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetRegistrationUserResponse.ErrorCode">
@@ -1605,9 +2329,34 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserResponse.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserResponse.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserResponse.Client">
+            <summary>
+            ID участника
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetRegistrationUserResponse.Pos">
+            <summary>
+            ID торговой точки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetSendVerificationCodeRequest.Phone">
             <summary>
             номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetSendVerificationCodeRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetSendVerificationCodeRequest.Operator">
@@ -1625,6 +2374,31 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.Login">
+            <summary>
+            номер телефона или номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.Password">
+            <summary>
+            пароль
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.IdFB">
+            <summary>
+            токен (временный код) Участника в социальной сети “Facebook”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.IdOK">
+            <summary>
+            токен (временный код) Участника в “Одноклассники”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.IdVK">
+            <summary>
+            токен (временный код) Участника в “ВКонтакте”
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientLoginResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1633,6 +2407,21 @@
         <member name="P:LCManagerPartner.Models.ClientLoginResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginResponse.ClientID">
+            <summary>
+            ID клиента
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Models.ClientLoginResponse.#ctor">
+            <summary>
+            ClientLoginResponse ()?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SendEmailCodeRequest.Email">
+            <summary>
+            адрес электронной почты участника программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.SendEmailCodeResponse.ErrorCode">
@@ -1645,6 +2434,16 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ValidateEmailRequest.Email">
+            <summary>
+            электронная почта
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ValidateEmailRequest.Code">
+            <summary>
+            полученный в сообщении проверочный код
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ValidateEmailResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1655,6 +2454,16 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.AddPhoneRequest.ClientID">
+            <summary>
+            идентификатор Участника
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.AddPhoneRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.AddPhoneResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1663,6 +2472,11 @@
         <member name="P:LCManagerPartner.Models.AddPhoneResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.DeletePhoneRequest.Phone">
+            <summary>
+            номер телефона
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.DeletePhoneResponse.ErrorCode">
@@ -1690,6 +2504,71 @@
             баланс бонусных баллов
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.ChequeTime">
+            <summary>
+            время чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PaidByBonus">
+            <summary>
+            оплачено бонусами
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.Number">
+            <summary>
+            номер чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PurchaseId">
+            <summary>
+            ID покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PurchaseNumber">
+            <summary>
+            номер покупки?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PurchaseDate">
+            <summary>
+            дата покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PurchasePos">
+            <summary>
+            торговая точка покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundRequest.PurchaseTerminal">
+            <summary>
+            торговый терминал покупки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.RefundRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
@@ -1715,9 +2594,79 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsRequest.Start_date">
+            <summary>
+            дата начала периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsRequest.End_date">
+            <summary>
+            дата окончания периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Clients">
+            <summary>
+            новые клиенты?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Clients_all">
+            <summary>
+            всего клиентов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Purchases">
+            <summary>
+            всего покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.PurchaseSum">
+            <summary>
+            сумма покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Refunds">
+            <summary>
+            всего возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.RefundSum">
+            <summary>
+            сумма возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.SpentSum">
+            <summary>
+            всего потрачено
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Charged">
+            <summary>
+            начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Redeemed">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.ChargeRefund">
+            <summary>
+            начислено с возвратов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.RedeemRefund">
+            <summary>
+            списано с возвратов?
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Balance">
             <summary>
             баланс бонусных баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.Paysum">
+            <summary>
+            сумма к оплате?
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorStatisticsResponse.ErrorCode">
@@ -1850,6 +2799,16 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetClientInfoRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientInfoRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetClientInfoResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1870,9 +2829,59 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Client">
+            <summary>
+            идентификатор Участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Name">
+            <summary>
+            имя
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Surname">
+            <summary>
+            фамилия
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Patronymic">
+            <summary>
+            отчество
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.AllowSms">
+            <summary>
+            получать уведомления по SMS
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.AllowEmail">
+            <summary>
+            получать уведомления по E-mail
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Birthdate">
+            <summary>
+            дата рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Email">
+            <summary>
+            адрес электронной почты
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetClientUpdateRequest.Gender">
+            <summary>
+            пол (1 - муж., -1 - жен., 0 - не определен)
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.SetClientUpdateResponse.ErrorCode">
@@ -1883,6 +2892,41 @@
         <member name="P:LCManagerPartner.Models.SetClientUpdateResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лоялности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.ChequeTime">
+            <summary>
+            время чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Pos">
+            <summary>
+            Код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Number">
+            <summary>
+            номер чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CancelLastChequeRequest.Terminal">
+            <summary>
+            код терминала Торговой точки
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.CancelLastChequeResponse.ErrorCode">
@@ -1905,6 +2949,81 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльноси
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Name">
+            <summary>
+            имя
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Surname">
+            <summary>
+            фамилия
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Patronymic">
+            <summary>
+            отчество
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Email">
+            <summary>
+            адрес электронной почты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Birthdate">
+            <summary>
+            дата рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.AllowSms">
+            <summary>
+            получать уведомления по SMS
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.AllowEmail">
+            <summary>
+            получать уведомления по E-mail
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Gender">
+            <summary>
+            пол (1 - муж., -1 - жен., 0 - не определен)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.AgreePersonalData">
+            <summary>
+            согласие на обработку персональных данных
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.PosCode">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.FriendPhone">
+            <summary>
+            телефон друга/подруги для механики “Приведи друга”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.ClientSetPassword">
+            <summary>
+            пароль клиента
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientCreateResponse.ErrorCode">
             <summary>
             код ошибки
@@ -1913,6 +3032,21 @@
         <member name="P:LCManagerPartner.Models.ClientCreateResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateResponse.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateResponse.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateResponse.Client">
+            <summary>
+            идентификатор участника программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.Client.id">
@@ -2030,9 +3164,39 @@
             Информация об участнике программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientImportRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientImportRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientImportRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientImportResponse.Imported">
+            <summary>
+            импортировано
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientImportResponse.Successful">
+            <summary>
+            успешно
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientImportResponse.Unsuccessful">
+            <summary>
+            неудачно
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientImportResponse.ExcelFile">
+            <summary>
+            файл базы
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientImportResponse.ErrorCode">
@@ -2045,6 +3209,16 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.MergeRequest.Active">
+            <summary>
+            Номер актуальной карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.MergeRequest.Merged">
+            <summary>
+            Номер устаревшей карты
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.MergeResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2055,9 +3229,84 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsRequest.Pos">
+            <summary>
+            код Торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsRequest.Start_date">
+            <summary>
+            начало периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsRequest.End_date">
+            <summary>
+            окончание периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Clients">
+            <summary>
+            новых клиентов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Clients_all">
+            <summary>
+            всего клиентов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Purchases">
+            <summary>
+            всего покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.PurchaseSum">
+            <summary>
+            сумма покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Refunds">
+            <summary>
+            всего возратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.RefundSum">
+            <summary>
+            сумма возратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.SpentSum">
+            <summary>
+            всего потрачено клиентам
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Charged">
+            <summary>
+            всего начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Redeemed">
+            <summary>
+            всего списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.ChargeRefund">
+            <summary>
+            начислено возвратов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.RedeemRefund">
+            <summary>
+            списано возвратов?
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Balance">
             <summary>
             баланс бонусных баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.Paysum">
+            <summary>
+            сумма к оплате
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.PosStatisticsResponse.ErrorCode">
@@ -2070,9 +3319,89 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.PurchasesClient">
+            <summary>
+            Покупок клиентом
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.PurchaseSumClient">
+            <summary>
+            Сумма покупок клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.RefundsClient">
+            <summary>
+            Возратов у клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.PosStatisticsResponse.RefundSumClient">
+            <summary>
+            Сумма возвратов у клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.Amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.BonusAdded">
+            <summary>
+            начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.BonusRedeemed">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.ChequeQty">
+            <summary>
+            количество чеков
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.ChequeQtyWithoutRefund">
+            <summary>
+            количество чеков без возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.MonthWeekNum">
+            <summary>
+            период агрегирования
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregation.ChequeDate">
+            <summary>
+            дата чека
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльноси
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.Pos">
+            <summary>
+            код Торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.From">
+            <summary>
+            Начало периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.To">
+            <summary>
+            окончание периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeAggregationRequest.Layout">
+            <summary>
+            форма агрегирования
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ChequeAggregationResponse.ErrorCode">
@@ -2085,9 +3414,84 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Models.ChequeAggregationResponse.#ctor">
+            <summary>
+            статистика по чекам
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.ClientQty">
+            <summary>
+            количество клиентов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.Amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.BonusAdded">
+            <summary>
+            начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.BonusRedeemed">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.ChequeQty">
+            <summary>
+            количество чеков
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.ChequeQtyWithoutRefund">
+            <summary>
+            количество чеков без возратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.MonthWeekNum">
+            <summary>
+            форма агрегирования
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregation.RegDate">
+            <summary>
+            дата регистрации
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientAggregationRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationRequest.Pos">
+            <summary>
+            код Торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationRequest.From">
+            <summary>
+            начало периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationRequest.To">
+            <summary>
+            окончание периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationRequest.Layout">
+            <summary>
+            форма агрегирования
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAggregationResponse.ClientInfo">
+            <summary>
+            статистика по клиентам
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientAggregationResponse.ErrorCode">
@@ -2105,6 +3509,21 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.BonusAddRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusAddRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusAddRequest.Bonus">
+            <summary>
+            начисляемые бонусы
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.BonusAddResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2113,6 +3532,91 @@
         <member name="P:LCManagerPartner.Models.BonusAddResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Id">
+            <summary>
+            ID чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Number">
+            <summary>
+            номер чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Date">
+            <summary>
+            дата
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.OperationType">
+            <summary>
+            тип операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Summ">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.SummDiscount">
+            <summary>
+            сумма скидки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Bonus">
+            <summary>
+            бонусы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.PaidByBonus">
+            <summary>
+            оплачено бонусами
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Discount">
+            <summary>
+            скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Partner">
+            <summary>
+            идентификатор Партнера программы лояльноси
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.Shop">
+            <summary>
+            магазин?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.CardNumber">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.PosName">
+            <summary>
+            наименование Торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeBonus.BonusSource">
+            <summary>
+            источник бонусов?
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Models.ChequeBonus.#ctor">
+            <summary>
+            начислено боунсов?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.Client">
+            <summary>
+            идентификатор участника программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.Operator">
@@ -2125,6 +3629,21 @@
             идентификатор Партнера программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.Pos">
+            <summary>
+            код Торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.Page">
+            <summary>
+            страницы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesRequest.PageSize">
+            <summary>
+            количество строк на странице
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetChequesBonusesResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2133,6 +3652,31 @@
         <member name="P:LCManagerPartner.Models.GetChequesBonusesResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesBonusesResponse.PageCount">
+            <summary>
+            всего страницы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClient.Id">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClient.Name">
+            <summary>
+            имя
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClient.Surname">
+            <summary>
+            фамилия
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClient.Patronymic">
+            <summary>
+            отчество
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClient.Phone">
@@ -2155,9 +3699,39 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.BuysImportRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BuysImportRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльноси
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.BuysImportRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BuysImportResult.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BuysImportResult.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BuysImportResult.Amount">
+            <summary>
+            сумма
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BuysImportResult.Bonus">
+            <summary>
+            начислено бонусов?
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.BuysImportResult.Balance">
@@ -2185,9 +3759,34 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.CardBonus.Id">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBonus.Bonus">
+            <summary>
+            размер начисления
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBonus.BonusType">
+            <summary>
+            тип бонуса
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBonus.BonusTime">
+            <summary>
+            время начисления
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.CardBonusesRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBonusesRequest.Card">
+            <summary>
+            номер карты
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.CardBonusesResponse.ErrorCode">
@@ -2198,6 +3797,21 @@
         <member name="P:LCManagerPartner.Models.CardBonusesResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.FastBonusCreateRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.FastBonusCreateRequest.FastBonusName">
+            <summary>
+            наименование 
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.FastBonusCreateRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.FastBonusCreateRequest.Operator">
@@ -2215,9 +3829,29 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.FastBonusCreateResponse.MarketList">
+            <summary>
+            Код торговой точки?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateLevelRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateLevelRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientUpdateLevelRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientUpdateLevelRequest.Level">
+            <summary>
+            уровень
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientUpdateLevelResponse.ErrorCode">
@@ -2235,9 +3869,39 @@
             номер телефона
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginRequest.Password">
+            <summary>
+            пароль
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Pos">
+            <summary>
+            ID торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.PosCode">
+            <summary>
+            Код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.RoleName">
+            <summary>
+            роль?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.PermissionCode">
+            <summary>
+            разрешения
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ManagerLoginResponse.ErrorCode">
@@ -2248,6 +3912,11 @@
         <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChangeClientRequest.ClientData">
+            <summary>
+            информация о клиенте
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ChangeClientRequest.Operator">
@@ -2265,6 +3934,26 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ChequeMaxSumRedeemRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeMaxSumRedeemRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeMaxSumRedeemRequest.ChequeSum">
+            <summary>
+            сумма чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ChequeMaxSumRedeemResponse.MaxSum">
+            <summary>
+            максимальная сумма списания
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ChequeMaxSumRedeemResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2275,9 +3964,89 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.CardBuysByMonth.BonusAdded">
+            <summary>
+            зачисленно бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBuysByMonth.BonusRedeemed">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBuysByMonth.AvgCheque">
+            <summary>
+            средний чек
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBuysByMonth.ChequeSum">
+            <summary>
+            всего потрачено
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CardBuysByMonth.MonthNum">
+            <summary>
+            месяц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusSource">
+            <summary>
+            источник бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusDate">
+            <summary>
+            дата зачисления
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusAdded">
+            <summary>
+            начислено баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusRedeemed">
+            <summary>
+            списано баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusBurn">
+            <summary>
+            сгоревшие баллы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Id">
+            <summary>
+            ID участника
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Name">
+            <summary>
+            имя
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Phone">
             <summary>
             номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Email">
+            <summary>
+            адрес электронной почты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BirthDate">
+            <summary>
+            дата рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Gender">
+            <summary>
+            пол
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.ClientType">
+            <summary>
+            тип клиента
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Card">
@@ -2285,14 +4054,139 @@
             номер карты
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Level">
+            <summary>
+            уровень
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Balance">
             <summary>
             баланс бонусных баллов
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BuyQty">
+            <summary>
+            количество покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BuySum">
+            <summary>
+            сумма покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.LastBuyDate">
+            <summary>
+            дата последней покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.LastBuyAmount">
+            <summary>
+            сумма последней покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BonusRedeemQty">
+            <summary>
+            количество списаний бонусных баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BonusRedeemSum">
+            <summary>
+            сумма потраченных бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.WelcomeBonusDate">
+            <summary>
+            дата зачисления "приветственных" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.WelcomeBonus">
+            <summary>
+            сумма "приветственых" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.PromoBonusDate">
+            <summary>
+            дата зачисления "промо" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.PromoBonus">
+            <summary>
+            сумма "промо" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.OperatorBonusDate">
+            <summary>
+            дата зачисления баллов "оператора"?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.OperatorBonus">
+            <summary>
+            сумма зачисления баллов "оператора"?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.FriendBonusDate">
+            <summary>
+            дата зачисления "дружеских" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.FriendBonus">
+            <summary>
+            сумма зачисления "дружеских" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BirthdayBonusDate">
+            <summary>
+            дата зачисления "поздравительных" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.BirthdayBonus">
+            <summary>
+            сумма зачисления "поздравительных" баллов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.PosRegister">
+            <summary>
+            регистрация в торговой точке?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.DateRegister">
+            <summary>
+            дата регистрации
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.RefundQty">
+            <summary>
+            количество возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Refund">
+            <summary>
+            сумма возвратов
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.From">
+            <summary>
+            начало периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.To">
+            <summary>
+            конец периода
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerResponse.ErrorCode">
@@ -2310,6 +4204,41 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.LessThen25">
+            <summary>
+            моложе 25 лет
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.More25Less35">
+            <summary>
+            25-35 лет
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.More35Less45">
+            <summary>
+            35-45 лет
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.More45">
+            <summary>
+            старше 45
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.Unknown">
+            <summary>
+            возраст неизвестен
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2323,6 +4252,61 @@
         <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.MenQty">
+            <summary>
+            мужчины
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.WomenQty">
+            <summary>
+            женщины
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.UnknownGender">
+            <summary>
+            пол не указан
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWithBuys">
+            <summary>
+            клиенты с покупками
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWithoutBuys">
+            <summary>
+            клиенты без покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWithTenBuys">
+            <summary>
+            клиенты с 10 покупками
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWitnOneBuys">
+            <summary>
+            клиенты с 1 покупкой
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWithPhone">
+            <summary>
+            клиенты с указанным номером телефона?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ClientsWithEmail">
+            <summary>
+            клиенты с указанным адресом электронной почты
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.ErrorCode">
@@ -2340,6 +4324,41 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.MenBuys">
+            <summary>
+            покупок у мужчин
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.WomenBuys">
+            <summary>
+            покупок у женщин
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.UnknownGenderBuys">
+            <summary>
+            покупок у людей без определённого пола
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.RepeatedBuys">
+            <summary>
+            повторных покупок
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysOnClient">
+            <summary>
+            среднее количество покупок на клиента?
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2355,6 +4374,106 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.WithBirthDate">
+            <summary>
+            с указанной датой рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.WithoutBirthDate">
+            <summary>
+            без указания даты рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.WithPhone">
+            <summary>
+            с указанным номером телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.WithEmail">
+            <summary>
+            с указанным адресом электронной почты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.MoreTenBuys">
+            <summary>
+            с 10 покупками
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.WithOneBuy">
+            <summary>
+            с 1 покупкой
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.Gain">
+            <summary>
+            получено?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AvgCheque">
+            <summary>
+            средний чек
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.BuysWeekdays">
+            <summary>
+            покупок в будни
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.BuysWeekOff">
+            <summary>
+            покупок в выходные
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AddedBonus">
+            <summary>
+            начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AvgCharge">
+            <summary>
+            среднее начисление бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.RedeemedBonus">
+            <summary>
+            списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AvgRedeem">
+            <summary>
+            среднее списание бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AvgBalance">
+            <summary>
+            средний баланс
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.AvgDiscount">
+            <summary>
+            средняя скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.ClientQty">
+            <summary>
+            количество клиентов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.ClientActiveQty">
+            <summary>
+            количество активных клиентов
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientAnalyticMoneyResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2365,9 +4484,44 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GainPeriod.Month">
+            <summary>
+            месяц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainPeriod.AvgCheque">
+            <summary>
+            средний чек
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainPeriod.Gain">
+            <summary>
+            получено
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GainOperatorPeriodRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainOperatorPeriodRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainOperatorPeriodRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainOperatorPeriodRequest.From">
+            <summary>
+            дата начала
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GainOperatorPeriodRequest.To">
+            <summary>
+            дата конца
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GainOperatorPeriodResponse.ErrorCode">
@@ -2380,9 +4534,44 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.RefundPeriod.Month">
+            <summary>
+            месяц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundPeriod.RefundSum">
+            <summary>
+            сумма возратов
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.RefundOperatorPeriodRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundOperatorPeriodRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundOperatorPeriodRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundOperatorPeriodRequest.From">
+            <summary>
+            дата начала
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundOperatorPeriodRequest.To">
+            <summary>
+            дата конца
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.RefundOperatorPeriodResponse.RefundOperatorPeriod">
+            <summary>
+            возратов за период
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.RefundOperatorPeriodResponse.ErrorCode">
@@ -2395,9 +4584,44 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientPeriod.Month">
+            <summary>
+            месяц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientPeriod.ClientQty">
+            <summary>
+            количество клиентов
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientOperatorPeriodRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientOperatorPeriodRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientOperatorPeriodRequest.Pos">
+            <summary>
+            код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientOperatorPeriodRequest.From">
+            <summary>
+            дата начала
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientOperatorPeriodRequest.To">
+            <summary>
+            дата конца
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientOperatorPeriodResponse.ClientOperatorPeriod">
+            <summary>
+            новых клиентов за период?
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientOperatorPeriodResponse.ErrorCode">
@@ -2430,6 +4654,11 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorInfoResponse.OperatorName">
+            <summary>
+            имя оператора
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorInfoResponse.ErrorCode">
             <summary>
             код ошибки
@@ -2438,6 +4667,21 @@
         <member name="P:LCManagerPartner.Models.OperatorInfoResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ActivateCardRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ActivateCardRequest.Card">
+            <summary>
+            номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ActivateCardRequest.Code">
+            <summary>
+            код подтверждения
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ActivateCardRequest.Operator">
@@ -2455,6 +4699,16 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.Good.Code">
+            <summary>
+            код товара
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Good.Name">
+            <summary>
+            наименование
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorGoodsRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
@@ -2468,6 +4722,26 @@
         <member name="P:LCManagerPartner.Models.OperatorGoodsResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorGoodsResponse.OperatorGoods">
+            <summary>
+            список товаров?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorPos.Region">
+            <summary>
+            регион
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorPos.City">
+            <summary>
+            город
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorPos.Address">
+            <summary>
+            адрес
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorPosRequest.Operator">
@@ -2485,9 +4759,19 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorPosResponse.Poses">
+            <summary>
+            адреса торговых точек
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.VerificationPromocodeRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.VerificationPromocodeRequest.Promocode">
+            <summary>
+            промокод
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.VerificationPromocodeResponse.ErrorCode">
@@ -2557,7 +4841,7 @@
         </member>
         <member name="P:LCManagerPartner.Models.PosClientPeriodRequest.Pos">
             <summary>
-            ID торгового терминала
+            код Торговой точки
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.PosClientPeriodRequest.From">

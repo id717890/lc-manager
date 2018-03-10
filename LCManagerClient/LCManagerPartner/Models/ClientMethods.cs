@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -21,24 +22,55 @@ namespace LCManagerPartner.Models
 {
     public class Card
     {
+        /// <summary>
+        /// номер карты
+        /// </summary>
         public Int64 number { get; set; }
+        /// <summary>
+        /// статус
+        /// </summary>
         public string status { get; set; }
+        /// <summary>
+        /// виртуальная?
+        /// </summary>
         public bool virt { get; set; }
+        /// <summary>
+        /// ссылка на изображение
+        /// </summary>
         public string image { get; set; }
+        /// <summary>
+        /// oper?
+        /// </summary>
         public string oper { get; set; }
         public Card() { }
     }
 
     public class GetClientCardsRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetClientCardsResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// детализация информации по картам
+        /// </summary>
         public List<Card> CardData { get; set; }
         public GetClientCardsResponse()
         {
@@ -88,14 +120,29 @@ namespace LCManagerPartner.Models
 
     public class ClientPartnerSelectRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public int PartnerID { get; set; }
+        /// <summary>
+        /// Добавление \ удаление? (1 - отвязка, 0 - привязка)
+        /// </summary>
         public bool Remove { get; set; }
     }
 
     public class ClientPartnerSelectResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
         public ClientPartnerSelectResponse() { }
     }
@@ -126,14 +173,29 @@ namespace LCManagerPartner.Models
 
     public class ClientCampaignSelectRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID акции
+        /// </summary>
         public int CampaignID { get; set; }
+        /// <summary>
+        /// Добавление \ удаление?
+        /// </summary>
         public bool Remove { get; set; }
     }
 
     public class ClientCampaignSelectResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
         public ClientCampaignSelectResponse() { }
     }
@@ -164,14 +226,29 @@ namespace LCManagerPartner.Models
 
     public class ClientAddCardRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// номер карты
+        /// </summary>
         public Int64 Card { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public int PartnerID { get; set; }
     }
 
     public class ClientAddCardResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
         public ClientAddCardResponse() { }
     }
@@ -202,16 +279,32 @@ namespace LCManagerPartner.Models
 
     public class AddEmailRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// адрес электронной почты участника программы лояльности
+        /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class AddEmailResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class ServerAddEmailResponse
     {
@@ -244,17 +337,29 @@ namespace LCManagerPartner.Models
     public class AddIDFBRequest
     {
         public string CodeFB { get; set; }
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
     }
 
     public class AddIDFBResponse
     {
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
-    }
+}
 
     public class FBUser
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
         public Int64 IDFB { get; set; }
     }
@@ -362,20 +467,32 @@ namespace LCManagerPartner.Models
     public class AddIDOKRequest
     {
         public string CodeOK { get; set; }
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
     }
 
     public class OKUser
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
         public Int64 IDOK { get; set; }
     }
 
     public class AddIDOKResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class OKResponse
     {
@@ -601,20 +718,32 @@ namespace LCManagerPartner.Models
     public class AddIDVKRequest
     {
         public string CodeVK { get; set; }
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
     }
 
     public class VKUser
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
         public Int64 IDVK { get; set; }
     }
 
     public class AddIDVKResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class VKResponse
     {
@@ -697,24 +826,44 @@ namespace LCManagerPartner.Models
         }
     }
 
-    public class GetPersonalCampaignsRequest
+public class GetPersonalCampaignsRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class GetPersonalCampaignsResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public List<Campaign> CampaignData { get; set; }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    /// <summary>
+    /// список акций
+    /// </summary>
+    public List<Campaign> CampaignData { get; set; }
+        /// <summary>
+    /// список акций
+    /// </summary>
         public GetPersonalCampaignsResponse()
         {
             CampaignData = new List<Campaign>();
         }
     }
 
-    public class ServerGetPersonalCampaignsResponse
+
+public class ServerGetPersonalCampaignsResponse
     {
         public GetPersonalCampaignsResponse ProcessRequest(SqlConnection cnn, GetPersonalCampaignsRequest request)
         {
@@ -758,16 +907,34 @@ namespace LCManagerPartner.Models
 
     public class SelectPreferencesRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID категории
+        /// </summary>
         public int CategoryID { get; set; }
+        /// <summary>
+        /// Удалено?
+        /// </summary>
         public bool Remove { get; set; }
     }
 
     public class SelectPreferencesResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public SelectPreferencesResponse() { }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    /// <summary>
+    /// Предпочтения участника
+    /// </summary>
+    public SelectPreferencesResponse() { }
     }
 
     public class ServerSelectPreferencesResponse
@@ -796,22 +963,44 @@ namespace LCManagerPartner.Models
 
     public class ClientPreferences
     {
+        /// <summary>
+        /// ID категории
+        /// </summary>
         public int CategoryId { get; set; }
+        /// <summary>
+        /// Наименование категории
+        /// </summary>
         public string CategoryName { get; set; }
+        /// <summary>
+        /// Включено?
+        /// </summary>
         public bool SwitchOn { get; set; }
     }
 
     public class ClientPreferencesRequest
     {
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class ClientPreferencesResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public List<ClientPreferences> ClientPreferencesData { get; set; }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    public List<ClientPreferences> ClientPreferencesData { get; set; }
         public ClientPreferencesResponse()
         {
             ClientPreferencesData = new List<ClientPreferences>();
@@ -856,19 +1045,61 @@ namespace LCManagerPartner.Models
 
     public class ChequeDetail
     {
+        /// <summary>
+        /// ID чека
+        /// </summary>
         public Int32 Id { get; set; }
+        /// <summary>
+        /// номер чека
+        /// </summary>
         public string Number { get; set; }
+        /// <summary>
+        /// дата чека
+        /// </summary>
         public DateTime Date { get; set; }
+        /// <summary>
+        /// тип операции
+        /// </summary>
         public string OperationType { get; set; }
+        /// <summary>
+        /// сумма
+        /// </summary>
         public decimal Summ { get; set; }
+        /// <summary>
+        /// сумма скидки
+        /// </summary>
         public decimal SummDiscount { get; set; }
+        /// <summary>
+        /// начисленно бонусов
+        /// </summary>
         public decimal Bonus { get; set; }
+        /// <summary>
+        /// оплачено бонусами
+        /// </summary>
         public decimal PaidByBonus { get; set; }
+        /// <summary>
+        /// скидка
+        /// </summary>
         public decimal Discount { get; set; }
+        /// <summary>
+        ///  Партнер
+        /// </summary>
         public string Partner { get; set; }
+        /// <summary>
+        /// торговая точка
+        /// </summary>
         public string Shop { get; set; }
+        /// <summary>
+        /// номер карты
+        /// </summary>
         public Int64 CardNumber { get; set; }
+        /// <summary>
+        /// детализация покупок
+        /// </summary>
         public List<ChequeDetailItems> items { get; set; }
+        /// <summary>
+        /// детализация акций
+        /// </summary>
         public List<string> Campaigns { get; set; }
         public ChequeDetail()
         {
@@ -879,23 +1110,47 @@ namespace LCManagerPartner.Models
 
     public class ChequeDetailItems
     {
+        /// <summary>
+        /// позиция
+        /// </summary>
         public int position { get; set; }
+        /// <summary>
+        /// код
+        /// </summary>
         public string code { get; set; }
+        /// <summary>
+        /// цена
+        /// </summary>
         public decimal price { get; set; }
+        /// <summary>
+        /// количество
+        /// </summary>
         public decimal quantity { get; set; }
+        /// <summary>
+        /// сумма
+        /// </summary>
         public decimal amount { get; set; }
     }
 
     public class ChequeDetailRequest
     {
+        /// <summary>
+        /// ID чека
+        /// </summary>
         public int ChequeID { get; set; }
     }
 
     public class ChequeDetailResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public ChequeDetail ChequeDetailData { get; set; }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    public ChequeDetail ChequeDetailData { get; set; }
         public ChequeDetailResponse()
         {
             ChequeDetailData = new ChequeDetail();
@@ -982,17 +1237,36 @@ namespace LCManagerPartner.Models
 
     public class AddDeviceRequest
     {
+        /// <summary>
+        /// Token устройства
+        /// </summary>
         public string Device_token { get; set; }
+        /// <summary>
+        /// зарегестрированная операционная система
+        /// </summary>
         public string OSRegistrator { get; set; }
+        /// <summary>
+        /// ID клиента
+        /// </summary>
         public int Client { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class AddDeviceResponse
     {
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class ServerAddDeviceResponse
     {
@@ -1025,7 +1299,13 @@ namespace LCManagerPartner.Models
 
     public class SendPushRequest
     {
+        /// <summary>
+        /// ID устройства
+        /// </summary>
         public string DeviceID { get; set; }
+        /// <summary>
+        /// сообщение
+        /// </summary>
         public string Message { get; set; }
     }
 
@@ -1229,29 +1509,84 @@ namespace LCManagerPartner.Models
 
     public class CardStatisticsRequest
     {
+        /// <summary>
+        /// номер карты
+        /// </summary>
         public Int64 Card { get; set; }
     }
 
     public class CardStatisticsResponse
     {
+        /// <summary>
+        /// уровень карты
+        /// </summary>
         public string Level { get; set; }
+        /// <summary>
+        /// состояние карты
+        /// </summary>
         public string Condition { get; set; }
+        /// <summary>
+        /// баланс карты
+        /// </summary>
         public decimal Balance { get; set; }
+        /// <summary>
+        /// полный баланс?
+        /// </summary>
         public decimal FullBalance { get; set; }
+        /// <summary>
+        /// количество покупок
+        /// </summary>
         public int Purchases { get; set; }
+        /// <summary>
+        /// сумма покупок
+        /// </summary>
         public decimal Purchasesum { get; set; }
+        /// <summary>
+        /// количество возвратов
+        /// </summary>
         public int Refunds { get; set; }
+        /// <summary>
+        /// сумма возвратов
+        /// </summary>
         public decimal RefundSum { get; set; }
+        /// <summary>
+        /// всего потрачено
+        /// </summary>
         public decimal SpentSum { get; set; }
+        /// <summary>
+        /// начисленно балов
+        /// </summary>
         public decimal Charged { get; set; }
+        /// <summary>
+        /// списано баллов
+        /// </summary>
         public decimal Redeemed { get; set; }
+        /// <summary>
+        /// начисленно за возвраты?
+        /// </summary>
         public decimal ChargeRefund { get; set; }
+        /// <summary>
+        /// списано балов за возрат?
+        /// </summary>
         public decimal RedeemRefund { get; set; }
+        /// <summary>
+        /// итоговая скидка
+        /// </summary>
         public decimal FullDiscount { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Код ошибки
+        /// </summary>
         public int ErrorCode { get; set; }
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
         public string Message { get; set; }
-    }
+}
 
     public class ServerCardStatisticsResponse
     {
@@ -1384,31 +1719,79 @@ namespace LCManagerPartner.Models
 
     public class CardAggregation
     {
+        /// <summary>
+        /// сумма
+        /// </summary>
         public decimal Amount { get; set; }
+        /// <summary>
+        /// начислено баллов
+        /// </summary>
         public decimal BonusAdded { get; set; }
+        /// <summary>
+        /// списано баллов
+        /// </summary>
         public decimal BonusRedeemed { get; set; }
+        /// <summary>
+        /// количество чеков
+        /// </summary>
         public int ChequeQty { get; set; }
+        /// <summary>
+        /// количество чеков без возвратов
+        /// </summary>
         public int ChequeQtyWithoutRefund { get; set; }
+        /// <summary>
+        /// тип агрегации
+        /// </summary>
         public int? MonthWeekNum { get; set; }
+        /// <summary>
+        /// время чека
+        /// </summary>
         public DateTime ChequeDate { get; set; }
     }
 
     public class CardAggregationRequest
     {
+        /// <summary>
+        /// номер карты
+        /// </summary>
         public Int64 Card { get; set; }
+        /// <summary>
+        /// ID партнера
+        /// </summary>
         public Int16? Partner { get; set; }
+        /// <summary>
+        /// Код торговой точки
+        /// </summary>
         public string Pos { get; set; }
+        /// <summary>
+        /// Начало периода
+        /// </summary>
         public DateTime? From { get; set; }
+        /// <summary>
+        /// Конец периода
+        /// </summary>
         public DateTime? To { get; set; }
+        /// <summary>
+        /// тип агрегации
+        /// </summary>
         public Int16 Layout { get; set; }
     }
 
     public class CardAggregationResponse
     {
         public List<CardAggregation> CardInfo { get; set; }
-        public string Message { get; set; }
-        public int ErrorCode { get; set; }
-        public CardAggregationResponse()
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    /// <summary>
+    /// статистика по картам
+    /// </summary>
+    public CardAggregationResponse()
         {
             CardInfo = new List<CardAggregation>();
         }
@@ -1494,17 +1877,36 @@ namespace LCManagerPartner.Models
 
     public class ClientPasswordChangeRequest
     {
+        /// <summary>
+        /// стары пароль
+        /// </summary>
         public string OldPassword { get; set; }
+        /// <summary>
+        /// новый пароль
+        /// </summary>
         public string NewPassword { get; set; }
+        /// <summary>
+        /// ID клиента
+        /// </summary>
         public int Client { get; set; }
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
     }
 
     public class ClientPasswordChangeResponse
     {
-        public string Message { get; set; }
-        public int ErrorCode { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class ServerClientPasswordChange
     {
@@ -1538,17 +1940,36 @@ namespace LCManagerPartner.Models
 
     public class ClientUpdateCommunicationRequest
     {
+        /// <summary>
+        /// ID оператора
+        /// </summary>
+        [Required]
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// ID участника
+        /// </summary>
         public int Client { get; set; }
+        /// <summary>
+        /// Разрешение на получение SMS
+        /// </summary>
         public bool? AllowSms { get; set; }
+        /// <summary>
+        /// Разрешение на получение писем по электронной почте
+        /// </summary>
         public bool? AllowEmail { get; set; }
     }
 
     public class ClientUpdateCommunicationResponse
     {
-        public string Message { get; set; }
-        public int ErrorCode { get; set; }
-    }
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+}
 
     public class ServerClientUpdateCommunication
     {
@@ -1602,9 +2023,15 @@ namespace LCManagerPartner.Models
     public class ClientBonusesResponse
     {
         public List<ClientBonus> ClientBonuses { get; set; }
-        public int ErrorCode { get; set; }
-        public string Message { get; set; }
-        public ClientBonusesResponse()
+    /// <summary>
+    /// Код ошибки
+    /// </summary>
+    public int ErrorCode { get; set; }
+    /// <summary>
+    /// Сообщение об ошибке
+    /// </summary>
+    public string Message { get; set; }
+    public ClientBonusesResponse()
         {
             ClientBonuses = new List<ClientBonus>();
         }

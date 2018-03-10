@@ -21,7 +21,6 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// Сообщение об ошибке
         /// </summary>
-        [Required]
         public string Message { get; set; }
         /// <summary>
         /// Файл отчёта
@@ -352,7 +351,7 @@ namespace LCManagerPartner.Models
         /// </summary>
         public Int16 Partner { get; set; }
         /// <summary>
-        /// ID торгового терминала
+        /// код Торговой точки
         /// </summary>
         public string Pos { get; set; }
         /// <summary>
