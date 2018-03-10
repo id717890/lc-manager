@@ -32,10 +32,10 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
         /// <summary>
         /// Установка пароля клиента
         /// </summary>
-
         [HttpPost]
         [Route("SetClientPassword")]
         public SetClientPasswordResponse SetClientPassword(SetClientPasswordRequest request)
@@ -47,7 +47,6 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Регистрация Участника в ЛКУ программы лояльности
         /// </summary>
-
         [HttpPost]
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
@@ -135,6 +134,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает информацию о Партнере
+        /// </summary>
         [HttpPost]
         [Route("GetPartners")]
         public GetPartnersResponse GetPartners(GetPartnersRequest request)
@@ -144,6 +146,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает информацию об акции
+        /// </summary>
         [HttpPost]
         [Route("GetCampaigns")]
         public GetCampaignsResponse GetCampaigns(GetCampaignsRequest request)
@@ -153,6 +158,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Добавление\удаление клиента у партнера
+        /// </summary>
         [HttpPost]
         [Route("ClientPartnerSelect")]
         public ClientPartnerSelectResponse ClientPartnerSelect(ClientPartnerSelectRequest request)
@@ -162,6 +170,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Добавление\удаление клиента из акции
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("ClientCampaignSelect")]
         public ClientCampaignSelectResponse ClientCampaignSelect(ClientCampaignSelectRequest request)
@@ -182,6 +195,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка сообщения по электронной почте
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("LeaveMessage")]
         public LeaveMessageResponse LeaveMessage(LeaveMessageRequest request)
@@ -268,6 +286,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает персональное предложение Участника (потерялся public class Campaing).
+        /// </summary>
         [HttpPost]
         [Route("GetPersonalCampaigns")]
         public GetPersonalCampaignsResponse GetPersonalCampaigns(GetPersonalCampaignsRequest request)
@@ -277,6 +298,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает "любимые" категории товаров
+        /// </summary>
         [HttpPost]
         [Route("SelectPreferences")]
         public SelectPreferencesResponse SelectPreferences(SelectPreferencesRequest request)
@@ -297,6 +321,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Возвращает "любимые" категории товаров Участника
+        /// </summary>
         [HttpPost]
         [Route("ClientGetPreferences")]
         public ClientPreferencesResponse ClientGetPreferences(ClientPreferencesRequest request)
@@ -317,6 +344,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Записать данные об устройстве Участника для отправки PUSH-уведомлений
+        /// </summary>
         [HttpPost]
         [Route("SetClientDevice")]
         public AddDeviceResponse SetClientDevice(AddDeviceRequest request)
@@ -326,6 +356,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка PUSH-уведомления
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendPush")]
         public SendPushResponse SendPush(SendPushRequest request)
@@ -335,6 +370,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Отправка PUSH-уведомления на устройства Apple
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("SendPushApple")]
         public SendPushResponse SendPushApple(SendPushRequest request)
@@ -344,6 +384,11 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Получение статистики по карте
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("CardStatistics")]
         public CardStatisticsResponse CardStatistics(CardStatisticsRequest request)
@@ -364,6 +409,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Статистика по картам за периода
+        /// </summary>
         [HttpPost]
         [Route("CardAggregation")]
         public CardAggregationResponse CardAggregation(CardAggregationRequest request)
@@ -384,6 +432,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Обновление профиля Участника программы лояльности
+        /// </summary>
         [HttpPost]
         [Route("ClientUpdate")]
         public SetClientUpdateResponse ClientUpdate(SetClientUpdateRequest request)
@@ -393,6 +444,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Обновление пароля Участника программы лояльности
+        /// </summary>
         [HttpPost]
         [Route("ClientPasswordChange")]
         public ClientPasswordChangeResponse ClientPasswordChange(ClientPasswordChangeRequest request)
@@ -402,6 +456,9 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        /// <summary>
+        /// Обновление способа связи с клиентов
+        /// </summary>
         [HttpPost]
         [Route("ClientUpdateCommunication")]
         public ClientUpdateCommunicationResponse ClientUpdateCommunication(ClientUpdateCommunicationRequest request)
