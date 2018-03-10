@@ -1,0 +1,46 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="header-image">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide loading">
+                        <a href="/MobileApplication"><img data-src="/gfx/interface/header-main.png" class="swiper-lazy" /></a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a data-toggle="modal" data-target="#register-modal" href="#"><img data-src="/gfx/interface/slide_2.png" class="swiper-lazy" /></a>
+                    </div>
+                    @*<div class="swiper-slide">
+                        <a data-toggle="modal" data-target="#register-modal" href="#"><img data-src="/gfx/interface/slide_3.png" class="swiper-lazy" /></a>
+                    </div>*@
+                    @*<div class="swiper-slide">
+                        <img data-src="/gfx/interface/slide_4.jpg" class="swiper-lazy" />
+                    </div>*@                    
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </section>
+        <section class="content">
+            <h1 style="color: #666666;">Наши партнеры</h1>
+            <div class="partners">
+                @Html.Partial("_partnerBlock", API.getPartners(4))
+            </div>
+            <div class="button-bar">
+                <a href="/Partners"><button type="button" class="btn">Все партнеры</button></a>
+            </div>
+        </section>
+        <section class="content">
+            <h1 style="color: #666666;">Участвуйте в акциях</h1>
+            <div class="actions">
+                @Html.Partial("_campaignsBlock", API.GetCampaigns(true))
+            </div>
+            <div class="button-bar">
+                <a href="/Actions"><button type="button" class="btn">Все акции</button></a>
+            </div>
+        </section>
+    </main>
+</div>

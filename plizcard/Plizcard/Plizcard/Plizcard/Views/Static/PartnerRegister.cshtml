@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "PartnerRegister";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+        <section class="header-image">
+            <img src="/gfx/interface/header-partners.png" alt="" />
+        </section>
+        <section class="content-medium">
+            <div class="twocolumns">
+                <div class="twocolumns-content">
+                    <h1>Стать партнером</h1>
+                    <div class="content-bg">
+                        <div class="ordered-list">
+                            <h2><span>1</span>Сбор информации</h2>
+                            <div>
+                                <p><a href="~/files/PartnersForm-WeKudrovo.docx">Скачайте анкету</a> потенциального Партнера</p>
+                                <p>Заполните и отправьте нам анкету в этой форме или на адрес электронной почты wekudrovo@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="ordered-list">
+                            <h2><span>2</span>Анализ информации</h2>
+                            <div>
+                                <p>Проводим анализ на предмет соответствия анкетных данных критериям проекта «ПОЖАЛУЙСТА».</p>
+                                <p>Формулируем оптимальное коммерческое предложение.</p>
+                            </div>
+                        </div>
+                        <div class="ordered-list ordered-list">
+                            <h2><span>3</span>Сотрудничество</h2>
+                            <div>
+                                <p>Договариваемся о встрече, проводим презентацию.</p>
+                                <p>Согласовываем финальные условия, подписываем протокол о намерениях.</p>
+                            </div>
+                        </div>
+                        <div style="padding-left:3em;padding-top:2em;">
+
+                            <h2>Проект "ПОЖАЛУЙСТА" для Вас:</h2>
+                            <ul style="list-style-type: disc;">
+                                <li>Привлечение новых клиентов</li>
+                                <li>Поощрение и удержание существующих</li>
+                                <li>Увеличение среднего чека и частоты покупок</li>
+                                <li>Экономия маркетингового бюджета</li>
+                                <li>Получение дополнительного дохода</li>
+                            </ul>
+                        </div>
+                        <div class="button-bar">
+                            <form action="#">
+                                @*<div class="file-wrapper">
+                                    <input type="file" value="" />
+                                    <button type="button" class="btn">Выбрать файл</button>
+                                </div>*@
+                                <br /><a href="#" data-toggle="modal" data-target="#becomePartner-modal" class="btn">Отправить заявку</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="twocolumns-aside">
+                    @Html.Partial("_leftcolumnActions")
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    $("#send-offer").click(function (event) {
+        event.preventDefault();
+        var valthis = $(this).closest('FORM').find(".masked-phone").first().val();
+        var phone = valthis.replace("+7", "").replace(/\D/g, "");
+        var city = $("#register-city").val();
+        var site = $("#register-site").val();
+        var sellgoods = $("#register-sellgoods").val();
+        var posQty = $("#register-posqty").val();
+        var cashSoftware = $("#register-cashsoftware").val();
+        var name = $("#register-name").val();
+        var email = $("#register-emailpartner").val();
+        var partnerData = '{City:\'' + city + '\',Site:\'' + site
+                + '\',GoodsSell:\'' + sellgoods + '\',PosQty:\'' + posQty
+                + '\',CashSoftware:\'' + cashSoftware + '\',Name:\'' + name
+                + '\',Phone:\'' + phone + '\',Email:\'' + email
+                + '\'}';
+
+        $.ajax({
+            type: "POST",
+            url: '/API.aspx/BecomePartner',
+            data: partnerData,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var res = JSON.parse(data.d);
+                if (res.ErrorCode == 0 && res.Message == "") {
+                    // Logged in... redirect or replace login form
+                    $("#send-offer").modal('hide');
+                    customAlert("Сообщение", "Ваша заявка успешно принята!");
+                } else {
+                    //Error
+                    customAlert("Ошибка", res.Message);
+                }
+            }
+        });
+
+    });
+</script>

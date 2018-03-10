@@ -1,0 +1,79 @@
+﻿@foreach(var item in @Model)
+{
+    if (item.large && ViewContext.RouteData.Values["action"].ToString().ToLower()=="index")
+    {
+<!--<div class="plate plate-single">
+    <div class="plate-imageholder">
+        <a href='/Actions/Details/@item.id'><img src='@item.logo' alt="Партнер" class="action-bg" style="width:100%;"></a>
+    </div>
+    <div class="plate-desc">
+        <img class="plate-desc-logo" src='@item.partnerlogo' alt="Лого" style="width:100%">
+        <p class="plate-short">@item.condition</p>
+        <p class="plate-hero">@item.tagline</p>
+        <div class="plate-bar">
+            <div>
+                <a href='/Actions/Details/@item.id'><button type="button" class="btn">Подробнее</button></a>
+            </div>
+            <div>
+       @if (UserSession.user_id > 0)
+       {
+           var aclass = (API.isFavCampaing(item.id)) ? "star-checked" : "";
+        <div class="star-holder @aclass">
+            <a href="#" data-toggle="tooltip" title="" class="star-half" data-original-title="Добавить в избранное" data='@item.id' dtype="campaings"></a>
+            <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='@item.id' dtype="campaings"></a>
+        </div>
+       }
+       else
+       {
+        <div class='star-holder star-unauth'>
+            <a href="#" data-toggle="modal" data-target="#login-modal" class="star-half" dtype="campaings"></a>
+        </div>
+       }
+            </div>
+        </div>
+
+    </div>
+</div>-->
+    }
+    else
+    {
+        <div class="plate plate3">
+            <div class="plate-imageholder">
+                <a href='/Actions/Details/@item.id'><img class="actions-head-img" src='@(Url.Content(item.logo))' alt="Акция" style="width:100%;"></a>
+            </div>
+
+            <div class="plate-desc">
+                <p class="plate-short">@item.condition</p>
+                @*<p class="plate-hero">@item.tagline</p>*@
+                <br/>
+                <div class="plate-bar">
+                    <div>
+                        <a href='/Actions/Details/@item.id'><button type="button" class="btn">Подробнее</button></a>
+                    </div>
+                    <div>
+                 @if (UserSession.user_id > 0)
+                 {
+                     var aclass = (API.isFavCampaing(item.id)) ? "star-checked" : "";
+                    <div class="star-holder @aclass">
+                        <a href="#" data-toggle="tooltip" title="" class="star-half" data-original-title="Добавить в избранное" data='@item.id' dtype="campaings"></a>
+                        <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='@item.id' dtype="campaings"></a>
+                    </div>
+                 }
+                 else
+                 {
+                    <div class='star-holder star-unauth'>
+                        <a href="#" data-toggle="modal" data-target="#login-modal" class="star-half" dtype="campaings"></a>
+                    </div>
+                 }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>
+<div class="plate plate3"></div>

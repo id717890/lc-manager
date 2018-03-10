@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string Domain = HttpContext.Current.Request.Url.Scheme + System.Uri.SchemeDelimiter + HttpContext.Current.Request.Url.Host + (HttpContext.Current.Request.Url.IsDefaultPort ? "" : ":" + HttpContext.Current.Request.Url.Port);
+
+}
+
+
+<div id="contentwrapper">
+    <main role="main" id="main">
+
+        <section class="content-medium">
+
+            <div class="twocolumns">
+                <div class="twocolumns-content" style="padding-top: 22px;">
+
+                    @*<h1>@Model.name</h1>*@
+
+                    <div class="plate plate-partner">
+                        <div class="plate-partner-content">
+                            <div class="plate-imageholder">
+                                <a href="#"><img src="@Url.Content(Model.logo)" alt="Партнер" class="action-bg"></a>
+                            </div>
+                            <div class="plate-desc">
+                                <p>@Html.Raw(Model.description)</p>
+                            </div>
+                        </div>
+
+                        <div class="plate-partner-buttons">
+                            <div class="buttons">
+                                <a href='/Partners/Poses/@ViewContext.RouteData.Values["id"].ToString()'><button class="btn" type="button">Адреса</button></a>
+                                @if (Model.internetshop!=null)
+                                {
+                                    <a href="@Model.internetshop" target="_blank"><button class="btn" type="button">На сайт</button></a>
+                                }
+                                <!-- unauth star template //-->
+                                @if (UserSession.user_id > 0)
+                                {
+                                    <div class="star-holder">
+                                        <a href="#" data-toggle="tooltip" title="" class="star-half" data-original-title="Добавить в избранное" data='@Model.id'></a>
+                                        <a href="#" data-toggle="tooltip" title="" class="star-full" data-original-title="Удалить из избранного" data='@Model.id'></a>
+                                    </div>
+                                }
+                                else
+                                {
+                                <div class='star-holder star-unauth'>
+                                    <a href="#" data-toggle="modal" data-target="#login-modal" class="star-half"></a>
+                                </div>
+                                }
+                            </div>
+
+                            <div class="social">
+                                <a href="#" id="share-fb-button"><img src="/gfx/interface/footer-soc-fb.png" alt="Facebook"></a>
+                                <a href="#" id="share-vk-button"><img src="/gfx/interface/footer-soc-vk.png" alt="VKontakte"></a>
+                                <a href="#" id="share-ok-button"><img src="/gfx/interface/footer-soc-ok.png" alt="Одноклассники"></a>
+                            </div>
+                        </div>
+                    </div>
+
+@Html.Partial("_partnerAdditionalBlock",(List<PlizCard.lcsite.PartnerInfo>)API.GetPartnerInfo(int.Parse(ViewContext.RouteData.Values["id"].ToString())))
+
+
+                </div>
+                <div class="twocolumns-aside">
+@Html.Partial("_leftcolumnActions")
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+
+@{
+    var link = Domain + "/Partners/Details/" + @ViewContext.RouteData.Values["id"].ToString();
+}
+
+<script>
+    $(function () {
+        $("#share-fb-button").click(function () {
+            Share.facebook ('@link', '@Model.name.Replace("'","\"")','@Model.logo', '@Model.description.Replace("\n"," ").Replace("'","\"")');
+        });
+        $("#share-vk-button").click(function () {
+            Share.vkontakte ('@link', '@Model.name.Replace("'","\"")','@Model.logo', '@Model.description.Replace("\n"," ").Replace("'","\"")');
+        });
+        $("#share-ok-button").click(function () {
+            Share.odnoklassniki ('@link', '@Model.name.Replace("'","\"")','@Model.logo', '@Model.description.Replace("\n"," ").Replace("'","\"")');
+        });
+    });
+
+</script>

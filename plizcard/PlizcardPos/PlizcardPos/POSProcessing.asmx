@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="POSProcessing.asmx.cs" Class="PlizcardPos.POSProcessing" %>

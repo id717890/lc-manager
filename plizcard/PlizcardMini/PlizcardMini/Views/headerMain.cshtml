@@ -1,0 +1,95 @@
+﻿<header role="banner">
+    <div id="header-line">
+        <div id="header-logo">
+            <div>
+                <a href="/"><img src="/gfx/interface/logo.png" alt="ПОЖАЛУЙСТА" /></a>
+                <!-- <span class="header-logo-slogan">От слова к делу!</span> -->
+            </div>            
+        </div>    
+        @*<div id="header-contacts">
+            <div>
+                <a><img src="~/gfx/interface/header-center.jpg" /></a>
+            </div>
+        </div>*@    
+        @*<div id="header-contacts">
+            <a class="header-phone" href="tel:88129065576">8 (812) 906-55-76</a>
+        </div>*@
+        @if (UserSession.user_id>0)
+        {
+            <div id="header-user-panel">
+                <br/>
+                <div>
+                    <a class="header-user-info"href="#"><img  style="vertical-align: super;" src="/gfx/interface/ava-blank.png" /></a>
+                </div>
+                <div>
+                    <a href="/Profile" class="header-user-name">Здравствуйте, @UserSession.client.firstname</a><br />
+                    @*<span class="header-amount">@UserSession.client.balance.ToString("### ##0.")</span>*@
+                    <p class="header-amount"><span style="vertical-align:-webkit-baseline-middle">@UserSession.client.balance.ToString("### ##0.")</span></p>
+                    <a class="header-exit" href="#" id="btn-logout">Выйти</a>
+                </div>
+            </div>
+
+        }
+        else
+        {
+        <div id="header-user">
+            <br/>
+            <a class="header-reg" data-toggle="modal" data-target="#register-modal" href="#">Зарегистрироваться</a>
+            <a class="header-enter" data-toggle="modal" data-target="#login-modal" href="#">Войти</a>
+        </div>
+        }
+    </div>
+    <div id="header-menu">
+        <nav role="navigation" id="main-nav">
+            @if (UserSession.user_id > 0)
+            {
+                switch (ViewContext.RouteData.Values["action"].ToString().ToLower())
+                {
+                    case "index":
+                    case "howitworks":
+                    //case "cards":
+                    case "partners":
+                    case "actions":
+                    case "mobileapplication":
+                    case "rules":
+                    case "faq":
+                    case "feedback":
+                        @*<ul>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" ? "active" : "")' href='/'>Главная</a></li>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "howitworks" ? "active" : "")' href='/HowItWorks'>Как это работает</a></li>*@
+                            @*<li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "cards" ? "active" : "")' href='/Cards'>Карты</a></li>*@
+                            @*<li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "partners" ? "active" : "")' href='/Partners'>Партнеры</a></li>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "actions" ? "active" : "")' href='/Actions'>Акции</a></li>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "mobileapplication" ? "active" : "")' href='/MobileApplication'>Мобильное приложение</a></li>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "faq" ? "active" : "")' href='/Faq'>Помощь</a></li>
+                        </ul>*@
+                        break;
+                    default:
+                        <ul>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" ? "active" : "")' href='/'>Главная</a></li>
+                            @*<li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "mycards" ? "active" : "")' href='/MyCards'>Мои карты</a></li>*@
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "myorders" ? "active" : "")' href='/MyOrders'>Мои покупки</a></li>
+                            @*<li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "personalactions" ? "active" : "")' href='/PersonalActions'>Персональные акции</a></li>
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "favorites" ? "active" : "")' href='/Favorites'>Избранное</a></li>*@
+                            <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "profile" ? "active" : "")' href='/Profile'>Профиль и настройка</a></li>
+                        </ul>
+                        break;
+                }
+            }
+            <!--else
+            {
+            <ul>
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" ? "active" : "")' href='/'>Главная</a></li>
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "howitworks" ? "active" : "")' href='/HowItWorks'>Как это работает</a></li>
+                @*<li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "cards" ? "active" : "")' href='/Cards'>Карты</a></li>*@
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "partners" ? "active" : "")' href='/Partners'>Партнеры</a></li>
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "actions" ? "active" : "")' href='/Actions'>Акции</a></li>
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "mobileapplication" ? "active" : "")' href='/MobileApplication'>Мобильное приложение</a></li>
+                <li><a class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "faq" ? "active" : "")' href='/Faq'>Помощь</a></li>
+            </ul>
+            }-->
+
+        </nav>
+    </div>
+</header>
+

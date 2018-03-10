@@ -1,0 +1,44 @@
+﻿@{
+    int id_category_filter = 0;
+    var category_filter = UserSession.get("PartnerCategoryFilter");
+    if (category_filter != null)
+    {
+        id_category_filter = (int)category_filter;
+    }
+    //var allcnt = ((List<curCategory>)Model).Sum(em => em.cnt);
+
+}
+
+@foreach (var item in Model)
+{
+    if(item.id == -1)
+    {
+    <div class="map-filter-line">
+        @*<a href='#' data='0' class="partners_category_filter" style='@((id_category_filter == 0) ? "min-width:100%; background: #FFF; color:#DD2B38;" : "min-width:100%;")'>Все<span class='filter-number' style='@((id_category_filter == 0) ? "color:#DD2B38; float:right; padding-top: 5px;" : "float:right; padding-top: 5px;")'>@item.cnt</span></a>*@
+        <div>
+            <a href='#' data='0' class="partners_category_filter" style='@((id_category_filter == 0) ? "" : "")'>Все</a>
+        </div>
+
+        <div>
+            <a href='#' data='0' class="partners_category_filter"><span class='filter-number @((id_category_filter == 0) ? "filter-number-highlight" : "")'>@item.cnt</span></a>
+        </div>
+
+    </div>
+    }
+    else
+    {
+
+    <div class="map-filter-line">
+        @*<a href='#' data='@item.id' class="partners_category_filter" style='@((id_category_filter == item.id) ? "min-width:100%; background: #FFF; color:#DD2B38;" : "min-width:100%;")'>@item.name<span class='filter-number' style='@((id_category_filter == item.id) ? "color:#DD2B38; float:right; padding-top: 5px;" : "float:right; padding-top: 5px;")'>@item.cnt</span></a>*@
+        <div>
+            <a href='#' data='@item.id' class="partners_category_filter" style='@((id_category_filter == item.id) ? "" : "")'>@item.name</a>
+        </div>
+        
+        <div>
+            <a href='#' data='@item.id' class="partners_category_filter"><span class='filter-number @((id_category_filter == item.id) ? "filter-number-highlight" : "")'>@item.cnt</span></a>
+        </div>
+            
+    </div>
+    }
+}
+
