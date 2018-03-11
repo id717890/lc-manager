@@ -1116,6 +1116,13 @@
             
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Middleware.CustomAuthenticationMiddleware">
+            <summary>
+            Этот посредник обрабатывает все ответы OwinMiddleware
+            Здесь мы проверяем заголоки (в данном случае создана константа ServerGlobalVariables.OwinStatusFlag, которая добавляется при ошибках авторизации)
+            Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.Card.number">
             <summary>
             номер карты
