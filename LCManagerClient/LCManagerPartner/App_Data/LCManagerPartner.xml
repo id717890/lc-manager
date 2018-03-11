@@ -1106,6 +1106,16 @@
             Проверка промокода
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Constants.ServerGlobalVariables">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:LCManagerPartner.Implementation.Constants.ServerGlobalVariables.OwinStatusFlag">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.Card.number">
             <summary>
             номер карты

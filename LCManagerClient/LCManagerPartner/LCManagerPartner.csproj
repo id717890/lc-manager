@@ -250,7 +250,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Constants\ServerGlobalVariables.cs" />
     <Compile Include="Implementation\JwtFormat.cs" />
+    <Compile Include="Implementation\Middleware\CustomAuthenticationMiddleware.cs" />
     <Compile Include="Models\ClientMethods.cs" />
     <Compile Include="Models\Methods.cs" />
     <Compile Include="Models\PosMethods.cs" />

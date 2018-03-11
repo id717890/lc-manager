@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using Microsoft.Owin.Security.Jwt;
-using Owin;
-
-namespace LCManagerPartner
+﻿namespace LCManagerPartner
 {
+    using System.Configuration;
+    using Implementation.Middleware;
+    using Microsoft.Owin.Security;
+    using Microsoft.Owin.Security.DataHandler.Encoder;
+    using Microsoft.Owin.Security.Jwt;
+    using Owin;
+
     public partial class Startup
     {
         public void ConfigureOAuth(IAppBuilder app)
         {
             var issuer = ConfigurationManager.AppSettings["issuer"];
             var secret = TextEncodings.Base64Url.Decode(ConfigurationManager.AppSettings["secret"]);
+
+            //подключаем наш посредник для Owin ответов
+            app.Use<CustomAuthenticationMiddleware>();
 
             app.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
             {
