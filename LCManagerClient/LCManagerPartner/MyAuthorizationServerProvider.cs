@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net;
+using LCManagerPartner.Implementation.Constants;
 using LCManagerPartner.Models;
 
 namespace LCManagerPartner
@@ -33,7 +35,7 @@ namespace LCManagerPartner
             };
             var result = new ServerManagerLogin();
             var authentificationResult = result.ProcessRequest(cnn, request);
-            if(authentificationResult.ErrorCode == 0)
+            if (authentificationResult.ErrorCode == 0)
             {
                 identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.RoleName));
                 //identity.AddClaim(new Claim("username", context.UserName));
@@ -54,20 +56,17 @@ namespace LCManagerPartner
                 {
                     identity.AddClaim(new Claim("poscode", authentificationResult.PosCode));
                 }
-                identity.AddClaim(new Claim("permissioncode",  authentificationResult.PermissionCode));
+                identity.AddClaim(new Claim("permissioncode", authentificationResult.PermissionCode));
                 context.Validated(identity);
             }
             else
             {
-                context.SetError("invalid_grant", "Provided username and password is incorrect", "401");
-                //context.Response.StatusCode = 401;
-                //context.Response.ReasonPhrase = "Provided username and password is incorrect";
-                //return new System.Net.Http.HttpResponseMessage
-                //{
-                //    StatusCode = System.Net.HttpStatusCode.Forbidden,
-                //    Content = new System.Net.Http.StringContent("You are unauthorized to access this resource")
-                //}; ;
-            }            
+                //Пишем текст ошибки
+                context.SetError("invalid_grant", "Provided username and password is incorrect");
+
+                //Добавляем в заголовок наш флаг (константу), он будет проверен посредником CustomAuthenticationMiddleware
+                context.Response.Headers.Add(ServerGlobalVariables.OwinStatusFlag, new[] { ((int)HttpStatusCode.Unauthorized).ToString() });
+            }
         }
     }
 }
