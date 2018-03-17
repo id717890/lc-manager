@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LCManagerPartner.Implementation
+﻿namespace LCManagerPartner.Implementation
 {
     using System;
     using System.Configuration;
-    //    using System.IdentityModel.Tokens.Jwt;7
     using System.IdentityModel.Tokens;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataHandler.Encoder;
@@ -15,7 +9,7 @@ namespace LCManagerPartner.Implementation
 
     public class JwtFormat : ISecureDataFormat<AuthenticationTicket>
     {
-        private static readonly byte[] _secret = TextEncodings.Base64Url.Decode(ConfigurationManager.AppSettings["secret"]);
+        private static readonly byte[] Secret = TextEncodings.Base64Url.Decode(ConfigurationManager.AppSettings["secret"]);
         private readonly string _issuer;
 
         public JwtFormat(string issuer)
@@ -29,8 +23,7 @@ namespace LCManagerPartner.Implementation
             {
                 throw new ArgumentNullException(nameof(data));
             }
-
-            var signingKey = new HmacSigningCredentials(_secret);
+            var signingKey = new HmacSigningCredentials(Secret);
             var issued = data.Properties.IssuedUtc;
             var expires = data.Properties.ExpiresUtc;
 
