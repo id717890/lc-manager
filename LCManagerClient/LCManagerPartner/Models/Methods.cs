@@ -11,6 +11,7 @@ using System.Web;
 using System.Net.Http;
 using System.Web.Http;
 using System.ComponentModel.DataAnnotations;
+using LCManagerPartner.Implementation.Data;
 
 namespace LCManagerPartner.Models
 {
@@ -468,53 +469,7 @@ namespace LCManagerPartner.Models
         }
     }
 
-    public class Pos
-    {
-        /// <summary>
-        /// Код торговой точки
-        /// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// наименование ТТ
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// регион
-        /// </summary>
-        public string Region { get; set; }
-        /// <summary>
-        /// город
-        /// </summary>
-        public string City { get; set; }
-        /// <summary>
-        /// адрес ТТ
-        /// </summary>
-        public string Address { get; set; }
-        /// <summary>
-        /// номер телефона
-        /// </summary>
-        public string Phone { get; set; }
-        /// <summary>
-        /// Показывать на сайте?
-        /// </summary>
-        public Boolean ShowOnSite { get; set; }
-        /// <summary>
-        /// Выдает карты участника?
-        /// </summary>
-        public Boolean GivesCard { get; set; }
-        public Pos() { }
-        public Pos(int id, string code, string region, string city, string address, string phone, bool showonsite, bool givescard)
-        {
-            Id = id;
-            Name = code;
-            Region = region;
-            City = city;
-            Address = address;
-            Phone = phone;
-            ShowOnSite = showonsite;
-            GivesCard = givescard;
-        }
-    }
+    
 
     public class GetPosesRequest
     {
@@ -7099,85 +7054,6 @@ namespace LCManagerPartner.Models
                 if (!reader.IsDBNull(0)) good.Code = reader.GetString(0);
                 if (!reader.IsDBNull(1)) good.Name = reader.GetString(1);
                 returnValue.OperatorGoods.Add(good);
-            }
-            reader.Close();
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            cnn.Close();
-            return returnValue;
-        }
-    }
-
-    public class OperatorPos
-    {
-        /// <summary>
-        /// регион
-        /// </summary>
-        public string Region { get; set; }
-        /// <summary>
-        /// город
-        /// </summary>
-        public string City { get; set; }
-        /// <summary>
-        /// адрес
-        /// </summary>
-        public string Address { get; set; }
-    }
-
-    public class OperatorPosRequest
-    {
-        /// <summary>
-        /// идентификатор Оператора программы лояльности
-        /// </summary>
-        public Int16 Operator { get; set; }
-    }
-
-    public class OperatorPosResponse
-    {
-        /// <summary>
-        /// код ошибки
-        /// </summary>
-        public int ErrorCode { get; set; }
-        /// <summary>
-        /// сообщение об ошибке
-        /// </summary>
-        public string Message { get; set; }
-        /// <summary>
-        /// адреса торговых точек
-        /// </summary>
-        public List<OperatorPos> Poses { get; set; }
-        public OperatorPosResponse()
-        {
-            Poses = new List<OperatorPos>();
-        }
-    }
-
-    public class ServerOperatorPos
-    {
-        public OperatorPosResponse ProcessRequest(SqlConnection cnn, OperatorPosRequest request)
-        {
-            var returnValue = new OperatorPosResponse();
-            cnn.Open();
-            SqlCommand cmd = cnn.CreateCommand();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "OperatorGetPos";
-            if (request.Operator == 0)
-            {
-                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
-            }
-            cmd.Parameters.AddWithValue("@operator", request.Operator);
-            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
-            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@result", SqlDbType.Int);
-            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                OperatorPos pos = new OperatorPos();
-                if (!reader.IsDBNull(0)) pos.Region = reader.GetString(0);
-                if (!reader.IsDBNull(1)) pos.City = reader.GetString(1);
-                if (!reader.IsDBNull(2)) pos.Address = reader.GetString(2);
-                returnValue.Poses.Add(pos);
             }
             reader.Close();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
