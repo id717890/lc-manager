@@ -1273,6 +1273,20 @@
             Сервис для работы ТТ оператора
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.GetPosByOperator(LCManagerPartner.Implementation.Request.OperatorPosRequest)">
+            <summary>
+            Получает список ТТ доступных оператору
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.GetPosListByOperator(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
+            <summary>
+            Получает список списков магазинов оператора"
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Implementation.Services.PosService.SaveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
             <summary>
             Сохраняет список магазинов в БД

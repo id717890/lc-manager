@@ -14,13 +14,18 @@
     /// </summary>
     public class PosService
     {
-        SqlConnection cnn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString);
+        readonly SqlConnection _cnn = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString);
 
+        /// <summary>
+        /// Получает список ТТ доступных оператору
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public OperatorPosResponse GetPosByOperator(OperatorPosRequest request)
         {
             var returnValue = new OperatorPosResponse();
-            cnn.Open();
-            SqlCommand cmd = cnn.CreateCommand();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "OperatorGetPos";
             if (request.Operator == 0)
@@ -45,15 +50,20 @@
             reader.Close();
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            cnn.Close();
+            _cnn.Close();
             return returnValue;
         }
 
+        /// <summary>
+        /// Получает список списков магазинов оператора"
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public OperatorPosListResponse GetPosListByOperator(OperatorPosListCreateRequest request)
         {
             var response = new OperatorPosListResponse();
-            cnn.Open();
-            SqlCommand cmd = cnn.CreateCommand();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "select id, caption, operator from poslist where operator=@id";
             cmd.Parameters.AddWithValue("@id", request.Operator);
@@ -62,6 +72,7 @@
             var buf=new List<OperatorPosList>();
             try
             {
+                #region Получаем списки магазинов, созданных оператором
                 var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -71,9 +82,11 @@
                     buf.Add(posList);
                 }
                 reader.Close();
+                #endregion
 
+                #region Получаем содержимое списков магазинов
                 cmd.CommandText =
-                    @"select p.id, c.name, p.address from poslistitems pli 
+                            @"select p.id, c.name, p.address from poslistitems pli 
                     join poslist pl on pl.id = pli.poslist and pl.id=@id 
                     join pos p on p.id = pli.pos 
                     join city c on c.id=p.city";
@@ -100,7 +113,8 @@
                         Caption = item.Caption,
                         Poses = listOfPos
                     });
-                }
+                } 
+                #endregion
 
                 response.PosLists = result;
                 response.ErrorCode = 0;
@@ -113,7 +127,7 @@
             }
             finally
             {
-                cnn.Close();
+                _cnn.Close();
             }
             return response;
         }
@@ -126,14 +140,14 @@
         public OperatorPosListResponse SaveOperatorPosList(OperatorPosListCreateRequest request)
         {
             var returnValue = new OperatorPosListResponse();
-            cnn.Open();
-            SqlCommand cmd = cnn.CreateCommand();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = "INSERT INTO poslist (caption, operator) output INSERTED.id VALUES(@Caption, @Operator)";
             cmd.Parameters.AddWithValue("@Caption", request.PosListName);
             cmd.Parameters.AddWithValue("@Operator", request.Operator);
 
-            var transaction = cnn.BeginTransaction();
+            var transaction = _cnn.BeginTransaction();
             cmd.Transaction = transaction;
             try
             {
@@ -158,7 +172,7 @@
             }
             finally
             {
-                cnn.Close();
+                _cnn.Close();
             }
             return returnValue;
         }
