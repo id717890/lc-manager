@@ -31,7 +31,7 @@
 
             ManagerLoginRequest request = new ManagerLoginRequest
             {
-                Phone = Convert.ToInt64(context.UserName),
+                Login = context.UserName,
                 Password = context.Password
             };
             var result = new ServerManagerLogin();

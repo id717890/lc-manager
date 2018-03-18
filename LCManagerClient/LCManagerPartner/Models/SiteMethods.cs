@@ -1171,6 +1171,21 @@ namespace LCManagerPartner.Models
         /// идентификатор Оператора программы лояльности
         /// </summary>
         public Int16 Operator { get; set; }
+
+        /// <summary>
+        /// Флаг получения FAQ для LCManager
+        /// </summary>
+        public bool LCManager { get; set; }
+
+        /// <summary>
+        /// Флаг получения FAQ для сайта
+        /// </summary>
+        public bool Site { get; set; }
+
+        /// <summary>
+        /// Флаг получения FAQ для мобильного приложения
+        /// </summary>
+        public bool Mobile { get; set; }
     }
 
     public class GetFaqResponse
@@ -1207,6 +1222,18 @@ namespace LCManagerPartner.Models
                 request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
             }
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if(request.LCManager)
+            {
+                cmd.Parameters.AddWithValue("@lcmanager", request.LCManager);
+            }
+            if(request.Site)
+            {
+                cmd.Parameters.AddWithValue("@site", request.Site);
+            }
+            if(request.Mobile)
+            {
+                cmd.Parameters.AddWithValue("@mobile", request.Mobile);
+            }
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);

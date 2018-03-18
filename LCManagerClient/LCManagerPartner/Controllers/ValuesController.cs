@@ -523,7 +523,7 @@ namespace LCManagerPartner.Controllers
         [Route("ManagerLogin")]
         public ManagerLoginResponse ManagerLogin(ManagerLoginRequest request)
         {
-            Log.Information("LCManagerPartner ManagerLogin {Phone}", request.Phone);
+            Log.Information("LCManagerPartner ManagerLogin {Login}", request.Login);
             var result = new ServerManagerLogin();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -716,5 +716,18 @@ namespace LCManagerPartner.Controllers
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
+
+        /// <summary>
+        /// Получить список ролей по идентификатору роли
+        /// </summary>
+        //[HttpPost]
+        //[Route("GetRoles")]
+        //public GetRolesResponse GetRoles(GetRolesRequest request)
+        //{
+        //    Log.Information("LCManagerPartner GetRoles {Login}", request.Login);
+        //    var result = new ServerGetRoles();
+        //    var returnValue = result.ProcessRequest(cnn, request);
+        //    return returnValue;
+        //}
     }
 }
