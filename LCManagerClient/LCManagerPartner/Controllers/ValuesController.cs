@@ -703,17 +703,7 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
-        /// <summary>
-        /// Выборка адресов торговых точек Оператора
-        /// </summary>
-        [HttpPost]
-        [Route("OperatorPos")]
-        public OperatorPosResponse OperatorPos(OperatorPosRequest request)
-        {
-            var result = new ServerOperatorPos();
-            var returnValue = result.ProcessRequest(cnn, request);
-            return returnValue;
-        }
+        
 
         /// <summary>
         /// Проверка промокода
