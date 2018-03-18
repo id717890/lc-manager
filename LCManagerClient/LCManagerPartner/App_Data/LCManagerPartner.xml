@@ -481,6 +481,12 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:LCManagerPartner.AuthClientProvider">
+            <inheritdoc />
+            <summary>
+            ClientLogin
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.GetConfirmCode(LCManagerPartner.Models.GetConfirmCodeRequest)">
             <summary>
             Проверка кода и валидация номера телефона
@@ -695,6 +701,25 @@
             <summary>
             Активация карты на списание
             </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.PosController.OperatorPos(LCManagerPartner.Implementation.Request.OperatorPosRequest)">
+            <summary>
+            Выборка адресов торговых точек Оператора
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.PosController.OperatorPos(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
+            <summary>
+            Сохранение списка магазинов
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.PosController.GetPosListByOperator(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
+            <summary>
+            Получает списка магазинов, отдельного оператора
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="M:LCManagerPartner.Controllers.ReportsController.ClientBuys(LCManagerPartner.Models.ClientBuysRequest)">
             <summary>
@@ -1096,14 +1121,24 @@
             Выборка товаров Оператора
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorPos(LCManagerPartner.Models.OperatorPosRequest)">
-            <summary>
-            Выборка адресов торговых точек Оператора
-            </summary>
-        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.VerificationPromocode(LCManagerPartner.Models.VerificationPromocodeRequest)">
             <summary>
             Проверка промокода
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Abstractions.BaseResponse">
+            <summary>
+            Абстрактный класс для ответа сервера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Abstractions.BaseResponse.ErrorCode">
+            <summary>
+            Код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Abstractions.BaseResponse.Message">
+            <summary>
+            Сообщение об ошибке
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Constants.ServerGlobalVariables">
@@ -1116,12 +1151,148 @@
             
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Data.Pos">
+            <summary>
+            Объект сущности pos
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.Id">
+            <summary>
+            Код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.Name">
+            <summary>
+            наименование ТТ
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.Region">
+            <summary>
+            регион
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.City">
+            <summary>
+            город
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.Address">
+            <summary>
+            адрес ТТ
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.ShowOnSite">
+            <summary>
+            Показывать на сайте?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.Pos.GivesCard">
+            <summary>
+            Выдает карты участника?
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Data.OperatorPosList">
+            <summary>
+            Объект сущности poslist
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorPosList.Id">
+            <summary>
+            Идентификатор списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorPosList.Caption">
+            <summary>
+            Наименование списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorPosList.Operator">
+            <summary>
+            Идентификатор опертора, которому принадлежит список
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorPosList.Poses">
+            <summary>
+            Список ТТ списка
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Middleware.CustomAuthenticationMiddleware">
             <summary>
             Этот посредник обрабатывает все ответы OwinMiddleware
             Здесь мы проверяем заголоки (в данном случае создана константа ServerGlobalVariables.OwinStatusFlag, которая добавляется при ошибках авторизации)
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorPosRequest">
+            <summary>
+            Запрос на получение списка ТТ оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorPosRequest.Operator">
+            <summary>
+            идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest">
+            <summary>
+            Запрос на создание списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.Operator">
+            <summary>
+            Идентификатор оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.PosListName">
+            <summary>
+            Наименование создаваемого списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.PosList">
+            <summary>
+            Перечень ID ТТ для списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorPosListResponse.PosLists">
+            <summary>
+            Списки ТТ
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorPosResponse.Poses">
+            <summary>
+            адреса торговых точек
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Services.PosService">
+            <summary>
+            Сервис для работы ТТ оператора
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.GetPosByOperator(LCManagerPartner.Implementation.Request.OperatorPosRequest)">
+            <summary>
+            Получает список ТТ доступных оператору
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.GetPosListByOperator(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
+            <summary>
+            Получает список списков магазинов оператора"
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.SaveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
+            <summary>
+            Сохраняет список магазинов в БД
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="P:LCManagerPartner.Models.Card.number">
             <summary>
@@ -2004,46 +2175,6 @@
         <member name="P:LCManagerPartner.Models.ChequeAddResponse.Balance">
             <summary>
             баланс бонусных баллов
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.Id">
-            <summary>
-            Код торговой точки
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.Name">
-            <summary>
-            наименование ТТ
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.Region">
-            <summary>
-            регион
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.City">
-            <summary>
-            город
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.Address">
-            <summary>
-            адрес ТТ
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.Phone">
-            <summary>
-            номер телефона
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.ShowOnSite">
-            <summary>
-            Показывать на сайте?
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.Pos.GivesCard">
-            <summary>
-            Выдает карты участника?
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetPosesRequest.PartnerID">
@@ -4746,41 +4877,6 @@
             список товаров?
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.OperatorPos.Region">
-            <summary>
-            регион
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPos.City">
-            <summary>
-            город
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPos.Address">
-            <summary>
-            адрес
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPosRequest.Operator">
-            <summary>
-            идентификатор Оператора программы лояльности
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPosResponse.ErrorCode">
-            <summary>
-            код ошибки
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPosResponse.Message">
-            <summary>
-            сообщение об ошибке
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorPosResponse.Poses">
-            <summary>
-            адреса торговых точек
-            </summary>
-        </member>
         <member name="P:LCManagerPartner.Models.VerificationPromocodeRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности
@@ -5468,6 +5564,12 @@
         <member name="P:LCManagerPartner.Models.BecomePartnerResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.AuthManagerProvider">
+            <inheritdoc />
+            <summary>
+            ManagerLogin
             </summary>
         </member>
     </members>

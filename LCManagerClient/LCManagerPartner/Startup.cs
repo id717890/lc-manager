@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.OAuth;
 using System.Web.Http;
-using LCManagerPartner.Implementation;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler.Encoder;
-using Microsoft.Owin.Security.Jwt;
 
 [assembly: OwinStartup(typeof(LCManagerPartner.Startup))]
 
@@ -23,16 +18,32 @@ namespace LCManagerPartner
             //enable cors origin requests
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
-            var myProvider = new MyAuthorizationServerProvider();
-            OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions
+            #region Авторизация по адресу api/ManagerLogin
+            var managerLoginProvider = new AuthManagerProvider();
+            OAuthAuthorizationServerOptions optionsManager = new OAuthAuthorizationServerOptions
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/ManagerLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(Convert.ToInt32(ConfigurationManager.AppSettings["expiration"])),
-                Provider = myProvider,
+                Provider = managerLoginProvider,
                 AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
             };
-            app.UseOAuthAuthorizationServer(options);
+            #endregion
+
+            #region Авторизация по адресу api/ClientLogin
+            var clientLoginProvider = new AuthClientProvider();
+            OAuthAuthorizationServerOptions optionsClient = new OAuthAuthorizationServerOptions
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/ClientLogin"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(Convert.ToInt32(ConfigurationManager.AppSettings["expiration"])),
+                Provider = clientLoginProvider,
+                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
+            };
+            #endregion
+
+            app.UseOAuthAuthorizationServer(optionsManager);
+            app.UseOAuthAuthorizationServer(optionsClient);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
             HttpConfiguration config = new HttpConfiguration();

@@ -1,19 +1,20 @@
-﻿using Microsoft.Owin.Security.OAuth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Net;
-using LCManagerPartner.Implementation.Constants;
-using LCManagerPartner.Models;
-
-namespace LCManagerPartner
+﻿namespace LCManagerPartner
 {
-    public class MyAuthorizationServerProvider : OAuthAuthorizationServerProvider
+    using Microsoft.Owin.Security.OAuth;
+    using System;
+    using System.Threading.Tasks;
+    using System.Security.Claims;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Net;
+    using Implementation.Constants;
+    using Models;
+
+    /// <inheritdoc />
+    /// <summary>
+    /// ManagerLogin
+    /// </summary>
+    public class AuthManagerProvider : OAuthAuthorizationServerProvider
     {
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {

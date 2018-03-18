@@ -241,6 +241,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="AuthorizeAttribute.cs" />
+    <Compile Include="AuthClientProvider.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -250,15 +251,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Abstractions\BaseResponse.cs" />
     <Compile Include="Implementation\Constants\ServerGlobalVariables.cs" />
+    <Compile Include="Implementation\Data\Pos.cs" />
+    <Compile Include="Implementation\Data\PosList.cs" />
     <Compile Include="Implementation\JwtFormat.cs" />
     <Compile Include="Implementation\Middleware\CustomAuthenticationMiddleware.cs" />
+    <Compile Include="Implementation\Request\PosRequest.cs" />
+    <Compile Include="Implementation\Response\PosResponse.cs" />
+    <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Models\ClientMethods.cs" />
     <Compile Include="Models\Methods.cs" />
-    <Compile Include="Models\PosMethods.cs" />
     <Compile Include="Models\ReportsMethods.cs" />
     <Compile Include="Models\SiteMethods.cs" />
-    <Compile Include="MyAuthorizationServerProvider.cs" />
+    <Compile Include="AuthManagerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -319,6 +325,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="SQL\20180317\1.RenamePoslistToPoslist_old.sql" />
+    <Content Include="SQL\20180317\2.CreateTablePoslist.sql" />
+    <Content Include="SQL\20180317\3.CreateTablePoslistItems.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
