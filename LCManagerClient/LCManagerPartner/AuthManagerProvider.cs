@@ -38,7 +38,10 @@
             var authentificationResult = result.ProcessRequest(cnn, request);
             if (authentificationResult.ErrorCode == 0)
             {
-                identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.RoleName));
+                foreach (var c in authentificationResult.Roles)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, c));
+                }
                 //identity.AddClaim(new Claim("username", context.UserName));
                 identity.AddClaim(new Claim("user", context.UserName));
                 if (authentificationResult.Operator > 0)

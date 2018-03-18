@@ -4012,9 +4012,9 @@
             сообщение об ошибке
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.ManagerLoginRequest.Phone">
+        <member name="P:LCManagerPartner.Models.ManagerLoginRequest.Login">
             <summary>
-            номер телефона
+            Логин пользователя
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ManagerLoginRequest.Password">
@@ -4060,6 +4060,11 @@
         <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.Roles">
+            <summary>
+            Список ролей менеджера
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ChangeClientRequest.ClientData">

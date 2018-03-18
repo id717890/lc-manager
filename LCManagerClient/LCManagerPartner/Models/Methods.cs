@@ -5302,6 +5302,15 @@ namespace LCManagerPartner.Models
         /// сообщение об ошибке
         /// </summary>
         public string Message { get; set; }
+        /// <summary>
+        /// Список ролей менеджера
+        /// </summary>
+        public List<string> Roles { get; set; }
+
+        public ManagerLoginResponse()
+        {
+            Roles = new List<string>();
+        }
     }
 
     public class ServerManagerLogin
@@ -5332,7 +5341,20 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            cmd.ExecuteNonQuery();
+            //cmd.ExecuteNonQuery();
+            var reader = cmd.ExecuteReader();
+            while(reader.Read())
+            {
+                try
+                {
+                    if (!reader.IsDBNull(0)) returnValue.Roles.Add(reader.GetString(0));
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(ex, "LCManagerAPI");
+                }
+            }
+            reader.Close();
 
             if (!DBNull.Value.Equals(cmd.Parameters["@operator"].Value))
             {
@@ -5357,6 +5379,10 @@ namespace LCManagerPartner.Models
             if (!DBNull.Value.Equals(cmd.Parameters["@permissioncode"].Value))
             {
                 returnValue.PermissionCode = Convert.ToString(cmd.Parameters["@permissioncode"].Value);
+            }
+            if(!string.IsNullOrWhiteSpace(returnValue.RoleName) && !returnValue.Roles.Contains(returnValue.RoleName))
+            {
+                returnValue.Roles.Add(returnValue.RoleName);
             }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
