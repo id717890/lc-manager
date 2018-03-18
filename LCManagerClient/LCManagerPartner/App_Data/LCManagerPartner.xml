@@ -5340,6 +5340,21 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetFaqRequest.LCManager">
+            <summary>
+            Флаг получения FAQ для LCManager
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetFaqRequest.Site">
+            <summary>
+            Флаг получения FAQ для сайта
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetFaqRequest.Mobile">
+            <summary>
+            Флаг получения FAQ для мобильного приложения
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetFaqResponse.ErrorCode">
             <summary>
             код ошибки

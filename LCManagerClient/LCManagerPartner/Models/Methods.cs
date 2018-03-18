@@ -5304,9 +5304,9 @@ namespace LCManagerPartner.Models
     public class ManagerLoginRequest
     {
         /// <summary>
-        /// номер телефона
+        /// Логин пользователя
         /// </summary>
-        public long Phone { get; set; }
+        public string Login { get; set; }
         /// <summary>
         /// пароль
         /// </summary>
@@ -5359,7 +5359,7 @@ namespace LCManagerPartner.Models
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ManagerLogin";
-            cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters.AddWithValue("@login", request.Login);
             cmd.Parameters.AddWithValue("@password", request.Password);
             cmd.Parameters.Add("@operator", SqlDbType.SmallInt);
             cmd.Parameters["@operator"].Direction = ParameterDirection.Output;
