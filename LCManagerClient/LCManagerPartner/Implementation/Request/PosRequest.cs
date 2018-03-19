@@ -14,6 +14,17 @@
     }
 
     /// <summary>
+    /// Запрос на удаление списка ТТ оператора
+    /// </summary>
+    public class OperatorPosRemoveRequest
+    {
+        /// <summary>
+        /// идентификатор удаляемого списка
+        /// </summary>
+        public Int16 OperatorPosList { get; set; }
+    }
+
+    /// <summary>
     /// Запрос на создание списка
     /// </summary>
     public class OperatorPosListCreateRequest

@@ -721,6 +721,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:LCManagerPartner.Controllers.PosController.RemoveOperatorPos(LCManagerPartner.Implementation.Request.OperatorPosRemoveRequest)">
+            <summary>
+            Удалени списка магазинов
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ReportsController.ClientBuys(LCManagerPartner.Models.ClientBuysRequest)">
             <summary>
             Очтёт о покупках клиента Оператора за период
@@ -1238,6 +1245,16 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorPosRemoveRequest">
+            <summary>
+            Запрос на удаление списка ТТ оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorPosRemoveRequest.OperatorPosList">
+            <summary>
+            идентификатор удаляемого списка
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest">
             <summary>
             Запрос на создание списка
@@ -1256,6 +1273,12 @@
         <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.PosList">
             <summary>
             Перечень ID ТТ для списка
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Response.DefaultResponse">
+            <inheritdoc />
+            <summary>
+            Ответ по умолчанию, возвращающий только код ошибки и сообщение
             </summary>
         </member>
         <member name="P:LCManagerPartner.Implementation.Response.OperatorPosListResponse.PosLists">
@@ -1290,6 +1313,13 @@
         <member name="M:LCManagerPartner.Implementation.Services.PosService.SaveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest)">
             <summary>
             Сохраняет список магазинов в БД
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.PosService.RemoveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorPosRemoveRequest)">
+            <summary>
+            Удаляет список магазинов из БД
             </summary>
             <param name="request"></param>
             <returns></returns>
