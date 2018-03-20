@@ -24,33 +24,100 @@
         public OperatorPosResponse GetPosByOperator(OperatorPosRequest request)
         {
             var returnValue = new OperatorPosResponse();
-            _cnn.Open();
-            SqlCommand cmd = _cnn.CreateCommand();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "OperatorGetPos";
-            if (request.Operator == 0)
+            try
             {
-                request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+                _cnn.Open();
+                SqlCommand cmd = _cnn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "OperatorGetPos";
+                if (request.Operator == 0)
+                {
+                    request.Operator = Convert.ToInt16(ConfigurationManager.AppSettings["Operator"]);
+                }
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+                cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+                cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@result", SqlDbType.Int);
+                cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Pos pos = new Pos();
+                    if (!reader.IsDBNull(0)) pos.Id = reader.GetInt16(0);
+                    if (!reader.IsDBNull(1)) pos.Region = reader.GetString(1);
+                    if (!reader.IsDBNull(2)) pos.City = reader.GetString(2);
+                    if (!reader.IsDBNull(3)) pos.Address = reader.GetString(3);
+                    returnValue.Poses.Add(pos);
+                }
+                reader.Close();
+
+
+
+                cmd.Parameters.Clear();
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select id, caption, operator from poslist where operator=@id";
+                cmd.Parameters.AddWithValue("@id", request.Operator);
+
+                var result = new List<OperatorPosList>();
+                var buf = new List<OperatorPosList>();
+
+                #region Получаем списки магазинов, созданных оператором
+
+                reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var posList = new OperatorPosList {Id = reader.GetInt16(0)};
+                    if (!reader.IsDBNull(1)) posList.Caption = reader.GetString(1);
+                    if (!reader.IsDBNull(2)) posList.Operator = reader.GetInt16(2);
+                    buf.Add(posList);
+                }
+                reader.Close();
+
+                #endregion
+
+                #region Получаем содержимое списков магазинов
+
+                cmd.CommandText =
+                    @"select p.id, c.name, p.address from poslistitems pli 
+                    join poslist pl on pl.id = pli.poslist and pl.id=@id 
+                    join pos p on p.id = pli.pos 
+                    join city c on c.id=p.city";
+
+                foreach (var item in buf)
+                {
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@id", item.Id);
+                    var listOfPos = new List<Pos>();
+                    reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var pos = new Pos {Id = reader.GetInt16(0)};
+                        if (!reader.IsDBNull(1)) pos.City = reader.GetString(1);
+                        if (!reader.IsDBNull(2)) pos.Address = reader.GetString(2);
+                        listOfPos.Add(pos);
+                    }
+                    reader.Close();
+                    result.Add(new OperatorPosList
+                    {
+                        Id = item.Id,
+                        Operator = item.Operator,
+                        Caption = item.Caption,
+                        Poses = listOfPos
+                    });
+                }
+                #endregion
+                returnValue.PosLists = result;
             }
-            cmd.Parameters.AddWithValue("@operator", request.Operator);
-            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
-            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
-            cmd.Parameters.Add("@result", SqlDbType.Int);
-            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            catch (Exception e)
             {
-                Pos pos = new Pos();
-                if (!reader.IsDBNull(0)) pos.Id = reader.GetInt16(0);
-                if (!reader.IsDBNull(1)) pos.Region = reader.GetString(1);
-                if (!reader.IsDBNull(2)) pos.City = reader.GetString(2);
-                if (!reader.IsDBNull(3)) pos.Address = reader.GetString(3);
-                returnValue.Poses.Add(pos);
+                returnValue.ErrorCode = 3;
+                returnValue.Message = e.Message;
             }
-            reader.Close();
-            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            _cnn.Close();
+            finally
+            {
+                _cnn.Close();
+            }
             return returnValue;
         }
 
@@ -177,5 +244,36 @@
             return returnValue;
         }
 
+        /// <summary>
+        /// Удаляет список магазинов из БД
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DefaultResponse RemoveOperatorPosList(OperatorPosRemoveRequest request)
+        {
+            var returnValue = new DefaultResponse();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "delete from poslist where id=@id";
+            cmd.Parameters.AddWithValue("@id", request.OperatorPosList);
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                returnValue.ErrorCode = 0;
+                returnValue.Message = string.Empty;
+            }
+            catch (Exception e)
+            {
+                returnValue.ErrorCode = 10;
+                returnValue.Message = e.Message;
+            }
+            finally
+            {
+                _cnn.Close();
+            }
+            return returnValue;
+        }
     }
 }

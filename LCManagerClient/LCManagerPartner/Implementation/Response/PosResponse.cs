@@ -7,6 +7,8 @@
 
     public class OperatorPosListResponse : BaseResponse
     {
+        public IEnumerable<Pos> Poses { get; set; }
+
         /// <summary>
         /// Списки ТТ
         /// </summary>
@@ -19,9 +21,12 @@
         /// адреса торговых точек
         /// </summary>
         public List<Pos> Poses { get; set; }
+        public List<OperatorPosList> PosLists { get; set; }
+
         public OperatorPosResponse()
         {
             Poses = new List<Pos>();
+            PosLists = new List<OperatorPosList>();
         }
     }
 }

@@ -48,5 +48,18 @@
         {
             return _operatorPosService.GetPosListByOperator(request);
         }
+
+
+        /// <summary>
+        /// Удалени списка магазинов
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("RemoveOperatorPosList")]
+        public DefaultResponse RemoveOperatorPos(OperatorPosRemoveRequest request)
+        {
+            return _operatorPosService.RemoveOperatorPosList(request);
+        }
     }
 }
