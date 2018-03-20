@@ -793,13 +793,17 @@ namespace LCManagerPartner.Models
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "Reports.OperatorClient";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@from", SqlDbType.DateTime);
+            cmd.Parameters["@from"].Direction = ParameterDirection.InputOutput;
             if (request.From.HasValue)
             {
-                cmd.Parameters.AddWithValue("@from", request.From.Value);
+                cmd.Parameters["@from"].Value = request.From.Value;
             }
+            cmd.Parameters.Add("@to", SqlDbType.DateTime);
+            cmd.Parameters["@to"].Direction = ParameterDirection.InputOutput;
             if (request.To.HasValue)
             {
-                cmd.Parameters.AddWithValue("@to", request.To.Value);
+                cmd.Parameters["@to"].Value = request.To.Value;
             }
             cmd.Parameters.Add("@errormessage", System.Data.SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
