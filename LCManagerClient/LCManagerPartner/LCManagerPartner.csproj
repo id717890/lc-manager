@@ -329,6 +329,11 @@
     <Content Include="SQL\20180317\1.RenamePoslistToPoslist_old.sql" />
     <Content Include="SQL\20180317\2.CreateTablePoslist.sql" />
     <Content Include="SQL\20180317\3.CreateTablePoslistItems.sql" />
+    <Content Include="SQL\20180319\1.drop_tables_poslist_poslistitems.sql" />
+    <Content Include="SQL\20180319\2.create_table_poslist.sql" />
+    <Content Include="SQL\20180319\3.create_table_poslistitems.sql" />
+    <Content Include="SQL\20180321\LoyCon Update 3.79 20180318 Smirnov.sql" />
+    <Content Include="SQL\20180321\procedure_OperatorGetPos.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
