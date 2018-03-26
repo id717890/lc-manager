@@ -26,6 +26,8 @@
             var signingKey = new HmacSigningCredentials(Secret);
             var issued = data.Properties.IssuedUtc;
             var expires = data.Properties.ExpiresUtc;
+            //var expires = issued.Value.DateTime.AddMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"]));
+            //var expires2 = DateTimeOffset.UtcNow.AddMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"]));
 
             return new JwtSecurityTokenHandler().WriteToken(
                 new JwtSecurityToken(

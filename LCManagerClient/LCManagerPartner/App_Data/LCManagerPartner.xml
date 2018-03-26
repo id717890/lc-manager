@@ -487,6 +487,18 @@
             ClientLogin
             </summary>
         </member>
+        <member name="T:LCManagerPartner.AuthRefreshTokenProvider">
+            <summary>
+            Провайдер обеспечивающий генерацию refresh_token
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.GetConfirmCode(LCManagerPartner.Models.GetConfirmCodeRequest)">
             <summary>
             Проверка кода и валидация номера телефона
