@@ -492,9 +492,21 @@
             Провайдер обеспечивающий генерацию refresh_token
             </summary>
         </member>
+        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.#ctor">
+            <summary>
+            Контроллер провайдера, где инициируется TokenService для записи refresh_token в БД
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)">
+            <summary>
+            Генерирует новый refresh_token и записывает его в БД.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.AuthRefreshTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)">
             <summary>
-            
+            Извлекает токен из хранилища, если он есть
             </summary>
             <param name="context"></param>
             <returns></returns>
@@ -1334,6 +1346,26 @@
             Удаляет список магазинов из БД
             </summary>
             <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Services.RefreshTokenService">
+            <summary>
+            Класс для записи и проверки Refresh_token в БД.
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.ReceiveRefreshToken(System.String)">
+            <summary>
+            Получает refresh_token пользователя. Если его нет возвращает пустую строку
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.UpdateRefreshToken(System.String,System.String)">
+            <summary>
+            Обновляет refresh_token у пользователя. Либо обнуляет его если отправлена пустая строка.
+            </summary>
+            <param name="username"></param>
+            <param name="refreshToken"></param>
             <returns></returns>
         </member>
         <member name="P:LCManagerPartner.Models.Card.number">

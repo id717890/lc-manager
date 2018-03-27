@@ -262,6 +262,7 @@
     <Compile Include="Implementation\Response\DefaultResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
+    <Compile Include="Implementation\Services\RefreshTokenService.cs" />
     <Compile Include="Models\ClientMethods.cs" />
     <Compile Include="Models\Methods.cs" />
     <Compile Include="Models\ReportsMethods.cs" />
