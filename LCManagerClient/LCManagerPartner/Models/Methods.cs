@@ -1167,6 +1167,10 @@ namespace LCManagerPartner.Models
         /// токен (временный код) Участника в “ВКонтакте”
         /// </summary>
         public string IdVK { get; set; }
+        /// <summary>
+        /// Идентификатор оператора, у которого авторизовывается клиент
+        /// </summary>
+        public Int16 Operator { get; set; }
     }
 
     public class ClientLoginResponse
@@ -1203,6 +1207,7 @@ namespace LCManagerPartner.Models
             cmd.Parameters.AddWithValue("@idfb", request.IdFB);
             cmd.Parameters.AddWithValue("@idok", request.IdOK);
             cmd.Parameters.AddWithValue("@idvk", request.IdVK);
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
