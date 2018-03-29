@@ -24,9 +24,10 @@ namespace LCManagerPartner
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/ManagerLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(Convert.ToInt32(ConfigurationManager.AppSettings["expiration"])),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"])),
                 Provider = managerLoginProvider,
-                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
+                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"]),
+                RefreshTokenProvider = new AuthRefreshTokenProvider()
             };
             #endregion
 
@@ -36,9 +37,10 @@ namespace LCManagerPartner
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/ClientLogin"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(Convert.ToInt32(ConfigurationManager.AppSettings["expiration"])),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"])),
                 Provider = clientLoginProvider,
-                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"])
+                AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"]),
+                RefreshTokenProvider = new AuthRefreshTokenProvider()
             };
             #endregion
 
