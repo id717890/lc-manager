@@ -42,7 +42,7 @@
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    Pos pos = new Pos();                    
+                    Pos pos = new Pos();
                     if (!reader.IsDBNull(0)) pos.Region = reader.GetString(0);
                     if (!reader.IsDBNull(1)) pos.City = reader.GetString(1);
                     if (!reader.IsDBNull(2)) pos.Address = reader.GetString(2);
