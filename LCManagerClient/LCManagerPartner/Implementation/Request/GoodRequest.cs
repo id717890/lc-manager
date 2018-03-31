@@ -16,6 +16,17 @@ namespace LCManagerPartner.Implementation.Request
     }
 
     /// <summary>
+    /// Запрос на удаление списка ТТ оператора
+    /// </summary>
+    public class OperatorGoodRemoveRequest
+    {
+        /// <summary>
+        /// идентификатор удаляемого списка товаров
+        /// </summary>
+        public Int16 OperatorGoodList { get; set; }
+    }
+
+    /// <summary>
     /// Запрос на создание списка товаров
     /// </summary>
     public class OperatorGoodListCreateRequest

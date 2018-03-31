@@ -742,6 +742,18 @@ namespace LCManagerPartner.Controllers
             return _operatorGoodService.GetGoodListByOperator(request);
         }
 
+        /// <summary>
+        /// Удалени списка товаров
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("RemoveOperatorGoodList")]
+        public DefaultResponse RemoveOperatorPos(OperatorGoodRemoveRequest request)
+        {
+            return _operatorGoodService.RemoveOperatorGoodList(request);
+        }
+
         #endregion
 
 

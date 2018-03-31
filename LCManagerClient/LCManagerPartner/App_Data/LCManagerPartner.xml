@@ -1171,6 +1171,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.RemoveOperatorPos(LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest)">
+            <summary>
+            Удалени списка товаров
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.VerificationPromocode(LCManagerPartner.Models.VerificationPromocodeRequest)">
             <summary>
             Проверка промокода
@@ -1317,6 +1324,16 @@
             Идентификатор оператора
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest">
+            <summary>
+            Запрос на удаление списка ТТ оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest.OperatorGoodList">
+            <summary>
+            идентификатор удаляемого списка товаров
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest">
             <summary>
             Запрос на создание списка товаров
@@ -1423,6 +1440,13 @@
         <member name="M:LCManagerPartner.Implementation.Services.GoodService.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodRequest)">
             <summary>
             Получает список списков товаров оператора"
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.RemoveOperatorGoodList(LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest)">
+            <summary>
+            Удаляет список товаров из БД
             </summary>
             <param name="request"></param>
             <returns></returns>

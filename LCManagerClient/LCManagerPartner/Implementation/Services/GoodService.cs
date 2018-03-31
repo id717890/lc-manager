@@ -140,5 +140,37 @@ namespace LCManagerPartner.Implementation.Services
             }
             return response;
         }
+
+        /// <summary>
+        /// Удаляет список товаров из БД
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public DefaultResponse RemoveOperatorGoodList(OperatorGoodRemoveRequest request)
+        {
+            var returnValue = new DefaultResponse();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = "delete from goodlist where id=@id";
+            cmd.Parameters.AddWithValue("@id", request.OperatorGoodList);
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                returnValue.ErrorCode = 0;
+                returnValue.Message = string.Empty;
+            }
+            catch (Exception e)
+            {
+                returnValue.ErrorCode = 10;
+                returnValue.Message = e.Message;
+            }
+            finally
+            {
+                _cnn.Close();
+            }
+            return returnValue;
+        }
     }
 }
