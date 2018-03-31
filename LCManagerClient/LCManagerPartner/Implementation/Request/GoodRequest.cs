@@ -5,8 +5,14 @@ using System.Web;
 
 namespace LCManagerPartner.Implementation.Request
 {
-    public class GoodRequest
+    /// <summary>
+    /// </summary>
+    public class OperatorGoodRequest
     {
+        /// <summary>
+        /// Идентификатор оператора
+        /// </summary>
+        public Int16 Operator { get; set; }
     }
 
     /// <summary>

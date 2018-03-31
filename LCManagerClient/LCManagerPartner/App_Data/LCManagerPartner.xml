@@ -1164,6 +1164,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodRequest)">
+            <summary>
+            Получает списки товаров, отдельного оператора
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.VerificationPromocode(LCManagerPartner.Models.VerificationPromocodeRequest)">
             <summary>
             Проверка промокода
@@ -1301,6 +1308,15 @@
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodRequest">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodRequest.Operator">
+            <summary>
+            Идентификатор оператора
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest">
             <summary>
             Запрос на создание списка товаров
@@ -1397,9 +1413,16 @@
             Сервис для работы со списками товаров оператора
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Implementation.Services.GoodService.SaveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest)">
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.SaveOperatorGoodList(LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest)">
             <summary>
             Сохраняет список магазинов в БД
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodRequest)">
+            <summary>
+            Получает список списков товаров оператора"
             </summary>
             <param name="request"></param>
             <returns></returns>

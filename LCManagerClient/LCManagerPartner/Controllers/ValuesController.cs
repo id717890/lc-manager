@@ -727,8 +727,20 @@ namespace LCManagerPartner.Controllers
         [Route("SaveOperatorGoodList")]
         public OperatorGoodListResponse OperatorGoodListSave(OperatorGoodListCreateRequest request)
         {
-            return _operatorGoodService.SaveOperatorPosList(request);
-        } 
+            return _operatorGoodService.SaveOperatorGoodList(request);
+        }
+
+        /// <summary>
+        /// Получает списки товаров, отдельного оператора
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("OperatorGoodList")]
+        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodRequest request)
+        {
+            return _operatorGoodService.GetGoodListByOperator(request);
+        }
 
         #endregion
 
