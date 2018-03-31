@@ -7023,6 +7023,11 @@ namespace LCManagerPartner.Models
     public class Good
     {
         /// <summary>
+        /// Идентификатор товара
+        /// </summary>
+        public short Id{ get; set; }
+
+        /// <summary>
         /// код товара
         /// </summary>
         public string Code { get; set; }
@@ -7084,6 +7089,7 @@ namespace LCManagerPartner.Models
                 Good good = new Good();
                 if (!reader.IsDBNull(0)) good.Code = reader.GetString(0);
                 if (!reader.IsDBNull(1)) good.Name = reader.GetString(1);
+                if (!reader.IsDBNull(2)) good.Id = reader.GetInt16(2);
                 returnValue.OperatorGoods.Add(good);
             }
             reader.Close();

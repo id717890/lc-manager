@@ -889,6 +889,11 @@
             Регистрация нового партнера программы лояльности
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.BalanceGet(LCManagerPartner.Models.BalanceGetRequest)">
             <summary>
             Получение баланса бонусных баллов по номеру карты, либо по номеру телефонаУчастника программы лояльности.
@@ -1152,6 +1157,13 @@
             Выборка товаров Оператора
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoodListSave(LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest)">
+            <summary>
+            Сохранение списка товаров
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.VerificationPromocode(LCManagerPartner.Models.VerificationPromocodeRequest)">
             <summary>
             Проверка промокода
@@ -1178,6 +1190,36 @@
             </summary>
         </member>
         <member name="F:LCManagerPartner.Implementation.Constants.ServerGlobalVariables.OwinStatusFlag">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Data.OperatorGoodList">
+            <summary>
+            Объект сущности goodlist
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorGoodList.Id">
+            <summary>
+            Идентификатор списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorGoodList.Name">
+            <summary>
+            Наименование списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorGoodList.Operator">
+            <summary>
+            Идентификатор опертора, которому принадлежит список
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Data.OperatorGoodList.Goods">
+            <summary>
+            Список ТТ списка
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Data.OperatorGoodList.#ctor">
             <summary>
             
             </summary>
@@ -1259,6 +1301,26 @@
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest">
+            <summary>
+            Запрос на создание списка товаров
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest.Operator">
+            <summary>
+            Идентификатор оператора
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest.GoodListName">
+            <summary>
+            Наименование создаваемого списка товаров
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest.GoodList">
+            <summary>
+            Перечень ID ТТ для списка
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorPosRequest">
             <summary>
             Запрос на получение списка ТТ оператора
@@ -1305,6 +1367,21 @@
             Ответ по умолчанию, возвращающий только код ошибки и сообщение
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Response.GoodResponse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Response.OperatorGoodListResponse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodListResponse.GoodLists">
+            <summary>
+            Списки ТТ
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Implementation.Response.OperatorPosListResponse.PosLists">
             <summary>
             Списки ТТ
@@ -1314,6 +1391,18 @@
             <summary>
             адреса торговых точек
             </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Services.GoodService">
+            <summary>
+            Сервис для работы со списками товаров оператора
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.SaveOperatorPosList(LCManagerPartner.Implementation.Request.OperatorGoodListCreateRequest)">
+            <summary>
+            Сохраняет список магазинов в БД
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="T:LCManagerPartner.Implementation.Services.PosService">
             <summary>
@@ -2619,6 +2708,11 @@
         <member name="P:LCManagerPartner.Models.ClientLoginRequest.IdVK">
             <summary>
             токен (временный код) Участника в “ВКонтакте”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.Operator">
+            <summary>
+            Идентификатор оператора, у которого авторизовывается клиент
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientLoginResponse.ErrorCode">
@@ -4924,6 +5018,11 @@
         <member name="P:LCManagerPartner.Models.ActivateCardResponse.Message">
             <summary>
             сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Good.Id">
+            <summary>
+            Идентификатор товара
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.Good.Code">
