@@ -25833,7 +25833,7 @@ END ELSE IF @version = 382 BEGIN
 		ALTER TABLE dbo.Users ADD refresh_token varchar(MAX) NULL
 	END
 
-	--Новая хранимая процедура. Обновляет поле refresh_token в таблице Users
+	-- RefreshTokenUpdate - Новая хранимая процедура. Обновляет поле refresh_token в таблице Users
 	IF OBJECT_ID('RefreshTokenUpdate') IS NOT NULL DROP PROCEDURE RefreshTokenUpdate
 	EXEC sp_executesql @statement = N'CREATE PROCEDURE RefreshTokenUpdate
 			@login NVARCHAR(20) = NULL,
@@ -25841,18 +25841,18 @@ END ELSE IF @version = 382 BEGIN
 			@errormessage NVARCHAR(100) = NULL OUTPUT
 		AS SET NOCOUNT ON
 			DECLARE @result TINYINT = 0
-			IF @login IS NULL BEGIN SET @errormessage = ''Идентификатор Пользователя не задан'' SET @result = 1 RETURN(@result) END
-			IF NOT EXISTS(SELECT login FROM Users WHERE login = @login) BEGIN SET @errormessage = ''Пользователь с таким идентификатором не существует'' SET @result = 2 RETURN(@result) END
+			IF @login IS NULL BEGIN SET @errormessage = N''Идентификатор Пользователя не задан'' SET @result = 1 RETURN(@result) END
+			IF NOT EXISTS(SELECT login FROM Users WHERE login = @login) BEGIN SET @errormessage = N''Пользователь с таким идентификатором не существует'' SET @result = 2 RETURN(@result) END
 			UPDATE Users SET refresh_token = @refresh_token WHERE login = @login
 			RETURN(@result)'
 
-	--Новая хранимая процедура. Проверяет наличие refresh_token в таблице Users
+	-- RefreshTokenCheck - Новая хранимая процедура. Проверяет наличие refresh_token в таблице Users
 	IF OBJECT_ID('RefreshTokenCheck') IS NOT NULL DROP PROCEDURE RefreshTokenCheck
 	EXEC sp_executesql @statement = N'CREATE PROCEDURE RefreshTokenCheck
 			@token NVARCHAR(MAX) = NULL,
 			@errormessage NVARCHAR(100) = NULL OUTPUT
 		AS SET NOCOUNT ON
-			IF @token IS NULL BEGIN SET @errormessage = ''Refresh token не задан''  RETURN(0) END
+			IF @token IS NULL BEGIN SET @errormessage = N''Refresh token не задан''  RETURN(1) END
 			SELECT u.refresh_token from Users u where u.refresh_token = @token
 
 			IF @@ROWCOUNT = 0 
@@ -25879,7 +25879,7 @@ END ELSE IF @version = 382 BEGIN
 		BEGIN
 			IF NOT EXISTS(SELECT id FROM operator WHERE id = @operator)
 			BEGIN
-				SET @errormessage = N''”казанный оператор не найден''
+				SET @errormessage = N''Указанный оператор не найден''
 				RETURN(1)
 			END
 			SELECT
@@ -25898,13 +25898,7 @@ END ELSE IF @version = 382 BEGIN
 		[id] [smallint] IDENTITY(1,1) NOT NULL,
 		[caption] [nvarchar](250) NOT NULL,
 		[operator] [smallint] NOT NULL,
-	 CONSTRAINT [PK_goodlist] PRIMARY KEY CLUSTERED ([id]))
-
-	IF OBJECT_ID('goodlist') IS NOT NULL 
-	BEGIN
-		DELETE FROM goodlist;
-		INSERT INTO goodlist (caption, operator) VALUES ('Test list goods #1',2), ('Test list goods #2',2); 
-	END
+	 CONSTRAINT [PK_goodlist] PRIMARY KEY CLUSTERED ([id]))	
 	
 	--Добавлена таблица goodlistitems для хранения содержимого списка товаров
 	IF OBJECT_ID('goodlistitems') IS NOT NULL DROP Table goodlistitems;
