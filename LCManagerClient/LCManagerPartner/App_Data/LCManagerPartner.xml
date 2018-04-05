@@ -487,6 +487,14 @@
             ClientLogin
             </summary>
         </member>
+        <member name="M:LCManagerPartner.AuthClientProvider.ValidateClientAuthentication(Microsoft.Owin.Security.OAuth.OAuthValidateClientAuthenticationContext)">
+            <inheritdoc />
+            <summary>
+            Валидация запроса на присутствие необходимых данных для авторизации
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
         <member name="T:LCManagerPartner.AuthRefreshTokenProvider">
             <summary>
             Провайдер обеспечивающий генерацию refresh_token
@@ -2619,6 +2627,11 @@
         <member name="P:LCManagerPartner.Models.ClientLoginRequest.IdVK">
             <summary>
             токен (временный код) Участника в “ВКонтакте”
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientLoginRequest.Operator">
+            <summary>
+            Идентификатор оператора, у которого авторизовывается клиент
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientLoginResponse.ErrorCode">
