@@ -240,9 +240,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="AuthClientRefreshTokenProvider.cs" />
     <Compile Include="AuthorizeAttribute.cs" />
     <Compile Include="AuthClientProvider.cs" />
-    <Compile Include="AuthRefreshTokenProvider.cs" />
+    <Compile Include="AuthManagerRefreshTokenProvider.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />

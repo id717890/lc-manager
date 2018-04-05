@@ -53,11 +53,13 @@
             string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
             SqlConnection cnn = new SqlConnection(connectionString);
 
+            var oper = Convert.ToInt16(context.OwinContext.Get<string>("operator"));
+
             ClientLoginRequest request = new ClientLoginRequest
             {
                 Login = Convert.ToInt64(context.UserName),
                 Password = context.Password,
-                Operator = Convert.ToInt16(context.OwinContext.Get<string>("operator"))
+                Operator = oper
             };
 
             var result = new ServerClientLoginResponse();
@@ -66,7 +68,8 @@
             {
                 //identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.ClientID));
                 //identity.AddClaim(new Claim("username", context.UserName));
-                identity.AddClaim(new Claim("clientId", authentificationResult.ClientID.ToString()));
+                identity.AddClaim(new Claim("client", authentificationResult.ClientID.ToString()));
+                identity.AddClaim(new Claim("operator", oper.ToString()));
                 context.Validated(identity);
             }
             else
