@@ -12,14 +12,14 @@
     /// <summary>
     /// Провайдер обеспечивающий генерацию refresh_token
     /// </summary>
-    public class AuthRefreshTokenProvider : IAuthenticationTokenProvider
+    public class AuthManagerRefreshTokenProvider : IAuthenticationTokenProvider
     {
         private readonly RefreshTokenService _tokenService;
 
         /// <summary>
         /// Контроллер провайдера, где инициируется TokenService для записи refresh_token в БД
         /// </summary>
-        public AuthRefreshTokenProvider()
+        public AuthManagerRefreshTokenProvider()
         {
             _tokenService=new RefreshTokenService();
         }
@@ -41,7 +41,7 @@
             if (username?.Value != null)
             {
                 //Пишем refresh_token в базу данных
-                if (_tokenService.UpdateRefreshToken(username.Value, guid))
+                if (_tokenService.UpdateRefreshTokenForManager(username.Value, guid))
                 {
                     //Если токен успешно записан в БД
 
@@ -66,7 +66,7 @@
         /// <returns></returns>
         public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-            if (_tokenService.ReceiveRefreshToken(context.Token))
+            if (_tokenService.ReceiveRefreshTokenForManager(context.Token))
             {
                 AuthenticationTicket ticket;
                 if (_refreshTokens.TryRemove(context.Token, out ticket))
