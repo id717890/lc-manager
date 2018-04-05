@@ -255,13 +255,17 @@
     </Compile>
     <Compile Include="Implementation\Abstractions\BaseResponse.cs" />
     <Compile Include="Implementation\Constants\ServerGlobalVariables.cs" />
+    <Compile Include="Implementation\Data\GoodList.cs" />
     <Compile Include="Implementation\Data\Pos.cs" />
     <Compile Include="Implementation\Data\PosList.cs" />
     <Compile Include="Implementation\JwtFormat.cs" />
     <Compile Include="Implementation\Middleware\CustomAuthenticationMiddleware.cs" />
+    <Compile Include="Implementation\Request\GoodRequest.cs" />
     <Compile Include="Implementation\Request\PosRequest.cs" />
     <Compile Include="Implementation\Response\DefaultResponse.cs" />
+    <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
+    <Compile Include="Implementation\Services\GoodService.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Implementation\Services\RefreshTokenService.cs" />
     <Compile Include="Models\ClientMethods.cs" />

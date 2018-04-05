@@ -1,12 +1,13 @@
 ﻿namespace LCManagerPartner.Implementation.Data
 {
+    using Models;
     using System;
     using System.Collections.Generic;
 
     /// <summary>
-    /// Объект сущности poslist
+    /// Объект сущности goodlist
     /// </summary>
-    public class OperatorPosList
+    public class OperatorGoodList
     {
         /// <summary>
         /// Идентификатор списка
@@ -15,22 +16,24 @@
         /// <summary>
         /// Наименование списка
         /// </summary>
-        public string Caption { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Идентификатор опертора, которому принадлежит список
         /// </summary>
         public Int16 Operator { get; set; }
 
-
         /// <summary>
         /// Список ТТ списка
         /// </summary>
-        public IEnumerable<Pos> Poses { get; set; }
+        public IEnumerable<Good> Goods { get; set; }
 
-        public OperatorPosList()
+        /// <summary>
+        /// 
+        /// </summary>
+        public OperatorGoodList()
         {
-            Poses=new List<Pos>();
+            Goods = new List<Good>();
         }
     }
 }

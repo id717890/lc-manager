@@ -1,4 +1,7 @@
-﻿using LCManagerPartner.Models;
+﻿using LCManagerPartner.Implementation.Request;
+using LCManagerPartner.Implementation.Response;
+using LCManagerPartner.Implementation.Services;
+using LCManagerPartner.Models;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -17,6 +20,16 @@ namespace LCManagerPartner.Controllers
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
+
+        private readonly GoodService _operatorGoodService;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ValuesController()
+        {
+            _operatorGoodService = new GoodService();
+        }
 
 
         /// <summary>
@@ -690,6 +703,8 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
+        #region Товары и списки товаров
+
         /// <summary>
         /// Выборка товаров Оператора
         /// </summary>
@@ -703,7 +718,45 @@ namespace LCManagerPartner.Controllers
             return returnValue;
         }
 
-        
+        /// <summary>
+        /// Сохранение списка товаров
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveOperatorGoodList")]
+        public OperatorGoodListResponse OperatorGoodListSave(OperatorGoodListCreateRequest request)
+        {
+            return _operatorGoodService.SaveOperatorGoodList(request);
+        }
+
+        /// <summary>
+        /// Получает списки товаров, отдельного оператора
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("OperatorGoodList")]
+        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodRequest request)
+        {
+            return _operatorGoodService.GetGoodListByOperator(request);
+        }
+
+        /// <summary>
+        /// Удалени списка товаров
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("RemoveOperatorGoodList")]
+        public DefaultResponse RemoveOperatorPos(OperatorGoodRemoveRequest request)
+        {
+            return _operatorGoodService.RemoveOperatorGoodList(request);
+        }
+
+        #endregion
+
+
 
         /// <summary>
         /// Проверка промокода
