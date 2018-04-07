@@ -1184,6 +1184,11 @@
             Активация карты на списание
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoodImport(LCManagerPartner.Implementation.Request.OperatorGoodImportRequest)">
+            <summary>
+            Выборка товаров Оператора
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoods(LCManagerPartner.Models.OperatorGoodsRequest)">
             <summary>
             Выборка товаров Оператора
@@ -1386,6 +1391,21 @@
             Перечень ID ТТ для списка
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodImportRequest">
+            <summary>
+            Запрос на импорт товаров из файла
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodImportRequest.Partner">
+            <summary>
+            Идентификатор партнера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodImportRequest.Goods">
+            <summary>
+            Список товаров
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorPosRequest">
             <summary>
             Запрос на получение списка ТТ оператора
@@ -1447,6 +1467,17 @@
             Списки ТТ
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Response.OperatorGoodImportResponse">
+            <inheritdoc />
+            <summary>
+            Ответ на импорт товаром из файла
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodImportResponse.ImportedRows">
+            <summary>
+            Кол-во импортированных строк
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Implementation.Response.OperatorPosListResponse.PosLists">
             <summary>
             Списки ТТ
@@ -1479,6 +1510,13 @@
         <member name="M:LCManagerPartner.Implementation.Services.GoodService.RemoveOperatorGoodList(LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest)">
             <summary>
             Удаляет список товаров из БД
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.ImportGoodsFromExcel(LCManagerPartner.Implementation.Request.OperatorGoodImportRequest)">
+            <summary>
+            Импортирует товары из файла
             </summary>
             <param name="request"></param>
             <returns></returns>

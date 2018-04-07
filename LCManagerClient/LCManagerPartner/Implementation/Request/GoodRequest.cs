@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using LCManagerPartner.Models;
 
 namespace LCManagerPartner.Implementation.Request
 {
@@ -45,5 +47,22 @@ namespace LCManagerPartner.Implementation.Request
         /// Перечень ID ТТ для списка
         /// </summary>
         public int[] GoodList { get; set; }
+    }
+
+    /// <summary>
+    /// Запрос на импорт товаров из файла
+    /// </summary>
+    public class OperatorGoodImportRequest
+    {
+        /// <summary>
+        /// Идентификатор партнера
+        /// </summary>
+        public Int16 Partner { get; set; }
+
+        /// <summary>
+        /// Список товаров
+        /// </summary>
+        public List<Good> Goods { get; set; }
+        
     }
 }

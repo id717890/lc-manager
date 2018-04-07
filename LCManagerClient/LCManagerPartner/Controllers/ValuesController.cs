@@ -709,6 +709,16 @@ namespace LCManagerPartner.Controllers
         /// Выборка товаров Оператора
         /// </summary>
         [HttpPost]
+        [Route("ImportOperatorGoods")]
+        public OperatorGoodImportResponse OperatorGoodImport(OperatorGoodImportRequest request)
+        {
+            return _operatorGoodService.ImportGoodsFromExcel(request);
+        }
+
+        /// <summary>
+        /// Выборка товаров Оператора
+        /// </summary>
+        [HttpPost]
         [Route("OperatorGoods")]
         public OperatorGoodsResponse OperatorGoods(OperatorGoodsRequest request)
         {
