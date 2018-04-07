@@ -1212,6 +1212,8 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add("@client", SqlDbType.Int);
+            cmd.Parameters["@client"].Direction = ParameterDirection.Output;
             System.Data.SqlClient.SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -1220,6 +1222,10 @@ namespace LCManagerPartner.Models
                 returnValue.ClientID = client;
             }
             reader.Close();
+            if (!DBNull.Value.Equals(cmd.Parameters["@client"].Value))
+            {
+                returnValue.ClientID = Convert.ToInt16(cmd.Parameters["@client"].Value);
+            }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             cnn.Close();

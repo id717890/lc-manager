@@ -9,15 +9,41 @@
     using System.Net;
     using Implementation.Constants;
     using Models;
+    using System.Linq;
 
     /// <inheritdoc />
     /// <summary>
     /// ClientLogin
     /// </summary>
-    public class AuthClientProvider: OAuthAuthorizationServerProvider
+    public class AuthClientProvider : OAuthAuthorizationServerProvider
     {
+        /// <inheritdoc />
+        /// <summary>
+        /// Валидация запроса на присутствие необходимых данных для авторизации
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+            #region Проверяем пришедший запрос на наличие в нем параметра "operator"
+            var operatorId = context.Parameters.SingleOrDefault(f => f.Key == "operator");
+            if (operatorId.Key != null && operatorId.Value != null)
+            {
+                try
+                {
+                    context.OwinContext.Set("operator", operatorId.Value[0]);
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+            }
+            else
+            {
+                context.SetError("invalid_operator", "Request do not contain ID of operator");
+                return;
+            } 
+            #endregion
             context.Validated();
         }
 
@@ -27,10 +53,13 @@
             string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
             SqlConnection cnn = new SqlConnection(connectionString);
 
+            var oper = Convert.ToInt16(context.OwinContext.Get<string>("operator"));
+
             ClientLoginRequest request = new ClientLoginRequest
             {
                 Login = Convert.ToInt64(context.UserName),
-                Password = context.Password
+                Password = context.Password,
+                Operator = oper
             };
 
             var result = new ServerClientLoginResponse();
@@ -39,7 +68,8 @@
             {
                 //identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.ClientID));
                 //identity.AddClaim(new Claim("username", context.UserName));
-                identity.AddClaim(new Claim("user", context.UserName));
+                identity.AddClaim(new Claim("client", authentificationResult.ClientID.ToString()));
+                identity.AddClaim(new Claim("operator", oper.ToString()));
                 context.Validated(identity);
             }
             else

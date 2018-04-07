@@ -240,9 +240,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="AuthClientRefreshTokenProvider.cs" />
     <Compile Include="AuthorizeAttribute.cs" />
     <Compile Include="AuthClientProvider.cs" />
-    <Compile Include="AuthRefreshTokenProvider.cs" />
+    <Compile Include="AuthManagerRefreshTokenProvider.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -340,6 +341,10 @@
     <Content Include="SQL\20180319\3.create_table_poslistitems.sql" />
     <Content Include="SQL\20180321\LoyCon Update 3.79 20180318 Smirnov.sql" />
     <Content Include="SQL\20180321\procedure_OperatorGetPos.sql" />
+    <Content Include="SQL\20180328\LoyCon Update 3.80 20180328 Yusupov.sql" />
+    <Content Include="SQL\20180404\SQLQuery2.sql" />
+    <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.sql" />
+    <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

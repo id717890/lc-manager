@@ -1,4 +1,9 @@
-﻿namespace LCManagerPartner
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace LCManagerPartner
 {
     using System;
     using System.Collections.Concurrent;
@@ -12,19 +17,20 @@
     /// <summary>
     /// Провайдер обеспечивающий генерацию refresh_token
     /// </summary>
-    public class AuthRefreshTokenProvider : IAuthenticationTokenProvider
+    public class AuthClientRefreshTokenProvider : IAuthenticationTokenProvider
     {
         private readonly RefreshTokenService _tokenService;
 
         /// <summary>
         /// Контроллер провайдера, где инициируется TokenService для записи refresh_token в БД
         /// </summary>
-        public AuthRefreshTokenProvider()
+        public AuthClientRefreshTokenProvider()
         {
-            _tokenService=new RefreshTokenService();
+            _tokenService = new RefreshTokenService();
         }
 
-        private static ConcurrentDictionary<string, AuthenticationTicket> _refreshTokens = new ConcurrentDictionary<string, AuthenticationTicket>();
+        private static ConcurrentDictionary<string, AuthenticationTicket> _refreshTokens =
+            new ConcurrentDictionary<string, AuthenticationTicket>();
 
 
         /// <summary>
@@ -37,11 +43,12 @@
             //Генерируем refresh_token
             var guid = Guid.NewGuid().ToString();
 
-            var username = context.Ticket.Identity.Claims.SingleOrDefault(x => x.Type== "user");
-            if (username?.Value != null)
+            var client = context.Ticket.Identity.Claims.SingleOrDefault(x => x.Type == "client");
+            var oper = context.Ticket.Identity.Claims.SingleOrDefault(x => x.Type == "operator");
+            if (client?.Value != null && oper?.Value != null)
             {
                 //Пишем refresh_token в базу данных
-                if (_tokenService.UpdateRefreshToken(username.Value, guid))
+                if (_tokenService.UpdateRefreshTokenForClient(client.Value, Convert.ToInt16(oper.Value), guid))
                 {
                     //Если токен успешно записан в БД
 
@@ -50,7 +57,9 @@
                     var refreshTokenProperties = new AuthenticationProperties(context.Ticket.Properties.Dictionary)
                     {
                         IssuedUtc = context.Ticket.Properties.IssuedUtc,
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_refresh_token"]))
+                        ExpiresUtc =
+                            DateTime.UtcNow.AddMinutes(
+                                Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_refresh_token"]))
                     };
                     var refreshTokenTicket = new AuthenticationTicket(context.Ticket.Identity, refreshTokenProperties);
                     _refreshTokens.TryAdd(guid, refreshTokenTicket);
@@ -66,12 +75,12 @@
         /// <returns></returns>
         public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-            if (_tokenService.ReceiveRefreshToken(context.Token))
+            if (_tokenService.ReceiveRefreshTokenForClient(context.Token))
             {
                 AuthenticationTicket ticket;
                 if (_refreshTokens.TryRemove(context.Token, out ticket))
                 {
-                        context.SetTicket(ticket);
+                    context.SetTicket(ticket);
                 }
             }
         }

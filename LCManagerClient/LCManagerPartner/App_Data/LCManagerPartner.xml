@@ -481,30 +481,62 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="T:LCManagerPartner.AuthClientProvider">
-            <inheritdoc />
-            <summary>
-            ClientLogin
-            </summary>
-        </member>
-        <member name="T:LCManagerPartner.AuthRefreshTokenProvider">
+        <member name="T:LCManagerPartner.AuthClientRefreshTokenProvider">
             <summary>
             Провайдер обеспечивающий генерацию refresh_token
             </summary>
         </member>
-        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.#ctor">
+        <member name="M:LCManagerPartner.AuthClientRefreshTokenProvider.#ctor">
             <summary>
             Контроллер провайдера, где инициируется TokenService для записи refresh_token в БД
             </summary>
         </member>
-        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)">
+        <member name="M:LCManagerPartner.AuthClientRefreshTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)">
             <summary>
             Генерирует новый refresh_token и записывает его в БД.
             </summary>
             <param name="context"></param>
             <returns></returns>
         </member>
-        <member name="M:LCManagerPartner.AuthRefreshTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)">
+        <member name="M:LCManagerPartner.AuthClientRefreshTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)">
+            <summary>
+            Извлекает токен из хранилища, если он есть
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LCManagerPartner.AuthClientProvider">
+            <inheritdoc />
+            <summary>
+            ClientLogin
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.AuthClientProvider.ValidateClientAuthentication(Microsoft.Owin.Security.OAuth.OAuthValidateClientAuthenticationContext)">
+            <inheritdoc />
+            <summary>
+            Валидация запроса на присутствие необходимых данных для авторизации
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LCManagerPartner.AuthManagerRefreshTokenProvider">
+            <summary>
+            Провайдер обеспечивающий генерацию refresh_token
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.AuthManagerRefreshTokenProvider.#ctor">
+            <summary>
+            Контроллер провайдера, где инициируется TokenService для записи refresh_token в БД
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.AuthManagerRefreshTokenProvider.CreateAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenCreateContext)">
+            <summary>
+            Генерирует новый refresh_token и записывает его в БД.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.AuthManagerRefreshTokenProvider.ReceiveAsync(Microsoft.Owin.Security.Infrastructure.AuthenticationTokenReceiveContext)">
             <summary>
             Извлекает токен из хранилища, если он есть
             </summary>
@@ -1489,18 +1521,34 @@
             Класс для записи и проверки Refresh_token в БД.
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.ReceiveRefreshToken(System.String)">
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.ReceiveRefreshTokenForManager(System.String)">
             <summary>
             Получает refresh_token пользователя. Если его нет возвращает пустую строку
             </summary>
             <param name="token"></param>
             <returns></returns>
         </member>
-        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.UpdateRefreshToken(System.String,System.String)">
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.ReceiveRefreshTokenForClient(System.String)">
+            <summary>
+            Получает refresh_token клиента. Если его нет возвращает пустую строку
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.UpdateRefreshTokenForManager(System.String,System.String)">
             <summary>
             Обновляет refresh_token у пользователя. Либо обнуляет его если отправлена пустая строка.
             </summary>
             <param name="username"></param>
+            <param name="refreshToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.RefreshTokenService.UpdateRefreshTokenForClient(System.String,System.Int16,System.String)">
+            <summary>
+            Обновляет refresh_token у клиента. Либо обнуляет его если отправлена пустая строка.
+            </summary>
+            <param name="client"></param>
+            <param name="oper"></param>
             <param name="refreshToken"></param>
             <returns></returns>
         </member>

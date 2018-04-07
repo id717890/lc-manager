@@ -27,7 +27,7 @@ namespace LCManagerPartner
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"])),
                 Provider = managerLoginProvider,
                 AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"]),
-                RefreshTokenProvider = new AuthRefreshTokenProvider()
+                RefreshTokenProvider = new AuthManagerRefreshTokenProvider()
             };
             #endregion
 
@@ -40,7 +40,7 @@ namespace LCManagerPartner
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(Convert.ToInt32(ConfigurationManager.AppSettings["expiration_jwt_token"])),
                 Provider = clientLoginProvider,
                 AccessTokenFormat = new Implementation.JwtFormat(ConfigurationManager.AppSettings["issuer"]),
-                RefreshTokenProvider = new AuthRefreshTokenProvider()
+                RefreshTokenProvider = new AuthClientRefreshTokenProvider()
             };
             #endregion
 
