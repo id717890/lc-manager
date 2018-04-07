@@ -89,12 +89,20 @@
             Log.Information("LCManagerAPI. ReceiveAsync start.{token}", context.Token);
             if (_tokenService.ReceiveRefreshTokenForManager(context.Token))
             {
+                var ticket_test=new AuthenticationTicket(null, null);
+                var test = context;
+
                 Log.Information("LCManagerAPI. Токен {token} найден в БД", context.Token);
                 AuthenticationTicket ticket;
                 if (_refreshTokens.TryRemove(context.Token, out ticket))
                 {
                     Log.Information("LCManagerAPI. Токен {token} извлечен из словаря ", context.Token);
                     context.SetTicket(ticket);
+                }
+                else
+                {
+                    Log.Information("LCManagerAPI. Токенов в словаре {count} ", _refreshTokens.Count());
+                    Log.Information("LCManagerAPI. Наличие токена {token} в словаре = {state}", context.Token,_refreshTokens.Any(x=>x.Key ==context.Token));
                 }
             }
         }
