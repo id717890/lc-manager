@@ -44,7 +44,7 @@
         /// <summary>
         /// Перечень ID ТТ для списка
         /// </summary>
-        public int[] GoodList { get; set; }
+        public List<int> GoodList { get; set; }
     }
 
     /// <summary>

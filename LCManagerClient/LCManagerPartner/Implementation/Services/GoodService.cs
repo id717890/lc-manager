@@ -28,31 +28,43 @@
             var returnValue = new OperatorGoodListResponse();
             _cnn.Open();
             SqlCommand cmd = _cnn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO goodlist (caption, operator) output INSERTED.id VALUES(@Caption, @Operator)";
-            cmd.Parameters.AddWithValue("@Caption", request.GoodListName);
-            cmd.Parameters.AddWithValue("@Operator", request.Operator);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorCreateGoodList";
+            cmd.Parameters.AddWithValue("@caption", request.GoodListName);
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
-            var transaction = _cnn.BeginTransaction();
-            cmd.Transaction = transaction;
+            if (request.GoodList != null && request.GoodList.Count > 0)
+            {
+                using (var table = new DataTable())
+                {
+                    table.Columns.Add("id", typeof(int));
+
+                    foreach (var item in request.GoodList)
+                    {
+                        DataRow row = table.NewRow();
+                        row["id"] = item;
+                        table.Rows.Add(row);
+                    }
+                    var items = new SqlParameter("@items", SqlDbType.Structured)
+                    {
+                        TypeName = "dbo.IdItem",
+                        Value = table
+                    };
+                    cmd.Parameters.Add(items);
+                }
+            }
             try
             {
-                var id = cmd.ExecuteScalar();
-                var query = string.Empty;
-                foreach (var item in request.GoodList)
-                {
-                    query += $"INSERT INTO goodlistitems (goodlist, good) VALUES ({id},{item});\r\n";
-                }
-                cmd.Parameters.Clear();
-                cmd.CommandText = query;
                 cmd.ExecuteNonQuery();
-                transaction.Commit();
-                returnValue.ErrorCode = 0;
-                returnValue.Message = string.Empty;
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             }
             catch (Exception e)
             {
-                transaction.Rollback();
                 returnValue.ErrorCode = 3;
                 returnValue.Message = e.Message;
             }
