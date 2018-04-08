@@ -1189,7 +1189,7 @@
             Выборка товаров Оператора
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoods(LCManagerPartner.Models.OperatorGoodsRequest)">
+        <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorGoods(LCManagerPartner.Implementation.Request.OperatorGoodsRequest)">
             <summary>
             Выборка товаров Оператора
             </summary>
@@ -1201,7 +1201,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:LCManagerPartner.Controllers.ValuesController.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodRequest)">
+        <member name="M:LCManagerPartner.Controllers.ValuesController.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodsRequest)">
             <summary>
             Получает списки товаров, отдельного оператора
             </summary>
@@ -1352,13 +1352,14 @@
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
         </member>
-        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodRequest">
+        <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
             <summary>
+            
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodRequest.Operator">
+        <member name="P:LCManagerPartner.Implementation.Request.OperatorGoodsRequest.Operator">
             <summary>
-            Идентификатор оператора
+            идентификатор Оператора программы лояльности
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodRemoveRequest">
@@ -1452,14 +1453,34 @@
             Ответ по умолчанию, возвращающий только код ошибки и сообщение
             </summary>
         </member>
-        <member name="T:LCManagerPartner.Implementation.Response.GoodResponse">
+        <member name="T:LCManagerPartner.Implementation.Response.OperatorGoodsResponse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodsResponse.ErrorCode">
+            <summary>
+            код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodsResponse.Message">
+            <summary>
+            сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodsResponse.OperatorGoods">
+            <summary>
+            список товаров?
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Response.OperatorGoodsResponse.#ctor">
             <summary>
             
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Response.OperatorGoodListResponse">
+            <inheritdoc />
             <summary>
-            
             </summary>
         </member>
         <member name="P:LCManagerPartner.Implementation.Response.OperatorGoodListResponse.GoodLists">
@@ -1500,7 +1521,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:LCManagerPartner.Implementation.Services.GoodService.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodRequest)">
+        <member name="M:LCManagerPartner.Implementation.Services.GoodService.GetGoodListByOperator(LCManagerPartner.Implementation.Request.OperatorGoodsRequest)">
             <summary>
             Получает список списков товаров оператора"
             </summary>
@@ -5166,26 +5187,6 @@
         <member name="P:LCManagerPartner.Models.Good.Name">
             <summary>
             наименование
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorGoodsRequest.Operator">
-            <summary>
-            идентификатор Оператора программы лояльности
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorGoodsResponse.ErrorCode">
-            <summary>
-            код ошибки
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorGoodsResponse.Message">
-            <summary>
-            сообщение об ошибке
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Models.OperatorGoodsResponse.OperatorGoods">
-            <summary>
-            список товаров?
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.VerificationPromocodeRequest.Operator">

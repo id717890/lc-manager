@@ -1,21 +1,39 @@
-﻿using LCManagerPartner.Implementation.Abstractions;
-using LCManagerPartner.Implementation.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LCManagerPartner.Implementation.Response
+﻿namespace LCManagerPartner.Implementation.Response
 {
+    using Abstractions;
+    using Data;
+    using System.Collections.Generic;
+    using Models;
+
     /// <summary>
     /// 
     /// </summary>
-    public class GoodResponse
+    public class OperatorGoodsResponse
     {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
+        public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// список товаров?
+        /// </summary>
+        public List<Good> OperatorGoods { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public OperatorGoodsResponse()
+        {
+            OperatorGoods = new List<Good>();
+        }
     }
 
+    /// <inheritdoc />
     /// <summary>
-    /// 
     /// </summary>
     public class OperatorGoodListResponse : BaseResponse
     {

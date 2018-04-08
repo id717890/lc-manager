@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
-using LCManagerPartner.Models;
-
-namespace LCManagerPartner.Implementation.Request
+﻿namespace LCManagerPartner.Implementation.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+
     /// <summary>
+    /// 
     /// </summary>
-    public class OperatorGoodRequest
+    public class OperatorGoodsRequest
     {
         /// <summary>
-        /// Идентификатор оператора
+        /// идентификатор Оператора программы лояльности
         /// </summary>
         public Int16 Operator { get; set; }
     }

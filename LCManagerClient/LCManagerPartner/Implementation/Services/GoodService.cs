@@ -1,17 +1,16 @@
-﻿using LCManagerPartner.Implementation.Data;
-using LCManagerPartner.Implementation.Request;
-using LCManagerPartner.Implementation.Response;
-using LCManagerPartner.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-
-namespace LCManagerPartner.Implementation.Services
+﻿namespace LCManagerPartner.Implementation.Services
 {
+    using Data;
+    using Request;
+    using Response;
+    using Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+
+
     /// <summary>
     /// Сервис для работы со списками товаров оператора
     /// </summary>
@@ -69,7 +68,7 @@ namespace LCManagerPartner.Implementation.Services
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodRequest request)
+        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodsRequest request)
         {
             var response = new OperatorGoodListResponse();
             _cnn.Open();
