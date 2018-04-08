@@ -1,4 +1,6 @@
-﻿namespace LCManagerPartner.Implementation.Request
+﻿using System.Collections.Generic;
+
+namespace LCManagerPartner.Implementation.Request
 {
     using System;
 
@@ -42,6 +44,6 @@
         /// <summary>
         /// Перечень ID ТТ для списка
         /// </summary>
-        public int[] PosList { get; set; }
+        public List<int> PosList { get; set; }
     }
 }
