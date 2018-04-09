@@ -89,9 +89,6 @@
             Log.Information("LCManagerAPI. ReceiveAsync start.{token}", context.Token);
             if (_tokenService.ReceiveRefreshTokenForManager(context.Token))
             {
-                var ticket_test=new AuthenticationTicket(null, null);
-                var test = context;
-
                 Log.Information("LCManagerAPI. Токен {token} найден в БД", context.Token);
                 AuthenticationTicket ticket;
                 if (_refreshTokens.TryRemove(context.Token, out ticket))

@@ -1,0 +1,2 @@
+1. OperatorCreatePosList. Добавлено. Создает список торговых точек
+2. OperatorCreateGoodList. Добавлено. Создает список товаров
