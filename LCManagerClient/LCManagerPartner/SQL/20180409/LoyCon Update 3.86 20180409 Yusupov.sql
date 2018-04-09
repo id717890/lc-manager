@@ -26325,8 +26325,30 @@ END ELSE IF @version = 384 BEGIN
 END ELSE IF @version = 385 BEGIN
 	SELECT '3.86 20180409 Юсупов'
 
+	IF OBJECT_ID('OperatorCreateGoodList') IS NOT NULL DROP PROCEDURE OperatorCreateGoodList;
+	IF OBJECT_ID('OperatorCreatePosList') IS NOT NULL DROP PROCEDURE OperatorCreatePosList;
+	IF OBJECT_ID('OperatorImportGoods') IS NOT NULL DROP PROCEDURE OperatorImportGoods;
+	IF type_id('IdItem') IS NOT NULL DROP TYPE IdItem;
+	IF type_id('GoodItem') IS NOT NULL DROP TYPE GoodItem;
+
+	--Добавлено. Табличный тип для передачи списка id при создании списков ТТ и списков товаров
+	CREATE TYPE [IdItem] AS TABLE([id] [int] NOT NULL);
+
+	--Добавлено. Табличный тип для испорта списка товаров из файла
+	CREATE TYPE [GoodItem] AS TABLE(
+		[code] [nvarchar](20) NOT NULL,
+		[brandcode] [nvarchar](20) NULL,
+		[goodsgroup] [tinyint] NULL,
+		[brand] [tinyint] NULL,
+		[noreedeem] [bit] NOT NULL,
+		[nocharge] [bit] NOT NULL,
+		[price] [numeric](9, 2) NULL,
+		[minprice] [numeric](9, 2) NULL,
+		[name] [nvarchar](100) NOT NULL,
+		[catalog] [smallint] NULL
+	)
+
 	--Добавлено. Создает список товаров
-	IF OBJECT_ID('OperatorCreateGoodList') IS NOT NULL DROP PROCEDURE OperatorCreateGoodList
 	EXEC sp_executesql @statement = N'CREATE PROCEDURE [OperatorCreateGoodList]
 		@caption nvarchar(250) = NULL,
 		@operator SMALLINT = NULL,
@@ -26371,9 +26393,7 @@ END ELSE IF @version = 385 BEGIN
 			END CATCH
 		END'
 
-
 	--Добавлено. Создает список торговых точек
-	IF OBJECT_ID('OperatorCreatePosList') IS NOT NULL DROP PROCEDURE OperatorCreatePosList
 	EXEC sp_executesql @statement = N'CREATE PROCEDURE [OperatorCreatePosList]
 		@caption nvarchar(250) = NULL,
 		@operator SMALLINT = NULL,
@@ -26417,6 +26437,43 @@ END ELSE IF @version = 385 BEGIN
 				RETURN(4)
 			END CATCH
 		END'
+
+	EXEC sp_executesql @statement = N'CREATE PROCEDURE [OperatorImportGoods]
+		@partner SMALLINT = NULL,
+		@gooditems [GoodItem] READONLY,
+		@errormessage NVARCHAR(100) OUTPUT,
+		@insertedrows INT OUTPUT
+		AS SET NOCOUNT ON
+		DECLARE 
+			@result INT,
+			@i INT = 0,
+			@countgoods INT = 0,
+			@code NVARCHAR(20),
+			@name NVARCHAR(100)
+			DECLARE goodCursor CURSOR LOCAL FAST_FORWARD
+				FOR
+				SELECT [code], [name]
+				FROM @gooditems;
+		BEGIN
+			IF @partner IS NULL BEGIN SET @errormessage = N''Партнер не задан'' RETURN (1) END
+			SET @countgoods = (SELECT COUNT(*) FROM @gooditems)
+			IF (@countgoods = 0) BEGIN SET @errormessage = N''Список товаров пустой'' RETURN (2) END
+			IF(@countgoods > 0) BEGIN
+		
+			OPEN goodCursor;
+			-- Initial fetch attempt
+			FETCH NEXT FROM goodCursor INTO @code, @name;
+
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				INSERT into goods(partner, code, name) values(@partner, @code, @name)
+				FETCH NEXT FROM goodCursor INTO @code, @name;
+			END;
+			CLOSE goodCursor;
+			DEALLOCATE goodCursor;
+			END
+		END
+		RETURN(0)'
 
 END ELSE BREAK
 
