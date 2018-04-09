@@ -1,19 +1,14 @@
-﻿using LCManagerPartner.Implementation.Request;
-using LCManagerPartner.Implementation.Response;
-using LCManagerPartner.Implementation.Services;
-using LCManagerPartner.Models;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-
-namespace LCManagerPartner.Controllers
+﻿namespace LCManagerPartner.Controllers
 {
+    using Implementation.Request;
+    using Implementation.Response;
+    using Implementation.Services;
+    using Models;
+    using Serilog;
+    using System.Configuration;
+    using System.Data.SqlClient;
+    using System.Web.Http;
+
     [Authorize]
     [RoutePrefix("api/values")]
     public class ValuesController : ApiController
@@ -709,6 +704,16 @@ namespace LCManagerPartner.Controllers
         /// Выборка товаров Оператора
         /// </summary>
         [HttpPost]
+        [Route("ImportOperatorGoods")]
+        public OperatorGoodImportResponse OperatorGoodImport(OperatorGoodImportRequest request)
+        {
+            return _operatorGoodService.ImportGoodsFromExcel(request);
+        }
+
+        /// <summary>
+        /// Выборка товаров Оператора
+        /// </summary>
+        [HttpPost]
         [Route("OperatorGoods")]
         public OperatorGoodsResponse OperatorGoods(OperatorGoodsRequest request)
         {
@@ -737,7 +742,7 @@ namespace LCManagerPartner.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("OperatorGoodList")]
-        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodRequest request)
+        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodsRequest request)
         {
             return _operatorGoodService.GetGoodListByOperator(request);
         }
@@ -755,8 +760,6 @@ namespace LCManagerPartner.Controllers
         }
 
         #endregion
-
-
 
         /// <summary>
         /// Проверка промокода

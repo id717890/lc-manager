@@ -1,17 +1,16 @@
-﻿using LCManagerPartner.Implementation.Data;
-using LCManagerPartner.Implementation.Request;
-using LCManagerPartner.Implementation.Response;
-using LCManagerPartner.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-
-namespace LCManagerPartner.Implementation.Services
+﻿namespace LCManagerPartner.Implementation.Services
 {
+    using Data;
+    using Request;
+    using Response;
+    using Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.Data;
+    using System.Data.SqlClient;
+
+
     /// <summary>
     /// Сервис для работы со списками товаров оператора
     /// </summary>
@@ -29,31 +28,43 @@ namespace LCManagerPartner.Implementation.Services
             var returnValue = new OperatorGoodListResponse();
             _cnn.Open();
             SqlCommand cmd = _cnn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "INSERT INTO goodlist (caption, operator) output INSERTED.id VALUES(@Caption, @Operator)";
-            cmd.Parameters.AddWithValue("@Caption", request.GoodListName);
-            cmd.Parameters.AddWithValue("@Operator", request.Operator);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorCreateGoodList";
+            cmd.Parameters.AddWithValue("@caption", request.GoodListName);
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
-            var transaction = _cnn.BeginTransaction();
-            cmd.Transaction = transaction;
+            if (request.GoodList != null && request.GoodList.Count > 0)
+            {
+                using (var table = new DataTable())
+                {
+                    table.Columns.Add("id", typeof(int));
+
+                    foreach (var item in request.GoodList)
+                    {
+                        DataRow row = table.NewRow();
+                        row["id"] = item;
+                        table.Rows.Add(row);
+                    }
+                    var items = new SqlParameter("@items", SqlDbType.Structured)
+                    {
+                        TypeName = "dbo.IdItem",
+                        Value = table
+                    };
+                    cmd.Parameters.Add(items);
+                }
+            }
             try
             {
-                var id = cmd.ExecuteScalar();
-                var query = string.Empty;
-                foreach (var item in request.GoodList)
-                {
-                    query += $"INSERT INTO goodlistitems (goodlist, good) VALUES ({id},{item});\r\n";
-                }
-                cmd.Parameters.Clear();
-                cmd.CommandText = query;
                 cmd.ExecuteNonQuery();
-                transaction.Commit();
-                returnValue.ErrorCode = 0;
-                returnValue.Message = string.Empty;
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             }
             catch (Exception e)
             {
-                transaction.Rollback();
                 returnValue.ErrorCode = 3;
                 returnValue.Message = e.Message;
             }
@@ -69,7 +80,7 @@ namespace LCManagerPartner.Implementation.Services
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodRequest request)
+        public OperatorGoodListResponse GetGoodListByOperator(OperatorGoodsRequest request)
         {
             var response = new OperatorGoodListResponse();
             _cnn.Open();
@@ -172,5 +183,81 @@ namespace LCManagerPartner.Implementation.Services
             }
             return returnValue;
         }
+
+        /// <summary>
+        /// Импортирует товары из файла
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public OperatorGoodImportResponse ImportGoodsFromExcel(OperatorGoodImportRequest request)
+        {
+            OperatorGoodImportResponse returnValue = new OperatorGoodImportResponse();
+            _cnn.Open();
+            SqlCommand cmd = _cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "OperatorImportGoods";
+            cmd.Parameters.AddWithValue("@partner", request.Partner);
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@insertedrows", SqlDbType.Int);
+            cmd.Parameters["@insertedrows"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            if (request.Goods != null && request.Goods.Count > 0)
+            {
+                using (var table = new DataTable())
+                {
+                    table.Columns.Add("code", typeof(string));
+                    table.Columns.Add("brandcode", typeof(string));
+                    table.Columns.Add("goodsgroup", typeof(int));
+                    table.Columns.Add("brand", typeof(int));
+                    table.Columns.Add("noredeem", typeof(bool));
+                    table.Columns.Add("nocharge", typeof(bool));
+                    table.Columns.Add("price", typeof(decimal));
+                    table.Columns.Add("minprice", typeof(decimal));
+                    table.Columns.Add("name", typeof(string));
+                    table.Columns.Add("catalog", typeof(int));
+
+                    foreach (var item in request.Goods)
+                    {
+                        DataRow row = table.NewRow();
+                        row["code"] = item.Code;
+                        row["name"] = item.Name;
+                        row["noredeem"] = false;
+                        row["nocharge"] = false;
+                        table.Rows.Add(row);
+                    }
+                    var items = new SqlParameter("@gooditems", SqlDbType.Structured)
+                    {
+                        TypeName = "dbo.GoodItem",
+                        Value = table
+                    };
+                    cmd.Parameters.Add(items);
+                }
+            }
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                if (!DBNull.Value.Equals(cmd.Parameters["@insertedrows"].Value))
+                {
+                    returnValue.ImportedRows = Convert.ToInt32(cmd.Parameters["@insertedrows"].Value);
+                }
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            }
+            catch (Exception e)
+            {
+                returnValue.ErrorCode = 3;
+                returnValue.Message = e.Message;
+            }
+            finally
+            {
+                _cnn.Close();
+            }
+            return returnValue;
+        }
+
     }
 }

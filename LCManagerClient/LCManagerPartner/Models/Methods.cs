@@ -7,11 +7,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Net.Http;
-using System.Web.Http;
 using System.ComponentModel.DataAnnotations;
 using LCManagerPartner.Implementation.Data;
+using LCManagerPartner.Implementation.Request;
+using LCManagerPartner.Implementation.Response;
 
 namespace LCManagerPartner.Models
 {
@@ -7042,35 +7041,7 @@ namespace LCManagerPartner.Models
         /// </summary>
         public string Name { get; set; }
     }
-
-    public class OperatorGoodsRequest
-    {
-        /// <summary>
-        /// идентификатор Оператора программы лояльности
-        /// </summary>
-        public Int16 Operator { get; set; }
-    }
-
-    public class OperatorGoodsResponse
-    {
-        /// <summary>
-        /// код ошибки
-        /// </summary>
-        public int ErrorCode { get; set; }
-        /// <summary>
-        /// сообщение об ошибке
-        /// </summary>
-        public string Message { get; set; }
-        /// <summary>
-        /// список товаров?
-        /// </summary>
-        public List<Good> OperatorGoods { get; set; }
-        public OperatorGoodsResponse()
-        {
-            OperatorGoods = new List<Good>();
-        }
-    }
-
+    
     public class ServerOperatorGoods
     {
         public OperatorGoodsResponse ProcessRequest(SqlConnection cnn, OperatorGoodsRequest request)

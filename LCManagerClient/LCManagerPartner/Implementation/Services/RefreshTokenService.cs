@@ -37,7 +37,7 @@
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 if (returnValue.ErrorCode == 0) return true;
-                return true;
+                return false;
             }
             catch (Exception e)
             {
@@ -73,7 +73,7 @@
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 if (returnValue.ErrorCode == 0) return true;
-                return true;
+                return false;
             }
             catch (Exception e)
             {
@@ -111,7 +111,7 @@
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 if (returnValue.ErrorCode == 0) return true;
-                return true;
+                return false;
             }
             catch (Exception e)
             {
@@ -151,7 +151,7 @@
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 if (returnValue.ErrorCode == 0) return true;
-                return true;
+                return false;
             }
             catch (Exception e)
             {

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace LCManagerPartner.Implementation.Request
+﻿namespace LCManagerPartner.Implementation.Request
 {
+    using System;
+    using System.Collections.Generic;
+    using Models;
+
     /// <summary>
+    /// 
     /// </summary>
-    public class OperatorGoodRequest
+    public class OperatorGoodsRequest
     {
         /// <summary>
-        /// Идентификатор оператора
+        /// идентификатор Оператора программы лояльности
         /// </summary>
         public Int16 Operator { get; set; }
     }
@@ -44,6 +44,23 @@ namespace LCManagerPartner.Implementation.Request
         /// <summary>
         /// Перечень ID ТТ для списка
         /// </summary>
-        public int[] GoodList { get; set; }
+        public List<int> GoodList { get; set; }
+    }
+
+    /// <summary>
+    /// Запрос на импорт товаров из файла
+    /// </summary>
+    public class OperatorGoodImportRequest
+    {
+        /// <summary>
+        /// Идентификатор партнера
+        /// </summary>
+        public Int16 Partner { get; set; }
+
+        /// <summary>
+        /// Список товаров
+        /// </summary>
+        public List<Good> Goods { get; set; }
+        
     }
 }
