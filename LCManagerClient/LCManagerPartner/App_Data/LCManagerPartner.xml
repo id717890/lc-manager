@@ -2629,6 +2629,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Page">
+            <summary>
+            номер страниц
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.PageSize">
+            <summary>
+            количество строк на странице
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetChequesRequest.DateBuy">
             <summary>
             Дата покупки
@@ -2667,6 +2677,26 @@
         <member name="P:LCManagerPartner.Models.GetChequesRequest.Redeemed">
             <summary>
             Списано
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Start">
+            <summary>
+            Позиция с которой отображать выборку
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Length">
+            <summary>
+            Сколько объектов отображать
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.DateStart">
+            <summary>
+            Показывать продажи с
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.DateEnd">
+            <summary>
+            Показывать продажи по
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetChequesResponse.ErrorCode">

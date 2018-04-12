@@ -719,7 +719,17 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// Сколько объектов отображать
         /// </summary>
-        public int Length { get; set; } 
+        public int Length { get; set; }
+
+        /// <summary>
+        /// Показывать продажи с
+        /// </summary>
+        public string DateStart { get; set; }
+
+        /// <summary>
+        /// Показывать продажи по
+        /// </summary>
+        public string DateEnd { get; set; }
         #endregion
     }
 
@@ -771,7 +781,7 @@ namespace LCManagerPartner.Models
 	            -b2.summa AS redeemed, 
 	            pos.name AS posname,
 	            co.phone AS clientPhone,
-	            ROW_NUMBER() OVER ( ORDER BY c.proctime ) AS RowNum
+	            ROW_NUMBER() OVER ( ORDER BY c.proctime DESC ) AS RowNum
             FROM 
 	            cheque as c ";
 
@@ -780,11 +790,28 @@ namespace LCManagerPartner.Models
             //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
             var whereStr = string.Empty;
 
+            //Фильтр по дате (Верхний фильтр с диапазоном)
+            if (!string.IsNullOrEmpty(request.DateStart))
+            {
+                if (DateTime.TryParse(request.DateStart, out var date))
+                {
+                    whereStr = whereStr + "AND YEAR(c.proctime)>=" + date.Year + " AND MONTH(c.proctime)>=" + date.Month + " AND DAY(c.proctime)>=" + date.Day + " ";
+                }
+            }
+
+            //Фильтр по дате (Верхний фильтр с диапазоном)
+            if (!string.IsNullOrEmpty(request.DateEnd))
+            {
+                if (DateTime.TryParse(request.DateEnd, out var date))
+                {
+                    whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<=" + date.Day + " ";
+                }
+            }
+
             //Фильтр по дате покупки
             if (!string.IsNullOrEmpty(request.DateBuy))
             {
-                DateTime date;
-                if (DateTime.TryParse(request.DateBuy, out date))
+                if (DateTime.TryParse(request.DateBuy, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)=" + date.Year+" AND MONTH(c.proctime)="+date.Month+ " AND DAY(c.proctime)=" + date.Day+" ";
                 }
@@ -898,6 +925,7 @@ namespace LCManagerPartner.Models
             sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
             sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
 
+            if (request.Start == 0) request.Start++;
             sql = sql.Replace("@start", request.Start.ToString());
             sql = sql.Replace("@length", (request.Length + request.Start).ToString());
 
