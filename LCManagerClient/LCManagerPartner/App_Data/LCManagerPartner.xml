@@ -2629,14 +2629,44 @@
             код торговой точки
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.GetChequesRequest.Page">
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.DateBuy">
             <summary>
-            номер страниц
+            Дата покупки
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.GetChequesRequest.PageSize">
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.PosStr">
             <summary>
-            количество строк на странице
+            Точка продаж
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Phone">
+            <summary>
+            Клиент
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Operation">
+            <summary>
+            Операция (покупка, продажа)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Number">
+            <summary>
+            № чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Sum">
+            <summary>
+            Сумма покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Added">
+            <summary>
+            Начисленно
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Redeemed">
+            <summary>
+            Списано
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetChequesResponse.ErrorCode">
@@ -2654,7 +2684,7 @@
             количество страниц
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.GetChequesResponse.ChequeData">
+        <member name="P:LCManagerPartner.Models.GetChequesResponse.RecordTotal">
             <summary>
             детализация по чекам
             </summary>
