@@ -659,17 +659,6 @@ namespace LCManagerPartner.Models
         /// </summary>
         public Int16 Pos { get; set; }
 
-        #region Данные параметры заменены на Start и Length (см.ниже)
-        /// <summary>
-        /// номер страниц
-        /// </summary>
-        public Int16 Page { get; set; }
-        /// <summary>
-        /// количество строк на странице
-        /// </summary>
-        public Int16 PageSize { get; set; } 
-        #endregion
-
         #region Параметр передаваемые от jqyery плагина DataTable для фильтрации и пагинации
         /// <summary>
         /// Дата покупки
@@ -714,12 +703,12 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// Позиция с которой отображать выборку
         /// </summary>
-        public int Start { get; set; }
+        public int Page { get; set; }
 
         /// <summary>
         /// Сколько объектов отображать
         /// </summary>
-        public int Length { get; set; }
+        public Int16 PageSize { get; set; }
 
         /// <summary>
         /// Показывать продажи с
@@ -925,9 +914,9 @@ namespace LCManagerPartner.Models
             sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
             sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
 
-            if (request.Start == 0) request.Start++;
-            sql = sql.Replace("@start", request.Start.ToString());
-            sql = sql.Replace("@length", (request.Length + request.Start).ToString());
+            if (request.Page == 0) request.Page++;
+            sql = sql.Replace("@start", request.Page.ToString());
+            sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
 
             GetChequesResponse returnValue = new GetChequesResponse();
             con.Open();
@@ -6005,8 +5994,8 @@ namespace LCManagerPartner.Models
         public string Level { get; set; }
         public string Balance { get; set; }
 
-        public int Start { get; set; }
-        public int Length { get; set; }
+        public Int16 Page { get; set; }
+        public Int16 PageSize { get; set; }
     }
 
     public class OperatorClientsManagerResponse
@@ -6097,7 +6086,7 @@ namespace LCManagerPartner.Models
 				cr.regdate,
 				(SELECT COUNT(id) FROM cheque WHERE card = cd.number AND refund = 1) AS refundQty,
 				(SELECT COALESCE(SUM(ABS(amount)), 0) FROM cheque WHERE card = cd.number AND refund = 1) AS refund,
-                ROW_NUMBER() OVER ( ORDER BY cr.surname, cr.name, cr.patronymic ) AS RowNum
+                ROW_NUMBER() OVER ( ORDER BY cr.regdate DESC ) AS RowNum
 			FROM
 				clientoperator AS cr
 				INNER JOIN card AS cd ON cr.client = cd.client AND cr.operator = cd.operator
@@ -6216,9 +6205,9 @@ namespace LCManagerPartner.Models
             sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
             sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
 
-            if (request.Start == 0) request.Start++;
-            sql = sql.Replace("@start", request.Start.ToString());
-            sql = sql.Replace("@length", (request.Length + request.Start).ToString());
+            if (request.Page == 0) request.Page++;
+            sql = sql.Replace("@start", request.Page.ToString());
+            sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
 
             OperatorClientsManagerResponse returnValue = new OperatorClientsManagerResponse();
             returnValue.ErrorCode = 0;
