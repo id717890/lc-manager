@@ -4789,6 +4789,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.MenQty">
             <summary>
             мужчины

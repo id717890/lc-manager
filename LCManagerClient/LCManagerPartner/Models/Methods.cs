@@ -6538,6 +6538,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class ClientBaseStructureResponse
@@ -6597,7 +6607,7 @@ namespace LCManagerPartner.Models
 
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "ClientBaseStructure";
+            cmd.CommandText = "GetAnalyticClientBaseStructure";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
             if (request.Partner > 0)
             {
@@ -6607,6 +6617,10 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate);
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate);
+
             cmd.Parameters.Add("@menQty", SqlDbType.Int);
             cmd.Parameters["@menQty"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@womenQty", SqlDbType.Int);
@@ -6634,15 +6648,15 @@ namespace LCManagerPartner.Models
             {
                 cmd.ExecuteNonQuery();
 
-                returnValue.MenQty = Convert.ToInt32(cmd.Parameters["@menQty"].Value);
-                returnValue.WomenQty = Convert.ToInt32(cmd.Parameters["@womenQty"].Value);
-                returnValue.UnknownGender = Convert.ToInt32(cmd.Parameters["@unknownGender"].Value);
-                returnValue.ClientsWithBuys = Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value);
-                returnValue.ClientsWithoutBuys = Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value);
-                returnValue.ClientsWithTenBuys = Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value);
-                returnValue.ClientsWitnOneBuys = Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value);
-                returnValue.ClientsWithPhone = Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value);
-                returnValue.ClientsWithEmail = Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value);
+                returnValue.MenQty = cmd.Parameters["@menQty"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@menQty"].Value) :0;
+                returnValue.WomenQty = cmd.Parameters["@womenQty"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@womenQty"].Value) : 0;
+                returnValue.UnknownGender = cmd.Parameters["@unknownGender"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@unknownGender"].Value) : 0;
+                returnValue.ClientsWithBuys = cmd.Parameters["@clientsWithBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value) : 0;
+                returnValue.ClientsWithoutBuys = cmd.Parameters["@clientsWithoutBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value) : 0;
+                returnValue.ClientsWithTenBuys = cmd.Parameters["@clientsWithTenBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value) : 0;
+                returnValue.ClientsWitnOneBuys = cmd.Parameters["@clientsWithOneBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value) : 0;
+                returnValue.ClientsWithPhone = cmd.Parameters["@clientsWithPhone"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value) : 0;
+                returnValue.ClientsWithEmail = cmd.Parameters["@clientsWithEmail"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value) : 0;
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
