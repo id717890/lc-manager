@@ -6618,8 +6618,8 @@ namespace LCManagerPartner.Models
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
 
-            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate);
-            cmd.Parameters.AddWithValue(@"endDate", request.EndDate);
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
 
             cmd.Parameters.Add("@menQty", SqlDbType.Int);
             cmd.Parameters["@menQty"].Direction = ParameterDirection.Output;
@@ -6685,6 +6685,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class ClientBaseActiveResponse
@@ -6710,6 +6720,26 @@ namespace LCManagerPartner.Models
         /// </summary>
         public decimal BuysOnClient { get; set; }
         /// <summary>
+        /// количество активных клиентов
+        /// </summary>
+        public int ClientActiveQty { get; set; }
+        /// <summary>
+        /// получено?
+        /// </summary>
+        public decimal Gain { get; set; }
+        /// <summary>
+        /// средний чек
+        /// </summary>
+        public decimal AvgCheque { get; set; }
+        /// <summary>
+        /// покупок в будни
+        /// </summary>
+        public decimal BuysWeekdays { get; set; }
+        /// <summary>
+        /// покупок в выходные
+        /// </summary>
+        public decimal BuysWeekOff { get; set; }
+        /// <summary>
         /// код ошибки
         /// </summary>
         public int ErrorCode { get; set; }
@@ -6727,7 +6757,7 @@ namespace LCManagerPartner.Models
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "ClientBaseActive";
+            cmd.CommandText = "GetAnalyticClientBaseActive";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
 
             if (request.Partner > 0)
@@ -6739,6 +6769,9 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
 
             SqlParameter menBuys = new SqlParameter("@menBuys", SqlDbType.Decimal)
             {
@@ -6780,6 +6813,28 @@ namespace LCManagerPartner.Models
             };
             cmd.Parameters.Add(buysOnClient);
 
+            cmd.Parameters.Add("@clientActiveQty", SqlDbType.Int);
+            cmd.Parameters["@clientActiveQty"].Direction = ParameterDirection.Output;
+            SqlParameter gain = new SqlParameter("@gain", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(gain);
+
+            SqlParameter avgCheque = new SqlParameter("@avgCheque", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCheque);
+
+            cmd.Parameters.Add("@buysWeekdays", SqlDbType.Int);
+            cmd.Parameters["@buysWeekdays"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@buysWeekOff", SqlDbType.Int);
+            cmd.Parameters["@buysWeekOff"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -6794,6 +6849,11 @@ namespace LCManagerPartner.Models
                 returnValue.UnknownGenderBuys = Convert.ToDecimal(cmd.Parameters["@unknownGenderBuys"].Value);
                 returnValue.RepeatedBuys = Convert.ToDecimal(cmd.Parameters["@repeatedBuys"].Value);
                 returnValue.BuysOnClient = Convert.ToDecimal(cmd.Parameters["@buysOnClient"].Value);
+                returnValue.ClientActiveQty = Convert.ToInt32(cmd.Parameters["@clientActiveQty"].Value);
+                returnValue.Gain = Convert.ToDecimal(cmd.Parameters["@gain"].Value);
+                returnValue.AvgCheque = Convert.ToDecimal(cmd.Parameters["@avgCheque"].Value);
+                returnValue.BuysWeekdays = Convert.ToDecimal(cmd.Parameters["@buysWeekdays"].Value);
+                returnValue.BuysWeekOff = Convert.ToDecimal(cmd.Parameters["@buysWeekOff"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }

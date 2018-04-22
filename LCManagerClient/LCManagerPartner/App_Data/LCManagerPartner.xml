@@ -4869,6 +4869,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.MenBuys">
             <summary>
             покупок у мужчин
@@ -4892,6 +4902,31 @@
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysOnClient">
             <summary>
             среднее количество покупок на клиента?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.ClientActiveQty">
+            <summary>
+            количество активных клиентов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.Gain">
+            <summary>
+            получено?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.AvgCheque">
+            <summary>
+            средний чек
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysWeekdays">
+            <summary>
+            покупок в будни
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysWeekOff">
+            <summary>
+            покупок в выходные
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.ErrorCode">
