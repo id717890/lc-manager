@@ -1284,6 +1284,10 @@ namespace LCManagerPartner.Models
             }
             cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
             cmd.Parameters.AddWithValue("@email", request.Email);
+            if(!string.IsNullOrEmpty(request.Promocode))
+            {
+                cmd.Parameters.AddWithValue("@promocode", request.Promocode);
+            }
             try
             {
                 cmd.ExecuteNonQuery();
@@ -3007,6 +3011,10 @@ namespace LCManagerPartner.Models
         /// пароль клиента
         /// </summary>
         public bool ClientSetPassword { get; set; }
+        /// <summary>
+        /// промокод
+        /// </summary>
+        public string Promocode { get; set; }
     }
 
     public class ClientCreateResponse
@@ -3085,6 +3093,10 @@ namespace LCManagerPartner.Models
                 cmd.Parameters.AddWithValue("@friend", request.FriendPhone.Value);
             }
             cmd.Parameters.AddWithValue("@clientsetpassword", request.ClientSetPassword);
+            if (!string.IsNullOrEmpty(request.Promocode))
+            {
+                cmd.Parameters.AddWithValue("@promocode", request.Promocode);
+            }
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@client", SqlDbType.Int);
