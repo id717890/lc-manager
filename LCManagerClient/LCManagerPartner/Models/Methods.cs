@@ -6431,6 +6431,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class SegmentationAgeResponse
@@ -6456,6 +6466,18 @@ namespace LCManagerPartner.Models
         /// </summary>
         public int Unknown { get; set; }
         /// <summary>
+        /// количество клиентов
+        /// </summary>
+        public int ClientQty { get; set; }
+        /// <summary>
+        /// с указанной датой рождения
+        /// </summary>
+        public int WithBirthDate { get; set; }
+        /// <summary>
+        /// без указания даты рождения
+        /// </summary>
+        public int WithoutBirthDate { get; set; }
+        /// <summary>
         /// код ошибки
         /// </summary>
         public int ErrorCode { get; set; }
@@ -6474,7 +6496,7 @@ namespace LCManagerPartner.Models
 
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SegmentationAge";
+            cmd.CommandText = "GetAnalyticClientSegmentationAge";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
             if (request.Partner > 0)
             {
@@ -6484,6 +6506,9 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
 
             cmd.Parameters.Add("@less25", SqlDbType.Int);
             cmd.Parameters["@less25"].Direction = ParameterDirection.Output;
@@ -6495,6 +6520,12 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@more45"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@unknown", SqlDbType.Int);
             cmd.Parameters["@unknown"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientQty", SqlDbType.Int);
+            cmd.Parameters["@clientQty"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withBirthDate"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withoutBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withoutBirthDate"].Direction = ParameterDirection.Output;
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
@@ -6510,6 +6541,9 @@ namespace LCManagerPartner.Models
                 returnValue.More35Less45 = Convert.ToInt32(cmd.Parameters["@more35less45"].Value);
                 returnValue.More45 = Convert.ToInt32(cmd.Parameters["@more45"].Value);
                 returnValue.Unknown = Convert.ToInt32(cmd.Parameters["@unknown"].Value);
+                returnValue.ClientQty = Convert.ToInt32(cmd.Parameters["@clientQty"].Value);
+                returnValue.WithBirthDate = Convert.ToInt32(cmd.Parameters["@withBirthDate"].Value);
+                returnValue.WithoutBirthDate = Convert.ToInt32(cmd.Parameters["@withoutBirthDate"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
             }
