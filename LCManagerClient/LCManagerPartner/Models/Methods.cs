@@ -6628,6 +6628,12 @@ namespace LCManagerPartner.Models
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(avgDiscount);
+            cmd.Parameters.Add("@addedBonusCount", SqlDbType.Int);
+            cmd.Parameters["@addedBonusCount"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@redeemedBonusCount", SqlDbType.Int);
+            cmd.Parameters["@redeemedBonusCount"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientCount", SqlDbType.Int);
+            cmd.Parameters["@clientCount"].Direction = ParameterDirection.Output;
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
@@ -6637,15 +6643,20 @@ namespace LCManagerPartner.Models
             try
             {
                 cmd.ExecuteNonQuery();
-
                 returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
+                returnValue.AddedBonusCount = Convert.ToInt32(cmd.Parameters["@addedBonusCount"].Value);
                 returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
                 returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
+                returnValue.RedeemedBonusCount = Convert.ToInt32(cmd.Parameters["@redeemedBonusCount"].Value);
                 returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
+                returnValue.ClientCount = Convert.ToInt32(cmd.Parameters["@clientCount"].Value);
                 returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
                 returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
+
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                
+                
             }
             catch (Exception ex)
             {

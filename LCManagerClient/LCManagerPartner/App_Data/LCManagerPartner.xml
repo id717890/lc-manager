@@ -1467,6 +1467,11 @@
             Начислено бонусов
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AddedBonusCount">
+            <summary>
+            Кол-во начислени
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgCharge">
             <summary>
             Среднее начисление
@@ -1475,6 +1480,11 @@
         <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.RedeemedBonus">
             <summary>
             Списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.RedeemedBonusCount">
+            <summary>
+            Кол-во списаний
             </summary>
         </member>
         <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgRedeem">
@@ -1490,6 +1500,11 @@
         <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgDiscount">
             <summary>
             Фактическая скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.ClientCount">
+            <summary>
+            Кол-во клиентов
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Response.DefaultResponse">

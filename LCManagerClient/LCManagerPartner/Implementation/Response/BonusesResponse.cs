@@ -9,6 +9,10 @@
         /// </summary>
         public decimal AddedBonus { get; set; }
         /// <summary>
+        /// Кол-во начислени
+        /// </summary>
+        public decimal AddedBonusCount { get; set; }
+        /// <summary>
         /// Среднее начисление
         /// </summary>
         public decimal AvgCharge { get; set; }
@@ -16,6 +20,10 @@
         /// Списано бонусов
         /// </summary>
         public decimal RedeemedBonus { get; set; }
+        /// <summary>
+        /// Кол-во списаний
+        /// </summary>
+        public decimal RedeemedBonusCount { get; set; }
         /// <summary>
         /// Среднее списание
         /// </summary>
@@ -28,5 +36,9 @@
         /// Фактическая скидка
         /// </summary>
         public decimal AvgDiscount { get; set; }
+        /// <summary>
+        /// Кол-во клиентов
+        /// </summary>
+        public decimal ClientCount { get; set; }
     }
 }
