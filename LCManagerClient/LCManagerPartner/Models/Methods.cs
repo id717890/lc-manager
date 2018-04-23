@@ -6866,14 +6866,18 @@ namespace LCManagerPartner.Models
     public class ManagerSendCodeRequest
     {
         /// <summary>
-        /// номер телефона
+        /// Логин пользователя
         /// </summary>
-        public long Phone { get; set; }
+        public string Login { get; set; }
 
     }
 
     public class ManagerSendCodeResponse
     {
+        /// <summary>
+        /// Номер телефона пользователя, на который отправлялся проверочный код
+        /// </summary>
+        public long Phone { get; set; }
         /// <summary>
         /// код ошибки
         /// </summary>
@@ -6893,7 +6897,74 @@ namespace LCManagerPartner.Models
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ManagerSendCode";
+            cmd.Parameters.AddWithValue("@login", request.Login);
+            cmd.Parameters.Add("@phone", SqlDbType.BigInt);
+            cmd.Parameters["@phone"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            try
+            {
+                cmd.ExecuteNonQuery();
+                returnValue.Phone = Convert.ToInt64(cmd.Parameters["@phone"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "ManagerSendCode");
+            }
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class SetManagerPasswordRequest
+    {
+        /// <summary>
+        /// номер телефона
+        /// </summary>
+        public long Phone { get; set; }
+        /// <summary>
+        /// код подтверждения
+        /// </summary>
+        public string Code { get; set; }
+        /// <summary>
+        /// пароль
+        /// </summary>
+        public string Password { get; set; }
+        /// <summary>
+        /// ID участника программы лояльности
+        /// </summary>
+        public int ClientID { get; set; }
+    }
+
+    public class SetManagerPasswordResponse
+    {
+        /// <summary>
+        /// код ошибки
+        /// </summary>
+        public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
+        public string Message { get; set; }
+    }
+
+    public class ServerSetManagerPasswordResponse
+    {
+        public SetManagerPasswordResponse ProcessRequest(SqlConnection cnn, SetManagerPasswordRequest request)
+        {
+            SetManagerPasswordResponse returnValue = new SetManagerPasswordResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ManagerSetPassword";
             cmd.Parameters.AddWithValue("@phone", request.Phone);
+            cmd.Parameters.AddWithValue("@code", request.Code);
+            cmd.Parameters.AddWithValue("@password", request.Password);
+
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
