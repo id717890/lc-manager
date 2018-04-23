@@ -1136,6 +1136,11 @@
             Данные для страницы Аналитика LCManager
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.GetClientBonuses(LCManagerPartner.Implementation.Request.BonusesRequest)">
+            <summary>
+            Данные для страницы Аналитика LCManager, блок БОНУСЫ
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientBaseStructure(LCManagerPartner.Models.ClientBaseStructureRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
@@ -1352,6 +1357,16 @@
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Implementation.Request.BonusesRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.BonusesRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
             <summary>
             
@@ -1445,6 +1460,36 @@
         <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.PosList">
             <summary>
             Перечень ID ТТ для списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AddedBonus">
+            <summary>
+            Начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgCharge">
+            <summary>
+            Среднее начисление
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.RedeemedBonus">
+            <summary>
+            Списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgRedeem">
+            <summary>
+            Среднее списание
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgBalance">
+            <summary>
+            Средний баланс
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgDiscount">
+            <summary>
+            Фактическая скидка
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Response.DefaultResponse">

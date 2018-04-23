@@ -261,8 +261,10 @@
     <Compile Include="Implementation\Data\PosList.cs" />
     <Compile Include="Implementation\JwtFormat.cs" />
     <Compile Include="Implementation\Middleware\CustomAuthenticationMiddleware.cs" />
+    <Compile Include="Implementation\Request\BonusesRequest.cs" />
     <Compile Include="Implementation\Request\GoodRequest.cs" />
     <Compile Include="Implementation\Request\PosRequest.cs" />
+    <Compile Include="Implementation\Response\BonusesResponse.cs" />
     <Compile Include="Implementation\Response\DefaultResponse.cs" />
     <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />

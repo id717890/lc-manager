@@ -577,6 +577,19 @@
         }
 
         /// <summary>
+        /// Данные для страницы Аналитика LCManager, блок БОНУСЫ
+        /// </summary>
+        [HttpPost]
+        [Route("GetClientBonuses")]
+        public BonusesResponse GetClientBonuses(BonusesRequest request)
+        {
+            Log.Information("LCManagerPartner SegmentationAge {Operator}", request.Operator);
+            var result = new ServerBonuses();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        /// <summary>
         /// Данные для страницы Аналитика LCManager
         /// </summary>
         [HttpPost]

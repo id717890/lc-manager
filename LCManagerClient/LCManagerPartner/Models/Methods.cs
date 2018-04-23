@@ -6558,6 +6558,106 @@ namespace LCManagerPartner.Models
         }
     }
 
+    public class ServerBonuses
+    {
+        public BonusesResponse ProcessRequest(SqlConnection cnn, BonusesRequest request)
+        {
+            BonusesResponse returnValue = new BonusesResponse();
+            cnn.Open();
+
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "GetAnalyticClientBonuses";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
+
+            SqlParameter addedBonus = new SqlParameter("@addedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(addedBonus);
+
+            SqlParameter avgCharge = new SqlParameter("@avgCharge", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCharge);
+
+            SqlParameter redeemedBonus = new SqlParameter("@redeemedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemedBonus);
+
+            SqlParameter avgRedeem = new SqlParameter("@avgRedeem", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgRedeem);
+
+            SqlParameter avgBalance = new SqlParameter("@avgBalance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgBalance);
+
+            SqlParameter avgDiscount = new SqlParameter("@avgDiscount", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgDiscount);
+
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+
+                returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
+                returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
+                returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
+                returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
+                returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
+                returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner SegmentationAge {Message}", ex.Message);
+                returnValue.ErrorCode = 500;
+                returnValue.Message = ex.Message;
+            }
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
     public class ClientBaseStructureRequest
     {
         /// <summary>
