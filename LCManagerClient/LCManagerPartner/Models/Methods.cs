@@ -783,7 +783,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате (Верхний фильтр с диапазоном)
             if (!string.IsNullOrEmpty(request.DateStart))
             {
-                if (DateTime.TryParse(request.DateStart, out var date))
+                if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)>=" + date.Year + " AND MONTH(c.proctime)>=" + date.Month + " AND DAY(c.proctime)>=" + date.Day + " ";
                 }
@@ -792,7 +792,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате (Верхний фильтр с диапазоном)
             if (!string.IsNullOrEmpty(request.DateEnd))
             {
-                if (DateTime.TryParse(request.DateEnd, out var date))
+                if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<=" + date.Day + " ";
                 }
@@ -801,7 +801,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате покупки
             if (!string.IsNullOrEmpty(request.DateBuy))
             {
-                if (DateTime.TryParse(request.DateBuy, out var date))
+                if (DateTime.TryParseExact(request.DateBuy, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)=" + date.Year+" AND MONTH(c.proctime)="+date.Month+ " AND DAY(c.proctime)=" + date.Day+" ";
                 }
@@ -6196,7 +6196,7 @@ namespace LCManagerPartner.Models
             //Фильтр по уровню
             if (!string.IsNullOrEmpty(request.Level))
             {
-                whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = 3), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
+                whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
             }
 
             //Фильтр по балансу
