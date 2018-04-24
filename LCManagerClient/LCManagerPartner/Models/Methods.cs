@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using LCManagerPartner.Implementation.Data;
 using LCManagerPartner.Implementation.Request;
 using LCManagerPartner.Implementation.Response;
@@ -6113,6 +6114,8 @@ namespace LCManagerPartner.Models
 				LEFT JOIN cardtype AS ce ON ce.id = cd.type
 				LEFT JOIN level AS ll ON cd.level = ll.id ";
 
+            var joinStr = string.Empty;
+
             //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
             var whereStr = string.Empty;
             if (request.Operator != 0 && request.Partner == 0 && string.IsNullOrEmpty(request.Pos))
@@ -6131,6 +6134,7 @@ namespace LCManagerPartner.Models
             else
             if (request.Operator != 0 && request.Partner != 0 && !string.IsNullOrEmpty(request.Pos))
             {
+                joinStr = joinStr + "INNER JOIN pos AS ps ON cr.pos = ps.id ";
                 whereStr = @"
                 WHERE
                     cr.operator = @operator
@@ -6163,7 +6167,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате рождения
             if (!string.IsNullOrEmpty(request.Birthdate))
             {
-                if (DateTime.TryParse(request.Birthdate, out var date))
+                if (DateTime.TryParseExact(request.Birthdate, new []{"dd.MM.yyyy"}, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(cr.birthdate)=" + date.Year + " AND MONTH(cr.birthdate)=" + date.Month + " AND DAY(cr.birthdate)=" + date.Day + " ";
                 }
@@ -6202,8 +6206,8 @@ namespace LCManagerPartner.Models
                 whereStr = whereStr + " AND cd.fullbalance>=" + values[0] + " AND cd.fullbalance<" + values[1] + " ";
             }
 
-            sql = sql + whereStr;
-            sqlCount = sqlCount + whereStr;
+            sql = sql + joinStr + whereStr;
+            sqlCount = sqlCount + joinStr + whereStr;
 
             sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
 				WHERE   RowNum >= @start
@@ -6212,10 +6216,10 @@ namespace LCManagerPartner.Models
 
             sql = sql.Replace("@partner", request.Partner.ToString());
             sql = sql.Replace("@operator", request.Operator.ToString());
-            sql = sql.Replace("@pos", request.Pos.ToString());
+            sql = sql.Replace("@pos", "'" + request.Pos.ToString() + "'");
             sqlCount = sqlCount.Replace("@partner", request.Partner.ToString());
             sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
-            sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
+            sqlCount = sqlCount.Replace("@pos", "'"+request.Pos.ToString()+"'");
 
             if (request.Page == 0) request.Page++;
             sql = sql.Replace("@start", request.Page.ToString());
