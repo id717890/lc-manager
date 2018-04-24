@@ -3604,6 +3604,11 @@
             пароль клиента
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientCreateRequest.Promocode">
+            <summary>
+            промокод
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientCreateResponse.ErrorCode">
             <summary>
             код ошибки
