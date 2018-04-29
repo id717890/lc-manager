@@ -5529,6 +5529,16 @@
             ID оператора
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Partner">
+            <summary>
+            ID партнера
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Pos">
+            <summary>
+            ID торговой точки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorSalesRequest.From">
             <summary>
             Дата начала периода
@@ -5537,6 +5547,61 @@
         <member name="P:LCManagerPartner.Models.OperatorSalesRequest.To">
             <summary>
             Дата окончания периода
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.DateBuy">
+            <summary>
+            Фильтр по дате покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.PosName">
+            <summary>
+            Фильтр по имени ТТ
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Phone">
+            <summary>
+            Фильтр по телефону клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Operation">
+            <summary>
+            Фильтр по типу операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Cheque">
+            <summary>
+            Фильтр по номеру чека
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.SumMore">
+            <summary>
+            Фильтр по сумме (нижняя граница)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.SumLess">
+            <summary>
+            Фильтр по сумме (верхняя граница)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.ChargeMore">
+            <summary>
+            Фильтр по начислению (нижняя граница)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.ChargeLess">
+            <summary>
+            Фильтр по начислению (верхняя граница)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.RedeemMore">
+            <summary>
+            Фильтр по списанию (нижняя граница)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorSalesRequest.RedeemLess">
+            <summary>
+            Фильтр по списанию (верхняя граница)
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorBookkeepingRequest.Operator">
