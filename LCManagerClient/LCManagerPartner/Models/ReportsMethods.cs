@@ -798,7 +798,7 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// Фильтр по полю дата рождения
         /// </summary>
-        public String Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
         /// <summary>
         /// Фильтр по полю пол
         /// </summary>
