@@ -5479,6 +5479,51 @@
             Дата окончания периода
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Name">
+            <summary>
+            Фильтр по полю ФИО
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Phone">
+            <summary>
+            Фильтр по полю телефон
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Email">
+            <summary>
+            Фильтр по полю email
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Birthdate">
+            <summary>
+            Фильтр по полю дата рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Sex">
+            <summary>
+            Фильтр по полю пол
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Type">
+            <summary>
+            Фильтр по полю тип клиента
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Card">
+            <summary>
+            Фильтр по полю номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Level">
+            <summary>
+            Фильтр по полю уровень
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ReportOperatorClientRequest.Balance">
+            <summary>
+            Фильтр по полю баланс
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorSalesRequest.Operator">
             <summary>
             ID оператора

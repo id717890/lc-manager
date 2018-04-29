@@ -773,6 +773,8 @@ namespace LCManagerPartner.Models
         /// </summary>
         [Required]
         public Int16 Operator { get; set; }
+        public Int16 Partner { get; set; }
+        public Int16 Pos { get; set; }
         /// <summary>
         /// Дата начала периода
         /// </summary>
@@ -781,6 +783,42 @@ namespace LCManagerPartner.Models
         /// Дата окончания периода
         /// </summary>
         public DateTime? To { get; set; }
+        /// <summary>
+        /// Фильтр по полю ФИО
+        /// </summary>
+        public String Name { get; set; }
+        /// <summary>
+        /// Фильтр по полю телефон
+        /// </summary>
+        public String Phone { get; set; }
+        /// <summary>
+        /// Фильтр по полю email
+        /// </summary>
+        public String Email { get; set; }
+        /// <summary>
+        /// Фильтр по полю дата рождения
+        /// </summary>
+        public String Birthdate { get; set; }
+        /// <summary>
+        /// Фильтр по полю пол
+        /// </summary>
+        public Int16? Sex { get; set; }
+        /// <summary>
+        /// Фильтр по полю тип клиента
+        /// </summary>
+        public String Type { get; set; }
+        /// <summary>
+        /// Фильтр по полю номер карты
+        /// </summary>
+        public String Card { get; set; }
+        /// <summary>
+        /// Фильтр по полю уровень
+        /// </summary>
+        public String Level { get; set; }
+        /// <summary>
+        /// Фильтр по полю баланс
+        /// </summary>
+        public String Balance { get; set; }
     }
 
     public class ReportServerOperatorClient
@@ -793,8 +831,29 @@ namespace LCManagerPartner.Models
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "Reports.OperatorClient";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner !=0) cmd.Parameters.AddWithValue("@partner", request.Partner);
+            if (request.Pos != 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
             cmd.Parameters.AddWithValue("@from", request.From);
             cmd.Parameters.AddWithValue("@to", request.To);
+            cmd.Parameters.AddWithValue("@f_fio", request.Name);
+            cmd.Parameters.AddWithValue("@f_phone", request.Phone);
+            cmd.Parameters.AddWithValue("@f_email", request.Email);
+            cmd.Parameters.AddWithValue("@f_birthdate", request.Birthdate);
+            cmd.Parameters.AddWithValue("@f_sex", request.Sex);
+            cmd.Parameters.AddWithValue("@f_card", request.Card);
+
+            if (!string.IsNullOrEmpty(request.Type)) cmd.Parameters.AddWithValue("@f_type", request.Type.Substring(1, request.Type.Length - 2));
+            if (!string.IsNullOrEmpty(request.Level)) cmd.Parameters.AddWithValue("@f_level", request.Level.Substring(1, request.Level.Length - 2));
+
+            try
+            {
+                var values = request.Balance.Split('-');
+                cmd.Parameters.AddWithValue("@f_balance_more", values[0]);
+                cmd.Parameters.AddWithValue("@f_balance_less", values[1]);
+            } catch {}
+
+
+
             //cmd.Parameters.Add("@from", SqlDbType.DateTime);
             //cmd.Parameters["@from"].Direction = ParameterDirection.InputOutput;
             //if (request.From.HasValue)
