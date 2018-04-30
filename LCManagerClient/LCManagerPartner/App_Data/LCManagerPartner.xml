@@ -1136,6 +1136,11 @@
             Данные для страницы Аналитика LCManager
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.GetClientBonuses(LCManagerPartner.Implementation.Request.BonusesRequest)">
+            <summary>
+            Данные для страницы Аналитика LCManager, блок БОНУСЫ
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.ClientBaseStructure(LCManagerPartner.Models.ClientBaseStructureRequest)">
             <summary>
             Данные для страницы Аналитика LCManager
@@ -1352,6 +1357,16 @@
             Реализация взята здесь https://stackoverflow.com/questions/25032513/how-to-get-error-message-returned-by-dotnetopenauth-oauth2-on-client-side
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Implementation.Request.BonusesRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.BonusesRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
             <summary>
             
@@ -1445,6 +1460,51 @@
         <member name="P:LCManagerPartner.Implementation.Request.OperatorPosListCreateRequest.PosList">
             <summary>
             Перечень ID ТТ для списка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AddedBonus">
+            <summary>
+            Начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AddedBonusCount">
+            <summary>
+            Кол-во начислени
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgCharge">
+            <summary>
+            Среднее начисление
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.RedeemedBonus">
+            <summary>
+            Списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.RedeemedBonusCount">
+            <summary>
+            Кол-во списаний
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgRedeem">
+            <summary>
+            Среднее списание
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgBalance">
+            <summary>
+            Средний баланс
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.AvgDiscount">
+            <summary>
+            Фактическая скидка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.ClientCount">
+            <summary>
+            Кол-во клиентов
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Response.DefaultResponse">
@@ -4744,6 +4804,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.LessThen25">
             <summary>
             моложе 25 лет
@@ -4769,6 +4839,21 @@
             возраст неизвестен
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.ClientQty">
+            <summary>
+            количество клиентов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.WithBirthDate">
+            <summary>
+            с указанной датой рождения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.WithoutBirthDate">
+            <summary>
+            без указания даты рождения
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SegmentationAgeResponse.ErrorCode">
             <summary>
             код ошибки
@@ -4792,6 +4877,16 @@
         <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.Pos">
             <summary>
             код торговой точки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseStructureRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientBaseStructureResponse.MenQty">
@@ -4864,6 +4959,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.BeginDate">
+            <summary>
+            Начало периода для расчета аналитики
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveRequest.EndDate">
+            <summary>
+            Окончание периода для расчета аналитики
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.MenBuys">
             <summary>
             покупок у мужчин
@@ -4887,6 +4992,31 @@
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysOnClient">
             <summary>
             среднее количество покупок на клиента?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.ClientActiveQty">
+            <summary>
+            количество активных клиентов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.Gain">
+            <summary>
+            получено?
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.AvgCheque">
+            <summary>
+            средний чек
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysWeekdays">
+            <summary>
+            покупок в будни
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.BuysWeekOff">
+            <summary>
+            покупок в выходные
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientBaseActiveResponse.ErrorCode">

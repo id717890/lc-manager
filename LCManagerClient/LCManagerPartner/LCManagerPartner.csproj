@@ -261,8 +261,10 @@
     <Compile Include="Implementation\Data\PosList.cs" />
     <Compile Include="Implementation\JwtFormat.cs" />
     <Compile Include="Implementation\Middleware\CustomAuthenticationMiddleware.cs" />
+    <Compile Include="Implementation\Request\BonusesRequest.cs" />
     <Compile Include="Implementation\Request\GoodRequest.cs" />
     <Compile Include="Implementation\Request\PosRequest.cs" />
+    <Compile Include="Implementation\Response\BonusesResponse.cs" />
     <Compile Include="Implementation\Response\DefaultResponse.cs" />
     <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
@@ -318,6 +320,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Compile Include="App_Start\Startup.OAuth.cs" />
+    <None Include="Properties\PublishProfiles\dev.lctest.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />

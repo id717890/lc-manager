@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using LCManagerPartner.Implementation.Data;
 using LCManagerPartner.Implementation.Request;
 using LCManagerPartner.Implementation.Response;
@@ -782,7 +783,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате (Верхний фильтр с диапазоном)
             if (!string.IsNullOrEmpty(request.DateStart))
             {
-                if (DateTime.TryParse(request.DateStart, out var date))
+                if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)>=" + date.Year + " AND MONTH(c.proctime)>=" + date.Month + " AND DAY(c.proctime)>=" + date.Day + " ";
                 }
@@ -791,7 +792,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате (Верхний фильтр с диапазоном)
             if (!string.IsNullOrEmpty(request.DateEnd))
             {
-                if (DateTime.TryParse(request.DateEnd, out var date))
+                if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<=" + date.Day + " ";
                 }
@@ -800,7 +801,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате покупки
             if (!string.IsNullOrEmpty(request.DateBuy))
             {
-                if (DateTime.TryParse(request.DateBuy, out var date))
+                if (DateTime.TryParseExact(request.DateBuy, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(c.proctime)=" + date.Year+" AND MONTH(c.proctime)="+date.Month+ " AND DAY(c.proctime)=" + date.Day+" ";
                 }
@@ -6113,6 +6114,8 @@ namespace LCManagerPartner.Models
 				LEFT JOIN cardtype AS ce ON ce.id = cd.type
 				LEFT JOIN level AS ll ON cd.level = ll.id ";
 
+            var joinStr = string.Empty;
+
             //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
             var whereStr = string.Empty;
             if (request.Operator != 0 && request.Partner == 0 && string.IsNullOrEmpty(request.Pos))
@@ -6131,6 +6134,7 @@ namespace LCManagerPartner.Models
             else
             if (request.Operator != 0 && request.Partner != 0 && !string.IsNullOrEmpty(request.Pos))
             {
+                joinStr = joinStr + "INNER JOIN pos AS ps ON cr.pos = ps.id ";
                 whereStr = @"
                 WHERE
                     cr.operator = @operator
@@ -6163,7 +6167,7 @@ namespace LCManagerPartner.Models
             //Фильтр по дате рождения
             if (!string.IsNullOrEmpty(request.Birthdate))
             {
-                if (DateTime.TryParse(request.Birthdate, out var date))
+                if (DateTime.TryParseExact(request.Birthdate, new []{"dd.MM.yyyy"}, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
                     whereStr = whereStr + "AND YEAR(cr.birthdate)=" + date.Year + " AND MONTH(cr.birthdate)=" + date.Month + " AND DAY(cr.birthdate)=" + date.Day + " ";
                 }
@@ -6192,7 +6196,7 @@ namespace LCManagerPartner.Models
             //Фильтр по уровню
             if (!string.IsNullOrEmpty(request.Level))
             {
-                whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = 3), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
+                whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
             }
 
             //Фильтр по балансу
@@ -6202,8 +6206,8 @@ namespace LCManagerPartner.Models
                 whereStr = whereStr + " AND cd.fullbalance>=" + values[0] + " AND cd.fullbalance<" + values[1] + " ";
             }
 
-            sql = sql + whereStr;
-            sqlCount = sqlCount + whereStr;
+            sql = sql + joinStr + whereStr;
+            sqlCount = sqlCount + joinStr + whereStr;
 
             sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
 				WHERE   RowNum >= @start
@@ -6212,10 +6216,10 @@ namespace LCManagerPartner.Models
 
             sql = sql.Replace("@partner", request.Partner.ToString());
             sql = sql.Replace("@operator", request.Operator.ToString());
-            sql = sql.Replace("@pos", request.Pos.ToString());
+            sql = sql.Replace("@pos", "'" + request.Pos.ToString() + "'");
             sqlCount = sqlCount.Replace("@partner", request.Partner.ToString());
             sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
-            sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
+            sqlCount = sqlCount.Replace("@pos", "'"+request.Pos.ToString()+"'");
 
             if (request.Page == 0) request.Page++;
             sql = sql.Replace("@start", request.Page.ToString());
@@ -6443,6 +6447,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class SegmentationAgeResponse
@@ -6468,6 +6482,18 @@ namespace LCManagerPartner.Models
         /// </summary>
         public int Unknown { get; set; }
         /// <summary>
+        /// количество клиентов
+        /// </summary>
+        public int ClientQty { get; set; }
+        /// <summary>
+        /// с указанной датой рождения
+        /// </summary>
+        public int WithBirthDate { get; set; }
+        /// <summary>
+        /// без указания даты рождения
+        /// </summary>
+        public int WithoutBirthDate { get; set; }
+        /// <summary>
         /// код ошибки
         /// </summary>
         public int ErrorCode { get; set; }
@@ -6486,7 +6512,7 @@ namespace LCManagerPartner.Models
 
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SegmentationAge";
+            cmd.CommandText = "GetAnalyticClientSegmentationAge";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
             if (request.Partner > 0)
             {
@@ -6496,6 +6522,9 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
 
             cmd.Parameters.Add("@less25", SqlDbType.Int);
             cmd.Parameters["@less25"].Direction = ParameterDirection.Output;
@@ -6507,6 +6536,12 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@more45"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@unknown", SqlDbType.Int);
             cmd.Parameters["@unknown"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientQty", SqlDbType.Int);
+            cmd.Parameters["@clientQty"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withBirthDate"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@withoutBirthDate", SqlDbType.Int);
+            cmd.Parameters["@withoutBirthDate"].Direction = ParameterDirection.Output;
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
@@ -6522,8 +6557,122 @@ namespace LCManagerPartner.Models
                 returnValue.More35Less45 = Convert.ToInt32(cmd.Parameters["@more35less45"].Value);
                 returnValue.More45 = Convert.ToInt32(cmd.Parameters["@more45"].Value);
                 returnValue.Unknown = Convert.ToInt32(cmd.Parameters["@unknown"].Value);
+                returnValue.ClientQty = Convert.ToInt32(cmd.Parameters["@clientQty"].Value);
+                returnValue.WithBirthDate = Convert.ToInt32(cmd.Parameters["@withBirthDate"].Value);
+                returnValue.WithoutBirthDate = Convert.ToInt32(cmd.Parameters["@withoutBirthDate"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "LCManagerPartner SegmentationAge {Message}", ex.Message);
+                returnValue.ErrorCode = 500;
+                returnValue.Message = ex.Message;
+            }
+            cnn.Close();
+            return returnValue;
+        }
+    }
+
+    public class ServerBonuses
+    {
+        public BonusesResponse ProcessRequest(SqlConnection cnn, BonusesRequest request)
+        {
+            BonusesResponse returnValue = new BonusesResponse();
+            cnn.Open();
+
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "GetAnalyticClientBonuses";
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if (request.Pos > 0)
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
+
+            SqlParameter addedBonus = new SqlParameter("@addedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(addedBonus);
+
+            SqlParameter avgCharge = new SqlParameter("@avgCharge", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCharge);
+
+            SqlParameter redeemedBonus = new SqlParameter("@redeemedBonus", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(redeemedBonus);
+
+            SqlParameter avgRedeem = new SqlParameter("@avgRedeem", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgRedeem);
+
+            SqlParameter avgBalance = new SqlParameter("@avgBalance", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgBalance);
+
+            SqlParameter avgDiscount = new SqlParameter("@avgDiscount", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgDiscount);
+            cmd.Parameters.Add("@addedBonusCount", SqlDbType.Int);
+            cmd.Parameters["@addedBonusCount"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@redeemedBonusCount", SqlDbType.Int);
+            cmd.Parameters["@redeemedBonusCount"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@clientCount", SqlDbType.Int);
+            cmd.Parameters["@clientCount"].Direction = ParameterDirection.Output;
+
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+                returnValue.AddedBonus = Convert.ToDecimal(cmd.Parameters["@addedBonus"].Value);
+                returnValue.AddedBonusCount = Convert.ToInt32(cmd.Parameters["@addedBonusCount"].Value);
+                returnValue.AvgCharge = Convert.ToDecimal(cmd.Parameters["@avgCharge"].Value);
+                returnValue.RedeemedBonus = Convert.ToDecimal(cmd.Parameters["@redeemedBonus"].Value);
+                returnValue.RedeemedBonusCount = Convert.ToInt32(cmd.Parameters["@redeemedBonusCount"].Value);
+                returnValue.AvgRedeem = Convert.ToDecimal(cmd.Parameters["@avgRedeem"].Value);
+                returnValue.ClientCount = Convert.ToInt32(cmd.Parameters["@clientCount"].Value);
+                returnValue.AvgBalance = Convert.ToDecimal(cmd.Parameters["@avgBalance"].Value);
+                returnValue.AvgDiscount = Convert.ToDecimal(cmd.Parameters["@avgDiscount"].Value);
+
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                
+                
             }
             catch (Exception ex)
             {
@@ -6550,6 +6699,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class ClientBaseStructureResponse
@@ -6609,7 +6768,7 @@ namespace LCManagerPartner.Models
 
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "ClientBaseStructure";
+            cmd.CommandText = "GetAnalyticClientBaseStructure";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
             if (request.Partner > 0)
             {
@@ -6619,6 +6778,10 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
+
             cmd.Parameters.Add("@menQty", SqlDbType.Int);
             cmd.Parameters["@menQty"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@womenQty", SqlDbType.Int);
@@ -6646,15 +6809,15 @@ namespace LCManagerPartner.Models
             {
                 cmd.ExecuteNonQuery();
 
-                returnValue.MenQty = Convert.ToInt32(cmd.Parameters["@menQty"].Value);
-                returnValue.WomenQty = Convert.ToInt32(cmd.Parameters["@womenQty"].Value);
-                returnValue.UnknownGender = Convert.ToInt32(cmd.Parameters["@unknownGender"].Value);
-                returnValue.ClientsWithBuys = Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value);
-                returnValue.ClientsWithoutBuys = Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value);
-                returnValue.ClientsWithTenBuys = Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value);
-                returnValue.ClientsWitnOneBuys = Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value);
-                returnValue.ClientsWithPhone = Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value);
-                returnValue.ClientsWithEmail = Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value);
+                returnValue.MenQty = cmd.Parameters["@menQty"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@menQty"].Value) :0;
+                returnValue.WomenQty = cmd.Parameters["@womenQty"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@womenQty"].Value) : 0;
+                returnValue.UnknownGender = cmd.Parameters["@unknownGender"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@unknownGender"].Value) : 0;
+                returnValue.ClientsWithBuys = cmd.Parameters["@clientsWithBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithBuys"].Value) : 0;
+                returnValue.ClientsWithoutBuys = cmd.Parameters["@clientsWithoutBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithoutBuys"].Value) : 0;
+                returnValue.ClientsWithTenBuys = cmd.Parameters["@clientsWithTenBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithTenBuys"].Value) : 0;
+                returnValue.ClientsWitnOneBuys = cmd.Parameters["@clientsWithOneBuys"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithOneBuys"].Value) : 0;
+                returnValue.ClientsWithPhone = cmd.Parameters["@clientsWithPhone"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithPhone"].Value) : 0;
+                returnValue.ClientsWithEmail = cmd.Parameters["@clientsWithEmail"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["@clientsWithEmail"].Value) : 0;
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
@@ -6683,6 +6846,16 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+
+        /// <summary>
+        /// Начало периода для расчета аналитики
+        /// </summary>
+        public DateTime BeginDate { get; set; }
+
+        /// <summary>
+        /// Окончание периода для расчета аналитики
+        /// </summary>
+        public DateTime EndDate { get; set; }
     }
 
     public class ClientBaseActiveResponse
@@ -6708,6 +6881,26 @@ namespace LCManagerPartner.Models
         /// </summary>
         public decimal BuysOnClient { get; set; }
         /// <summary>
+        /// количество активных клиентов
+        /// </summary>
+        public int ClientActiveQty { get; set; }
+        /// <summary>
+        /// получено?
+        /// </summary>
+        public decimal Gain { get; set; }
+        /// <summary>
+        /// средний чек
+        /// </summary>
+        public decimal AvgCheque { get; set; }
+        /// <summary>
+        /// покупок в будни
+        /// </summary>
+        public decimal BuysWeekdays { get; set; }
+        /// <summary>
+        /// покупок в выходные
+        /// </summary>
+        public decimal BuysWeekOff { get; set; }
+        /// <summary>
         /// код ошибки
         /// </summary>
         public int ErrorCode { get; set; }
@@ -6725,7 +6918,7 @@ namespace LCManagerPartner.Models
             cnn.Open();
             SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "ClientBaseActive";
+            cmd.CommandText = "GetAnalyticClientBaseActive";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
 
             if (request.Partner > 0)
@@ -6737,6 +6930,9 @@ namespace LCManagerPartner.Models
             {
                 cmd.Parameters.AddWithValue("@pos", request.Pos);
             }
+
+            cmd.Parameters.AddWithValue(@"beginDate", request.BeginDate.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue(@"endDate", request.EndDate.ToString("yyyy-MM-dd"));
 
             SqlParameter menBuys = new SqlParameter("@menBuys", SqlDbType.Decimal)
             {
@@ -6778,6 +6974,28 @@ namespace LCManagerPartner.Models
             };
             cmd.Parameters.Add(buysOnClient);
 
+            cmd.Parameters.Add("@clientActiveQty", SqlDbType.Int);
+            cmd.Parameters["@clientActiveQty"].Direction = ParameterDirection.Output;
+            SqlParameter gain = new SqlParameter("@gain", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(gain);
+
+            SqlParameter avgCheque = new SqlParameter("@avgCheque", SqlDbType.Decimal)
+            {
+                Precision = 19,
+                Scale = 2,
+                Direction = ParameterDirection.Output
+            };
+            cmd.Parameters.Add(avgCheque);
+
+            cmd.Parameters.Add("@buysWeekdays", SqlDbType.Int);
+            cmd.Parameters["@buysWeekdays"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@buysWeekOff", SqlDbType.Int);
+            cmd.Parameters["@buysWeekOff"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -6792,6 +7010,11 @@ namespace LCManagerPartner.Models
                 returnValue.UnknownGenderBuys = Convert.ToDecimal(cmd.Parameters["@unknownGenderBuys"].Value);
                 returnValue.RepeatedBuys = Convert.ToDecimal(cmd.Parameters["@repeatedBuys"].Value);
                 returnValue.BuysOnClient = Convert.ToDecimal(cmd.Parameters["@buysOnClient"].Value);
+                returnValue.ClientActiveQty = Convert.ToInt32(cmd.Parameters["@clientActiveQty"].Value);
+                returnValue.Gain = Convert.ToDecimal(cmd.Parameters["@gain"].Value);
+                returnValue.AvgCheque = Convert.ToDecimal(cmd.Parameters["@avgCheque"].Value);
+                returnValue.BuysWeekdays = Convert.ToDecimal(cmd.Parameters["@buysWeekdays"].Value);
+                returnValue.BuysWeekOff = Convert.ToDecimal(cmd.Parameters["@buysWeekOff"].Value);
                 returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             }
