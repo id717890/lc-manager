@@ -1179,6 +1179,11 @@
             Отправка кода подтверждения менеджером
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.SetManagerPassword(LCManagerPartner.Models.SetManagerPasswordRequest)">
+            <summary>
+            Установка/изменение пароля Участника.
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.OperatorInfo(LCManagerPartner.Models.OperatorInfoRequest)">
             <summary>
             Информация об операторе
@@ -5309,9 +5314,14 @@
             сообщение об ошибке
             </summary>
         </member>
-        <member name="P:LCManagerPartner.Models.ManagerSendCodeRequest.Phone">
+        <member name="P:LCManagerPartner.Models.ManagerSendCodeRequest.Login">
             <summary>
-            номер телефона
+            Логин пользователя
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerSendCodeResponse.Phone">
+            <summary>
+            Номер телефона пользователя, на который отправлялся проверочный код
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ManagerSendCodeResponse.ErrorCode">
@@ -5320,6 +5330,36 @@
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ManagerSendCodeResponse.Message">
+            <summary>
+            сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordRequest.Phone">
+            <summary>
+            номер телефона
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordRequest.Code">
+            <summary>
+            код подтверждения
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordRequest.Password">
+            <summary>
+            пароль
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordRequest.ClientID">
+            <summary>
+            ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordResponse.ErrorCode">
+            <summary>
+            код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SetManagerPasswordResponse.Message">
             <summary>
             сообщение об ошибке
             </summary>

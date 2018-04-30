@@ -678,8 +678,22 @@
         [Route("ManagerSendCode")]
         public ManagerSendCodeResponse ManagerSendCode(ManagerSendCodeRequest request)
         {
-            Log.Information("LCManagerPartner ManagerSendCode {Phone}", request.Phone);
+            Log.Information("LCManagerPartner ManagerSendCode {Phone}", request.Login);
             var result = new ServerManagerSendCode();
+            var returnValue = result.ProcessRequest(cnn, request);
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Установка/изменение пароля Участника.
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("SetManagerPassword")]
+        public SetManagerPasswordResponse SetManagerPassword(SetManagerPasswordRequest request)
+        {
+            Log.Information("LCManagerPartner SetClientPassword {phone}", request.Phone);
+            var result = new ServerSetManagerPasswordResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
         }
