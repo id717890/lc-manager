@@ -5551,6 +5551,18 @@ namespace LCManagerPartner.Models
         /// </summary>
         public string PermissionCode { get; set; }
         /// <summary>
+        /// Идентификатор партнёра по умолчанию, проставляется в случаях регистрации участника оператором
+        /// </summary>
+        public Int16 DefaultPartner { get; set; }
+        /// <summary>
+        /// Идентификатор торговой точки по умолчанию, проставляется в случаях регистрации участника оператором или партнёром
+        /// </summary>
+        public Int16 DefaultPos { get; set; }
+        /// <summary>
+        /// Код торговой точки по умолчанию, проставляется в случаях регистрации участника оператором или партнёром
+        /// </summary>
+        public string DefaultPosCode { get; set; }
+        /// <summary>
         /// код ошибки
         /// </summary>
         public int ErrorCode { get; set; }
@@ -5593,6 +5605,12 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@rolename"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@permissioncode", SqlDbType.NVarChar, 20);
             cmd.Parameters["@permissioncode"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@defaultpartner", SqlDbType.SmallInt);
+            cmd.Parameters["@defaultpartner"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@defaultpos", SqlDbType.SmallInt);
+            cmd.Parameters["@defaultpos"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@defaultposcode", SqlDbType.NVarChar, 10);
+            cmd.Parameters["@defaultposcode"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -5639,6 +5657,22 @@ namespace LCManagerPartner.Models
             if(!string.IsNullOrWhiteSpace(returnValue.RoleName) && !returnValue.Roles.Contains(returnValue.RoleName))
             {
                 returnValue.Roles.Add(returnValue.RoleName);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@defaultpartner"].Value))
+            {
+                returnValue.Partner = Convert.ToInt16(cmd.Parameters["@defaultpartner"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@defaultpos"].Value))
+            {
+                returnValue.Pos = Convert.ToInt16(cmd.Parameters["@defaultpos"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@defaultposcode"].Value))
+            {
+                returnValue.PosCode = Convert.ToString(cmd.Parameters["@defaultposcode"].Value);
+            }
+            if (!DBNull.Value.Equals(cmd.Parameters["@rolename"].Value))
+            {
+                returnValue.RoleName = Convert.ToString(cmd.Parameters["@rolename"].Value);
             }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
             returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);

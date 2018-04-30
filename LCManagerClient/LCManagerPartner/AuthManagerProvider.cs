@@ -60,6 +60,18 @@
                 {
                     identity.AddClaim(new Claim("poscode", authentificationResult.PosCode));
                 }
+                if (authentificationResult.DefaultPartner > 0)
+                {
+                    identity.AddClaim(new Claim("defaultpartner", authentificationResult.DefaultPartner.ToString()));
+                }
+                if (authentificationResult.DefaultPos > 0)
+                {
+                    identity.AddClaim(new Claim("defaultpos", authentificationResult.DefaultPos.ToString()));
+                }
+                if (!string.IsNullOrEmpty(authentificationResult.DefaultPosCode))
+                {
+                    identity.AddClaim(new Claim("defaultposcode", authentificationResult.DefaultPosCode));
+                }
                 identity.AddClaim(new Claim("permissioncode", authentificationResult.PermissionCode));
                 context.Validated(identity);
             }
