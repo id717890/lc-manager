@@ -4489,6 +4489,21 @@
             разрешения
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.DefaultPartner">
+            <summary>
+            Идентификатор партнёра по умолчанию, проставляется в случаях регистрации участника оператором
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.DefaultPos">
+            <summary>
+            Идентификатор торговой точки по умолчанию, проставляется в случаях регистрации участника оператором или партнёром
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.ManagerLoginResponse.DefaultPosCode">
+            <summary>
+            Код торговой точки по умолчанию, проставляется в случаях регистрации участника оператором или партнёром
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ManagerLoginResponse.ErrorCode">
             <summary>
             код ошибки
