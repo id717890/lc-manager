@@ -794,7 +794,7 @@ namespace LCManagerPartner.Models
             {
                 if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<=" + date.Day + " ";
+                    whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<" + date.Day + " ";
                 }
             }
 
@@ -838,21 +838,21 @@ namespace LCManagerPartner.Models
             if (!string.IsNullOrEmpty(request.Sum))
             {
                 var values = request.Sum.Split('-');
-                whereStr = whereStr + " AND ABS(c.amount)>="+values[0]+ " AND ABS(c.amount)<="+values[1]+" ";
+                whereStr = whereStr + " AND ABS(c.amount)>="+values[0]+ " AND ABS(c.amount)<"+values[1]+" ";
             }
 
             //Фильтр по начислениям
             if (!string.IsNullOrEmpty(request.Added))
             {
                 var values = request.Added.Split('-');
-                whereStr = whereStr + " AND b1.summa>=" + values[0] + " AND b1.summa<=" + values[1] + " ";
+                whereStr = whereStr + " AND b1.summa>=" + values[0] + " AND b1.summa<" + values[1] + " ";
             }
 
             //Фильтр по списаниям
             if (!string.IsNullOrEmpty(request.Redeemed))
             {
                 var values = request.Redeemed.Split('-');
-                whereStr = whereStr + " AND ABS(b2.summa)>=" + values[0] + " AND ABS(b2.summa)<=" + values[1] + " ";
+                whereStr = whereStr + " AND ABS(b2.summa)>=" + values[0] + " AND ABS(b2.summa)<" + values[1] + " ";
             }
 
             if (!string.IsNullOrEmpty(whereStr)) whereStr = whereStr + "AND 1=1";
