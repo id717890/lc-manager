@@ -5661,15 +5661,15 @@ namespace LCManagerPartner.Models
             }
             if (!DBNull.Value.Equals(cmd.Parameters["@defaultpartner"].Value))
             {
-                returnValue.Partner = Convert.ToInt16(cmd.Parameters["@defaultpartner"].Value);
+                returnValue.DefaultPartner = Convert.ToInt16(cmd.Parameters["@defaultpartner"].Value);
             }
             if (!DBNull.Value.Equals(cmd.Parameters["@defaultpos"].Value))
             {
-                returnValue.Pos = Convert.ToInt16(cmd.Parameters["@defaultpos"].Value);
+                returnValue.DefaultPos = Convert.ToInt16(cmd.Parameters["@defaultpos"].Value);
             }
             if (!DBNull.Value.Equals(cmd.Parameters["@defaultposcode"].Value))
             {
-                returnValue.PosCode = Convert.ToString(cmd.Parameters["@defaultposcode"].Value);
+                returnValue.DefaultPosCode = Convert.ToString(cmd.Parameters["@defaultposcode"].Value);
             }
             if (!DBNull.Value.Equals(cmd.Parameters["@rolename"].Value))
             {
