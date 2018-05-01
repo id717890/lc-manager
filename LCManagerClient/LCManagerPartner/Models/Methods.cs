@@ -756,36 +756,205 @@ namespace LCManagerPartner.Models
         public GetChequesResponse ProcessRequest(SqlConnection con, GetChequesRequest request)
         {
             //неизменный текст запроса
-            var sql = @"
-            SELECT 
-	            c.id, 
-	            c.number, 
-	            c.chequetime, 
-	            c.refund, 
-	            ABS(c.amount) AS amount, 
-	            c.discount, 
-	            p.name AS partner, 
-	            pos.code AS pos, 
-	            c.card, 
-	            b1.summa AS added, 
-	            -b2.summa AS redeemed, 
-	            pos.name AS posname,
-	            co.phone AS clientPhone,
-	            ROW_NUMBER() OVER ( ORDER BY c.proctime DESC ) AS RowNum
-            FROM 
-	            cheque as c ";
+    //        var sql = @"
+    //        SELECT 
+	   //         c.id, 
+	   //         c.number, 
+	   //         c.chequetime, 
+	   //         c.refund, 
+	   //         ABS(c.amount) AS amount, 
+	   //         c.discount, 
+	   //         p.name AS partner, 
+	   //         pos.code AS pos, 
+	   //         c.card, 
+	   //         b1.summa AS added, 
+	   //         -b2.summa AS redeemed, 
+	   //         pos.name AS posname,
+	   //         co.phone AS clientPhone,
+	   //         ROW_NUMBER() OVER ( ORDER BY c.proctime DESC ) AS RowNum
+    //        FROM 
+	   //         cheque as c ";
 
-            var sqlCount = @"SELECT COUNT(*) FROM  cheque as c ";
+    //        var sqlCount = @"SELECT COUNT(*) FROM  cheque as c ";
 
-            //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
-            var whereStr = string.Empty;
+    //        //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
+    //        var whereStr = string.Empty;
 
+    //        //Фильтр по дате (Верхний фильтр с диапазоном)
+    //        if (!string.IsNullOrEmpty(request.DateStart))
+    //        {
+    //            if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+    //            {
+    //                whereStr = whereStr + "AND YEAR(c.proctime)>=" + date.Year + " AND MONTH(c.proctime)>=" + date.Month + " AND DAY(c.proctime)>=" + date.Day + " ";
+    //            }
+    //        }
+
+    //        //Фильтр по дате (Верхний фильтр с диапазоном)
+    //        if (!string.IsNullOrEmpty(request.DateEnd))
+    //        {
+    //            if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+    //            {
+    //                whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<" + date.Day + " ";
+    //            }
+    //        }
+
+    //        //Фильтр по дате покупки
+    //        if (!string.IsNullOrEmpty(request.DateBuy))
+    //        {
+    //            if (DateTime.TryParseExact(request.DateBuy, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+    //            {
+    //                whereStr = whereStr + "AND YEAR(c.proctime)=" + date.Year+" AND MONTH(c.proctime)="+date.Month+ " AND DAY(c.proctime)=" + date.Day+" ";
+    //            }
+    //        }
+
+    //        //Фильтр по точке продаж
+    //        if (!string.IsNullOrEmpty(request.PosStr))
+    //        {
+    //            whereStr = whereStr + " AND pos.name LIKE '%" + request.PosStr + "%' ";
+    //        }
+
+    //        //Фильтр по операции
+    //        if (!string.IsNullOrEmpty(request.Operation))
+    //        {
+    //            if (request.Operation.ToLower().Contains("возврат"))
+    //                whereStr = whereStr + " AND c.refund=1 ";
+    //            if (request.Operation.ToLower().Contains("покупка"))
+    //                whereStr = whereStr + " AND c.refund!=1 ";
+    //        }
+
+    //        //Фильтр по №чека
+    //        if (!string.IsNullOrEmpty(request.Number))
+    //        {
+    //            whereStr = whereStr + " AND (c.number LIKE '%" + request.Number + "%'OR c.number LIKE '%" + request.Number + "' OR c.number LIKE '" + request.Number + "%' OR c.number ='" + request.Number+ "') ";
+    //        }
+
+    //        //Фильтр по клиенту
+    //        if (!string.IsNullOrEmpty(request.Phone))
+    //        {
+    //            whereStr = whereStr + " AND (co.phone LIKE '%" + request.Phone + "%' OR co.phone LIKE '%" + request.Phone+ "' OR co.phone LIKE '" + request.Phone+ "%' OR co.phone ='"+request.Phone+"') ";
+    //        }
+
+    //        //Фильтр по сумме
+    //        if (!string.IsNullOrEmpty(request.Sum))
+    //        {
+    //            var values = request.Sum.Split('-');
+    //            whereStr = whereStr + " AND ABS(c.amount)>="+values[0]+ " AND ABS(c.amount)<"+values[1]+" ";
+    //        }
+
+    //        //Фильтр по начислениям
+    //        if (!string.IsNullOrEmpty(request.Added))
+    //        {
+    //            var values = request.Added.Split('-');
+    //            whereStr = whereStr + " AND b1.summa>=" + values[0] + " AND b1.summa<" + values[1] + " ";
+    //        }
+
+    //        //Фильтр по списаниям
+    //        if (!string.IsNullOrEmpty(request.Redeemed))
+    //        {
+    //            var values = request.Redeemed.Split('-');
+    //            whereStr = whereStr + " AND ABS(b2.summa)>=" + values[0] + " AND ABS(b2.summa)<" + values[1] + " ";
+    //        }
+
+    //        if (!string.IsNullOrEmpty(whereStr)) whereStr = whereStr + "AND 1=1";
+
+    //        //Формируем блок JOIN в зависимости от пришедших парамтеров
+    //        var joinStr = string.Empty;
+    //        if (request.Operator != 0 && request.PartnerId == 0 && request.Pos == 0)
+    //        {
+    //            joinStr = @"
+    //                    LEFT JOIN partner as p ON c.partner = p.id 
+		  //              LEFT JOIN pos ON c.pos = pos.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
+		  //              left join card cd on cd.number = c.card
+		  //              inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
+	   //             WHERE 
+    //                    c.partner IN(SELECT id FROM partner WHERE operator = @operator) AND(c.cancelled IS NULL OR c.cancelled = 0) ";
+                
+    //        }
+    //        else if (request.Operator != 0 && request.PartnerId != 0 && request.Pos == 0)
+    //        {
+    //            joinStr = @"
+    //                    LEFT JOIN partner as p ON c.partner = p.id 
+		  //              LEFT JOIN pos ON c.pos = pos.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
+		  //              left join card cd on cd.number = c.card
+		  //              inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
+	   //             WHERE 
+		  //              c.partner = @partner AND (c.cancelled IS NULL OR c.cancelled = 0)";
+    //        }
+    //        else if (request.Operator != 0 && request.PartnerId != 0 && request.Pos != 0)
+    //        {
+    //            joinStr = @"
+    //                    LEFT JOIN partner as p ON c.partner = p.id 
+		  //              LEFT JOIN pos ON c.pos = pos.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
+		  //              left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
+		  //              left join card cd on cd.number = c.card
+		  //              inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
+	   //             WHERE 
+    //                    c.pos = @pos AND (c.cancelled IS NULL OR c.cancelled = 0) ";
+    //        }
+
+    //        sql = sql + joinStr;
+    //        sqlCount = sqlCount + joinStr;
+
+    //        sql = sql + whereStr;
+    //        sqlCount = sqlCount + whereStr;
+
+    //        sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
+				//WHERE   RowNum >= @start
+				//	AND RowNum < @length
+				//ORDER BY RowNum";
+
+    //        sql = sql.Replace("@partner", request.PartnerId.ToString());
+    //        sql = sql.Replace("@operator", request.Operator.ToString());
+    //        sql = sql.Replace("@pos", request.Pos.ToString());
+    //        sqlCount = sqlCount.Replace("@partner", request.PartnerId.ToString());
+    //        sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
+    //        sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
+
+    //        if (request.Page == 0) request.Page++;
+    //        sql = sql.Replace("@start", request.Page.ToString());
+    //        sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
+
+            GetChequesResponse returnValue = new GetChequesResponse();
+            //con.Open();
+            //SqlCommand cmd = con.CreateCommand();
+            //cmd.CommandType = CommandType.Text;
+            //cmd.CommandText = sqlCount;
+            //returnValue.RecordTotal = (Int32) cmd.ExecuteScalar();
+            //returnValue.RecordFilterd = returnValue.RecordTotal;
+            //cmd.CommandText = sql;
+
+            con.Open();
+            SqlCommand cmd = con.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ChequesPaging";
+            if (request.Operator > 0) cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.PartnerId > 0) cmd.Parameters.AddWithValue("@partner", request.PartnerId);
+            if (request.Pos > 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
+            if (request.Page == 0) request.Page++;
+            cmd.Parameters.AddWithValue("@start", request.Page);
+            cmd.Parameters.AddWithValue("@length", request.Page + request.PageSize);
+            cmd.Parameters.AddWithValue("@f_pos", request.PosStr);
+            cmd.Parameters.AddWithValue("@f_phone", request.PosStr);
+            cmd.Parameters.AddWithValue("@f_cheque", request.Number);
+            
+            if (!string.IsNullOrEmpty(request.DateBuy))
+            {
+                if (DateTime.TryParseExact(request.DateBuy, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+                {
+                    cmd.Parameters.AddWithValue("@f_date_buy", date);
+                }
+            }
             //Фильтр по дате (Верхний фильтр с диапазоном)
             if (!string.IsNullOrEmpty(request.DateStart))
             {
                 if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    whereStr = whereStr + "AND YEAR(c.proctime)>=" + date.Year + " AND MONTH(c.proctime)>=" + date.Month + " AND DAY(c.proctime)>=" + date.Day + " ";
+                    cmd.Parameters.AddWithValue("@f_date_start", date);
                 }
             }
 
@@ -794,155 +963,49 @@ namespace LCManagerPartner.Models
             {
                 if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    whereStr = whereStr + "AND YEAR(c.proctime)<=" + date.Year + " AND MONTH(c.proctime)<=" + date.Month + " AND DAY(c.proctime)<" + date.Day + " ";
+                    cmd.Parameters.AddWithValue("@f_date_end", date);
                 }
-            }
-
-            //Фильтр по дате покупки
-            if (!string.IsNullOrEmpty(request.DateBuy))
-            {
-                if (DateTime.TryParseExact(request.DateBuy, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
-                {
-                    whereStr = whereStr + "AND YEAR(c.proctime)=" + date.Year+" AND MONTH(c.proctime)="+date.Month+ " AND DAY(c.proctime)=" + date.Day+" ";
-                }
-            }
-
-            //Фильтр по точке продаж
-            if (!string.IsNullOrEmpty(request.PosStr))
-            {
-                whereStr = whereStr + " AND pos.name LIKE '%" + request.PosStr + "%' ";
             }
 
             //Фильтр по операции
             if (!string.IsNullOrEmpty(request.Operation))
             {
-                if (request.Operation.ToLower().Contains("возврат"))
-                    whereStr = whereStr + " AND c.refund=1 ";
-                if (request.Operation.ToLower().Contains("покупка"))
-                    whereStr = whereStr + " AND c.refund!=1 ";
-            }
-
-            //Фильтр по №чека
-            if (!string.IsNullOrEmpty(request.Number))
-            {
-                whereStr = whereStr + " AND (c.number LIKE '%" + request.Number + "%'OR c.number LIKE '%" + request.Number + "' OR c.number LIKE '" + request.Number + "%' OR c.number ='" + request.Number+ "') ";
-            }
-
-            //Фильтр по клиенту
-            if (!string.IsNullOrEmpty(request.Phone))
-            {
-                whereStr = whereStr + " AND (co.phone LIKE '%" + request.Phone + "%' OR co.phone LIKE '%" + request.Phone+ "' OR co.phone LIKE '" + request.Phone+ "%' OR co.phone ='"+request.Phone+"') ";
+                if (request.Operation.ToLower().Contains("возврат")) cmd.Parameters.AddWithValue("@f_operation", 1);
+                else if (request.Operation.ToLower().Contains("покупка")) cmd.Parameters.AddWithValue("@f_operation", 0);
             }
 
             //Фильтр по сумме
             if (!string.IsNullOrEmpty(request.Sum))
             {
                 var values = request.Sum.Split('-');
-                whereStr = whereStr + " AND ABS(c.amount)>="+values[0]+ " AND ABS(c.amount)<"+values[1]+" ";
+                cmd.Parameters.AddWithValue("@f_sum_more", Convert.ToInt32(values[0]));
+                cmd.Parameters.AddWithValue("@f_sum_less", Convert.ToInt32(values[1]));
             }
 
             //Фильтр по начислениям
             if (!string.IsNullOrEmpty(request.Added))
             {
                 var values = request.Added.Split('-');
-                whereStr = whereStr + " AND b1.summa>=" + values[0] + " AND b1.summa<" + values[1] + " ";
+                cmd.Parameters.AddWithValue("@f_added_more", Convert.ToInt32(values[0]));
+                cmd.Parameters.AddWithValue("@f_added_less", Convert.ToInt32(values[1]));
             }
 
             //Фильтр по списаниям
             if (!string.IsNullOrEmpty(request.Redeemed))
             {
                 var values = request.Redeemed.Split('-');
-                whereStr = whereStr + " AND ABS(b2.summa)>=" + values[0] + " AND ABS(b2.summa)<" + values[1] + " ";
+                cmd.Parameters.AddWithValue("@f_redeemed_more", Convert.ToInt32(values[0]));
+                cmd.Parameters.AddWithValue("@f_redeemed_less", Convert.ToInt32(values[1]));
             }
 
-            if (!string.IsNullOrEmpty(whereStr)) whereStr = whereStr + "AND 1=1";
 
-            //Формируем блок JOIN в зависимости от пришедших парамтеров
-            var joinStr = string.Empty;
-            if (request.Operator != 0 && request.PartnerId == 0 && request.Pos == 0)
-            {
-                joinStr = @"
-                        LEFT JOIN partner as p ON c.partner = p.id 
-		                LEFT JOIN pos ON c.pos = pos.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
-		                left join card cd on cd.number = c.card
-		                inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
-	                WHERE 
-                        c.partner IN(SELECT id FROM partner WHERE operator = @operator) AND(c.cancelled IS NULL OR c.cancelled = 0) ";
-                
-            }
-            else if (request.Operator != 0 && request.PartnerId != 0 && request.Pos == 0)
-            {
-                joinStr = @"
-                        LEFT JOIN partner as p ON c.partner = p.id 
-		                LEFT JOIN pos ON c.pos = pos.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
-		                left join card cd on cd.number = c.card
-		                inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
-	                WHERE 
-		                c.partner = @partner AND (c.cancelled IS NULL OR c.cancelled = 0)";
-            }
-            else if (request.Operator != 0 && request.PartnerId != 0 && request.Pos != 0)
-            {
-                joinStr = @"
-                        LEFT JOIN partner as p ON c.partner = p.id 
-		                LEFT JOIN pos ON c.pos = pos.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus > 0 group by cheque) b1 on b1.cheque=c.id
-		                left join (select cheque, sum(bonus) as summa from bonus where bonus < 0 group by cheque) b2 on b2.cheque=c.id
-		                left join card cd on cd.number = c.card
-		                inner join clientoperator co on cd.client = co.client AND cd.operator = co.operator
-	                WHERE 
-                        c.pos = @pos AND (c.cancelled IS NULL OR c.cancelled = 0) ";
-            }
 
-            sql = sql + joinStr;
-            sqlCount = sqlCount + joinStr;
-
-            sql = sql + whereStr;
-            sqlCount = sqlCount + whereStr;
-
-            sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
-				WHERE   RowNum >= @start
-					AND RowNum < @length
-				ORDER BY RowNum";
-
-            sql = sql.Replace("@partner", request.PartnerId.ToString());
-            sql = sql.Replace("@operator", request.Operator.ToString());
-            sql = sql.Replace("@pos", request.Pos.ToString());
-            sqlCount = sqlCount.Replace("@partner", request.PartnerId.ToString());
-            sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
-            sqlCount = sqlCount.Replace("@pos", request.Pos.ToString());
-
-            if (request.Page == 0) request.Page++;
-            sql = sql.Replace("@start", request.Page.ToString());
-            sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
-
-            GetChequesResponse returnValue = new GetChequesResponse();
-            con.Open();
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = sqlCount;
-            returnValue.RecordTotal = (Int32) cmd.ExecuteScalar();
-            returnValue.RecordFilterd = returnValue.RecordTotal;
-            cmd.CommandText = sql;
-            
-            //con.Open();
-            //SqlCommand cmd = con.CreateCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "Cheques";
-            //cmd.Parameters.AddWithValue("@operator", request.Operator);
-            //cmd.Parameters.AddWithValue("@partner", request.PartnerId);
-            //cmd.Parameters.AddWithValue("@pos", request.Pos);
-            //cmd.Parameters.AddWithValue("@page", request.Page);
-            //cmd.Parameters.AddWithValue("@pagesize", request.PageSize);
-            //cmd.Parameters.AddWithValue("@start", request.Start);
-            //cmd.Parameters.AddWithValue("@length", request.Length);
-            //cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
-            //cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
-            //cmd.Parameters.Add("@result", SqlDbType.Int);
-            //cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@total_rows", SqlDbType.Int);
+            cmd.Parameters["@total_rows"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
             //cmd.Parameters.Add("@pagecount", SqlDbType.Int);
             //cmd.Parameters["@pagecount"].Direction = ParameterDirection.Output;
             //cmd.Parameters.Add("@total", SqlDbType.Int);
@@ -968,9 +1031,10 @@ namespace LCManagerPartner.Models
                 returnValue.ChequeData.Add(cheque);
             }
             reader.Close();
-            //returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
-            //returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            //returnValue.PageCount = Convert.ToInt32(cmd.Parameters["@pagecount"].Value);
+            returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+            returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+            returnValue.RecordTotal = Convert.ToInt32(cmd.Parameters["@total_rows"].Value);
+            returnValue.RecordFilterd = returnValue.RecordTotal;
             try
             {
                 foreach (var cheque in returnValue.ChequeData)
