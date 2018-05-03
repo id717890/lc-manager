@@ -6124,10 +6124,9 @@ namespace LCManagerPartner.Models
 				(SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number) AS friendBonusDate,
 				(SELECT SUM(bonus) FROM bonus WHERE source = 5 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS friendBonus,
 				(SELECT MAX(proctime) FROM bonus WHERE source = 6 AND card = cd.number) AS birthdayBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 6 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS birthdayBonus,
+				(SELECT SUM(bonus) FROM bonus WHERE source = 6 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 6 AND card = cd.number)) AS birthdayBonus,
 				CASE
 					WHEN cr.appdevice IS NOT NULL AND cr.pos IS NULL THEN N'Мобилка'
-					WHEN cr.appdevice IS NULL AND cr.pos IS NULL THEN N'Сайт'
 					WHEN cr.pos IS NOT NULL THEN (SELECT name FROM pos WHERE id = cr.pos)
 				END AS posRegistrator,
 				cr.regdate,
