@@ -6134,233 +6134,261 @@ namespace LCManagerPartner.Models
     {
         public OperatorClientsManagerResponse ProcessRequest(SqlConnection cnn, OperatorClientsManagerRequest request)
         {
-            //неизменный текст запроса
-            var sql = @"
-            SELECT
-				cr.client,
-				COALESCE(cr.surname + ' ', '') + COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') AS fullname,
-				cr.phone,
-				COALESCE(cr.email, N'Отсутствует') AS email,
-				cr.birthdate,
-				CASE
-					WHEN cr.gender = 1 THEN N'Мужской'
-					WHEN cr.gender = 0 THEN N'Женский'
-					ELSE N'Не указан'
-				END AS gender,
-				COALESCE(ce.name, N'Клиент') AS client_type,
-				cd.number,
-				COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') AS level,
-				cd.fullbalance,
-				(SELECT COUNT(id) FROM cheque WHERE card = cd.number AND (refund = 0 OR refund IS NULL) AND (cancelled IS NULL OR cancelled = 0)) AS buyqty,
-				(SELECT SUM(amount) FROM cheque WHERE card = cd.number AND (refund = 0 OR refund IS NULL) AND (cancelled IS NULL OR cancelled = 0)) AS buysum,
-				(SELECT proctime FROM cheque WHERE card = cd.number AND proctime = (SELECT MAX(proctime) FROM cheque WHERE card = cd.number) AND (cancelled IS NULL OR cancelled = 0) AND id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)) AS lastBuyDate,
-				(SELECT amount FROM cheque WHERE card = cd.number AND proctime = (SELECT MAX(proctime) FROM cheque WHERE card = cd.number) AND (cancelled IS NULL OR cancelled = 0) AND id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)) AS lastBuyAmount,
-				(SELECT 
-					COUNT(bs.id) 
-				FROM 
-					bonus AS bs 
-					INNER JOIN cheque AS ce ON bs.cheque = ce.id 
-				WHERE 
-					bs.bonus < 0 
-					AND bs.card = cd.number
-					AND (ce.cancelled IS NULL OR ce.cancelled = 0)
-					AND (ce.refund = 0 OR ce.refund IS NULL)
-					AND ce.id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)
-				) AS bonusredeemqty,
-				(SELECT 
-					COALESCE(SUM(ABS(bonus)), 0) 
-				FROM 
-					bonus AS bs
-					INNER JOIN cheque AS ce ON bs.cheque = ce.id
-				WHERE 
-					bs.bonus < 0 
-					AND bs.card = cd.number
-					AND (ce.cancelled IS NULL OR ce.cancelled = 0)
-					AND (ce.refund = 0 OR ce.refund IS NULL)
-					AND ce.id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)
-				) AS bonusredeemsum,
-				(SELECT MAX(proctime) FROM bonus WHERE source = 4 AND card = cd.number) AS welcomeBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 4 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 4 AND card = cd.number)) AS welcomeBonus,
-				(SELECT MAX(proctime) FROM bonus WHERE source = 2 AND card = cd.number) AS promoBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 2 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 2 AND card = cd.number)) AS promoBonus,
-				(SELECT MAX(proctime) FROM bonus WHERE source = 3 AND card = cd.number) AS operatorBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 3 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 3 AND card = cd.number)) AS operatorBonus,
-				(SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number) AS friendBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 5 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS friendBonus,
-				(SELECT MAX(proctime) FROM bonus WHERE source = 6 AND card = cd.number) AS birthdayBonusDate,
-				(SELECT SUM(bonus) FROM bonus WHERE source = 6 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS birthdayBonus,
-				CASE
-					WHEN cr.appdevice IS NOT NULL AND cr.pos IS NULL THEN N'Мобилка'
-					WHEN cr.appdevice IS NULL AND cr.pos IS NULL THEN N'Сайт'
-					WHEN cr.pos IS NOT NULL THEN (SELECT name FROM pos WHERE id = cr.pos)
-				END AS posRegistrator,
-				cr.regdate,
-				(SELECT COUNT(id) FROM cheque WHERE card = cd.number AND refund = 1) AS refundQty,
-				(SELECT COALESCE(SUM(ABS(amount)), 0) FROM cheque WHERE card = cd.number AND refund = 1) AS refund,
-                ROW_NUMBER() OVER ( ORDER BY cr.regdate DESC ) AS RowNum
-			FROM
-				clientoperator AS cr
-				INNER JOIN card AS cd ON cr.client = cd.client AND cr.operator = cd.operator
-				LEFT JOIN cardtype AS ce ON ce.id = cd.type
-				LEFT JOIN level AS ll ON cd.level = ll.id ";
+   //         //неизменный текст запроса
+   //         var sql = @"
+   //         SELECT
+			//	cr.client,
+			//	COALESCE(cr.surname + ' ', '') + COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') AS fullname,
+			//	cr.phone,
+			//	COALESCE(cr.email, N'Отсутствует') AS email,
+			//	cr.birthdate,
+			//	CASE
+			//		WHEN cr.gender = 1 THEN N'Мужской'
+			//		WHEN cr.gender = 0 THEN N'Женский'
+			//		ELSE N'Не указан'
+			//	END AS gender,
+			//	COALESCE(ce.name, N'Клиент') AS client_type,
+			//	cd.number,
+			//	COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') AS level,
+			//	cd.fullbalance,
+			//	(SELECT COUNT(id) FROM cheque WHERE card = cd.number AND (refund = 0 OR refund IS NULL) AND (cancelled IS NULL OR cancelled = 0)) AS buyqty,
+			//	(SELECT SUM(amount) FROM cheque WHERE card = cd.number AND (refund = 0 OR refund IS NULL) AND (cancelled IS NULL OR cancelled = 0)) AS buysum,
+			//	(SELECT proctime FROM cheque WHERE card = cd.number AND proctime = (SELECT MAX(proctime) FROM cheque WHERE card = cd.number) AND (cancelled IS NULL OR cancelled = 0) AND id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)) AS lastBuyDate,
+			//	(SELECT amount FROM cheque WHERE card = cd.number AND proctime = (SELECT MAX(proctime) FROM cheque WHERE card = cd.number) AND (cancelled IS NULL OR cancelled = 0) AND id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)) AS lastBuyAmount,
+			//	(SELECT 
+			//		COUNT(bs.id) 
+			//	FROM 
+			//		bonus AS bs 
+			//		INNER JOIN cheque AS ce ON bs.cheque = ce.id 
+			//	WHERE 
+			//		bs.bonus < 0 
+			//		AND bs.card = cd.number
+			//		AND (ce.cancelled IS NULL OR ce.cancelled = 0)
+			//		AND (ce.refund = 0 OR ce.refund IS NULL)
+			//		AND ce.id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)
+			//	) AS bonusredeemqty,
+			//	(SELECT 
+			//		COALESCE(SUM(ABS(bonus)), 0) 
+			//	FROM 
+			//		bonus AS bs
+			//		INNER JOIN cheque AS ce ON bs.cheque = ce.id
+			//	WHERE 
+			//		bs.bonus < 0 
+			//		AND bs.card = cd.number
+			//		AND (ce.cancelled IS NULL OR ce.cancelled = 0)
+			//		AND (ce.refund = 0 OR ce.refund IS NULL)
+			//		AND ce.id NOT IN (SELECT cheque FROM cheque WHERE refund = 1)
+			//	) AS bonusredeemsum,
+			//	(SELECT MAX(proctime) FROM bonus WHERE source = 4 AND card = cd.number) AS welcomeBonusDate,
+			//	(SELECT SUM(bonus) FROM bonus WHERE source = 4 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 4 AND card = cd.number)) AS welcomeBonus,
+			//	(SELECT MAX(proctime) FROM bonus WHERE source = 2 AND card = cd.number) AS promoBonusDate,
+			//	(SELECT SUM(bonus) FROM bonus WHERE source = 2 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 2 AND card = cd.number)) AS promoBonus,
+			//	(SELECT MAX(proctime) FROM bonus WHERE source = 3 AND card = cd.number) AS operatorBonusDate,
+			//	(SELECT SUM(bonus) FROM bonus WHERE source = 3 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 3 AND card = cd.number)) AS operatorBonus,
+			//	(SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number) AS friendBonusDate,
+			//	(SELECT SUM(bonus) FROM bonus WHERE source = 5 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS friendBonus,
+			//	(SELECT MAX(proctime) FROM bonus WHERE source = 6 AND card = cd.number) AS birthdayBonusDate,
+			//	(SELECT SUM(bonus) FROM bonus WHERE source = 6 AND card = cd.number AND proctime = (SELECT MAX(proctime) FROM bonus WHERE source = 5 AND card = cd.number)) AS birthdayBonus,
+			//	CASE
+			//		WHEN cr.appdevice IS NOT NULL AND cr.pos IS NULL THEN N'Мобилка'
+			//		WHEN cr.appdevice IS NULL AND cr.pos IS NULL THEN N'Сайт'
+			//		WHEN cr.pos IS NOT NULL THEN (SELECT name FROM pos WHERE id = cr.pos)
+			//	END AS posRegistrator,
+			//	cr.regdate,
+			//	(SELECT COUNT(id) FROM cheque WHERE card = cd.number AND refund = 1) AS refundQty,
+			//	(SELECT COALESCE(SUM(ABS(amount)), 0) FROM cheque WHERE card = cd.number AND refund = 1) AS refund,
+   //             ROW_NUMBER() OVER ( ORDER BY cr.regdate DESC ) AS RowNum
+			//FROM
+			//	clientoperator AS cr
+			//	INNER JOIN card AS cd ON cr.client = cd.client AND cr.operator = cd.operator
+			//	LEFT JOIN cardtype AS ce ON ce.id = cd.type
+			//	LEFT JOIN level AS ll ON cd.level = ll.id ";
 
-            var sqlCount = @"
-            SELECT COUNT(*) 
-            FROM  
-                clientoperator as cr 
-				INNER JOIN card AS cd ON cr.client = cd.client AND cr.operator = cd.operator
-				LEFT JOIN cardtype AS ce ON ce.id = cd.type
-				LEFT JOIN level AS ll ON cd.level = ll.id ";
+   //         var sqlCount = @"
+   //         SELECT COUNT(*) 
+   //         FROM  
+   //             clientoperator as cr 
+			//	INNER JOIN card AS cd ON cr.client = cd.client AND cr.operator = cd.operator
+			//	LEFT JOIN cardtype AS ce ON ce.id = cd.type
+			//	LEFT JOIN level AS ll ON cd.level = ll.id ";
 
-            var joinStr = string.Empty;
+   //         var joinStr = string.Empty;
 
-            //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
-            var whereStr = string.Empty;
-            if (request.Operator != 0 && request.Partner == 0 && string.IsNullOrEmpty(request.Pos))
-            {
-                whereStr = @"
-                WHERE
-                    cr.operator = @operator ";
-            }
-            else if (request.Operator != 0 && request.Partner != 0 && string.IsNullOrEmpty(request.Pos))
-            {
-                whereStr = @"
-                WHERE
-                    cr.operator = @operator
-                    AND cr.pos IN (SELECT id FROM pos WHERE partner = @partner) ";
-            }
-            else
-            if (request.Operator != 0 && request.Partner != 0 && !string.IsNullOrEmpty(request.Pos))
-            {
-                joinStr = joinStr + "INNER JOIN pos AS ps ON cr.pos = ps.id ";
-                whereStr = @"
-                WHERE
-                    cr.operator = @operator
-                    AND ps.code = @pos ";
-            }
+   //         //Формируем блок WHERE в зависимости от фильтрации в таблице на клиенте
+   //         var whereStr = string.Empty;
+   //         if (request.Operator != 0 && request.Partner == 0 && string.IsNullOrEmpty(request.Pos))
+   //         {
+   //             whereStr = @"
+   //             WHERE
+   //                 cr.operator = @operator ";
+   //         }
+   //         else if (request.Operator != 0 && request.Partner != 0 && string.IsNullOrEmpty(request.Pos))
+   //         {
+   //             whereStr = @"
+   //             WHERE
+   //                 cr.operator = @operator
+   //                 AND cr.pos IN (SELECT id FROM pos WHERE partner = @partner) ";
+   //         }
+   //         else
+   //         if (request.Operator != 0 && request.Partner != 0 && !string.IsNullOrEmpty(request.Pos))
+   //         {
+   //             joinStr = joinStr + "INNER JOIN pos AS ps ON cr.pos = ps.id ";
+   //             whereStr = @"
+   //             WHERE
+   //                 cr.operator = @operator
+   //                 AND ps.code = @pos ";
+   //         }
 
-            //Фильтр по ФИО
-            if (!string.IsNullOrEmpty(request.Name))
-            {
-                whereStr = whereStr + @" 
-                    AND (
-                        COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '%" + request.Name + @"' 
-                        OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '%" + request.Name + @"%' 
-                        OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '" + request.Name + @"%' 
-                        OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') = '" + request.Name + @"') ";
-            }
+   //         //Фильтр по ФИО
+   //         if (!string.IsNullOrEmpty(request.Name))
+   //         {
+   //             whereStr = whereStr + @" 
+   //                 AND (
+   //                     COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '%" + request.Name + @"' 
+   //                     OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '%" + request.Name + @"%' 
+   //                     OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') like '" + request.Name + @"%' 
+   //                     OR COALESCE(cr.surname +' ', '') +COALESCE(cr.name + ' ', '') + COALESCE(cr.patronymic + ' ', '') = '" + request.Name + @"') ";
+   //         }
             
-            //Фильтр по телефону
-            if (!string.IsNullOrEmpty(request.Phone))
-            {
-                whereStr = whereStr + " AND (cr.phone LIKE '%" + request.Phone + "%' OR cr.phone LIKE '%" + request.Phone + "' OR cr.phone LIKE '" + request.Phone + "%' OR cr.phone ='" + request.Phone + "') ";
-            }
+   //         //Фильтр по телефону
+   //         if (!string.IsNullOrEmpty(request.Phone))
+   //         {
+   //             whereStr = whereStr + " AND (cr.phone LIKE '%" + request.Phone + "%' OR cr.phone LIKE '%" + request.Phone + "' OR cr.phone LIKE '" + request.Phone + "%' OR cr.phone ='" + request.Phone + "') ";
+   //         }
 
-            //Фильтр по телефону
-            if (!string.IsNullOrEmpty(request.Email))
-            {
-                whereStr = whereStr + " AND (cr.email LIKE '%" + request.Email + "%' OR cr.email LIKE '%" + request.Email + "' OR cr.email LIKE '" + request.Email + "%' OR cr.email ='" + request.Email + "') ";
-            }
+   //         //Фильтр по телефону
+   //         if (!string.IsNullOrEmpty(request.Email))
+   //         {
+   //             whereStr = whereStr + " AND (cr.email LIKE '%" + request.Email + "%' OR cr.email LIKE '%" + request.Email + "' OR cr.email LIKE '" + request.Email + "%' OR cr.email ='" + request.Email + "') ";
+   //         }
 
-            //Фильтр по дате рождения
+   //         //Фильтр по дате рождения
+   //         if (!string.IsNullOrEmpty(request.Birthdate))
+   //         {
+   //             if (DateTime.TryParseExact(request.Birthdate, new []{"dd.MM.yyyy"}, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+   //             {
+   //                 whereStr = whereStr + "AND YEAR(cr.birthdate)=" + date.Year + " AND MONTH(cr.birthdate)=" + date.Month + " AND DAY(cr.birthdate)=" + date.Day + " ";
+   //             }
+   //         }
+
+   //         //Фильтр по полу
+   //         if (!string.IsNullOrEmpty(request.Sex))
+   //         {
+   //             if (request.Sex.ToLower().Contains("мужской")) whereStr = whereStr + " AND cr.gender=1 ";
+   //             else if (request.Sex.ToLower().Contains("женский")) whereStr = whereStr + " AND cr.gender=0 ";
+   //             else whereStr = whereStr + " AND cr.gender is NULL ";
+   //         }
+
+   //         //Фильтр по типу клиента
+   //         if (!string.IsNullOrEmpty(request.ClientType))
+   //         {
+   //             whereStr = whereStr + " AND COALESCE(ce.name, N'Клиент')='" + request.ClientType.Substring(1, request.ClientType.Length - 2) + "' ";
+   //         }
+
+   //         //Фильтр по номеру карты
+   //         if (!string.IsNullOrEmpty(request.Number))
+   //         {
+   //             whereStr = whereStr + " AND (cd.number LIKE '%" + request.Number + "%'OR cd.number LIKE '%" + request.Number + "' OR cd.number LIKE '" + request.Number + "%' OR cd.number ='" + request.Number + "') ";
+   //         }
+
+   //         //Фильтр по уровню
+   //         if (!string.IsNullOrEmpty(request.Level))
+   //         {
+   //             whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
+   //         }
+
+   //         //Фильтр по балансу
+   //         if (!string.IsNullOrEmpty(request.Balance))
+   //         {
+   //             var values = request.Balance.Split('-');
+   //             whereStr = whereStr + " AND cd.fullbalance>=" + values[0] + " AND cd.fullbalance<" + values[1] + " ";
+   //         }
+
+   //         sql = sql + joinStr + whereStr;
+   //         sqlCount = sqlCount + joinStr + whereStr;
+
+   //         sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
+			//	WHERE   RowNum >= @start
+			//		AND RowNum < @length
+			//	ORDER BY RowNum";
+
+   //         sql = sql.Replace("@partner", request.Partner.ToString());
+   //         sql = sql.Replace("@operator", request.Operator.ToString());
+   //         sql = sql.Replace("@pos", "'" + request.Pos.ToString() + "'");
+   //         sqlCount = sqlCount.Replace("@partner", request.Partner.ToString());
+   //         sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
+   //         sqlCount = sqlCount.Replace("@pos", "'"+request.Pos.ToString()+"'");
+
+   //         if (request.Page == 0) request.Page++;
+   //         sql = sql.Replace("@start", request.Page.ToString());
+   //         sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
+
+            //OperatorClientsManagerResponse returnValue = new OperatorClientsManagerResponse();
+            //returnValue.ErrorCode = 0;
+            //returnValue.Message = string.Empty;
+
+            //cnn.Open();
+            //SqlCommand cmd = cnn.CreateCommand();
+            //cmd.CommandType = CommandType.Text;
+            //cmd.CommandText = sqlCount;
+            //try
+            //{
+            //    returnValue.RecordTotal = (Int32)cmd.ExecuteScalar();
+            //    returnValue.RecordFilterd = returnValue.RecordTotal;
+            //}
+            //catch (Exception)
+            //{
+            //}
+
+            //cmd.CommandText = sql;
+
+            var returnValue = new OperatorClientsManagerResponse();
+            cnn.Open();
+            SqlCommand cmd = cnn.CreateCommand();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "ClientsPaging";
+
+            cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0)
+            {
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+            }
+            if (!string.IsNullOrEmpty(request.Pos))
+            {
+                cmd.Parameters.AddWithValue("@pos", request.Pos);
+            }
+            if (request.Page == 0) request.Page++;
+            cmd.Parameters.AddWithValue("@start", request.Page);
+            cmd.Parameters.AddWithValue("@length", request.Page + request.PageSize);
+            //cmd.Parameters.AddWithValue("@f_fio", request.Name);
+            //cmd.Parameters.AddWithValue("@f_phone", request.Phone);
+            //cmd.Parameters.AddWithValue("@f_email", request.Email);
+            //cmd.Parameters.AddWithValue("@f_sex", request.Sex);
+            //cmd.Parameters.AddWithValue("@f_type", request.ClientType);
+            //cmd.Parameters.AddWithValue("@f_card", request.Number);
+            //cmd.Parameters.AddWithValue("@f_level", request.Level);
+
             if (!string.IsNullOrEmpty(request.Birthdate))
             {
-                if (DateTime.TryParseExact(request.Birthdate, new []{"dd.MM.yyyy"}, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+                if (DateTime.TryParseExact(request.Birthdate, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    whereStr = whereStr + "AND YEAR(cr.birthdate)=" + date.Year + " AND MONTH(cr.birthdate)=" + date.Month + " AND DAY(cr.birthdate)=" + date.Day + " ";
+                    cmd.Parameters.AddWithValue("@f_birthdate", date);
                 }
             }
-
-            //Фильтр по полу
-            if (!string.IsNullOrEmpty(request.Sex))
-            {
-                if (request.Sex.ToLower().Contains("мужской")) whereStr = whereStr + " AND cr.gender=1 ";
-                else if (request.Sex.ToLower().Contains("женский")) whereStr = whereStr + " AND cr.gender=0 ";
-                else whereStr = whereStr + " AND cr.gender is NULL ";
-            }
-
-            //Фильтр по типу клиента
-            if (!string.IsNullOrEmpty(request.ClientType))
-            {
-                whereStr = whereStr + " AND COALESCE(ce.name, N'Клиент')='" + request.ClientType.Substring(1, request.ClientType.Length - 2) + "' ";
-            }
-
-            //Фильтр по номеру карты
-            if (!string.IsNullOrEmpty(request.Number))
-            {
-                whereStr = whereStr + " AND (cd.number LIKE '%" + request.Number + "%'OR cd.number LIKE '%" + request.Number + "' OR cd.number LIKE '" + request.Number + "%' OR cd.number ='" + request.Number + "') ";
-            }
-
-            //Фильтр по уровню
-            if (!string.IsNullOrEmpty(request.Level))
-            {
-                whereStr = whereStr + " AND COALESCE(ll.condition,(SELECT CAST(CAST(MIN(interest) AS INT) AS NVARCHAR(5)) + N' %' FROM chequerule WHERE operator = @operator), N'Отсутствует') = '"+ request.Level.Substring(1, request.Level.Length - 2) + "' ";
-            }
-
             //Фильтр по балансу
             if (!string.IsNullOrEmpty(request.Balance))
             {
                 var values = request.Balance.Split('-');
-                whereStr = whereStr + " AND cd.fullbalance>=" + values[0] + " AND cd.fullbalance<" + values[1] + " ";
+                cmd.Parameters.AddWithValue("@f_balance_more", Convert.ToInt32(values[0]));
+                cmd.Parameters.AddWithValue("@f_balance_less", Convert.ToInt32(values[1]));
             }
 
-            sql = sql + joinStr + whereStr;
-            sqlCount = sqlCount + joinStr + whereStr;
-
-            sql = @"SELECT  * FROM (" + sql + @") AS RowConstrainedResult
-				WHERE   RowNum >= @start
-					AND RowNum < @length
-				ORDER BY RowNum";
-
-            sql = sql.Replace("@partner", request.Partner.ToString());
-            sql = sql.Replace("@operator", request.Operator.ToString());
-            sql = sql.Replace("@pos", "'" + request.Pos.ToString() + "'");
-            sqlCount = sqlCount.Replace("@partner", request.Partner.ToString());
-            sqlCount = sqlCount.Replace("@operator", request.Operator.ToString());
-            sqlCount = sqlCount.Replace("@pos", "'"+request.Pos.ToString()+"'");
-
-            if (request.Page == 0) request.Page++;
-            sql = sql.Replace("@start", request.Page.ToString());
-            sql = sql.Replace("@length", (request.PageSize + request.Page).ToString());
-
-            OperatorClientsManagerResponse returnValue = new OperatorClientsManagerResponse();
-            returnValue.ErrorCode = 0;
-            returnValue.Message = string.Empty;
-
-            cnn.Open();
-            SqlCommand cmd = cnn.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = sqlCount;
-            try
-            {
-                returnValue.RecordTotal = (Int32)cmd.ExecuteScalar();
-                returnValue.RecordFilterd = returnValue.RecordTotal;
-            }
-            catch (Exception)
-            {
-            }
-
-            cmd.CommandText = sql;
-
-            //var returnValue = new OperatorClientsManagerResponse();
-            //cnn.Open();
-            //SqlCommand cmd = cnn.CreateCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "Clients";
-
-            //cmd.Parameters.AddWithValue("@operator", request.Operator);
-            //if (request.Partner > 0)
-            //{
-            //    cmd.Parameters.AddWithValue("@partner", request.Partner);
-            //}
-            //if (!string.IsNullOrEmpty(request.Pos))
-            //{
-            //    cmd.Parameters.AddWithValue("@pos", request.Pos);
-            //}
-            //cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
-            //cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
-            //cmd.Parameters.Add("@result", SqlDbType.Int);
-            //cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+            cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+            cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@total_rows", SqlDbType.Int);
+            cmd.Parameters["@total_rows"].Direction = ParameterDirection.Output;
+            cmd.Parameters.Add("@result", SqlDbType.Int);
+            cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
 
             try
             {
@@ -6401,6 +6429,10 @@ namespace LCManagerPartner.Models
                     returnValue.OperatorClients.Add(clientBuys);
                 }
                 reader.Close();
+                returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                returnValue.RecordTotal = Convert.ToInt32(cmd.Parameters["@total_rows"].Value);
+                returnValue.RecordFilterd = returnValue.RecordTotal;
             }
             catch (Exception e)
             {
