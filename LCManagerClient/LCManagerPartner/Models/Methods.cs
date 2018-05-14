@@ -704,12 +704,12 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// Позиция с которой отображать выборку
         /// </summary>
-        public int Page { get; set; }
+        public long Page { get; set; }
 
         /// <summary>
         /// Сколько объектов отображать
         /// </summary>
-        public Int16 PageSize { get; set; }
+        public long PageSize { get; set; }
 
         /// <summary>
         /// Показывать продажи с
@@ -5927,8 +5927,8 @@ namespace LCManagerPartner.Models
         public string Level { get; set; }
         public string Balance { get; set; }
 
-        public Int16 Page { get; set; }
-        public Int16 PageSize { get; set; }
+        public long Page { get; set; }
+        public long PageSize { get; set; }
     }
 
     public class OperatorClientsManagerResponse
