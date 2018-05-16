@@ -782,7 +782,7 @@ namespace LCManagerPartner.Models
             {
                 if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    cmd.Parameters.AddWithValue("@f_date_start", date);
+                    cmd.Parameters.AddWithValue("@f_date_start", date.ToString("yyyy-MM-dd"));
                 }
             }
 
@@ -791,7 +791,7 @@ namespace LCManagerPartner.Models
             {
                 if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
                 {
-                    cmd.Parameters.AddWithValue("@f_date_end", date);
+                    cmd.Parameters.AddWithValue("@f_date_end", date.ToString("yyyy-MM-dd"));
                 }
             }
 
