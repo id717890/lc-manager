@@ -831,6 +831,8 @@ namespace LCManagerPartner.Models
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "Reports.OperatorClient";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
+            if (request.Partner > 0) cmd.Parameters.AddWithValue("@partner", request.Partner);
+            if (request.Pos > 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
             if (request.Partner !=0) cmd.Parameters.AddWithValue("@partner", request.Partner);
             if (request.Pos != 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
             cmd.Parameters.AddWithValue("@from", request.From);
