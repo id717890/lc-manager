@@ -831,8 +831,6 @@ namespace LCManagerPartner.Models
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.CommandText = "Reports.OperatorClient";
             cmd.Parameters.AddWithValue("@operator", request.Operator);
-            if (request.Partner > 0) cmd.Parameters.AddWithValue("@partner", request.Partner);
-            if (request.Pos > 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
             if (request.Partner !=0) cmd.Parameters.AddWithValue("@partner", request.Partner);
             if (request.Pos != 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
             cmd.Parameters.AddWithValue("@from", request.From);
@@ -1032,7 +1030,7 @@ namespace LCManagerPartner.Models
                     worksheet.Cells["N" + cellNum].Value = posClients[i].SumAmountPeriod;
                     worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
-                    worksheet.Cells["O" + cellNum].Value = posClients[i].SumAmountPeriod - posClients[i].SubstractBonus - posClients[i].SumRefundPeriod;
+                    worksheet.Cells["O" + cellNum].Value = posClients[i].SumAmountPeriod - posClients[i].SubstractBonus + posClients[i].SumRefundPeriod;
                     worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     worksheet.Cells["P" + cellNum].Value = posClients[i].AddedBonus;
