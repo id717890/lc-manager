@@ -69,7 +69,7 @@
                 //identity.AddClaim(new Claim(ClaimTypes.Role, authentificationResult.ClientID));
                 //identity.AddClaim(new Claim("username", context.UserName));
                 identity.AddClaim(new Claim("client", authentificationResult.ClientID.ToString()));
-                identity.AddClaim(new Claim("operator", oper.ToString()));
+                identity.AddClaim(new Claim("oper", oper.ToString()));
                 context.Validated(identity);
             }
             else

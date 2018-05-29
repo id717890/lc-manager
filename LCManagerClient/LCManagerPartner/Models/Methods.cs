@@ -659,6 +659,14 @@ namespace LCManagerPartner.Models
         /// код торговой точки
         /// </summary>
         public Int16 Pos { get; set; }
+        /// <summary>
+        /// ID клиента ПЛ
+        /// </summary>
+        public long Client { get; set; }
+        /// <summary>
+        /// Номер карты клиента ПЛ
+        /// </summary>
+        public long Card { get; set; }
 
         #region Параметр передаваемые от jqyery плагина DataTable для фильтрации и пагинации
         /// <summary>
@@ -763,12 +771,13 @@ namespace LCManagerPartner.Models
             if (request.Operator > 0) cmd.Parameters.AddWithValue("@operator", request.Operator);
             if (request.PartnerId > 0) cmd.Parameters.AddWithValue("@partner", request.PartnerId);
             if (request.Pos > 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
+            if (request.Client > 0) cmd.Parameters.AddWithValue("@client", request.Client);
             if (request.Page == 0) request.Page++;
             cmd.Parameters.AddWithValue("@start", request.Page);
             cmd.Parameters.AddWithValue("@length", request.Page + request.PageSize);
-            cmd.Parameters.AddWithValue("@f_pos", request.PosStr);
-            cmd.Parameters.AddWithValue("@f_phone", request.Phone);
-            cmd.Parameters.AddWithValue("@f_cheque", request.Number);
+            if (!string.IsNullOrEmpty(request.PosStr)) cmd.Parameters.AddWithValue("@f_pos", request.PosStr);
+            if (!string.IsNullOrEmpty(request.Phone)) cmd.Parameters.AddWithValue("@f_phone", request.Phone);
+            if (!string.IsNullOrEmpty(request.Number)) cmd.Parameters.AddWithValue("@f_cheque", request.Number);
             
             if (!string.IsNullOrEmpty(request.DateBuy))
             {
@@ -3097,6 +3106,18 @@ namespace LCManagerPartner.Models
         /// дата последней покупки
         /// </summary>
         public DateTime lastpurchasedate { get; set; }
+        /// <summary>
+        /// Номер карты
+        /// </summary>
+        public Int64 CardNumber { get; set; }
+        /// <summary>
+        /// Статус карты
+        /// </summary>
+        public string CardStatus { get; set; }
+        /// <summary>
+        /// Общий баланс карты
+        /// </summary>
+        public decimal CardFullBalance { get; set; }
         public Client() { }
     }
 
@@ -3106,6 +3127,10 @@ namespace LCManagerPartner.Models
         /// ID участника программы лояльности
         /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID оператора программы лояльности
+        /// </summary>
+        public int OperatorId { get; set; }
         /// <summary>
         /// Последняя покупка?
         /// </summary>
@@ -3142,6 +3167,7 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientGet";
             cmd.Parameters.AddWithValue("@id", request.ClientID);
+            if (request.OperatorId != 0) cmd.Parameters.AddWithValue("@operator", request.OperatorId);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
@@ -3166,6 +3192,9 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(10)) client.allowemail = reader.GetBoolean(10);
                     if (!reader.IsDBNull(11)) client.balance = reader.GetDecimal(11);
                     if (!reader.IsDBNull(12)) client.allowpush = reader.GetBoolean(12);
+                    if (!reader.IsDBNull(13)) client.CardStatus = reader.GetString(13);
+                    if (!reader.IsDBNull(14)) client.CardFullBalance = reader.GetDecimal(14);
+                    if (!reader.IsDBNull(19)) client.CardNumber = reader.GetInt64(19);
                     returnValue.ClientData = client;
                 }
                 reader.Close();

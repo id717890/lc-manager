@@ -2694,6 +2694,16 @@
             код торговой точки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Client">
+            <summary>
+            ID клиента ПЛ
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetChequesRequest.Card">
+            <summary>
+            Номер карты клиента ПЛ
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetChequesRequest.DateBuy">
             <summary>
             Дата покупки
@@ -3729,9 +3739,29 @@
             дата последней покупки
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.Client.CardNumber">
+            <summary>
+            Номер карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Client.CardStatus">
+            <summary>
+            Статус карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Client.CardFullBalance">
+            <summary>
+            Общий баланс карты
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetClientRequest.ClientID">
             <summary>
             ID участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.GetClientRequest.OperatorId">
+            <summary>
+            ID оператора программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.GetClientRequest.LastPurchase">
