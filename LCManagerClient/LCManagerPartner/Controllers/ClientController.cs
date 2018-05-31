@@ -47,7 +47,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Регистрация Участника в ЛКУ программы лояльности
         /// </summary>
-        [HttpPost]
+        [AllowAnonymous, HttpPost]
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
         {
@@ -59,7 +59,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Отправка проверечного кода в SMS сообщении на указанный номер телефона
         /// </summary>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         [Route("GetSendVerificationCode")]
         public GetSendVerificationCodeResponse GetSendVerificationCode(GetSendVerificationCodeRequest request)
         {
@@ -103,7 +103,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Изменение данных Участника по заданному идентификатору
         /// </summary>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         [Route("ChangeClient")]
         public ChangeClientResponse ChangeClient(ChangeClientRequest request)
         {
@@ -423,7 +423,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Создание профиля Участника программы лояльности
         /// </summary>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         [Route("ClientCreate")]
         public ClientCreateResponse ClientCreate(ClientCreateRequest request)
         {
