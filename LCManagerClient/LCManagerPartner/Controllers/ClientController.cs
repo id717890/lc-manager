@@ -36,7 +36,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Установка пароля клиента
         /// </summary>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         [Route("SetClientPassword")]
         public SetClientPasswordResponse SetClientPassword(SetClientPasswordRequest request)
         {
