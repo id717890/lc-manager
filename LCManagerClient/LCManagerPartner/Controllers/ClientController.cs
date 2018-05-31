@@ -24,7 +24,7 @@ namespace LCManagerPartner.Controllers
         /// <summary>
         /// Проверка кода и валидация номера телефона
         /// </summary>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         [Route("GetConfirmCode")]
         public GetConfirmCodeResponse GetConfirmCode(GetConfirmCodeRequest request)
         {
