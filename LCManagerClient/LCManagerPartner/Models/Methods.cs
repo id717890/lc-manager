@@ -1807,7 +1807,7 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// дата покупки
         /// </summary>
-        public DateTime? PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }
         /// <summary>
         /// торговая точка покупки
         /// </summary>
@@ -1910,7 +1910,12 @@ namespace LCManagerPartner.Models
             {
                 returnValue.ErrorCode = 25;
                 returnValue.Message = ex.Message;
-                Log.Error("LCManagerPos Refund {Message}", ex.Message);
+                string purchaseDate = "No value ";
+                if (request.PurchaseDate > new DateTime(1753, 01, 01))
+                {
+                    purchaseDate = request.PurchaseDate.ToLongDateString();
+                }
+                Log.Error(ex, "ServerRefundResponse " + purchaseDate + request.ChequeTime.ToLongDateString());
                 return returnValue;
             }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
