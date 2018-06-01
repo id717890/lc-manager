@@ -1378,6 +1378,10 @@ namespace LCManagerPartner.Models
         /// адрес электронной почты участника программы лояльности
         /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// Идентификатор оператора программы лояльности
+        /// </summary>
+        public Int16 Operator { get; set; }
     }
 
     public class SendEmailCodeResponse
@@ -1402,6 +1406,7 @@ namespace LCManagerPartner.Models
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "ClientSendEmailCode";
             cmd.Parameters.AddWithValue("@email", request.Email);
+            if (request.Operator > 0) cmd.Parameters.AddWithValue("@operator", request.Operator);
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);

@@ -2849,6 +2849,11 @@
             ID участника программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.SetClientPasswordRequest.Operator">
+            <summary>
+            ID оператора программы лояльности
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.SetClientPasswordResponse.ErrorCode">
             <summary>
             код ошибки
