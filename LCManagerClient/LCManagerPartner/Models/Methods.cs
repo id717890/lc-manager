@@ -1036,6 +1036,11 @@ namespace LCManagerPartner.Models
         /// ID участника программы лояльности
         /// </summary>
         public int ClientID { get; set; }
+        /// <summary>
+        /// ID оператора программы лояльности
+        /// </summary>
+        public int Operator { get; set; }
+
     }
 
     public class SetClientPasswordResponse
@@ -1064,6 +1069,7 @@ namespace LCManagerPartner.Models
             cmd.Parameters.AddWithValue("@password", request.Password);
 
             cmd.Parameters.AddWithValue("@client", request.ClientID);
+            if (request.Operator>0) cmd.Parameters.AddWithValue("@operator", request.Operator);
 
             cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
