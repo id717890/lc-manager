@@ -2433,6 +2433,7 @@ namespace LCManagerPartner.Models
         public bool PhoneValidated { get; set; }
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
+        public string Promocode { get; set; }
     }
 
     public class ServerGetClientInfoResponse
@@ -2490,6 +2491,7 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(15)) returnValue.PhoneValidated = reader.GetBoolean(15);
                     if (!reader.IsDBNull(16)) returnValue.EmailValidated = reader.GetBoolean(16);
                     if (!reader.IsDBNull(17)) returnValue.RegDate = reader.GetDateTime(17);
+                    if (!reader.IsDBNull(18)) returnValue.Promocode = reader.GetString(18);
                 }
 
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
