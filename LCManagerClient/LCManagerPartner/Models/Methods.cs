@@ -1818,7 +1818,7 @@ namespace LCManagerPartner.Models
         /// <summary>
         /// дата покупки
         /// </summary>
-        public DateTime? PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }
         /// <summary>
         /// торговая точка покупки
         /// </summary>
@@ -1921,7 +1921,12 @@ namespace LCManagerPartner.Models
             {
                 returnValue.ErrorCode = 25;
                 returnValue.Message = ex.Message;
-                Log.Error("LCManagerPos Refund {Message}", ex.Message);
+                string purchaseDate = "No value ";
+                if (request.PurchaseDate > new DateTime(1753, 01, 01))
+                {
+                    purchaseDate = request.PurchaseDate.ToLongDateString();
+                }
+                Log.Error(ex, "ServerRefundResponse " + purchaseDate + request.ChequeTime.ToLongDateString());
                 return returnValue;
             }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
@@ -2439,6 +2444,7 @@ namespace LCManagerPartner.Models
         public bool PhoneValidated { get; set; }
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
+        public string Promocode { get; set; }
     }
 
     public class ServerGetClientInfoResponse
@@ -2496,6 +2502,7 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(15)) returnValue.PhoneValidated = reader.GetBoolean(15);
                     if (!reader.IsDBNull(16)) returnValue.EmailValidated = reader.GetBoolean(16);
                     if (!reader.IsDBNull(17)) returnValue.RegDate = reader.GetDateTime(17);
+                    if (!reader.IsDBNull(18)) returnValue.Promocode = reader.GetString(18);
                 }
 
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
