@@ -7681,7 +7681,7 @@ namespace LCManagerPartner.Models
         public VerificationPromocodeResponse ProcessRequest(SqlConnection cnn, VerificationPromocodeRequest request)
         {
             VerificationPromocodeResponse returnValue = new VerificationPromocodeResponse();
-            if (request.Promocode.Length != 8)
+            if (request.Promocode.Length == 0)
             {
                 returnValue.ErrorCode = 1;
                 returnValue.Message = "Промокод должен состоять из 6 цифр";
