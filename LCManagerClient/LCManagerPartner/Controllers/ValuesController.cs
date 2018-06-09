@@ -60,7 +60,8 @@
         [Route("ChequeAdd")]
         public ChequeAddResponse ChequeAdd(ChequeAddRequest request)
         {
-            Log.Information("LCManagerPartner ChequeAdd {phone}", request.Phone);
+            Log.Information("LCManagerPartner ChequeAdd {phone}, Card = {Card}", 
+                        request.Phone, request.Card);
             var result = new ServerChequeAddResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -245,7 +246,11 @@
         [Route("Refund")]
         public RefundResponse Refund(RefundRequest request)
         {
-            Log.Information("LCManagerPartner Refund {Phone}", request.Phone);
+            Log.Information("LCManagerPartner Refund Phone = {Phone}, Card = {Card}, Amount = {Amount}, PurchaseDate = {PurchaseDate}, " +
+                            "PurchaseNumber = {PurchaseNumber}, Operator = {Operator}, PurchasePos = {PurchasePos}, ChequeTime = {ChequeTime}, Number = {Number}, " +
+                            "PaidByBonus = {PaidByBonus}, Partner = {Partner}, Pos = {Pos}, PurchaseId = {PurchaseId}, PurchaseTerminal = {PurchaseTerminal}, Partner = {Partner}", 
+                            request.Phone, request.Card, request.Amount, request.PurchaseDate, request.PurchaseNumber, request.Operator, request.PurchasePos, request.ChequeTime,
+                            request.Number, request.PaidByBonus, request.Partner, request.Pos, request.PurchaseId, request.PurchaseTerminal);
             var result = new ServerRefundResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;

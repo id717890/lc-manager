@@ -1915,7 +1915,7 @@ namespace LCManagerPartner.Models
                 {
                     purchaseDate = request.PurchaseDate.ToLongDateString();
                 }
-                Log.Error(ex, "ServerRefundResponse " + purchaseDate + request.ChequeTime.ToLongDateString());
+                Log.Error(ex, "ServerRefundResponse {purchaseDate}, {ChequeTime}, {Phone}", purchaseDate, request.ChequeTime.ToShortDateString(), request.Phone);
                 return returnValue;
             }
             returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
@@ -1940,6 +1940,10 @@ namespace LCManagerPartner.Models
                 returnValue.Amount = Convert.ToDecimal(cmd.Parameters["@amount"].Value);
             }
             catch { }
+            if (returnValue.ErrorCode > 0)
+            {
+                Log.Error("ServerRefundResponse {ErrorCode}, {Message}, {ChequeTime}, {Phone}", returnValue.ErrorCode, returnValue.Message, request.ChequeTime.ToShortDateString(), request.Phone);
+            }
             cnn.Close();
             return returnValue;
         }
@@ -7677,7 +7681,7 @@ namespace LCManagerPartner.Models
         public VerificationPromocodeResponse ProcessRequest(SqlConnection cnn, VerificationPromocodeRequest request)
         {
             VerificationPromocodeResponse returnValue = new VerificationPromocodeResponse();
-            if (request.Promocode.Length != 6)
+            if (request.Promocode.Length != 8)
             {
                 returnValue.ErrorCode = 1;
                 returnValue.Message = "Промокод должен состоять из 6 цифр";
