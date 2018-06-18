@@ -127,7 +127,10 @@
         [Route("GetRegistrationUser")]
         public GetRegistrationUserResponse GetRegistrationUser(GetRegistrationUserRequest request)
         {
-            Log.Information("LCManagerPartner GetRegistrationUser {phone}", request.Phone);
+            Log.Information("LCManagerPartner GetRegistrationUser Operator = {Operator}, Phone = {phone}, PosCode = {PosCode}, AgreePersonalData = {AgreePersonalData}, Card = {Card}" +
+                            "ClientSetPassword = {ClientSetPassword}, Email = {Email}, FriendPhone = {FriendPhone}, PartnerID = {PartnerID}, Promocode = {Promocode}", 
+                                                            request.Operator, request.Phone, request.PosCode, request.AgreePersonalData, request.Card, request.ClientSetPassword, 
+                                                            request.Email, request.FriendPhone, request.PartnerID, request.Promocode);
             var result = new ServerGetRegistrationUserResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
@@ -168,7 +171,8 @@
         [Route("ChangeClient")]
         public ChangeClientResponse ChangeClient(ChangeClientRequest request)
         {
-            Log.Information("LCManagerPartner ChangeClient {phone}", request.ClientData.phone);
+            Log.Information("LCManagerPartner ChangeClient Operator = {Operator}, phone = {phone}, address = {address}", 
+                            request.Operator, request.ClientData.phone, request.ClientData.address);
             var result = new ServerChangeClientResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
