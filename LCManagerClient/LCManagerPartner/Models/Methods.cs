@@ -3568,6 +3568,7 @@ namespace LCManagerPartner.Models
                 cmd.Parameters.AddWithValue("@operator", request.Operator);
                 cmd.Parameters.AddWithValue("@regdate", c.RegDate);
                 cmd.Parameters.AddWithValue("@totalpurchase", c.TotalPurchase);
+                cmd.Parameters.AddWithValue("@posCode", c.PosRegister);
                 cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
                 try
