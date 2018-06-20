@@ -758,6 +758,13 @@
             Активация карты на списание
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.BonusesNotForPurchases(LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest)">
+            <summary>
+            Получение списка бонусов не за покупки
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.PosController.OperatorPos(LCManagerPartner.Implementation.Request.OperatorPosRequest)">
             <summary>
             Выборка адресов торговых точек Оператора
@@ -1372,6 +1379,16 @@
             Окончание периода для расчета аналитики
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest">
+            <summary>
+            Запрос для получения бонусов не за покупки по номеру карты
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest.Card">
+            <summary>
+            Номер карты
+            </summary>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
             <summary>
             
@@ -1510,6 +1527,17 @@
         <member name="P:LCManagerPartner.Implementation.Response.BonusesResponse.ClientCount">
             <summary>
             Кол-во клиентов
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Response.BonusesNotForPurchasesResponse">
+            <inheritdoc />
+            <summary>
+            Класс ответа возвращающий бонусы клиента не за покупки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Implementation.Response.BonusesNotForPurchasesResponse.Bonuses">
+            <summary>
+            Список бонусов не за покупки
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Response.DefaultResponse">
@@ -3022,6 +3050,11 @@
         <member name="P:LCManagerPartner.Models.SendEmailCodeRequest.Email">
             <summary>
             адрес электронной почты участника программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.SendEmailCodeRequest.Operator">
+            <summary>
+            Идентификатор оператора программы лояльности
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.SendEmailCodeResponse.ErrorCode">
@@ -4657,6 +4690,11 @@
         <member name="P:LCManagerPartner.Models.Bonus.BonusBurn">
             <summary>
             сгоревшие баллы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.BonusCard">
+            <summary>
+            Номер карты на которую начислены бонусы
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Id">

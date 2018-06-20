@@ -5802,6 +5802,10 @@ namespace LCManagerPartner.Models
         /// сгоревшие баллы
         /// </summary>
         public decimal BonusBurn { get; set; }
+        /// <summary>
+        /// Номер карты на которую начислены бонусы
+        /// </summary>
+        public long BonusCard { get; set; }
     }
 
     public class OperatorClientsManagerBuys

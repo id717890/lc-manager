@@ -1,4 +1,7 @@
-﻿namespace LCManagerPartner.Implementation.Response
+﻿using System.Collections.Generic;
+using LCManagerPartner.Models;
+
+namespace LCManagerPartner.Implementation.Response
 {
     using Abstractions;
 
@@ -40,5 +43,20 @@
         /// Кол-во клиентов
         /// </summary>
         public decimal ClientCount { get; set; }
+    }
+
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс ответа возвращающий бонусы клиента не за покупки
+    /// </summary>
+    public class BonusesNotForPurchasesResponse: BaseResponse
+    {
+        /// <summary>
+        /// Список бонусов не за покупки
+        /// </summary>
+        public IEnumerable<Bonus> Bonuses { get; set; }
+
+        public int RecordTotal { get; set; }
+        public int RecordFilterd { get; set; }
     }
 }
