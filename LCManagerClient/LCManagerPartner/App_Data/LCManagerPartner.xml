@@ -1252,6 +1252,17 @@
             Сообщение об ошибке
             </summary>
         </member>
+        <member name="T:LCManagerPartner.Implementation.Config">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Config.GetCustomHeaderAuthorization">
+            <summary>
+            Получает из конфигурации название дополнительного кастомного заголовка где может храниться ключ для JWT авторизации
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Constants.ServerGlobalVariables">
             <summary>
             
@@ -6320,6 +6331,12 @@
             <inheritdoc />
             <summary>
             ManagerLogin
+            </summary>
+        </member>
+        <member name="T:LCManagerPartner.Startup.HeaderOAuthBearerProvider">
+            <summary>
+            Провайдер добавляющий в заголовки запросов кастомный ключ. 
+            Реализовано для работы с ЭВОТОР
             </summary>
         </member>
     </members>

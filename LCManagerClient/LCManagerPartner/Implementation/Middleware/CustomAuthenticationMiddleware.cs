@@ -20,6 +20,15 @@
 
         public override async Task Invoke(IOwinContext context)
         {
+            //Проверяет в заголовках запроса наличие дополнительный кастомного заголовока
+            //Если он есть то берет ключ из него и помещает в заголовок Authorization, после этого удаляется
+            //Такой механиз нужен для работы с ЭВОТОР
+            if (context.Request.Headers.ContainsKey(Config.GetCustomHeaderAuthorization()))
+            {
+                context.Request.Headers.SetValues("Authorization", context.Request.Headers[Config.GetCustomHeaderAuthorization()]);
+                context.Request.Headers.Remove(Config.GetCustomHeaderAuthorization());
+            }
+
             await Next.Invoke(context);
 
             if (context.Response.StatusCode == 400

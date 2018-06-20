@@ -255,6 +255,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Abstractions\BaseResponse.cs" />
+    <Compile Include="Implementation\Config.cs" />
     <Compile Include="Implementation\Constants\ServerGlobalVariables.cs" />
     <Compile Include="Implementation\Data\GoodList.cs" />
     <Compile Include="Implementation\Data\Pos.cs" />

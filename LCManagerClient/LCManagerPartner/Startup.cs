@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using Microsoft.Owin;
 using Owin;
 using Microsoft.Owin.Security.OAuth;
@@ -50,6 +51,35 @@ namespace LCManagerPartner
 
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);
+        }
+
+        /// <summary>
+        /// Провайдер добавляющий в заголовки запросов кастомный ключ. 
+        /// Реализовано для работы с ЭВОТОР
+        /// </summary>
+        private class HeaderOAuthBearerProvider : OAuthBearerAuthenticationProvider
+        {
+            readonly string _name;
+
+            public HeaderOAuthBearerProvider(string name)
+            {
+                _name = name;
+            }
+
+            public override Task RequestToken(OAuthRequestTokenContext context)
+            {
+                var value = context.Request.Headers.Get(_name);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    context.Token = value;
+                }
+                return Task.FromResult<object>(null);
+            }
+
+            //public override Task ValidateIdentity(OAuthValidateIdentityContext context)
+            //{
+            //    return Task.FromResult<object>(null);
+            //}
         }
     }
 }
