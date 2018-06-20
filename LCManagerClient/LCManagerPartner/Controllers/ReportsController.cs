@@ -1,4 +1,5 @@
 ﻿using LCManagerPartner.Models;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -83,6 +84,7 @@ namespace LCManagerPartner.Controllers
         [Route("OperatorClient")]
         public ReportResponse OperatorClient(ReportOperatorClientRequest request)
         {
+            Log.Information("", request.Operator);
             var result = new ReportServerOperatorClient();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;

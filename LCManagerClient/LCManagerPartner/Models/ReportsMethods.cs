@@ -856,36 +856,49 @@ namespace LCManagerPartner.Models
             cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
             cmd.Parameters.Add("@result", SqlDbType.Int);
             cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-            SqlDataReader reader = cmd.ExecuteReader();
             List<PosClient> posClients = new List<PosClient>();
-            while (reader.Read())
+            try
             {
-                PosClient posClient = new PosClient();
+                SqlDataReader reader = cmd.ExecuteReader();            
+                while (reader.Read())
+                {
+                    PosClient posClient = new PosClient();
 
-                if (!reader.IsDBNull(0)) posClient.Brand = reader.GetString(0);
-                if (!reader.IsDBNull(1)) posClient.Address = reader.GetString(1);
-                if (!reader.IsDBNull(2)) posClient.Name = reader.GetString(2);
-                if (!reader.IsDBNull(3)) posClient.Gender = reader.GetString(3);
-                if (!reader.IsDBNull(4)) posClient.Phone = 80000000000 + reader.GetInt64(4);
-                if (!reader.IsDBNull(5)) posClient.Email = reader.GetString(5);
-                if (!reader.IsDBNull(6)) posClient.Card = reader.GetInt64(6);
-                if (!reader.IsDBNull(7)) posClient.ClientType = reader.GetString(7);
-                if (!reader.IsDBNull(8)) posClient.QtyBuysPeriod = reader.GetInt32(8);
-                if (!reader.IsDBNull(9)) posClient.SumAmountPeriod = reader.GetDecimal(9);
-                if (!reader.IsDBNull(10)) posClient.AddedBonus = reader.GetDecimal(10);
-                if (!reader.IsDBNull(11)) posClient.SubstractBonus = reader.GetDecimal(11);
-                if (!reader.IsDBNull(12)) posClient.QtyRefundPeriod = reader.GetInt32(12);
-                if (!reader.IsDBNull(13)) posClient.SumRefundPeriod = reader.GetDecimal(13);
-                if (!reader.IsDBNull(14)) posClient.Balance = reader.GetDecimal(14);
-                if (!reader.IsDBNull(15)) posClient.LevelCondition = reader.GetString(15);
-                if (!reader.IsDBNull(16)) posClient.BirthDate = reader.GetDateTime(16);
-                if (!reader.IsDBNull(17)) posClient.AllowSms = reader.GetBoolean(17);
-                if (!reader.IsDBNull(18)) posClient.AllowEmail = reader.GetBoolean(18);
-                if (!reader.IsDBNull(19)) posClient.AddedBonusUnbuy = reader.GetDecimal(19);
-                if (!reader.IsDBNull(20)) posClient.RegDate = reader.GetDateTime(20);
-                posClients.Add(posClient);
-            }
+                    if (!reader.IsDBNull(0)) posClient.Brand = reader.GetString(0);
+                    if (!reader.IsDBNull(1)) posClient.Address = reader.GetString(1);
+                    if (!reader.IsDBNull(2)) posClient.Name = reader.GetString(2);
+                    if (!reader.IsDBNull(3)) posClient.Gender = reader.GetString(3);
+                    if (!reader.IsDBNull(4)) posClient.Phone = 80000000000 + reader.GetInt64(4);
+                    if (!reader.IsDBNull(5)) posClient.Email = reader.GetString(5);
+                    if (!reader.IsDBNull(6)) posClient.Card = reader.GetInt64(6);
+                    if (!reader.IsDBNull(7)) posClient.ClientType = reader.GetString(7);
+                    if (!reader.IsDBNull(8)) posClient.QtyBuysPeriod = reader.GetInt32(8);
+                    if (!reader.IsDBNull(9)) posClient.SumAmountPeriod = reader.GetDecimal(9);
+                    if (!reader.IsDBNull(10)) posClient.AddedBonus = reader.GetDecimal(10);
+                    if (!reader.IsDBNull(11)) posClient.SubstractBonus = reader.GetDecimal(11);
+                    if (!reader.IsDBNull(12)) posClient.QtyRefundPeriod = reader.GetInt32(12);
+                    if (!reader.IsDBNull(13)) posClient.SumRefundPeriod = reader.GetDecimal(13);
+                    if (!reader.IsDBNull(14)) posClient.Balance = reader.GetDecimal(14);
+                    if (!reader.IsDBNull(15)) posClient.LevelCondition = reader.GetString(15);
+                    if (!reader.IsDBNull(16)) posClient.BirthDate = reader.GetDateTime(16);
+                    if (!reader.IsDBNull(17)) posClient.AllowSms = reader.GetBoolean(17);
+                    if (!reader.IsDBNull(18)) posClient.AllowEmail = reader.GetBoolean(18);
+                    if (!reader.IsDBNull(19)) posClient.AddedBonusUnbuy = reader.GetDecimal(19);
+                    if (!reader.IsDBNull(20)) posClient.RegDate = reader.GetDateTime(20);
+                    posClients.Add(posClient);
+                }
             reader.Close();
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex, "LCManagerApi report OperatorClient");
+                cnn.Close();
+                return new ReportResponse
+                {
+                    ErrorCode = 10,
+                    Message = ex.Message
+                };
+            }
             cnn.Close();
             using (var package = new ExcelPackage())
             {
