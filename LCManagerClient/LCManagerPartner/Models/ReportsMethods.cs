@@ -896,7 +896,8 @@ namespace LCManagerPartner.Models
                 return new ReportResponse
                 {
                     ErrorCode = 10,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Report = new byte[0]
                 };
             }
             cnn.Close();
