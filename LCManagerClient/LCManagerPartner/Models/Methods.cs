@@ -3240,6 +3240,7 @@ namespace LCManagerPartner.Models
         public bool AllowEmail { get; set; }
         public DateTime RegDate { get; set; }
         public decimal TotalPurchase { get; set; }
+        public string PosRegister { get; set; }
         public string ErrorMessage { get; set; }
     }
 
@@ -3311,20 +3312,20 @@ namespace LCManagerPartner.Models
                 for (int i = 2; i <= worksheet.Dimension.End.Row; i++)
                 {
                     ClientImport client = new ClientImport();
+                    //try
+                    //{
+                    //    if (worksheet.Cells[i, 1].Value != null)
+                    //    {
+                    //        client.Card = Convert.ToInt64(worksheet.Cells[i, 1].Value);
+                    //    }
+                    //}
+                    //catch
+                    //{ }
                     try
                     {
                         if (worksheet.Cells[i, 1].Value != null)
                         {
-                            client.Card = Convert.ToInt64(worksheet.Cells[i, 1].Value);
-                        }
-                    }
-                    catch
-                    { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 2].Value != null)
-                        {
-                            string phone = worksheet.Cells[i, 2].Value.ToString();
+                            string phone = worksheet.Cells[i, 1].Value.ToString();
                             if (phone.Length == 11)
                             {
                                 phone = phone.Substring(1);
@@ -3342,9 +3343,17 @@ namespace LCManagerPartner.Models
                     }
                     try
                     {
+                        if (worksheet.Cells[i, 2].Value != null)
+                        {
+                            client.Email = worksheet.Cells[i, 2].Value.ToString();
+                        }
+                    }
+                    catch { }
+                    try
+                    {
                         if (worksheet.Cells[i, 3].Value != null)
                         {
-                            client.Email = worksheet.Cells[i, 3].Value.ToString();
+                            client.Surname = worksheet.Cells[i, 3].Value.ToString();
                         }
                     }
                     catch { }
@@ -3352,7 +3361,7 @@ namespace LCManagerPartner.Models
                     {
                         if (worksheet.Cells[i, 4].Value != null)
                         {
-                            client.Surname = worksheet.Cells[i, 4].Value.ToString();
+                            client.Name = worksheet.Cells[i, 4].Value.ToString();
                         }
                     }
                     catch { }
@@ -3360,7 +3369,7 @@ namespace LCManagerPartner.Models
                     {
                         if (worksheet.Cells[i, 5].Value != null)
                         {
-                            client.Name = worksheet.Cells[i, 5].Value.ToString();
+                            client.Patronymic = worksheet.Cells[i, 5].Value.ToString();
                         }
                     }
                     catch { }
@@ -3368,7 +3377,8 @@ namespace LCManagerPartner.Models
                     {
                         if (worksheet.Cells[i, 6].Value != null)
                         {
-                            client.Patronymic = worksheet.Cells[i, 6].Value.ToString();
+                            //client.BirthDate = Convert.ToDateTime(worksheet.Cells[i, 6].Value);
+                            client.BirthDate = DateTime.ParseExact(worksheet.Cells[i, 6].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
                         }
                     }
                     catch { }
@@ -3376,15 +3386,7 @@ namespace LCManagerPartner.Models
                     {
                         if (worksheet.Cells[i, 7].Value != null)
                         {
-                            client.BirthDate = Convert.ToDateTime(worksheet.Cells[i, 7].Value);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 8].Value != null)
-                        {
-                            string gender = Convert.ToString(worksheet.Cells[i, 8].Value);
+                            string gender = Convert.ToString(worksheet.Cells[i, 7].Value);
                             if (gender.ToLower().Equals("женский"))
                             {
                                 client.Gender = false;
@@ -3395,49 +3397,18 @@ namespace LCManagerPartner.Models
                             }
                         }
 
+                        //if (worksheet.Cells[i, 7].Value != null)
+                        //{
+                        //    client.Gender = Convert.ToBoolean(worksheet.Cells[i, 7].Value);
+                        //}
+                    }
+                    catch { }
+                    try
+                    {
                         if (worksheet.Cells[i, 8].Value != null)
                         {
-                            client.Gender = Convert.ToBoolean(worksheet.Cells[i, 8].Value);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 9].Value != null)
-                        {
-                            client.Address = worksheet.Cells[i, 9].Value.ToString();
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 10].Value != null)
-                        {
-                            client.HasChildren = Convert.ToBoolean(worksheet.Cells[i, 10].Value);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 11].Value != null)
-                        {
-                            client.AllowSms = Convert.ToBoolean(worksheet.Cells[i, 11].Value);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 12].Value != null)
-                        {
-                            client.AllowEmail = Convert.ToBoolean(worksheet.Cells[i, 12].Value);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 13].Value != null)
-                        {
-                            client.RegDate = Convert.ToDateTime(worksheet.Cells[i, 13].Value);
+                            //client.Address = worksheet.Cells[i, 8].Value.ToString();
+                            client.RegDate = DateTime.ParseExact(worksheet.Cells[i, 8].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture); ;                            
                         }
                         else
                         {
@@ -3447,9 +3418,45 @@ namespace LCManagerPartner.Models
                     catch { }
                     try
                     {
-                        if (worksheet.Cells[i, 14].Value != null)
+                        if(worksheet.Cells[i, 9].Value != null)
                         {
-                            client.TotalPurchase = Convert.ToDecimal(worksheet.Cells[i, 14].Value);
+                            client.PosRegister = worksheet.Cells[i, 9].Value.ToString();
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (worksheet.Cells[i, 10].Value != null)
+                        {
+                            client.AllowSms = Convert.ToBoolean(worksheet.Cells[i, 10].Value);
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        if (worksheet.Cells[i, 11].Value != null)
+                        {
+                            client.AllowEmail = Convert.ToBoolean(worksheet.Cells[i, 11].Value);
+                        }
+                    }
+                    catch { }
+                    //try
+                    //{
+                    //    if (worksheet.Cells[i, 13].Value != null)
+                    //    {
+                    //        client.RegDate = Convert.ToDateTime(worksheet.Cells[i, 13].Value);
+                    //    }
+                    //    else
+                    //    {
+                    //        client.RegDate = DateTime.Now;
+                    //    }
+                    //}
+                    //catch { }
+                    try
+                    {
+                        if (worksheet.Cells[i, 12].Value != null)
+                        {
+                            client.TotalPurchase = Convert.ToDecimal(worksheet.Cells[i, 12].Value);
                         }
                     }
                     catch { }
@@ -3561,6 +3568,7 @@ namespace LCManagerPartner.Models
                 cmd.Parameters.AddWithValue("@operator", request.Operator);
                 cmd.Parameters.AddWithValue("@regdate", c.RegDate);
                 cmd.Parameters.AddWithValue("@totalpurchase", c.TotalPurchase);
+                cmd.Parameters.AddWithValue("@posCode", c.PosRegister);
                 cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
                 try
@@ -7692,7 +7700,7 @@ namespace LCManagerPartner.Models
         public VerificationPromocodeResponse ProcessRequest(SqlConnection cnn, VerificationPromocodeRequest request)
         {
             VerificationPromocodeResponse returnValue = new VerificationPromocodeResponse();
-            if (request.Promocode.Length != 6)
+            if (request.Promocode.Length == 0)
             {
                 returnValue.ErrorCode = 1;
                 returnValue.Message = "Промокод должен состоять из 6 цифр";
