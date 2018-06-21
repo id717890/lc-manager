@@ -25,6 +25,7 @@
                 {
                     new SymmetricKeyIssuerSecurityTokenProvider(issuer, secret)
                 }
+                //,Provider = new HeaderOAuthBearerProvider("Mloyaltyauthorization")
             });
         }
     }

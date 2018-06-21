@@ -7,6 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using LCManagerPartner.Implementation.Request;
+using LCManagerPartner.Implementation.Response;
+using LCManagerPartner.Implementation.Services;
 
 namespace LCManagerPartner.Controllers
 {
@@ -17,6 +20,12 @@ namespace LCManagerPartner.Controllers
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
 
+        private readonly BonusService _bonusService;
+
+        public ClientController()
+        {
+            _bonusService=new BonusService();
+        }
 
         //Дублирующиеся методы: GetConfirmCode, SetClientPassword, GetRegistrationUser, GetSendVerificationCode, ClientLogin, GetCheques, GetClient, ChangeClient, BalanceGet
         //GetPartners, GetCampaigns, LeaveMessage, SendEmailCode, ValidateEmail, DeletePhone, AddPhone, ClientInfo, ClientCreate, ClientUpdate, CardBonuses, ActivateCard
@@ -499,6 +508,18 @@ namespace LCManagerPartner.Controllers
             var result = new ServerActivateCard();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
+        }
+
+        /// <summary>
+        /// Получение списка бонусов не за покупки
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("BonusesNotForPurchases")]
+        public BonusesNotForPurchasesResponse BonusesNotForPurchases(BonusesNotForPurchasesRequest request)
+        {
+            return _bonusService.GetBonusesNotForPurchases(request);
         }
     }
 }

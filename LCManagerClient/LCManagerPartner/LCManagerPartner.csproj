@@ -255,6 +255,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Abstractions\BaseResponse.cs" />
+    <Compile Include="Implementation\Config.cs" />
     <Compile Include="Implementation\Constants\ServerGlobalVariables.cs" />
     <Compile Include="Implementation\Data\GoodList.cs" />
     <Compile Include="Implementation\Data\Pos.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Implementation\Response\DefaultResponse.cs" />
     <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
+    <Compile Include="Implementation\Services\BonusService.cs" />
     <Compile Include="Implementation\Services\GoodService.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Implementation\Services\RefreshTokenService.cs" />
