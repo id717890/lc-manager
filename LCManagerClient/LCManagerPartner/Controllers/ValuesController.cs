@@ -253,7 +253,13 @@
         [Route("Refund")]
         public RefundResponse Refund(RefundRequest request)
         {
-            Log.Information("LCManagerPartner Refund {Phone}", request.Phone);
+            //Log.Information("LCManagerPartner Refund {Phone}", request.Phone);
+            Log.Information("LCManagerPartner GetRegistrationUser Operator = {Operator}, Phone = {phone}, Amount = {Amount}, Card = {Card}, ChequeTime = {ChequeTime}, " +
+                                        "Number = {Number}, PaidByBonus = {PaidByBonus}, Partner = {Partner}, Pos = {Pos}, PurchaseDate = {PurchaseDate}, PurchaseId = {PurchaseId}, " +
+                                        "PurchaseNumber = {PurchaseNumber}, PurchasePos = {PurchasePos}, PurchaseTerminal = {PurchaseTerminal}",
+                                                            request.Operator, request.Phone, request.Amount, request.Card, request.ChequeTime,
+                                                            request.Number, request.PaidByBonus, request.Partner, request.Pos, request.PurchaseDate, request.PurchaseId, request.PurchaseNumber,
+                                                            request.PurchasePos, request.PurchaseTerminal);
             var result = new ServerRefundResponse();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
