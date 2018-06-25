@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    <li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>
+    @*<li><a href=""><img src="/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+    @if (ViewBag.RoleName.Contains("Admin"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        <div><div>?<p>Профиль</p></div><a href="#my_profile" class="this-p">Профиль</a></div>
+        <div><div>?<p>Администратор</p></div><p><span id="admin_head">Администратор</span></p></div>
+    </div>
+}
+<section class="table-min-width">
+    <div class="my_action_waper">
+        <div class="form-terminal__tabs-content">
+            <div class="my_profile active" id="my_profile">
+                <div class="form_wrap">
+                    <h2>личные данные</h2>
+                    <form action="" method="post" class="form-data form_personal_data">
+                        <label for="second_name" class="form-data__label">
+                            <span class="form-data__field-name">Фамилия</span>
+                            <input type="text" name="second_name" id="second_name" class="active_input input" placeholder="Лигомин" disabled>
+                        </label>
+
+                        <label for="first_name" class="form-data__label">
+                            <span class="form-data__field-name">Имя</span>
+                            <input type="text" name="first_name" id="first_name" class="active_input input" placeholder="Имя" disabled>
+                        </label>
+
+                        <label for="patronymic" class="form-data__label">
+                            <span class="form-data__field-name">Отчество</span>
+                            <input type="text" name="patronymic" id="patronymic" class="active_input input" placeholder="Отчество" disabled>
+                        </label>
+
+                        <div class="pen_wrap pen_wrap_data">
+                            <img src="/img/pen_not_active.png" width="16" height="16" class="pen_no" alt="pen">
+                            <img src="/img/pen_active.png" width="16" height="16" class="pen_act pen_act_data" alt="pen">
+                        </div>
+
+                        <button type="reset" id="cencel_but_reg" class="hidden hed_form_but_1">Отменить</button>
+                        <input type="submit" id="save_but_reg" class="hidden hed_form_but_2" value="Сохранить">
+                    </form>
+
+                    <h2>учетные данные</h2>
+                    <form action="" method="post" class="form-data credentials">
+
+                        <label for="number_phone" class="label_block form-data__label">
+                            <span class="form-data__field-name">Телефон</span>
+                            <input type="text" id="number_phone" class="active_input_phone input" placeholder="+7 (915) 399-26-42" disabled>
+
+                            <button type="submit" id="but_sms" class="hidden but_sms">Отправить SMS-код</button>
+                            <input type="text" id="area_sms" name="text_sms" placeholder="Введите SMS-код" class="hidden but_sms_test">
+                            <button type="reset" id="cencel_but_phone" class="hidden hed_form_but_1">Отменить</button>
+                            <button type="submit" id="save_but_phone" class="hidden hed_form_but_2">Сохранить</button>
+
+                            <span class="pen_wrap pen_wrap_phone">
+                                <img src="/img/pen_not_active.png" width="16" height="16" class="pen_no" alt="pen">
+                                <img src="/img/pen_active.png" width="16" height="16" class="pen_act pen_act_phone" alt="pen">
+                            </span>
+                        </label>
+
+                        <label for="email" class="label_block form-data__label">
+                            <span class="form-data__field-name">E-mail</span>
+                            <input type="email" id="email" name="email" class="active_email input" placeholder="ligomin@loycon.ru" disabled>
+
+                            <button type="reset" id="but_email" class="hidden hed_form_but_1">Отменить</button>
+                            <button type="submit" id="but_email_com" class="hidden hed_form_but_2">Подтвердить адрес</button>
+
+                            <span class="pen_wrap pen_wrap_email">
+                                <img src="/img/pen_not_active.png" width="16" height="16" class="pen_no" alt="pen">
+                                <img src="/img/pen_active.png" width="16" height="16" class="pen_act pen_act_email" alt="pen">
+                            </span>
+                        </label>
+
+                        <label for="password" class="label_block form-data__label">
+                            <span class="hidden hidden_text_pass">Текущий пароль</span>
+                            <span id="show_text" class="form-data__field-name">Пароль</span>
+                            <input type="password" id="password" name="password" class="active_pass_input input" placeholder="123123123" value="123123123" disabled>
+                            <img class="butt_hidee_pass_on" onclick="ShowHidePassword('password')" src="~/img/hide-pass.png" style="display: none;">
+                            <img class="butt_viev_pass_on" onclick="ShowHidePassword('password')" src="~/img/viev-pass.png" style="display: none;">
+
+                            <span class="active_block hidden">
+                                Новый пароль
+                                <input type="password" id="password_confirm" name="password_confirm" class="input hidden_pass_input" value="1234567890" placeholder="Qwerty123456">
+                                <img class="butt_hidee_pass_to" onclick="ShowHidePassword('password_confirm')" src="~/img/hide-pass.png" style="display: none;">
+                                <img class="butt_viev_pass_to" onclick="ShowHidePassword('password_confirm')" src="~/img/viev-pass.png" style="display: none;">
+                            </span>
+                            <button type="reset" id="but_pass_cenl" class="hidden hed_form_but_1">Отменить</button>
+                            <button type="submit" id="but_pass_save" class="hidden hed_form_but_2">Сохранить</button>
+
+                            <span class="pen_wrap pen_wrap_pass">
+                                <img src="/img/pen_not_active.png" width="16" height="16" class="pen_no" alt="pen">
+                                <img src="/img/pen_active.png" width="16" height="16" class="pen_act pen_act_pass" alt="pen">
+                            </span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

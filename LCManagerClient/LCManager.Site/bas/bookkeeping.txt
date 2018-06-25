@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "partner": "Капитошка",
+      "payment": "15 000,00",
+      "ipayment": "13 000,00",
+      "client": "0",
+      "comision": "1 300,00",
+
+      "diagrams": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-legend'></div></div><div class='line-chart__bottom' ><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Покупки', borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Начислено',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,},{label:'Клиенты',borderColor:'#567BA5',pointBackgroundColor:'#567BA5',pointRadius:2,backgroundColor:'#567BA5',data:[150,300,690,181,656,155,440,150,300,690,181,656,155,440],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+	},
+    {
+      "id": "2",
+      "partner": "Европейский",
+      "payment": "23 000,00",
+      "ipayment": "0,00",
+      "client": "136",
+      "comision": "0,00",
+
+      "diagrams": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-legend'></div></div><div class='line-chart__bottom' ><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Покупки', borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Начислено',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,},{label:'Клиенты',borderColor:'#567BA5',pointBackgroundColor:'#567BA5',pointRadius:2,backgroundColor:'#567BA5',data:[150,300,690,181,656,155,440,150,300,690,181,656,155,440],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+    },
+    {
+      "id": "3",
+      "partner": "Stivalli",
+      "payment": "0,00",
+      "ipayment": "1 200,00",
+      "client": "180",
+      "comision": "1 800,00",
+      "diagrams": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-legend'></div></div><div class='line-chart__bottom' ><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Покупки', borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Начислено',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,},{label:'Клиенты',borderColor:'#567BA5',pointBackgroundColor:'#567BA5',pointRadius:2,backgroundColor:'#567BA5',data:[150,300,690,181,656,155,440,150,300,690,181,656,155,440],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+    },
+    {
+      "id": "4",
+      "partner": "Sasha Fabiani",
+      "payment": "85 000,00",
+      "ipayment": "63 000,00",
+      "client": "1 500",
+      "comision": "2 650,00",
+      "diagrams": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-legend'></div></div><div class='line-chart__bottom' ><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Покупки', borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Начислено',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,},{label:'Клиенты',borderColor:'#567BA5',pointBackgroundColor:'#567BA5',pointRadius:2,backgroundColor:'#567BA5',data:[150,300,690,181,656,155,440,150,300,690,181,656,155,440],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+    }
+  ]
+}

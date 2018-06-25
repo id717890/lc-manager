@@ -1,0 +1,668 @@
+﻿@*@model LC_Manager.Models.ClientAnalyticMoneyResponse*@
+
+@{
+    ViewBag.Title = "Аналитика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+
+}
+
+@section ContentHeader
+{
+    <div class="tabs__links-head">
+        <ul class="tabs__links">
+            @if (ViewBag.RoleName.Contains("AnalyticsClient"))
+            {
+                <li class="active"><a href="#clients">Клиенты</a></li>
+            }
+            @if (ViewBag.RoleName.Contains("AnalyticsShop"))
+            {
+                <li><a href="#shop">Магазины</a></li>
+            }
+            @if (ViewBag.RoleName.Contains("AnalyticsGood"))
+            {
+                <li><a href="#products">Товары</a></li>
+            }
+        </ul>
+        <div class="select-right">
+            <span class="select-right-text">Период:</span>
+            <select name="" id="analytic-period" class="select-right-item select">
+                <option class="" value="all">Всего</option>
+                <option class="" value="quarter">Квартал</option>
+                <option class="" value="month">Месяц</option>
+                <option class="" value="week">Неделя</option>
+                <option class="" value="day">Сегодня</option>
+            </select>
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function clientsSegmentationToBuys2(buysdataDiagram) {
+            var configData = buysdataDiagram;
+            var config = {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        " Мужчины",
+                        " Женщины",
+                        " Пол не указан",
+                        " С покупками",
+                        " Без покупок",
+                    ],
+                    datasets: [{
+                        data: configData,
+                        backgroundColor: [
+                            "#11B9A3",
+                            "#E5C861",
+                            "#58AEDC",
+                            "#D4614A",
+                            "#373636",
+                        ],
+                        borderWidth: 0,
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    legend: false,
+                    legendCallback: function (chart) {
+                        var text = [];
+                        afterData = ' чел.';
+                        text.push('<ul class="' + chart.id + '-legend">');
+                        for (var i = 0; i < chart.data.datasets[0].data.length; i++) {
+                            text.push('<li><span class="check-inside-chart" style="background-color:' + chart.data.datasets[0].backgroundColor[i] + '"></span>');
+                            if (chart.data.labels[i]) {
+                                text.push(chart.data.labels[i] + ': <span class="text-inside-chart">' + chart.data.datasets[0].data[i] + afterData + '</span>');
+
+                            }
+                            text.push('</li>');
+                        }
+                        text.push('</ul>');
+                        return text.join("");
+                    },
+                    segmentShowStroke: true,
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    tooltips: {
+                        enabled: false,
+                        mode: 'index',
+                        position: 'nearest',
+                        custom: function (tooltip) {
+                            // Tooltip Element
+                            var idAftreDate = this._chart.canvas.id;
+                            var tooltipEl = document.getElementById('chartjs-tooltip-1');
+                            if (!tooltipEl) {
+                                tooltipEl = document.createElement('div');
+                                tooltipEl.id = 'chartjs-tooltip';
+                                tooltipEl.innerHTML = "<table></table>"
+                                document.body.appendChild(tooltipEl);
+                            } else {
+                                tooltipEl.innerHTML = "<table></table>"
+                            }
+                            // Hide if no tooltip
+                            if (tooltip.opacity === 0) {
+                                tooltipEl.style.opacity = 0;
+                                return;
+                            }
+
+                            // Set caret Position
+                            tooltipEl.classList.remove('above', 'below', 'no-transform');
+                            if (tooltip.yAlign) {
+                                tooltipEl.classList.add(tooltip.yAlign);
+                            } else {
+                                tooltipEl.classList.add('no-transform');
+                            }
+
+                            function getBody(bodyItem) {
+                                return bodyItem.lines;
+                            }
+
+                            if (idAftreDate == 'structura-of-client-base') {
+                                afterData = ' чел.'
+                            }
+                            if (idAftreDate == 'active-of-client-base') {
+                                afterData = ' руб.';
+                            }
+
+                            if (idAftreDate == 'structura-of-client-base2') {
+                                afterData = ' чел.'
+                            }
+                            if (idAftreDate == 'active-of-client-base2') {
+                                afterData = ' руб.';
+                            }
+
+                            if (idAftreDate == 'structura-of-client-base3') {
+                                afterData = ' чел.'
+                            }
+                            if (idAftreDate == 'active-of-client-base3') {
+                                afterData = ' руб.';
+                            }
+
+                            // Set Text
+                            if (tooltip.body) {
+                                var titleLines = tooltip.title || [];
+                                var bodyLines = tooltip.body.map(getBody);
+
+                                var innerHtml = '<thead>';
+
+                                titleLines.forEach(function (title) {
+                                    innerHtml += '<tr><th>' + title + '</th></tr>';
+                                });
+                                innerHtml += '</thead><tbody>';
+
+                                bodyLines.forEach(function (body, i) {
+                                    var colors = tooltip.labelColors[i];
+                                    var style = 'background:' + colors.backgroundColor;
+                                    style += '; border-color:' + colors.borderColor;
+                                    style += '; border-width: 2px';
+                                    var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
+                                    innerHtml += '<tr><td>' + span + body + afterData + '</td></tr>';
+                                });
+                                innerHtml += '</tbody>';
+
+                                var tableRoot = tooltipEl.querySelector('table');
+                                tableRoot.innerHTML = innerHtml;
+                            }
+
+                            var position = this._chart.canvas.getBoundingClientRect();
+                            // Display, position, and set styles for font
+                            tooltipEl.style.opacity = 1;
+                            tooltipEl.style.left = tooltip.caretX + 'px';
+                            tooltipEl.style.top = tooltip.caretY + 'px';
+                            tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+                        },
+                    },
+                    cutoutPercentage: 55,
+                    tooltipTemplate: "<%= value %>%",
+                }
+            };
+            var ctx = document.getElementById("structura-of-client-base").getContext("2d");
+            var myChart1 = new Chart(ctx, config);
+            document.getElementById('structura-of-client-base-legend').innerHTML = myChart1.generateLegend();
+        }
+
+        $(function () {
+            
+        })
+    </script>
+}
+
+<section>
+    <div class="content__tabs-bl" id="tabs">
+        <div class="tabs__content">
+            <div id="clients" class="active">
+                <div class="graphs graphs-head">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Сегментация по возрасту</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="segmentation-of-years"></canvas>
+                                    <div class="graphs__col-graph-text" id="client_count_age">-</div>
+                                    <div id="chartjs-tooltip-0" class="chartjs-tooltip-left"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="segmentation-of-years-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__full">
+                                    <p>
+                                        Указали день рождения: <span class="green-text" id="with_birthdate">- чел.</span>
+                                    </p>
+                                    <p>
+                                        Не указали день рождения: <span class="orange-text" id="without_birthdate">- чел.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="graphs__col">
+                        <h3 class="graphs__heading">Структура клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="structura-of-client-base"></canvas>
+                                    <div class="graphs__col-graph-text" id="client_count">-</div>
+                                    <div id="chartjs-tooltip-1" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="structura-of-client-base-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Телефон: <span class="blue-text" id="client_with_phone">- чел.</span>
+                                    </p>
+                                    <p>
+                                        Email: <span class="blue-text" id="client_with_email">- чел. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        10+ покупок: <span class="green-text" id="client_with_ten_buys">- чел.</span>
+                                    </p>
+                                    <p>
+                                        1 покупка: <span class="green-text" id="client_with_one_buy">- чел.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col__1200-big">
+                        <h3 class="graphs__heading">Активность клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph ">
+                                    <canvas id="active-of-client-base"></canvas>
+                                    <div class="graphs__col-graph-text" id="client_active_count">-</div>
+                                    <div id="chartjs-tooltip-2" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="active-of-client-base-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Выручка: <span class="blue-text" id="gain">- руб.</span>
+                                    </p>
+                                    <p>
+                                        Средний чек: <span class="blue-text" id="avg_cheque">- руб. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Покупки в будни: <span class="green-text" id="buys_weekdays">- %</span>
+                                    </p>
+                                    <p>
+                                        Покупки в выходные: <span class="green-text" id="buys_weekoff">-%</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="graphs">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Бонусы</h3>
+                        <div class="bonus-table">
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указано общее количество бонусов, начисленных за выбранный период. Данное количество бонусов, также, включает в себя и бонусы не за покупки. Расчет ведется за всё время действия Программы.</span></a></div>
+                                <div class="bonus-table__two">Начислено бонусов:</div>
+                                <div class="bonus-table__three" id="added_bonus">-</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first">
+                                    <a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указано количество бонусов, которое в среднем начисляется за одну покупку. Расчет ведется за всё время действия Программы.</span></a>
+                                </div>
+                                <div class="bonus-table__two">Среднее начисление:</div>
+                                <div class="bonus-table__three" id="avg_charge">-</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указано общее количество бонусов, списанных за выбранный период. Данное количество бонусов, также, включает в себя и бонусы не за покупки. Расчет ведется за всё время действия Программы.</span></a></div>
+                                <div class="bonus-table__two">Списано бонусов:</div>
+                                <div class="bonus-table__three" id="redeemed_bonus">-</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указано количество бонусов, которое в среднем списывается в одну покупку. Расчет ведется за всё время действия Программы.</span></a></div>
+                                <div class="bonus-table__two">Среднее списание:</div>
+                                <div class="bonus-table__three" id="avg_redeem">-</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указано количество бонусов, которое в среднем находится на бонусных счетах участников Программы. Расчет ведется за всё время действия Программы.</span></a></div>
+                                <div class="bonus-table__two">Средний баланс:</div>
+                                <div class="bonus-table__three" id="avg_balance">-</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Указан фактический процент скидки, который предоставляется Участнику Программы в заданный период. Расчет ведется за всё время действия Программы по формуле - количество списанных бонусов/количество начисленных бонусов* 100%.</span></a></div>
+                                <div class="bonus-table__two">Фактическая скидка:</div>
+                                <div class="bonus-table__three" id="avg_discount">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col_big">
+                        <div class="line-chart-bl">
+                            <div class="line-chart__head">
+                                <div id="line-chart-legend" class="line-chart-legend"></div>
+                            </div>
+                            <div class="line-chart__bottom">
+                                <canvas id="line-chart-30" class="line-chart"></canvas>
+                                <div id="chartjs-tooltip-30" class="linejs-tooltip"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="shop">
+                <div class="graphs graphs-head">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Сегментация по возрасту</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="segmentation-of-years2"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-4" class="chartjs-tooltip-left"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="segmentation-of-years2-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__full">
+                                    <p>
+                                        Указали день рождения: <span class="green-text">85 000 чел.</span>
+                                    </p>
+                                    <p>
+                                        Не указали день рождения: <span class="orange-text">15 000 чел.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="graphs__col">
+                        <h3 class="graphs__heading">Структура клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="structura-of-client-base2"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-5" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="structura-of-client-base2-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Телефон: <span class="blue-text">100 000 чел.</span>
+                                    </p>
+                                    <p>
+                                        Email: <span class="blue-text"> 100 000 чел. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        10+ покупок: <span class="green-text">1500 чел.</span>
+                                    </p>
+                                    <p>
+                                        1 покупка: <span class="green-text">6000 чел.</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col__1200-big">
+                        <h3 class="graphs__heading">Активность клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph ">
+                                    <canvas id="active-of-client-base2"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-6" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="active-of-client-base2-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Выручка: <span class="blue-text">10 000 000 руб.</span>
+                                    </p>
+                                    <p>
+                                        Средний чек: <span class="blue-text"> 2 500 руб. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Покупки в будни: <span class="green-text">70%</span>
+                                    </p>
+                                    <p>
+                                        Покупки в выходные: <span class="green-text">30%</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="graphs">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Бонусы</h3>
+                        <div class="bonus-table">
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Начислено бонусов:</div>
+                                <div class="bonus-table__three">25 500 500</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first">
+                                    <a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это 2... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                                </div>
+                                <div class="bonus-table__two">Среднее начисление:</div>
+                                <div class="bonus-table__three">350</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Списано бонусов:</div>
+                                <div class="bonus-table__three">25 500 000</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Среднее списание:</div>
+                                <div class="bonus-table__three">350</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Средний баланс:</div>
+                                <div class="bonus-table__three">190</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Фактическая скидка:</div>
+                                <div class="bonus-table__three">7%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col_big">
+
+                        <div class="line-chart-bl">
+                            <div class="line-chart__head">
+                                <div id="line-chart2-legend" class="line-chart-legend"></div>
+                            </div>
+                            <div class="line-chart__bottom">
+                                <canvas id="line-chart2" class="line-chart"></canvas>
+                                <div id="chartjs-tooltip-7" class="linejs-tooltip"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div id="products">
+                <div class="graphs graphs-head">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Сегментация по возрасту</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="segmentation-of-years3"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-8" class="chartjs-tooltip-left"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="segmentation-of-years3-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__full">
+                                    <p>
+                                        Указали день рождения: <span class="green-text">85 000 чел.</span>
+                                    </p>
+                                    <p>
+                                        Не указали день рождения: <span class="orange-text">15 000 чел.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="graphs__col">
+                        <h3 class="graphs__heading">Структура клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph">
+                                    <canvas id="structura-of-client-base3"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-9" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="structura-of-client-base3-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Телефон: <span class="blue-text">100 000 чел.</span>
+                                    </p>
+                                    <p>
+                                        Email: <span class="blue-text"> 100 000 чел. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        10+ покупок: <span class="green-text">1500 чел.</span>
+                                    </p>
+                                    <p>
+                                        1 покупка: <span class="green-text">6000 чел.</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col__1200-big">
+                        <h3 class="graphs__heading">Активность клиентской базы</h3>
+                        <div class="graphs-ib graphs-ib_first">
+                            <div class="graphs-bl">
+                                <div class="graphs__col-graph ">
+                                    <canvas id="active-of-client-base3"></canvas>
+                                    <div class="graphs__col-graph-text">100 000 </div>
+                                    <div id="chartjs-tooltip-10" class="chartjs-tooltip"></div>
+                                </div>
+                                <div class="graphs__col-params">
+                                    <div id="active-of-client-base3-legend" class="chart-legend"></div>
+                                </div>
+                            </div>
+                            <div class="graphs-text">
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Выручка: <span class="blue-text">10 000 000 руб.</span>
+                                    </p>
+                                    <p>
+                                        Средний чек: <span class="blue-text"> 2 500 руб. </span>
+                                    </p>
+                                </div>
+                                <div class="graphs-text__half">
+                                    <p>
+                                        Покупки в будни: <span class="green-text">70%</span>
+                                    </p>
+                                    <p>
+                                        Покупки в выходные: <span class="green-text">30%</span>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="graphs">
+                    <div class="graphs__col graphs__col_small">
+                        <h3 class="graphs__heading">Бонусы</h3>
+                        <div class="bonus-table">
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Начислено бонусов:</div>
+                                <div class="bonus-table__three">25 500 500</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first">
+                                    <a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это 2... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a>
+                                </div>
+                                <div class="bonus-table__two">Среднее начисление:</div>
+                                <div class="bonus-table__three">350</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Списано бонусов:</div>
+                                <div class="bonus-table__three">25 500 000</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Среднее списание:</div>
+                                <div class="bonus-table__three">350</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Средний баланс:</div>
+                                <div class="bonus-table__three">190</div>
+                            </div>
+                            <div class="bonus-table__row">
+                                <div class="bonus-table__first"><a href="" class="quest-circle-link"><span class="quest-circle">?</span><span class="quest-circle-info">Выручка - это... сегментация рынка, отбрасывая подробности, нейтрализует комплексный план размещения. Наряду с этим, коммуникация последовательно отталкивает </span></a></div>
+                                <div class="bonus-table__two">Фактическая скидка:</div>
+                                <div class="bonus-table__three">7%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="graphs__col graphs__col_big">
+
+                        <div class="line-chart-bl">
+                            <div class="line-chart__head">
+                                <div id="line-chart3-legend" class="line-chart-legend"></div>
+                            </div>
+                            <div class="line-chart__bottom">
+                                <canvas id="line-chart3" class="line-chart"></canvas>
+                                <div id="chartjs-tooltip-11" class="linejs-tooltip"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "theme": "Не начисляются бонусы",
+      "date": "05.02.2015 <p>17:30</p>",
+      "preorety": "Срочный",
+      "status": "Решена",
+	  "iconum": "",
+      "content": "<div class='table__info__question'><p>Добрый день! В магазине на Ленина  клиенту не зачислились бонус</p></div><div class='clear'></div><div class='table__info__back'><p>Добрый! Уточните,пожалуйста, номер  карты клиента...</p></div><div class='clear'></div><div class='table__info__question'><p>2666546548965</p></div><div class='clear'></div><div class='table__info__back'><p>К сожалению, Вы не считали карту сканером штрих-кода, поэтому бонусы не зачислились</p></div><div class='clear'></div><div class='table__info__question'><p>Спасибо! Мы разобрались!</p></div><div class='clear'></div><div class='table__info__back'><p>Заявку можно закрывать?</p></div><div class='clear'></div><div class='table__info__question'><p>Да, еще раз спасибо!</p></div><div class='clear'></div>"
+    },
+	{
+      "id": "2",
+      "theme": "Сделайте новый отчет",
+      "date": "04.02.2015 <p>17:30</p>",
+      "preorety": "Нормальный",
+      "status": "<p class='blue'>В работе</p>",
+	  "iconum": "<p>2</p>",
+      "content": "<div class='table__info__question'><p>Добрый день! В магазине на Ленина  клиенту не зачислились бонус</p></div><div class='clear'></div><div class='table__info__back'><p>Добрый! Уточните,пожалуйста, номер  карты клиента...</p></div><div class='clear'></div><div class='table__info__question'><p>2666546548965</p></div><div class='clear'></div><div class='table__info__back'><p>К сожалению, Вы не считали карту сканером штрих-кода, поэтому бонусы не зачислились</p></div><div class='clear'></div><div class='table__info__question'><p>Спасибо! Мы разобрались!</p></div><div class='clear'></div><div class='table__info__back'><p>Заявку можно закрывать?</p></div><div class='clear'></div><div class='table__info__question'><p>Да, еще раз спасибо!</p></div><div class='clear'></div>"
+    },
+	{
+      "id": "3",
+      "theme": "Не считывается карта лояльности",
+      "date": "04.02.2015 <p>17:30</p>",
+      "preorety": "Высокий",
+      "status": "Решена",
+	  "iconum": "",
+      "content": "<div class='table__info__question'><p>Добрый день! В магазине на Ленина  клиенту не зачислились бонус</p></div><div class='clear'></div><div class='table__info__back'><p>Добрый! Уточните,пожалуйста, номер  карты клиента...</p></div><div class='clear'></div><div class='table__info__question'><p>2666546548965</p></div><div class='clear'></div><div class='table__info__back'><p>К сожалению, Вы не считали карту сканером штрих-кода, поэтому бонусы не зачислились</p></div><div class='clear'></div><div class='table__info__question'><p>Спасибо! Мы разобрались!</p></div><div class='clear'></div><div class='table__info__back'><p>Заявку можно закрывать?</p></div><div class='clear'></div><div class='table__info__question'><p>Да, еще раз спасибо!</p></div><div class='clear'></div>"
+    },
+	{
+      "id": "4",
+      "theme": "Не доставляются смс-сообщения",
+      "date": "03.02.2015 <p>17:30</p>",
+      "preorety": "Низкий",
+      "status": "В очереди",
+	  "iconum": "<img src='../img/time_ico.png'>",
+      "content": "<div class='table__info__question'><p>Добрый день! В магазине на Ленина  клиенту не зачислились бонус</p></div><div class='clear'></div><div class='table__info__back'><p>Добрый! Уточните,пожалуйста, номер  карты клиента...</p></div><div class='clear'></div><div class='table__info__question'><p>2666546548965</p></div><div class='clear'></div><div class='table__info__back'><p>К сожалению, Вы не считали карту сканером штрих-кода, поэтому бонусы не зачислились</p></div><div class='clear'></div><div class='table__info__question'><p>Спасибо! Мы разобрались!</p></div><div class='clear'></div><div class='table__info__back'><p>Заявку можно закрывать?</p></div><div class='clear'></div><div class='table__info__question'><p>Да, еще раз спасибо!</p></div><div class='clear'></div>"
+    },
+	{
+      "id": "4",
+      "theme": "Поменять % начисления",
+      "date": "03.02.2015 <p>17:30</p>",
+      "preorety": "Срочный",
+      "status": "<p class='blue'>В работе</p>",
+	  "iconum": "<p>3</p>",
+      "content": "<div class='table__info__question'><p>Добрый день! В магазине на Ленина  клиенту не зачислились бонус</p></div><div class='clear'></div><div class='table__info__back'><p>Добрый! Уточните,пожалуйста, номер  карты клиента...</p></div><div class='clear'></div><div class='table__info__question'><p>2666546548965</p></div><div class='clear'></div><div class='table__info__back'><p>К сожалению, Вы не считали карту сканером штрих-кода, поэтому бонусы не зачислились</p></div><div class='clear'></div><div class='table__info__question'><p>Спасибо! Мы разобрались!</p></div><div class='clear'></div><div class='table__info__back'><p>Заявку можно закрывать?</p></div><div class='clear'></div><div class='table__info__question'><p>Да, еще раз спасибо!</p></div><div class='clear'></div>"
+    }
+  ]
+}
