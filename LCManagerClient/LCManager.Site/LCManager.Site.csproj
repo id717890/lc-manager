@@ -195,6 +195,7 @@
     <Compile Include="Implementation\ResponseData\DefaultResponse.cs" />
     <Compile Include="Implementation\ResponseData\OperatorGoodResponse.cs" />
     <Compile Include="Implementation\ResponseData\OperatorPosResponse.cs" />
+    <Compile Include="Models\BonusModel.cs" />
     <Compile Include="Models\GoodModel.cs" />
     <Compile Include="Models\JQueryDataTableParamModel.cs" />
     <Compile Include="Models\PosModel.cs" />
@@ -557,6 +558,16 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\LoyconClient\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LCManager.Infrastructure\LCManager.Infrastructure.csproj">
+      <Project>{46664A87-A441-4A32-98B6-E115F21E3336}</Project>
+      <Name>LCManager.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LCManager.Jwt\LCManager.Jwt.csproj">
+      <Project>{9847845E-5132-4717-9FD3-58CB7FFC72D3}</Project>
+      <Name>LCManager.Jwt</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

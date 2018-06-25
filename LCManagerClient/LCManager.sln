@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.Site", "LCManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.Infrastructure", "LCManager.Infrastructure\LCManager.Infrastructure.csproj", "{46664A87-A441-4A32-98B6-E115F21E3336}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.Jwt", "LCManager.Jwt\LCManager.Jwt.csproj", "{9847845E-5132-4717-9FD3-58CB7FFC72D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{46664A87-A441-4A32-98B6-E115F21E3336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46664A87-A441-4A32-98B6-E115F21E3336}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46664A87-A441-4A32-98B6-E115F21E3336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9847845E-5132-4717-9FD3-58CB7FFC72D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9847845E-5132-4717-9FD3-58CB7FFC72D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9847845E-5132-4717-9FD3-58CB7FFC72D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9847845E-5132-4717-9FD3-58CB7FFC72D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
