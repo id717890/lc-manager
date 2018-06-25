@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.WebAPI", "LCManagerPartner\LCManager.WebAPI.csproj", "{AAFA0FE9-96A2-4621-9DAF-FA3632F97528}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.WebAPI", "LCManager.WebAPI\LCManager.WebAPI.csproj", "{AAFA0FE9-96A2-4621-9DAF-FA3632F97528}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCManager.Site", "LCManager.Site\LCManager.Site.csproj", "{0E42601F-3312-4C6F-AF64-0B669F9A6FB1}"
 EndProject
