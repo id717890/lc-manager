@@ -1,0 +1,112 @@
+﻿<div class="modal" id="ClientsClientCreateAddClient">
+    <div id="modal1" class="modal_clients_addclient">
+        <p>Подтверждаете добавление?</p>
+        <div class="modal_button3">
+            <button class="modal_clients_addclient_agree" id="ClientsClientCreateAddClientYes">
+                Да
+            </button>
+            <button class="modal_clients_addclient_disagree" id="ClientsClientCreateAddClientNo">
+                Нет
+            </button>
+        </div>
+        @*<div>
+                <button class="modal_conform" id="ClientsClientCreateAddClientYes">Да</button>
+                <button class="modal_close" id="ClientsClientCreateAddClientNo">Нет</button>
+            </div>*@
+    </div>
+</div>
+
+<script type="text/javascript">
+    //$("#ClientsClientCreate").submit(function (e) {
+    //    e.preventDefault();
+    //    var modal = document.getElementById("ClientsClientCreateAddClient");
+    //    var btnYes = document.getElementById("ClientsClientCreateAddClientYes");
+    //    var btnNo = document.getElementById("ClientsClientCreateAddClientNo");
+    //    modal.style.display = "block";
+    //    btnNo.onclick = function () {
+    //        modal.style.display = "none";
+    //    }
+    //    btnYes.onclick = function () {
+    //        modal.style.display = "none";
+    //    }
+    //    window.onclick = function (event) {
+    //        if (event.target == modal) {
+    //            modal.style.display = "none";
+    //        }
+    //    }
+    //});
+
+    $("#ClientsClientCreate").submit(function (e) {
+        //var modal = document.getElementById("ClientsClientCreateAddClient");
+        //modal.style.display = "none";
+        e.preventDefault();
+        var phone = document.getElementById("ClientsClientCreatePhone").value; 
+        phone = phone.replace("+7", "").replace(/\D/g, "");
+        if (phone.length > 0 && phone.length === 10) {
+            var url = "@Url.Action("ClientCreate", "Home")";
+            var name = document.getElementById("ClientsClientCreateName").value;
+            var surname = document.getElementById("ClientsClientCreateSurname").value;
+            var patronymic = document.getElementById("ClientsClientCreatePatronymic").value;
+            var card = document.getElementById("ClientsClientCreateCard").value;
+            var email = document.getElementById("ClientsClientCreateEmail").value;
+
+            //var gender = g.options[g.selectedIndex].text;
+            //$("#ClientsClientCreateGender").niceSelect('destroy');
+            var gender = document.getElementById("ClientsClientCreateGender").value;
+            //$("#ClientsClientCreateGender").niceSelect();
+            var birthdate = document.getElementById("ClientsClientCreateBirthdate").value;
+            var allowsms = document.getElementById("ClientsClientCreateAllowSms").checked;
+            var allowemail = document.getElementById("ClientsClientCreateAllowEmail").checked;
+            var promocode = document.getElementById("ClientsClientCreatePromocode").value;
+            var data = '{Name: \'' + name + '\', Surname: \'' + surname + '\', Patronymic: \'' + patronymic + '\', Card: \'' + card + '\' , Phone: \'' +
+                phone + '\', Email: \'' + email + '\', Birthdate: \'' + birthdate + '\', AllowSms: \'' + allowsms + '\', AllowEmail: \'' +
+                allowemail + '\', Gender:\'' + gender + '\', Promocode: \'' + promocode + '\'}';
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                data: data,
+                success: function (data) {
+                    var d = JSON.parse(data);
+                    if (d.ErrorCode > 0) {
+                        var modal = document.getElementById('TerminalModalErrorRegister');
+
+                        // Get the button that opens the modal
+                        var btn = document.getElementById("TerminalModalErrorRegisterClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    } else {
+                        var modal = document.getElementById("TerminalModalSuccessRegister");
+                        modal.style.display = "block";
+                        var btn = document.getElementById("TerminalModalSuccessRegisterClose");
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                            window.location.reload(true);
+                        }
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                                window.location.reload(true);
+                            }
+                        }
+                    }
+                },
+                error: function (data) {
+                }
+            })
+        }
+        else {
+            document.getElementById("ClientsClientCreatePhone").style.borderColor = "#D4614A";
+        }
+    });
+</script>
+

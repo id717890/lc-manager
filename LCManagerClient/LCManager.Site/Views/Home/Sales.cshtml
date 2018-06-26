@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Аналитика";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="filters">
+        <p>Показать продажи с </p>
+        <input type="text" name=" date-item" class=" zbz-input-clearable datepicker" id="dateFrom">
+        <p> по </p>
+        <input type="text" name="date-item " class=" zbz-input-clearable datepicker" id="dateTo">
+        <div class="table__clear_meu">
+            <p class="clear-date" id="claerDate">Сбросить даты</p>
+            <p id="claerAllFilters">Сбросить все фильтры</p>
+        </div>
+    </div>
+}
+
+<section class="table-min-width">
+    <div class="table__content">
+        <div class="table_selling">
+            <table id="clients-sales" class="display selling" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <p>Дата покупки</p>
+                        </th>
+                        <th>
+                            <p>Точка продаж</p>
+                        </th>
+                        <th>
+                            <p>Клиент</p>
+                        </th>
+                        <th>
+                            <p>Операция</p>
+                        </th>
+                        <th>
+                            <p>№ чека</p>
+                        </th>
+                        <th>
+                            <p>Сумма покупки</p>
+                        </th>
+                        <th>
+                            <p>Начислено</p>
+                        </th>
+                        <th>
+                            <p>Списано</p>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div class="page-navigation">
+            <div class="table__download_meu">
+                <div>?<p style="font-family: 'a_Futurica'; text-align: left;">Отчёт о продажах по программе лояльности за период с фильтрацией.</p></div>
+                @using (Html.BeginForm("OperatorSalesReport", "Home", FormMethod.Post, new { id = "export-sales-to-file-form", style = "display: flex" }))
+                {
+                    @Html.Hidden("from", string.Empty)
+                    @Html.Hidden("to", string.Empty)
+                    @Html.Hidden("date", string.Empty)
+                    @Html.Hidden("shop", string.Empty)
+                    @Html.Hidden("phone", string.Empty)
+                    @Html.Hidden("operation", string.Empty)
+                    @Html.Hidden("cheque", string.Empty)
+                    @Html.Hidden("sum", string.Empty)
+                    @Html.Hidden("charge", string.Empty)
+                    @Html.Hidden("redeem", string.Empty)
+                    <p>Выгрузить: </p>
+                    <a href="#" id="OperatorSalesReport">XLSX</a>
+                }
+            </div>
+        </div>
+    </div>
+</section>

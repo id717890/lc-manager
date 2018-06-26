@@ -1,0 +1,669 @@
+﻿
+@{
+    ViewBag.Title = "Clients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    #clientsTable_length label {
+        display: flex;
+    }
+
+    .table-length span {
+        color: #fff !important;
+    }
+
+        .table-length div {
+            cursor: pointer!important;
+            position: relative!important;
+            text-align: left !important;
+            -webkit-transition: all 0.2s ease-in-out!important;
+            transition: all 0.2s ease-in-out!important;
+            -webkit-user-select: none!important;
+            -moz-user-select: none!important;
+            -ms-user-select: none!important;
+            user-select: none!important;
+            white-space: nowrap!important;
+            display: inline-block!important;
+            vertical-align: middle!important;
+            background-color: #58AEDC!important;
+            width: 150px!important;
+            border: none!important;
+            color: #fff!important;
+            -webkit-border-radius: 6px!important;
+            border-radius: 6px!important;
+            padding: 0px 5px 0px 15px!important;
+            height: 36px!important;
+            line-height: 36px!important;
+            font-weight: 400!important;
+            font-family: 'a_FuturicaMedium'!important;
+            font-size: 16rem!important;
+            -webkit-appearance: none!important;
+            -moz-appearance: none!important;
+            appearance: none!important;
+            -webkit-box-sizing: border-box!important;
+            box-sizing: border-box!important;
+            outline: none!important;
+            margin: auto 0!important;
+        }
+
+        .table-length .nice-select {
+            width: 65px !important;
+            margin-top: 6px !important;
+            float: left !important;
+        }
+</style>
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("ClientsAllClients"))
+        {
+            <div><div>?<p>В данном разделе можно фильтровать и просматривать информацию об участниках Программы.</p></div><a href="#allclients" class="this-p">Все клиенты</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsCreateClients"))
+        {
+            <div><div>?<p>В данном разделе можно добавлять клиентов без подтверждения номера телефона. Добавить можно как одного клиента, так и список клиентов, загрузив его с компьютера.</p></div><a href="#clientadd">Добавить новых клиентов</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsCreateClientList"))
+        {
+            <div><div>?<p>Создать список для акции</p></div><a href="#addclientlist-body">Создать список для акции</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsMyClientList"))
+        {
+            <div><div>?<p>Мои списки для акций</p></div><a href="#clientactions">Мои списки для акций</a></div>
+        }
+        <div style="float: right"><p>Всего клиентов: <span id="clientCount"></span></p></div>
+        @*@if (ViewBag.RoleName.Contains("unkmanager") || ViewBag.RoleName.Contains("azssale") || ViewBag.RoleName.Contains("Admin"))
+            {
+                <div><div>?<p>В данном разделе можно фильтровать и просматривать информацию об участниках Программы.</p></div><a href="#allclients" class="this-p">Все клиенты</a></div>
+                <div><div>?<p>В данном разделе можно добавлять клиентов без подтверждения номера телефона. Добавить можно как одного клиента, так и список клиентов, загрузив его с компьютера.</p></div><a href="#clientadd">Добавить новых клиентов</a></div>
+                <div><div>?<p>Создать список для акции</p></div><a href="#addclientlist-body">Создать список для акции</a></div>
+                <div><div>?<p>Мои списки для акций</p></div><a href="#clientactions">Мои списки для акций</a></div>
+                <div><p>Всего клиентов: <span id="clientCount"></span></p></div>
+            }
+            else
+            {
+                <div><div>?<p>В данном разделе можно добавлять клиентов без подтверждения номера телефона. Добавить можно как одного клиента, так и список клиентов, загрузив его с компьютера.</p></div><a href="#clientadd" class="this-p">Добавить новых клиентов</a></div>
+                <div style="visibility: hidden;"><p>Всего клиентов: <span id="clientCount"></span></p></div>
+            }*@
+    </div>
+}
+
+@section Partial
+{
+    @Html.Partial("~/Views/Partial/Clients.cshtml")
+}
+
+
+<section class="table-min-width">
+    <div class="form-terminal__tabs-content">
+        @if (ViewBag.RoleName.Contains("ClientsAllClients"))
+        {
+            <div id="allclients" class="@(ViewBag.RoleName.Contains("ClientsAllClients") ? "active" : "")">
+                <div class="client_table">
+                    <table id="clientsTable" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><p>ФИО клиента</p></th>
+                                <th><p>Телефон</p></th>
+                                <th><p>E-mail</p></th>
+                                <th><p>Дата рождения</p></th>
+                                <th><p>Пол</p></th>
+                                <th><p>Тип клиента</p></th>
+                                <th><p>Номер карты</p></th>
+                                <th><p>Поощрение</p></th>
+                                <th><p>Баланс</p></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="page-navigation">
+                        <div class="table__download_meu">
+                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Клиентская база с возможностью фильтрации и формирования списка номеров телефонов и карт.</p></div>
+                            @*<a href="">CSV</a>*@
+                            @using (Html.BeginForm("OperatorClientReport", "Home", FormMethod.Post, new { id = "export-clients-to-file-form", style = "display: flex" }))
+                            {
+                                @Html.Hidden("fio", string.Empty)
+                                @Html.Hidden("phone", string.Empty)
+                                @Html.Hidden("email", string.Empty)
+                                @Html.Hidden("birthdate", string.Empty)
+                                @Html.Hidden("sex", string.Empty)
+                                @Html.Hidden("type", string.Empty)
+                                @Html.Hidden("card", string.Empty)
+                                @Html.Hidden("level", string.Empty)
+                                @Html.Hidden("balance", string.Empty)
+                                <p>Скачать клиентскую базу: </p>
+                                <a href="#" id="export-clients-to-file">XLSX</a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsCreateClients"))
+        {
+            <div id="clientadd" class="@(ViewBag.RoleName.Contains("ClientsCreateClients") && !ViewBag.RoleName.Contains("ClientsAllClients") ? "active" : "")">
+                <div class="client_body">
+                    <div class="client_left">
+                        <div class="client_body_title"><p>Добавить нового клиента:</p></div>
+                        <div class="client_body_form">
+                            <form id="ClientsClientCreate">
+                                <input type="text" name="name" placeholder="Имя" id="ClientsClientCreateName">
+                                <input type="text" name="family" placeholder="Фамилия" id="ClientsClientCreateSurname">
+                                <input type="text" name="surname" placeholder="Отчество" id="ClientsClientCreatePatronymic">
+                                <input type="text" name="cart" placeholder="Номер карты" id="ClientsClientCreateCard">
+                                <input type="text" name="phone" placeholder="Номер телефона" id="ClientsClientCreatePhone">
+                                <input type="email" name="email" placeholder="E-mail" id="ClientsClientCreateEmail">
+                                <input type="text" name="promocode" placeholder="Промокод" id="ClientsClientCreatePromocode" />
+                                @*<div class="select" id="ClientsClientCreateGender">*@
+                                <select class="select" id="ClientsClientCreateGender">
+                                    <option value="0">Пол</option>
+                                    <option value="1">Мужской</option>
+                                    <option value="-1">Женский</option>
+                                </select>
+                                @*</div>*@
+                                <input type="text" name="date" class="datepicker" id="ClientsClientCreateBirthdate">
+                                <div class="client_body_check">
+                                    <input type="checkbox" class="checkbox" name="sms" id="ClientsClientCreateAllowSms" checked>
+                                    <label for="ClientsClientCreateAllowSms">Уведомлять по SMS</label>
+                                    <input type="checkbox" class="checkbox" name="emails" id="ClientsClientCreateAllowEmail" checked>
+                                    <label for="ClientsClientCreateAllowEmail">Уведомлять по E-mail</label>
+                                </div>
+                                <input type="submit" name="subok" id="subok" value="Добавить клиента">
+                                @*<input type="submit" name="suberr" id="suberr" value="Добавить ошибка">*@
+                            </form>
+                        </div>
+                        <div class="client_upload">
+                            <a href="" id="upload-clients-from-file">Добавить клиентов списком</a>
+                            <input type="file" class="hidden" name="file-clients" id="file-clients" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                            <a href="~/Files/Формат файла для импорта контактов.xlsx">Скачать образец файла в XLSX</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsCreateClientList"))
+        {
+            <div id="addclientlist-body" class="@(ViewBag.RoleName.Contains("ClientsCreateClientList") && !ViewBag.RoleName.Contains("ClientsCreateClients") && !ViewBag.RoleName.Contains("ClientsAllClients") ? "active" : "")">
+                <div class="addclientlist-body">
+                    <div class="addclientlist-left">
+                        <div class="addclientlist-block red biglistul">
+                            <div class="addclientlist-block-title"><p>Покупки клиента</p></div>
+                            <div class="addclientlist-block-content">
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title"><div>?<p>Количество покупок</p></div><p>Количество покупок:</p></div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost" value="25" />
+                                        <p>до</p><input type="text" id="maxCost" value="63" />
+                                        <div id="slider"></div>
+                                    </div>
+                                </div>
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title"><div>?<p>Сумма покупок</p></div><p>Сумма покупок:</p></div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost2" value="0" />
+                                        <p>до</p><input type="text" id="maxCost2" value="150000" />
+                                        <div id="slider2"></div>
+                                    </div>
+                                </div>
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title"><div>?<p>Давность покупки</p></div><p>Давность покупки:</p></div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost3" value="0" />
+                                        <p>до</p><input type="text" id="maxCost3" value="365" />
+                                        <div id="slider3"></div>
+                                    </div>
+                                </div>
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title"><div>?<p>Средний чек</p></div><p>Средний чек:</p></div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost4" value="0" />
+                                        <p>до</p><input type="text" id="maxCost4" value="20000" />
+                                        <div id="slider4"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="addclientlist-block-bottom">
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="addclientlist-block red biglistul">
+                            <div class="addclientlist-block-title"><p>Портрет клиента</p></div>
+                            <div class="addclientlist-block-content">
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title">
+                                        <div>?<p>Возраст</p></div><p>Возраст: </p> <div>?<p>Не указан</p></div><p>Не указан </p>
+                                        <input type="checkbox" class="checkbox" name="miner" id="checkbox23">
+                                        <label for="checkbox23"></label>
+                                    </div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost5" value="0" />
+                                        <p>до</p><input type="text" id="maxCost5" value="100" />
+                                        <div id="slider5"></div>
+                                    </div>
+                                </div>
+                                <div class="seletaddlc">
+                                    <div class="selectaddlc-title"><div>?<p>Баланс бонусов</p></div><p>Баланс бонусов:</p></div>
+                                    <div class="selectcontinp">
+                                        <p>от</p><input type="text" id="minCost6" value="0" />
+                                        <p>до</p><input type="text" id="maxCost6" value="10000" />
+                                        <div id="slider6"></div>
+                                    </div>
+                                </div>
+                                <div class="blcontselect">
+                                    <div class="client_body_check">
+                                        <div class="infomod"><div>?<p>Согласие</p></div>Согласие:</div>
+                                        <input type="checkbox" class="checkbox" name="sms" id="checkbox1">
+                                        <label for="checkbox1">SMS</label>
+                                        <input type="checkbox" class="checkbox" name="emails" id="checkbox2">
+                                        <label for="checkbox2">E-mail</label>
+                                        <input type="checkbox" class="checkbox" name="Push" id="checkbox3">
+                                        <label for="checkbox3">Push</label>
+                                    </div>
+                                </div>
+                                <div class="blcontselect">
+                                    <div class="client_body_check">
+                                        <div class="infomod"><div>?<p>Пол</p></div>Пол:</div>
+                                        <input type="checkbox" class="checkbox" name="men" id="checkbox4">
+                                        <label for="checkbox4">Мужской</label>
+                                        <input type="checkbox" class="checkbox" name="wome" id="checkbox5">
+                                        <label for="checkbox5">Женский</label>
+                                        <input type="checkbox" class="checkbox" name="nonmen" id="checkbox6">
+                                        <label for="checkbox6">Не указан</label>
+                                    </div>
+                                </div>
+                                <div class="blcontselect">
+                                    <div class="client_body_check">
+                                        <div class="infomod"><div>?<p>Тип клиента</p></div>Тип клиента:</div>
+                                        <input type="checkbox" class="checkbox" name="pentioner" id="checkbox7">
+                                        <label for="checkbox7">Пенсионер</label>
+                                        <input type="checkbox" class="checkbox" name="vipcliend" id="checkbox8">
+                                        <label for="checkbox8">VIP-клиент</label>
+                                        <input type="checkbox" class="checkbox" name="miner" id="checkbox9">
+                                        <label for="checkbox9">Сотрудник</label>
+                                    </div>
+                                </div>
+                                <div class="blcontselect">
+                                    <div class="client_body_check">
+                                        <div class="infomod"><div>?<p>Уровень карты</p></div>Уровень карты:</div>
+                                        <input type="checkbox" class="checkbox" name="Silver" id="checkbox10">
+                                        <label for="checkbox10">Silver</label>
+                                        <input type="checkbox" class="checkbox" name="Gold" id="checkbox11">
+                                        <label for="checkbox11">Gold</label>
+                                        <input type="checkbox" class="checkbox" name="Platinum" id="checkbox12">
+                                        <label for="checkbox12">Platinum</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addclientlist-block-bottom">
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="addclientlist-block red biglistul">
+                            <div class="addclientlist-block-title"><p>Предпочтения клиента</p></div>
+                            <div class="addclientlist-block-content">
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>Магазин</p></div>Магазин:</div>
+                                    <input type="text" class="zbz-input-clearable" id="lsearch1">
+                                </div>
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>Категории товаров</p></div>Категории товаров:</div>
+                                    <input type="text" class="zbz-input-clearable" id="lsearch2">
+                                </div>
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>Бренды товаров</p></div>Бренды товаров:</div>
+                                    <input type="text" class="zbz-input-clearable">
+                                </div>
+                            </div>
+                            <div class="addclientlist-block-bottom">
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="addclientlist-block activecalienrsadd">
+                            <div class="addclientlist-block-title"><p>Активность клиента</p></div>
+                            <div class="addclientlist-block-content">
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>Участие в акции</p></div>Участие в акции:</div>
+                                    <input type="text" class="zbz-input-clearable" id="lsearch3">
+                                    <div class="client_body_check">
+                                        <input type="checkbox" class="checkbox" name="Silver" id="checkbox13">
+                                        <label for="checkbox13">Выполнили условия</label>
+                                        <input type="checkbox" class="checkbox" name="Gold" id="checkbox14">
+                                        <label for="checkbox14">Не выполнили условия</label>
+                                    </div>
+                                </div>
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>SMS-рассылка</p></div>SMS-рассылка:</div>
+                                    <input type="text" class="zbz-input-clearable" id="lsearch4">
+                                    <div class="client_body_check">
+                                        <input type="checkbox" class="checkbox" name="Silver" id="checkbox15">
+                                        <label for="checkbox15">Выполнили условия</label>
+                                        <input type="checkbox" class="checkbox" name="Gold" id="checkbox16">
+                                        <label for="checkbox16">Не выполнили условия</label>
+                                    </div>
+                                </div>
+                                <div class="addclientpred">
+                                    <div class="infomod"><div>?<p>E-mail-рассылка</p></div>E-mail-рассылка:</div>
+                                    <input type="text" class="zbz-input-clearable">
+                                    <div class="client_body_check">
+                                        <input type="checkbox" class="checkbox" name="Silver" id="checkbox17">
+                                        <label for="checkbox17">Выполнили условия</label>
+                                        <input type="checkbox" class="checkbox" name="Gold" id="checkbox18">
+                                        <label for="checkbox18">Не выполнили условия</label>
+                                    </div>
+                                </div>
+                                <div class="actionaddclient">
+                                    <div class="client_body_check">
+                                        <div class="infomod"><div>?<p>Все акции (35)</p></div>Все акции (35):</div>
+                                        <input type="checkbox" class="checkbox" name="pentioner" id="checkbox19">
+                                        <label for="checkbox19">Участвовали во всех</label>
+                                        <input type="checkbox" class="checkbox" name="vipcliend" id="checkbox20">
+                                        <label for="checkbox20">Не участвовали вообще</label>
+                                        <input type="checkbox" class="checkbox" name="miner" id="checkbox21">
+                                        <label for="checkbox21">Участие в 50% и более акций</label>
+                                        <input type="checkbox" class="checkbox" name="miner" id="checkbox22">
+                                        <label for="checkbox22">Участие в менее 50% акций</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="addclientlist-block-bottom">
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="addlistaction-liveblock">
+                        <div class="addclientlist-block-title"><p>Новый список клиентов:</p></div>
+                        <div class="liveblock-content">
+                            <input class="liveblock-name zbz-input-clearable" type="text" placeholder="Введите наименование списка">
+                            <div class="actions-block-graph">
+                                <input type="text" value="30" class="dial" data-linecap="round" data-readOnly="true" data-thickness="0.1" data-fgColor="#58afdd">
+                                <p>35 000чел.</p>
+                            </div>
+                            <ul>
+                                <li>Средний чек: от 1000 до 5000 руб.</li>
+                                <li>Более 3-х покупок: 10 000 чел.</li>
+                                <li>Давность покупки: от 1 до 30 дней</li>
+                                <li>Покупки только в будни</li>
+                                <li>Согласие на SMS-рассылку</li>
+                                <li>Согласие на E-mail-рассылку</li>
+                                <li>Покупали товар А и В</li>
+                                <li>Не покупали товар А и В</li>
+                                <li>Покупали в выходные</li>
+                            </ul>
+                            <input type="submit" name="subok" id="subok" name="button" value="Сохранить в мои списки"><div class="infomod"><div>?<p>save</p></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.RoleName.Contains("ClientsMyClientList"))
+        {
+            <div id="clientactions" class="@(ViewBag.RoleName.Contains("ClientsMyClientList") && !ViewBag.RoleName.Contains("ClientsCreateClientList") && !ViewBag.RoleName.Contains("ClientsCreateClients") && !ViewBag.RoleName.Contains("ClientsAllClients") ? "active" : "")">
+                <div class="actios-body">
+                    <div class="actions-left">
+                        <div class="actions-block blue">
+                            <div class="actions-block-title"><p>#Увеличить частоту покупки</p></div>
+                            <div class="actions-block-content">
+                                <div class="actions-block-graph">
+                                    <input type="text" value="30" class="dial" data-linecap="round" data-readOnly="true" data-thickness="0.1" data-fgColor="#58afdd">
+                                    <p>100 000чел.</p>
+                                </div>
+                                <div class="actions-block-li">
+                                    <ul>
+                                        <li><div></div>Мужчины: 3000 чел.</li>
+                                        <li><div></div>Женщины: 3000 чел.</li>
+                                        <li><div></div>Пол не указан: 6000 чел.</li>
+                                        <li><div></div>Давность покупки: от 14 до 50 дней</li>
+                                        <li><div></div>Более одной покупки</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="actions-block-bottom">
+                                <div>
+                                    <a><img src="~/img/del.png"><p>Удалть список клиентов</p></a>
+                                    <a><img src="~/img/mes.png"><p>Сделать рассылку без<br>акции на список клиенов</p></a>
+                                    <a><img src="~/img/depos.png"><p>Создать бонусную акцию<br>для списка клиентов</p></a>
+                                </div>
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="actions-block gren">
+                            <div class="actions-block-title"><p>#Увеличить средний чек</p></div>
+                            <div class="actions-block-content">
+                                <div class="actions-block-graph">
+                                    <input type="text" value="30" class="dial" data-linecap="round" data-readOnly="true" data-thickness="0.1" data-fgColor="#14baa3">
+                                    <p>100 000чел.</p>
+                                </div>
+                                <div class="actions-block-li">
+                                    <ul>
+                                        <li><div></div>Средний чек: от 1000 до 5000 руб.</li>
+                                        <li><div></div>Более 3-х покупок: 10 000 чел.</li>
+                                        <li><div></div>Давность покупки: от 1 до 30 дней</li>
+                                        <li><div></div>Покупка в будни: 50 000 чел.</li>
+                                        <li><div></div>Согласие на SMS-рассылку</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="actions-block-bottom">
+                                <div>
+                                    <a><img src="~/img/del.png"><p>Удалть список клиентов</p></a>
+                                    <a><img src="~/img/mes.png"><p>Сделать рассылку без<br>акции на список клиенов</p></a>
+                                    <a><img src="~/img/depos.png"><p>Создать бонусную акцию<br>для списка клиентов</p></a>
+                                </div>
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="actions-block yellow">
+                            <div class="actions-block-title"><p>#Собрать анкетные данные</p></div>
+                            <div class="actions-block-content">
+                                <div class="actions-block-graph">
+                                    <input type="text" value="30" class="dial" data-linecap="round" data-readOnly="true" data-thickness="0.1" data-fgColor="#ffec03">
+                                    <p>100 000чел.</p>
+                                </div>
+                                <div class="actions-block-li">
+                                    <ul>
+                                        <li><div></div>Не указан пол: 10 000 чел.</li>
+                                        <li><div></div>Не указан возраст: 10 000 чел.</li>
+                                        <li><div></div>Более 10-ти покупок</li>
+                                        <li><div></div>Согласие на E-mail</li>
+                                        <li><div></div>Согласие на SMS</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="actions-block-bottom">
+                                <div>
+                                    <a><img src="~/img/del.png"><p>Удалть список клиентов</p></a>
+                                    <a><img src="~/img/mes.png"><p>Сделать рассылку без<br>акции на список клиенов</p></a>
+                                    <a><img src="~/img/depos.png"><p>Создать бонусную акцию<br>для списка клиентов</p></a>
+                                </div>
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                        <div class="actions-block red biglistul">
+                            <div class="actions-block-title"><p>#Увеличить продажи товаров бренда а и в</p></div>
+                            <div class="actions-block-content">
+                                <div class="actions-block-graph">
+                                    <input type="text" value="30" class="dial" data-linecap="round" data-readOnly="true" data-thickness="0.1" data-fgColor="#ea6b51">
+                                    <p>100 000чел.</p>
+                                </div>
+                                <div class="actions-block-li">
+                                    <ul id="actions-ul">
+                                        <li><div></div>Средний чек: от 1000 до 5000 руб.</li>
+                                        <li><div></div>Более 3-х покупок: 10 000 чел.</li>
+                                        <li><div></div>Давность покупки: от 1 до 30 дней</li>
+                                        <li><div></div>Покупка в будни: 50 000 чел.</li>
+                                        <li><div></div>Согласие на SMS-рассылку</li>
+                                        <li><div></div>Согласие на E-mail</li>
+                                        <li><div></div>Покупали товар А и В</li>
+                                        <li><div></div>Не покупали товар А и В</li>
+                                        <li><div></div>Покупали в выходные</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="actions-block-bottom">
+                                <div>
+                                    <a><img src="~/img/del.png"><p>Удалть список клиентов</p></a>
+                                    <a><img src="~/img/mes.png"><p>Сделать рассылку без<br>акции на список клиенов</p></a>
+                                    <a><img src="~/img/depos.png"><p>Создать бонусную акцию<br>для списка клиентов</p></a>
+                                </div>
+                                <div class="openblocklist"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@*<div class="modal-body-cofirm">
+        <div id="modal1" class="modal_div">
+            <p>Подтверждаете добавление?</p>
+            <div>
+                <a class="modal_conform">Да</a>
+                <a class="modal_close">Нет</a>
+            </div>
+        </div>
+    </div>*@
+<div class="modal-body-ok">
+    <div id="modal2" class="modal_div">
+        <h4>Успешно!</h4>
+        <p>Клиенты успешно добавлены!</p>
+        <a class="modalclose">Закрыть</a>
+    </div>
+</div>
+<div class="modal-body-err">
+    <div id="modal3" class="modal_div">
+        <h4>Что-то пошло не так!</h4>
+        <p>Проверьте файл на корректность и попробуйте снова</p>
+        <a class="modclose">Закрыть</a>
+    </div>
+</div>
+<div class="overlay"></div>
+<div class='modal' id='clientBuysModalWindow'>
+    <div class='modal_client_cheques'>
+        <div class='table__content'>
+            <div class='table_sales_terminal'>
+                <table class='display client_cheques' id='ClientCheques' cellspacing='0' width='100%'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th><p>Дата операции</p></th>
+                            <th><p>Торговая точка</p></th>
+                            <th><p>Операция</p></th>
+                            <th><p>Сумма операции</p></th>
+                            <th><p>Начислено</p></th>
+                            <th><p>Списано</p></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div class='page-navigation' id='TerminalChequeNavigation'>
+                    <div class='table__download_meu'>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='modal' id='clientBonusModalWindow'>
+    <div class='modal_client_bonuses'>
+        <div class='table__content'>
+            <div class='table_sales_terminal'>
+                <table class='display client_bonuses' id='ClientBonuses' cellspacing='0' width='100%'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th><p>Дата</p></th>
+                            <th><p>Тип бонуса</p></th>
+                            <th><p>Начислено</p></th>
+                            <th><p>Списано</p></th>
+                            <th><p>Сгорело</p></th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div class='page-navigation' id='ClientBonusNavigation'>
+                    <div class='table__download_meu'>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts
+    {
+        <script type="text/javascript">
+        @*$("#OperatorClientReport").click(function (e) {
+            e.preventDefault();
+            var beginDate = document.getElementById("dateFrom").value;
+            var endDate = document.getElementById("dateTo").value;
+            window.location = '@Url.Action("OperatorClientReport", "Home")?From=' + beginDate + '&To=' + endDate;
+        })*@
+            $("#upload-clients-from-file").click(function(e) {
+                e.preventDefault();
+                $("#file-clients").click();
+            });
+
+            $("#file-clients").change(function () {
+                ConfirmDialog('Подтверждете добавление?').then(function (resolve) {
+                    if (resolve) {
+                        var fileUpload = $("#file-clients").get(0);
+                        var files = fileUpload.files;
+                        var fileData = new FormData();
+                        for (var i = 0; i < files.length; i++) {
+                            fileData.append(files[i].name, files[i]);
+                        };
+                        console.log(fileData);
+                        $.ajax({
+                            url: "@Url.Action("OperatorClientImportFromExcel", "Home")",
+                            type: "POST",
+                            data: fileData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                if (response.success === true) {
+                                    DialogSuccess("УСПЕШНО!");
+                                } else {
+                                    DialogError("Ошибка", response);
+                                    console.log(response);
+                                }
+                            },
+                            error: function (response) {
+                                DialogError("Ошибка", response);
+                                console.log(response);
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    }
+
+

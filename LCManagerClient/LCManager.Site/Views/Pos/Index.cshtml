@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "Shops";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("ShopsMyShops"))
+        {
+            <div class="tab_shops"><div>?<p>В данном разделе отображаются все точки продаж, подключенные к Программе лояльности. Здесь, также, можно сформировать список точек продаж для настройки акции.</p></div><a href="#tab_shops" class="this-p">Точки продаж</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("ShopsCreateShopList"))
+        {
+            <div class="tab_mylist_shop"><div>?<p>В данном разделе отображаются все списки точек продаж, которые были сформированы для проведения акции.</p></div><a href="#tab_shopslist">Мои списки для акций</a></div>
+        }
+        <div class="shopvievshop"><p>Всего точек продаж: <span class="shopslistcount"></span></p></div>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+
+        function Action() {
+            var checked = [];
+            $(".checkbox-for-shop:checked").each(function ()
+            {
+                checked.push(parseInt($(this).val()));
+            });
+            $("#selected_shops").val(checked.join(","));
+
+            var name = $("#shop_list_name").val();
+            if (name === '') {
+                DialogError("Ошибка", "Укажите наименование списка");
+                return;
+            }
+
+            var selected_shops = $("#selected_shops").val();
+            if (selected_shops === '') {
+                DialogError("Ошибка", "Нужно выбрать хотя бы 1 магазин");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("OperatorPosListSave", "Pos")",
+                type: "POST",
+                data: { 'list_name': name, 'list_id': selected_shops},
+                success: function (response) {
+                    const data = JSON.parse(response);
+                    if (data.success === true) {
+                        DialogSuccess("Список добавлен!");
+                    }
+                    else {
+                        DialogError("Ошибка", response);
+                        console.log(response);
+                    }
+                },
+                error: function (response) {
+                    DialogError("Ошибка", response);
+                    console.log(response);
+                }
+            });
+        }
+
+        $(document).on('click',
+            '.dell-control',
+            function() {
+                var id = $(this).data('id');
+                ConfirmDialog('Подтверждаете удаление?').then(function(resolve) {
+                    if (resolve) {
+                        $.ajax({
+                            url: "@Url.Action("OperatorPosListRemove","Pos")",
+                            type: "POST",
+                            data: { 'id': id },
+                            success: function(response) {
+                                if (response.success === true) {
+                                    DialogSuccess("Список удалён!");
+                                } else {
+                                    DialogError("Ошибка", response);
+                                    console.log(response);
+                                }
+                            },
+                            error: function(response) {
+                                DialogError("Ошибка", response);
+                                console.log(response);
+                            }
+                        });
+                    }
+                }).catch(function(reject) {
+                    console.log(reject);
+                });
+            });
+
+        $(function() {
+            $(".add_shop_submit").on("click",
+                function() {
+                    ConfirmDialog('Подтверждаете добавление?').then(function(resolve) {
+                        if (resolve) {
+                            Action();
+                        }
+                    }).catch(function(reject) {
+                        console.log(reject);
+                    });
+                });
+
+            $("#checkbox0").on('change',
+                function() {
+                    var selected_shops = $('.checkbox-for-shop:checked').length;
+                    $("#count_of_shops").html(selected_shops + " маг.");
+                });
+
+            $("#shopsTable").on('change',
+                '.checkbox-for-shop',
+                function () {
+                    console.log('check');
+                    var selected_shops = $('.checkbox-for-shop:checked').length;
+                    $("#count_of_shops").html(selected_shops + " маг.");
+                });
+
+            $('#shopsTable').DataTable({
+                "ajax": "@Url.Action("GetOperatorPos", "Pos")",
+                "columns": [
+                    { "data": "Check" },
+                    { "data": "Region" },
+                    { "data": "City" },
+                    { "data": "Address" }
+                ],
+                "ordering": false,
+                initComplete: function () {
+                    console.log(this);
+                    $("#shopsTable_length").appendTo($(".client_nav"));
+                    $("#shopsTable_length").css('display', 'flex');
+                    $("#shopsTable_length").addClass('shopvievbuttom');
+                    $(".shopslistcount").html(this.api().data().count());
+                    this.api().columns([1, 2, 3]).every(function () {
+                        addInputFilter(this);
+                    });
+                    niceSelect();
+                }
+            });
+
+            goodshopTablelist = $('#shopslistTable').DataTable({
+                "ajax": "@Url.Action("GetListOfPos", "Pos")",
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '<img src="/img/tableiconopen.png">'
+                    },
+                    { "data": "Caption" },
+                    { "data": "Text" },
+                    {
+                        "orderable": false,
+                        "data": "HtmlForDelete"
+                    }
+                ],
+                "ordering": false,
+                "lengthChange": false,
+                initComplete: function () {
+                    $(".goodshopTablecont").html(this.api().data().count());
+                    this.api().columns([1, 2]).every(function () {
+                        addInputFilter(this);
+                    });
+                }
+            });
+
+            $('#shopslistTable tbody').on('click', 'tr.odd td:nth-child(1), tr.odd td:nth-child(2), tr.odd td:nth-child(3), tr.even td:nth-child(1), tr.even td:nth-child(2), tr.even td:nth-child(3)', function () {
+                var tr = $(this).closest('tr');
+                var row = goodshopTablelist.row(tr);
+                showHideRow(tr, row, shopTablelistData);
+            });
+
+            function shopTablelistData(d) {
+                return '<tbody>' + d.details + '</tbody>';
+            }
+        });
+    </script>
+}
+
+<section class="table-min-width">
+    <div class="my_action_waper shops">
+        <div class="form-terminal__tabs-content">
+            @if (ViewBag.RoleName.Contains("ShopsMyShops"))
+            {
+                <div id="tab_shops" class="@(ViewBag.RoleName.Contains("ShopsMyShops") ? "active" : "")">
+                    <table id="shopsTable" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th><div>?<p>123</p></div><input type='checkbox' class='checkbox' name='checkbox1' id='checkbox0'><label for='checkbox0'></label></th>
+                                <th><p>Регион</p></th>
+                                <th><p>Город</p></th>
+                                <th><p>Адрес</p></th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div class="shops_add_block">
+                        <a class="shops_add_fbut">Создать список для акции</a>
+                        <input type="text" name="addshops" class="addshopinput" id="shop_list_name" placeholder="Введите наименование списка">
+                        <input type="text" name="selected_shops" class="addshopinput" style="display: none!important" id="selected_shops">
+                        <div class="add_shops_graph" id="count_of_shops">0 маг.</div>
+                        <button class="add_shop_submit" disabled>Сохранить в мои списки</button>
+                        <div class="modal_ask">?<p>1231231231</p></div>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.RoleName.Contains("ShopsCreateShopList"))
+            {
+                <div id="tab_shopslist" class="@(ViewBag.RoleName.Contains("ShopsCreateShopList") && !ViewBag.RoleName.Contains("ShopsMyShops") ? "active" : "")">
+                    <table id="shopslistTable" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><p>Наименование списка</p></th>
+                                <th><p>Кол-во ТТ</p></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>

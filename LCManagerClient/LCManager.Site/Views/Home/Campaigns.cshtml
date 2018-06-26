@@ -1,0 +1,268 @@
+﻿
+@{
+    ViewBag.Title = "Campaigns";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if(!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style = "visibility:hidden;" >.</a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href=""><img src="../img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("CampaignMyCampaign"))
+        {
+            <div><div>?<p>В данном разделе отображаются все акции, которые проходили или проходят в Программе. По каждой акции можно посмотреть статистику, раскрыв строку нажатием на строку, либо на синий ярлычок слева строки.</p></div><a href="#my_action" class="this-p">Мои акции</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("CampaignCreateCampaign"))
+        {
+            <div><div>?<p>Создать акцию</p></div><a href="#add_action">Создать акцию</a></div>
+        }
+        @*<div><div>?<p>База знаний</p></div><a href="#products">База знаний</a></div>*@
+        <div><p>Всего акций: <span id="stockCount"></span></p></div>
+    </div>
+
+}
+
+<section class="my_action table-min-width">
+    <div class="my_action_waper">
+        <div class="form-terminal__tabs-content">
+            @if (ViewBag.RoleName.Contains("CampaignMyCampaign"))
+            {
+                <div id="my_action" class="@(ViewBag.RoleName.Contains("CampaignMyCampaign") ? "active" : "")">
+                    <div class="my_action_body">
+                        <table id="stockTable" class="display my_action_table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><p>Наименование акции</p></th>
+                                    <th><p>Статус акции</p></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.RoleName.Contains("CampaignCreateCampaign"))
+            {
+                <div id="add_action" class="@(ViewBag.RoleName.Contains("CampaignCreateCampaign") && !ViewBag.RoleName.Contains("CampaignMyCampaign") ? "active" : "")">
+                    <div class="client_left">
+                        <div class="mailling-wrap">
+                            <form>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Наименование</p>
+                                    </div>
+                                    <div class="param-input">
+                                        <input type="text" name="name" class="zbz-input-clearable" placeholder="Введите наименование акции">
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Даты проведения</p>
+                                    </div>
+                                    <div class="param-input">
+                                        <div class="col-2-input">
+                                            <input type="text" name="startDate" placeholder="Дата запуска" class="datepicker zbz-input-clearable">
+                                            <input type="text" name="finishDate" placeholder="Дата завершения" class="datepicker zbz-input-clearable">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Шаблон акции</p>
+                                    </div>
+                                    <div class="param-input" id="clientListSelect">
+                                        <select name="addactionList" id="addactionList" class="select">
+                                            <option value="1">Выбрать шаблок акции</option>
+                                            <option value="2">Повышенные бонусы</option>
+                                            <option value="3">Счастливые моменты</option>
+                                            <option value="4">Сгораемые промо-бонусы</option>
+                                            <option value="5">Бонусы за количество покупок</option>
+                                            <option value="6">Бонусы за сумму одной покупок</option>
+                                            <option value="7">Бонусы за количество позиций в чеке</option>
+                                            <option value="8">Бонусы за общую сумму покупок</option>
+                                            <option value="9">Повышенные бонусы День Рождение</option>
+                                            <option value="10">Сгораемые бонусы День Рождение</option>
+                                            <option value="11">Велком бонус</option>
+                                        </select>
+                                        <div id="actionoption" class="actionoption"></div>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Список магазинов</p>
+                                    </div>
+                                    <div class="param-input" id="shopListSelect">
+                                        <select name="clientList" class="select">
+                                            <option>Выбрать список магазинов</option>
+                                            <option value="create">Создать список магазинов</option>
+                                            <option>Выбрать все магазины</option>
+                                            <option>Акция без учета магазинов</option>
+                                            <option>Список для акции №1</option>
+                                            <option>Список для акции №2</option>
+                                        </select>
+                                    </div>
+                                    <div class="param-info">
+                                        <p class="grey-text" for="shopListSelect">25</p>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Список Товаров</p>
+                                    </div>
+                                    <div class="param-input" id="ItemListSelect">
+                                        <select name="clientList" class="select">
+                                            <option>Выбрать список товаров</option>
+                                            <option value="create">Создать новый список</option>
+                                            <option>Акция без учета товаров</option>
+                                            <option>Список товаров для акции №1</option>
+                                            <option>Список товаров для акции №2</option>
+                                            <option>Список товаров для акции №3</option>
+                                        </select>
+                                    </div>
+                                    <div class="param-info">
+                                        <p class="grey-text" for="ItemListSelect">150</p>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Список клиентов</p>
+                                    </div>
+                                    <div class="param-input" id="clientListSelect">
+                                        <select name="clientList" class="select">
+                                            <option>Выбрать список клиентов</option>
+                                            <option>Выбрать всех клиентов</option>
+                                            <option value="create">Создать новый список</option>
+                                            <option>#Собрать анкетный данные</option>
+                                            <option>#Увеличить частоту покупок</option>
+                                            <option>#Увеличить средний чек</option>
+                                        </select>
+                                    </div>
+                                    <div class="param-info">
+                                        <p class="grey-text" for="clientListSelect">15 000</p>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Коммуникация</p>
+                                    </div>
+                                    <div class="param-box">
+                                        <div class="comunication">
+                                            <p class="comunication-title collapse-detail" id="sms"><span class="detail"><img src="/img/tableiconopen.png"></span>SMS</p>
+                                            <div class="colapse-box" for="sms">
+                                                <div class="col-2-input">
+                                                    <input type="text" name="sendSMSDate" placeholder="Дата отправки" class="datepicker zbz-input-clearable">
+                                                    <input type="text" name="sendSMSTime" placeholder="Время отправки" class="timeinput">
+                                                </div>
+                                                <div class="collapse-input">
+                                                    <textarea name="smsText" placeholder="Введите текст сообщения" class="smsText"></textarea>
+                                                    <div class="param-info sms-length sms-grey">
+                                                        <div class="inline-block">
+                                                            <div class="number"><p class="text-center">5</p></div><div class="hover_detail">?<p>123123</p></div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="inline-block">
+                                                            <div class="number"><p class="text-center">300</p></div><div class="hover_detail">?<p>123123</p></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comunication">
+                                            <p class="comunication-title collapse-detail" id="email"><span class="detail"><img src="/img/tableiconopen.png"></span>E-mail</p>
+                                            <div class="colapse-box" for="email">
+                                                <div class="col-2-input">
+                                                    <input type="text" name="sendEmailDate" placeholder="Дата отправки" class="datepicker zbz-input-clearable">
+                                                    <input type="text" name="sendSMSTime" placeholder="Время отправки" class="timeinput">
+                                                </div>
+                                                <div class="collapse-input">
+                                                    <select name="clientList" class="select">
+                                                        <option>Распродажа осень</option>
+                                                        <option>#Собрать анкетный данные</option>
+                                                        <option>#Увеличить частоту покупок</option>
+                                                        <option>#Увеличить средний чек</option>
+                                                    </select>
+                                                    <div class="param-info">
+                                                        <a href="#" class="btn btn-round-rect btn-blue">Загрузить макет</a>
+                                                    </div>
+                                                </div>
+                                                <div class="collapse-input">
+                                                    <p>Персонализация письма</p>
+                                                    <div class="param-chekbox">
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailUserName" id="checkbox1">
+                                                            <label for="checkbox1">Имя</label>
+                                                        </div>
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailUserFatherName" id="checkbox2">
+                                                            <label for="checkbox2">Отчество</label>
+                                                        </div>
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailBalans" id="checkbox3">
+                                                            <label for="checkbox3">Баланс</label>
+                                                        </div>
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailLavel" id="checkbox4">
+                                                            <label for="checkbox4">Уровень участия</label>
+                                                        </div>
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailPrescription" id="checkbox5">
+                                                            <label for="checkbox5">Давность покупки</label>
+                                                        </div>
+                                                        <div class="chekboxLabel">
+                                                            <input type="checkbox" class="checkbox" name="emailAmount" id="checkbox6">
+                                                            <label for="checkbox6">Сумма покупки</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comunication">
+                                            <p class="comunication-title collapse-detail" id="push"><span class="detail"><img src="/img/tableiconopen.png"></span>Push</p>
+                                            <div class="colapse-box" for="push">
+                                                <div class="col-2-input">
+                                                    <input type="text" name="sendPushDate" placeholder="Дата отправки" class="datepicker zbz-input-clearable">
+                                                    <input type="text" name="sendSMSTime" placeholder="Время отправки" class="timeinput">
+                                                </div>
+                                                <div class="collapse-input">
+                                                    <textarea name="pushText" placeholder="Введите текст сообщения"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="submit-box">
+                                    <input type="submit" name="submit" id="submit" value="Создать акцию"><div class="hover_detail">?<p>123123</p></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

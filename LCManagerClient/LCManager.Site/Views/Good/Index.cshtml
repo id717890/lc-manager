@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = "ShopsGoods";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("GoodsMyGoods"))
+        {
+            <div><div>?<p>В данном разделе Вы найдете подборку кратких инструкций по использованию данного интерфейса и обслуживанию участников Программы лояльности.</p></div><a href="#my_itte" class="this-p">Товары</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("GoodsMyGoodsList"))
+        {
+            <div><div>?<p>Мои списки товаров</p></div><a href="#my_list_itte">Мои списки товаров</a></div>
+        }
+        <div class="shopvievshop"><p>Всего товаров: <span class="goodshopTablecont">0</span></p></div>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        function Action() {
+            var checked = [];
+            $(".checkbox-for-good:checked").each(function ()
+            {
+                checked.push(parseInt($(this).val()));
+            });
+            $("#selected_goods").val(checked.join(","));
+
+            var name = $("#good_list_name").val();
+            if (name === '') {
+                DialogError("Ошибка", "Укажите наименование списка");
+                return;
+            }
+
+            var selected_goods = $("#selected_goods").val();
+            if (selected_goods === '') {
+                DialogError("Ошибка", "Нужно выбрать хотя бы 1 товар");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("OperatorGoodListSave", "Good")",
+                type: "POST",
+                data: { 'list_name': name, 'list_id': selected_goods},
+                success: function (response) {
+                    const data = JSON.parse(response);
+                    if (data.success === true) {
+                        DialogSuccess("Список добавлен!");
+                    }
+                    else {
+                        DialogError("Ошибка", response);
+                        console.log(response);
+                    }
+                },
+                error: function (response) {
+                    DialogError("Ошибка", response);
+                    console.log(response);
+                }
+            });
+        }
+
+        $(document).on('click',
+            '.dell-control',
+            function() {
+                var id = $(this).data('id');
+                ConfirmDialog('Подтверждаете удаление?').then(function(resolve) {
+                    if (resolve) {
+                        $.ajax({
+                            url: "@Url.Action("OperatorGoodListRemove", "Good")",
+                            type: "POST",
+                            data: { 'id': id },
+                            success: function(response) {
+                                if (response.success === true) {
+                                    DialogSuccess("Список удалён!");
+                                } else {
+                                    DialogError("Ошибка", response);
+                                    console.log(response);
+                                }
+                            },
+                            error: function(response) {
+                                DialogError("Ошибка", response);
+                                console.log(response);
+                            }
+                        });
+                    }
+                }).catch(function(reject) {
+                    console.log(reject);
+                });
+            });
+
+        $(function () {
+            $("#checkbox0").on('change',
+                function () {
+                    var selected_goods = $('.checkbox-for-good:checked').length;
+                    $("#count_of_goods").html(selected_goods + " тов.");
+                });
+
+            $("#goodshopTable").on('change',
+                '.checkbox-for-good',
+                function () {
+                    var selected_goods = $('.checkbox-for-good:checked').length;
+                    $("#count_of_goods").html(selected_goods + " тов.");
+                });
+
+            $("#add_good_submit").on("click",
+                function () {
+                    ConfirmDialog('Подтверждаете добавление?').then(function (resolve) {
+                        if (resolve) {
+                            Action();
+                        }
+                    }).catch(function (reject) {
+                        console.log(reject);
+                    });
+                });
+
+            $('#goodshopTable').DataTable({
+                "ajax": "@Url.Action("GetGoods", "Good")",
+                "columns": [
+                    { "data": "chek" },
+                    { "data": "name" },
+                    { "data": "text" }
+                ],
+                "ordering": false,
+                initComplete: function () {
+                    console.log(this);
+                    $("#shopsTable_length").appendTo($(".client_nav"));
+                    $("#shopsTable_length").css('display', 'flex');
+                    $("#shopsTable_length").addClass('shopvievbuttom');
+                    $(".goodshopTablecont").html(this.api().data().count());
+                    this.api().columns([1, 2]).every(function () {
+                        addInputFilter(this);
+                    });
+                    niceSelect();
+                }
+            });
+
+            var goodshopTablelist = $('#goodshopTablelist').DataTable({
+                "ajax": "@Url.Action("OpretorGoodListGet", "Good")",
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '<img src="/img/tableiconopen.png">'
+                    },
+                    { "data": "Name" },
+                    { "data": "Text" },
+                    {
+                        "orderable": false,
+                        "data": "HtmlForDelete"
+                    }
+                ],
+                "ordering": false,
+                "lengthChange": false,
+                initComplete: function () {
+                    this.api().columns([1, 2]).every(function () {
+                        addInputFilter(this);
+                    });
+                }
+            });
+
+            $('#goodshopTablelist tbody').on('click', 'tr.odd td:nth-child(1), tr.odd td:nth-child(2), tr.odd td:nth-child(3), tr.even td:nth-child(1), tr.even td:nth-child(2), tr.even td:nth-child(3)', function () {
+                var tr = $(this).closest('tr');
+                var row = goodshopTablelist.row(tr);
+                showHideRow(tr, row, shopTablelistData);
+            });
+
+            function shopTablelistData(d) {
+                return '<tbody>' + d.details + '</tbody>';
+            }
+
+            $("#upload-goods-from-file").click(function(e) {
+                e.preventDefault();
+                $("#file-goods").click();
+            });
+
+            $("#file-goods").change(function () {
+                ConfirmDialog('Подтверждете добавление?').then(function (resolve) {
+                    if (resolve) {
+                        var fileUpload = $("#file-goods").get(0);
+                        var files = fileUpload.files;
+                        var fileData = new FormData();
+                        for (var i = 0; i < files.length; i++) {
+                            fileData.append(files[i].name, files[i]);
+                        };
+
+                        $.ajax({
+                            url: "@Url.Action("OperatorGoodImportFromExcel","Good")",
+                            type: "POST",
+                            data: fileData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                if (response.success === true) {
+                                    DialogSuccess("УСПЕШНО!");
+                                } else {
+                                    DialogError("Ошибка", response);
+                                    console.log(response);
+                                }
+                            },
+                            error: function (response) {
+                                DialogError("Ошибка", response);
+                                console.log(response);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+<section class="table-min-width">
+    <div class="my_action_waper goodshop">
+        <div class="form-terminal__tabs-content">
+            @if (ViewBag.RoleName.Contains("GoodsMyGoods"))
+            {
+                <div id="my_itte" class="@(ViewBag.RoleName.Contains("GoodsMyGoods") ? "active" : "")">
+                    <div class="addclientlist-left">
+                        <table id="goodshopTable" class="display clientlist" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><div>?<p>123</p></div><input type='checkbox' class='checkbox' name='checkbox1' id='checkbox0'><label for='checkbox0'></label></th>
+                                    <th><p>Артикул</p></th>
+                                    <th><p>Наименование товара</p></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="godshopright">
+                        <div class="godshop_add_header">
+                            <a href="" id="upload-goods-from-file">Загрузить товары</a>
+                            <input type="file" class="hidden" name="file-goods" id="file-goods" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                            <a href="@Url.Action("OperatorGoodDownloadTemplate","Good")">Скачать образец</a>
+                        </div>
+                        <div class="godshop_add_cont">
+                            <a class="active">Создать список для акции</a>
+                            <input type="text" id="good_list_name" placeholder="Введите наименование списка">
+                            <input type="text" name="selected_goods" class="addshopinput" style="display: none !important" id="selected_goods">
+                            <div class="godshop_add_cont_count" id="count_of_goods">0 тов.</div>
+                            <button id="add_good_submit" disabled>Сохранить в мои списки</button>
+                            <div>?<p>123123213</p></div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.RoleName.Contains("GoodsMyGoodsList"))
+            {
+                <div id="my_list_itte" class="@(ViewBag.RoleName.Contains("GoodsMyGoodsList") && !ViewBag.RoleName.Contains("GoodsMyGoods") ? "active" : "")">
+                    <table id="goodshopTablelist" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><p>Наименование списка</p></th>
+                                <th><p>Кол-во SKU</p></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>

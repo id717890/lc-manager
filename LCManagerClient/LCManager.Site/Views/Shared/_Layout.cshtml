@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LC-Manager</title>
+    <link rel="stylesheet" href="~/Content/animate.css">
+    <link rel="stylesheet" href="~/Content/style.css">
+</head>
+<body>
+    <div class="main-flex">
+        <aside class="aside">
+            <div class="aside__fix">
+                <div class="aside__head">«@(ViewBag.OperatorName)»</div>
+                @*<div class="aside__head">«@(LC_Manager.Models.UserData.OperatorName)»</div>*@
+                <nav class="aside__links">
+                    <ul class="aside__links-ul aside__links-ul_first">
+                        @if (ViewBag.RoleName.Contains("Analytics"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "home" ? "active" : "")">
+                                <a href="@Url.Action("Index", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_analytic"></i>
+                                    <span>Аналитика</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Terminal"))
+                        {
+                            <li class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "terminal" ? "active" : "")'>
+                                <a href="@Url.Action("Terminal", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_sell"></i>
+                                    <span>Терминал</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Sales"))
+                        {
+                            <li class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "sales" ? "active" : "")'>
+                                <a href="@Url.Action("Sales", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_sell"></i>
+                                    <span>Продажи</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Clients"))
+                        {
+                            <li class='@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "clients" ? "active" : "")'>
+                                <a href="@Url.Action("Clients", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_clients"></i>
+                                    <span>Клиенты</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("BonusNoCheque"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "bonus" ? "active" : "")">
+
+                                <a href="@Url.Action("Index", "Bonus")" class="aside-link">
+                                    <i class="icon-nav icon-nav_clients"></i>
+                                    <span>Бонусы</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Mailing"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "distributions" ? "active" : "")">
+                                <a href="@Url.Action("Distributions", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_action"></i>
+                                    <span>Рассылки</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Campaign"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "campaigns" ? "active" : "")">
+                                <a href="@Url.Action("Campaigns", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_action"></i>
+                                    <span>Акции</span>
+                                </a>
+                            </li>
+                        }
+                        @if (ViewBag.RoleName.Contains("Shops"))
+                        {
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "pos" ? "active" : "")">
+                                <a href="@Url.Action("Index", "Pos")" class="aside-link">
+                                    <i class="icon-nav icon-nav_setting"></i>
+                                    <span>Точки продаж</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    @if (ViewBag.RoleName.Contains("Total"))
+                    {
+                        <ul class="aside__links-ul aside__links-ul_two">
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "bookkeeping" ? "active" : "")">
+                                <a href="@Url.Action("Bookkeeping", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_bux"></i>
+                                    <span>Сверка</span>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                    @if (ViewBag.RoleName.Contains("Goods"))
+                    {
+                        <ul class="aside__links-ul aside__links-ul_three">
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "good" ? "active" : "")">
+                                <a href="@Url.Action("Index", "Good")" class="aside-link">
+                                    <i class="icon-nav icon-nav_faq"></i>
+                                    <span>Товары</span>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+
+                    @if (ViewBag.RoleName.Contains("Faq"))
+                    {
+                        <ul class="aside__links-ul aside__links-ul_three">
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "faq" ? "active" : "")">
+                                <a href="@Url.Action("FAQ", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_faq"></i>
+                                    <span>FAQ</span>
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </nav>
+            </div>
+        </aside>
+        <div class="content">
+            <header class="content__header">
+                <a href="" class="btn-hide-aside"></a>
+                <ul class="content__header-nav">
+                    @RenderSection("ContentHeaderNav", false)
+                </ul>
+                <a href="@Url.Action("Logoff", "Account")" class="content__header-logout">
+                    <i></i>
+                    <span>Выйти</span>
+                </a>
+                <div class="content__search">
+                    <div class="content__search__left">
+                        <div class="search-form">
+                            <button class="search-form__submit"></button>
+                            <input type="text" class="search-form__input" placeholder="Поиск клиента по номеру телефона">
+                            <button class="search-form__cancel"></button>
+                        </div>
+                    </div>
+                    <div class="content__search__right">
+                        <div class="search-form">
+                            <button class="search-form__submit"></button>
+                            <input type="text" class="search-form__input" placeholder="Поиск покупки по номеру чека">
+                            <button class="search-form__cancel"></button>
+                        </div>
+                    </div>
+                </div>
+                @RenderSection("ContentHeader", false)
+            </header>
+            @RenderBody()
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery-ui")
+    @Scripts.Render("~/bundles/plugins")
+    @Scripts.Render("~/bundles/main")
+
+    @Html.Partial("~/Views/Partial/Layout.cshtml")
+    @RenderSection("Scripts", required: false)
+    @RenderSection("Partial", false)
+    <!-- BEGIN JIVOSITE CODE {literal} -->
+    <script type='text/javascript'>
+        (function () {
+            var widget_id = '3uBzf42ZkQ'; var d = document; var w = window; function l() {
+                var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/' + widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);
+            } if (d.readyState == 'complete') { l(); } else { if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } }
+        })();</script>
+    <!-- {/literal} END JIVOSITE CODE -->
+</body>
+</html>
