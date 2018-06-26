@@ -9,8 +9,9 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Globalization;
+using LCManager.JWT;
 using Newtonsoft.Json;
-using LC_Manager.Implementation;
+//using LC_Manager.Implementation;
 
 namespace LC_Manager.Controllers
 {
