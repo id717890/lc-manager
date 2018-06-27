@@ -1043,8 +1043,8 @@ namespace LCManagerPartner.Models
 
                     worksheet.Cells["N" + cellNum].Value = posClients[i].SumAmountPeriod;
                     worksheet.Cells["N" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
-
-                    worksheet.Cells["O" + cellNum].Value = posClients[i].SumAmountPeriod - posClients[i].SubstractBonus + posClients[i].SumRefundPeriod;
+                    
+                    worksheet.Cells["O" + cellNum].Value = posClients[i].SumAmountPeriod - posClients[i].SubstractBonus; //+ posClients[i].SumRefundPeriod;
                     worksheet.Cells["O" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
 
                     worksheet.Cells["P" + cellNum].Value = posClients[i].AddedBonus;
