@@ -791,6 +791,16 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="T:LCManagerPartner.Controllers.ReportsController">
+            <inheritdoc />
+            <summary>
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.#ctor">
+            <inheritdoc />
+            <summary>
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ReportsController.ClientBuys(LCManagerPartner.Models.ClientBuysRequest)">
             <summary>
             Очтёт о покупках клиента Оператора за период
@@ -847,6 +857,11 @@
         <member name="M:LCManagerPartner.Controllers.ReportsController.OperatorBonus(LCManagerPartner.Models.OperatorBonusSourceRequest)">
             <summary>
             Отчёт по бонусам не за покупки за период у оператора
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.BonusesNoChequeReport(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
+            <summary>
+            Отчёт по бонусам не за покупки
             </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.SiteController.GetSegments(LCManagerPartner.Models.GetSegmentsRequest)">
@@ -1602,6 +1617,14 @@
             <summary>
             адреса торговых точек
             </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.BonusService.BonusesNoChequeReport(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
+            <summary>
+            Отчет по бонусам не за покупки
+            </summary>
+            <param name="cnn"></param>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="T:LCManagerPartner.Implementation.Services.GoodService">
             <summary>

@@ -113,46 +113,26 @@
                                 <th><p>Начислено</p></th>
                                 <th><p>Списано</p></th>
                                 <th><p>Сгорело</p></th>
+                                <th><p>Номер карты</p></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
-
-
-
-                    @*<table id="clientsTable" class="display clientlist" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th><p>ФИО клиента</p></th>
-                                    <th><p>Телефон</p></th>
-                                    <th><p>E-mail</p></th>
-                                    <th><p>Дата рождения</p></th>
-                                    <th><p>Пол</p></th>
-                                    <th><p>Тип клиента</p></th>
-                                    <th><p>Номер карты</p></th>
-                                    <th><p>Поощрение</p></th>
-                                    <th><p>Баланс</p></th>
-                                </tr>
-                            </thead>
-                        </table>*@
                     <div class="page-navigation">
                         <div class="table__download_meu">
-                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Клиентская база с возможностью фильтрации и формирования списка номеров телефонов и карт.</p></div>
-                            @*<a href="">CSV</a>*@
-                            @using (Html.BeginForm("OperatorClientReport", "Home", FormMethod.Post, new { id = "export-clients-to-file-form", style = "display: flex" }))
+                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
+                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
                             {
-                                @Html.Hidden("fio", string.Empty)
-                                @Html.Hidden("phone", string.Empty)
-                                @Html.Hidden("email", string.Empty)
-                                @Html.Hidden("birthdate", string.Empty)
-                                @Html.Hidden("sex", string.Empty)
-                                @Html.Hidden("type", string.Empty)
-                                @Html.Hidden("card", string.Empty)
-                                @Html.Hidden("level", string.Empty)
-                                @Html.Hidden("balance", string.Empty)
-                                <p>Скачать клиентскую базу: </p>
-                                <a href="#" id="export-clients-to-file">XLSX</a>
+                                @Html.Hidden("bonus_from", string.Empty)
+                                @Html.Hidden("bonus_to", string.Empty)
+                                @Html.Hidden("bonus_date", string.Empty)
+                                @Html.Hidden("bonus_type", string.Empty)
+                                @Html.Hidden("bonus_added", string.Empty)
+                                @Html.Hidden("bonus_redeemed", string.Empty)
+                                @Html.Hidden("bonus_burned", string.Empty)
+                                @Html.Hidden("bonus_card", string.Empty)
+                                <p>Скачать отчет: </p>
+                                <a href="#" id="export-bonuses-no-cheque-to-file">XLSX</a>
                             }
 
                         </div>
@@ -172,8 +152,21 @@
             tableBonuses.draw();
         });
 
-        $("#claerDateBonuses").click(function(){
+        $("#claerDateBonuses").on("click", function(){
             clearDateBonuses();
+        });
+
+        $("#export-bonuses-no-cheque-to-file").on("click", function(e) {
+            e.preventDefault();
+            $("#bonus_from").val($("#dateFrom").val());
+            $("#bonus_to").val($("#dateTo").val());
+            $("#bonus_date").val(tableBonuses.column(1).search());
+            $("#bonus_type").val(tableBonuses.column(2).search());
+            $("#bonus_added").val(tableBonuses.column(3).search());
+            $("#bonus_redeemed").val(tableBonuses.column(4).search());
+            $("#bonus_burned").val(tableBonuses.column(5).search());
+            $("#bonus_card").val(tableBonuses.column(6).search());
+            $("#export-bonuses-no-cheque-to-file-form").submit();
         });
 
         function clearDateBonuses(){
@@ -202,14 +195,15 @@
                         "className": 'details-control',
                         "orderable": false,
                         "data": null,
-                        //"defaultContent": '<img src="../img/tableiconopen.png"><br/><i class="details-arrow"></i>'
-                        "defaultContent": '<i class="details-arrow"></i>'
+                        "defaultContent": '<img src="../img/tableiconopen.png"><br/><i class="details-arrow"></i>'
+                        //"defaultContent": '<i class="details-arrow"></i>'
                     },
                     { "data": "date" },
                     { "data": "type" },
                     { "data": "added" },
                     { "data": "redeemed" },
                     { "data": "fireed" },
+                    { "data": "card" }
                 ],
                 "ordering": false,
                 initComplete: function () {
@@ -234,6 +228,9 @@
                         select.append('<option value="500-1000">500-1000</option>');
                         select.append('<option value="1000-9000">1000-9000</option>');
                     });
+                    this.api().columns([6]).every( function () {
+                        addInputFilter(this);
+                    } );
                     niceSelect();
                     $(".nice-select ul.list li.focus").removeClass('focus');
                 }

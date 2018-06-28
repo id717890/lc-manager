@@ -82,6 +82,7 @@
     <Compile Include="Response\DefaultResponse.cs" />
     <Compile Include="Response\GetClientInfoResponse.cs" />
     <Compile Include="Response\GetRegistrationUserResponse.cs" />
+    <Compile Include="Response\ReportResponse.cs" />
     <Compile Include="Response\_BaseResponse.cs" />
   </ItemGroup>
   <ItemGroup>

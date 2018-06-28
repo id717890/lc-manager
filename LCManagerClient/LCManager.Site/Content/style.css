@@ -1592,8 +1592,9 @@ select::-ms-expand {
             width: 5px;
         }
 
-.table_selling .selling tr:first-child td {
-    border-top: solid 1px #dee2e7!important;
+.table_selling .selling tr:first-child td,
+.datatables-div .selling tr:first-child td {
+    border-top: solid 1px #dee2e7 !important;
 }
 .table_selling .selling thead th, .table_selling .selling thead td {
     border-bottom: none;
@@ -7751,6 +7752,11 @@ select {
     }
 
     .table_selling > .dataTables_wrapper > table > tbody > tr > td {
+        border-bottom: solid 1px #dee2e7;
+        border-top: none !important;
+    }
+
+    .datatables-div > .dataTables_wrapper > table > tbody > tr > td {
         border-bottom: solid 1px #dee2e7;
         border-top: none !important;
     }

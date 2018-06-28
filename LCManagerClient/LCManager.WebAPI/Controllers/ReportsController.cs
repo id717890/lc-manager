@@ -8,13 +8,28 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using LCManager.Infrastructure.Request;
+using LCManagerPartner.Implementation.Services;
 
 namespace LCManagerPartner.Controllers
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// </summary>
     [Authorize]
     [RoutePrefix("api/reports")]
     public class ReportsController : ApiController
     {
+        private readonly BonusService _bonusService;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// </summary>
+        public ReportsController()
+        {
+            _bonusService = new BonusService();
+        }
+
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
         SqlConnection cnn = new SqlConnection(connectionString);
 
@@ -166,6 +181,16 @@ namespace LCManagerPartner.Controllers
             var result = new ServerOperatorBonusSource();
             var returnValue = result.ProcessRequest(cnn, request);
             return returnValue;
+        }
+
+        /// <summary>
+        /// Отчёт по бонусам не за покупки
+        /// </summary>
+        [HttpPost]
+        [Route("BonusesNoChequeReport")]
+        public LCManager.Infrastructure.Response.ReportResponse BonusesNoChequeReport(BonusesNotForPurchasesRequest request)
+        {
+            return _bonusService.BonusesNoChequeReport(request);
         }
     }
 }

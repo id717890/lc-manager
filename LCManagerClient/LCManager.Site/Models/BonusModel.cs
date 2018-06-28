@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace LC_Manager.Models
 {
@@ -13,6 +10,7 @@ namespace LC_Manager.Models
         public string added { get; set; }
         public string redeemed { get; set; }
         public string fireed { get; set; }
+        public string card { get; set; }
         public string lorem { get; set; }
     }
 
