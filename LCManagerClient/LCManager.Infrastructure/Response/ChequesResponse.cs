@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Response
-{
-    using System.Collections.Generic;
-    using Data;
+﻿using System.Collections.Generic;
+using Site.Infrastrucure.Data;
 
+namespace LCManager.Infrastructure.Response
+{
     public class ChequesResponse
     {
         public int ErrorCode { get; set; }
