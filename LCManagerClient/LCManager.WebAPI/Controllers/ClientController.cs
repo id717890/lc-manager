@@ -11,7 +11,21 @@ using LCManager.Infrastructure.Request;
 using LCManagerPartner.Implementation.Request;
 using LCManagerPartner.Implementation.Response;
 using LCManagerPartner.Implementation.Services;
+using AddEmailRequest = LCManagerPartner.Models.AddEmailRequest;
+using AddPhoneRequest = LCManagerPartner.Models.AddPhoneRequest;
+using CardBonusesRequest = LCManagerPartner.Models.CardBonusesRequest;
+using CardStatisticsRequest = LCManagerPartner.Models.CardStatisticsRequest;
 using ChangeClientRequest = LCManagerPartner.Models.ChangeClientRequest;
+using ClientBonusesRequest = LCManagerPartner.Models.ClientBonusesRequest;
+using ClientCreateRequest = LCManagerPartner.Models.ClientCreateRequest;
+using ClientPasswordChangeRequest = LCManagerPartner.Models.ClientPasswordChangeRequest;
+using GetClientInfoRequest = LCManagerPartner.Models.GetClientInfoRequest;
+using GetConfirmCodeRequest = LCManagerPartner.Models.GetConfirmCodeRequest;
+using GetRegistrationUserRequest = LCManagerPartner.Models.GetRegistrationUserRequest;
+using GetSendVerificationCodeRequest = LCManagerPartner.Models.GetSendVerificationCodeRequest;
+using SendEmailCodeRequest = LCManagerPartner.Models.SendEmailCodeRequest;
+using SetClientPasswordRequest = LCManagerPartner.Models.SetClientPasswordRequest;
+using ValidateEmailRequest = LCManagerPartner.Models.ValidateEmailRequest;
 
 namespace LCManagerPartner.Controllers
 {
