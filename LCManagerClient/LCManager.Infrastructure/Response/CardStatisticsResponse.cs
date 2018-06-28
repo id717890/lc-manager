@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Response
-{
-    using System;
-    using Microsoft.Build.Framework;
+﻿using System;
+using Microsoft.Build.Framework;
 
+namespace LCManager.Infrastructure.Response
+{
     public class CardStatisticsResponse: BaseResponse
     {
             /// <summary>

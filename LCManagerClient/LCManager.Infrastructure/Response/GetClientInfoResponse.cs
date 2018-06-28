@@ -1,7 +1,7 @@
-﻿namespace Site.Infrastrucure.Response
-{
-    using System;
+﻿using System;
 
+namespace LCManager.Infrastructure.Response
+{
     public class GetClientInfoResponse: BaseResponse
     {
         public Int64 Card { get; set; }

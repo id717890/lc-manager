@@ -1,4 +1,4 @@
-﻿namespace Site.Infrastrucure.Response
+﻿namespace LCManager.Infrastructure.Response
 {
     public class DefaultResponse : BaseResponse
     {

@@ -9,8 +9,12 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Globalization;
+using LCManager.Infrastructure.Request;
+using LCManager.Infrastructure.Response;
 using LCManager.JWT;
 using Newtonsoft.Json;
+using Bonus = LCManager.Infrastructure.Data.Bonus;
+
 //using LC_Manager.Implementation;
 
 namespace LC_Manager.Controllers
@@ -41,6 +45,8 @@ namespace LC_Manager.Controllers
                     Operator = Implementation.JwtProps.GetOperator(),
                     //Card = response.ClientData.CardNumber,
                     Date = Request["columns[1][search][value]"],
+                    DateStart = Request["date_from"],
+                    DateEnd = Request["date_to"],
                     Page = Convert.ToInt64(param.start),
                     PageSize = Convert.ToInt64(param.length)
                 };
@@ -83,7 +89,7 @@ namespace LC_Manager.Controllers
                     if (response.ErrorCode == 0)
                     {
                         Bonuses bonuses = new Bonuses();
-                        foreach (Site.Infrastrucure.Data.Bonus c in response.Bonuses)
+                        foreach (Bonus c in response.Bonuses)
                         {
                             BonusesViewModel bonus = new BonusesViewModel
                             {

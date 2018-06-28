@@ -7,9 +7,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using LCManager.Infrastructure.Request;
 using LCManagerPartner.Implementation.Request;
 using LCManagerPartner.Implementation.Response;
 using LCManagerPartner.Implementation.Services;
+using ChangeClientRequest = LCManagerPartner.Models.ChangeClientRequest;
 
 namespace LCManagerPartner.Controllers
 {

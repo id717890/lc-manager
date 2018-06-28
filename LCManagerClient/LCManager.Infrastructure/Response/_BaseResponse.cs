@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Site.Infrastrucure.Response
+﻿namespace LCManager.Infrastructure.Response
 {
     /// <summary>
     /// Абстрактный класс для ответа сервера

@@ -78,21 +78,32 @@
 
 @section ContentHeader
 {
-    <div class="client_nav">
+    @*<div class="client_nav">
         @if (ViewBag.RoleName.Contains("BonusNoChequeList"))
         {
             <div><div>?<p>В данном разделе можно фильтровать и просматривать информацию по бонусам не относящимся к покупкам.</p></div><a href="#allbonuses" class="this-p">Все бонусы</a></div>
         }
         <div style="float: right"><p>Всего бонусов: <span id="bonusesCount"></span></p></div>
+    </div>*@
+    
+<div class="filters">
+    <p>Показать бонусы с </p>
+    <input type="text" name=" date-item" class=" zbz-input-clearable datepicker" id="dateFrom">
+    <p> по </p>
+    <input type="text" name="date-item " class=" zbz-input-clearable datepicker" id="dateTo">
+    <div class="table__clear_meu">
+        <p class="clear-date" id="claerDate">Сбросить даты</p>
+        <p id="claerAllFilters">Сбросить все фильтры</p>
     </div>
+</div>
 }
 
 <section class="table-min-width">
     <div class="form-terminal__tabs-content">
         @if (ViewBag.RoleName.Contains("BonusNoCheque"))
         {
-            <div id="allbonuses" class="@(ViewBag.RoleName.Contains("BonusNoCheque") ? "active" : "")">
-                <div class="client_table">
+            <div id="allbonuses" class="@(ViewBag.RoleName.Contains("BonusNoCheque") ? "active" : "")" style="margin-bottom: 100px">
+                <div class="datatables-div">
                     <table id="clients-bonuses" class="display selling hl-table" cellspacing="0">
                         <thead>
                             <tr>
@@ -161,12 +172,16 @@
             tableBonuses = $('#clients-bonuses').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
-                "lengthChange": false,
+                //"lengthChange": false,
                 "info": false,
                 "ajax":
                 {
                     method: "POST",
-                    url: "../Bonus/GetBonuses"
+                    url: "../Bonus/GetBonuses",
+                    data: function (params) {
+                        params.date_from = $("#dateFrom").val();
+                        params.date_to = $("#dateTo").val();
+                    }
                 },
                 "columns": [
                     {

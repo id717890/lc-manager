@@ -1,7 +1,7 @@
-﻿namespace Site.Infrastrucure.Response
-{
-    using System;
+﻿using System;
 
+namespace LCManager.Infrastructure.Response
+{
     public class GetRegistrationUserResponse: BaseResponse
     {
         /// <summary>

@@ -1,7 +1,7 @@
-﻿namespace Site.Infrastrucure.Data
-{
-    using System;
+﻿using System;
 
+namespace LCManager.Infrastructure.Data
+{
     public class Client
     {
         /// <summary>

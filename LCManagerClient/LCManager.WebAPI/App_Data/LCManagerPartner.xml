@@ -758,7 +758,7 @@
             Активация карты на списание
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Controllers.ClientController.BonusesNotForPurchases(LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest)">
+        <member name="M:LCManagerPartner.Controllers.ClientController.BonusesNotForPurchases(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
             <summary>
             Получение списка бонусов не за покупки
             </summary>
@@ -1388,16 +1388,6 @@
         <member name="P:LCManagerPartner.Implementation.Request.BonusesRequest.EndDate">
             <summary>
             Окончание периода для расчета аналитики
-            </summary>
-        </member>
-        <member name="T:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest">
-            <summary>
-            Запрос для получения бонусов не за покупки по номеру карты
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest.Card">
-            <summary>
-            Номер карты
             </summary>
         </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
