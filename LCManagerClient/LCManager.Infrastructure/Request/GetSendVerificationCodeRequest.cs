@@ -1,7 +1,7 @@
-﻿namespace Site.Infrastrucure.Request
-{
-    using System;
+﻿using System;
 
+namespace LCManager.Infrastructure.Request
+{
     public class GetSendVerificationCodeRequest
     {
         /// <summary>

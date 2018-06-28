@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Data
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace LCManager.Infrastructure.Data
+{
     public class Cheque
     {
         public Int32 Id { get; set; }

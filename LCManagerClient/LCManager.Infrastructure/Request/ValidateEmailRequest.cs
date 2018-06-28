@@ -1,4 +1,4 @@
-﻿namespace Site.Infrastrucure.Request
+﻿namespace LCManager.Infrastructure.Request
 {
     public class ValidateEmailRequest
     {

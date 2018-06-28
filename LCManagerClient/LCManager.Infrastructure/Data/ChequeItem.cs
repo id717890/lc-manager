@@ -1,4 +1,4 @@
-﻿namespace Site.Infrastrucure.Data
+﻿namespace LCManager.Infrastructure.Data
 {
     public class ChequeItem
     {

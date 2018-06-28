@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Site.Infrastrucure.Data;
+using LCManager.Infrastructure.Data;
 
 namespace LCManager.Infrastructure.Response
 {
