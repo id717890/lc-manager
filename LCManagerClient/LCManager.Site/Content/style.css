@@ -12464,3 +12464,7 @@ select {
     height: auto;
     margin: auto;
 }
+
+.w100 {
+    width: 100%;
+}
