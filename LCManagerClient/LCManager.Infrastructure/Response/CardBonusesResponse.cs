@@ -1,7 +1,8 @@
-﻿namespace Site.Infrastrucure.Response
+﻿using System.Collections.Generic;
+using LCManager.Infrastructure.Data;
+
+namespace LCManager.Infrastructure.Response
 {
-    using System.Collections.Generic;
-    using Data;
     public class CardBonusesResponse
     {
         public List<CardBonus> CardBonuses { get; set; }

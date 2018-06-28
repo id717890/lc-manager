@@ -1,7 +1,7 @@
-﻿namespace Site.Infrastrucure.Request
-{
-    using System;
+﻿using System;
 
+namespace LCManager.Infrastructure.Request
+{
     public class ChequesRequest
     {
         public Int16 Operator { get; set; }

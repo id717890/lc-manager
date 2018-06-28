@@ -758,7 +758,7 @@
             Активация карты на списание
             </summary>
         </member>
-        <member name="M:LCManagerPartner.Controllers.ClientController.BonusesNotForPurchases(LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest)">
+        <member name="M:LCManagerPartner.Controllers.ClientController.BonusesNotForPurchases(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
             <summary>
             Получение списка бонусов не за покупки
             </summary>
@@ -790,6 +790,16 @@
             </summary>
             <param name="request"></param>
             <returns></returns>
+        </member>
+        <member name="T:LCManagerPartner.Controllers.ReportsController">
+            <inheritdoc />
+            <summary>
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.#ctor">
+            <inheritdoc />
+            <summary>
+            </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.ReportsController.ClientBuys(LCManagerPartner.Models.ClientBuysRequest)">
             <summary>
@@ -847,6 +857,11 @@
         <member name="M:LCManagerPartner.Controllers.ReportsController.OperatorBonus(LCManagerPartner.Models.OperatorBonusSourceRequest)">
             <summary>
             Отчёт по бонусам не за покупки за период у оператора
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.BonusesNoChequeReport(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
+            <summary>
+            Отчёт по бонусам не за покупки
             </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.SiteController.GetSegments(LCManagerPartner.Models.GetSegmentsRequest)">
@@ -1390,16 +1405,6 @@
             Окончание периода для расчета аналитики
             </summary>
         </member>
-        <member name="T:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest">
-            <summary>
-            Запрос для получения бонусов не за покупки по номеру карты
-            </summary>
-        </member>
-        <member name="P:LCManagerPartner.Implementation.Request.BonusesNotForPurchasesRequest.Card">
-            <summary>
-            Номер карты
-            </summary>
-        </member>
         <member name="T:LCManagerPartner.Implementation.Request.OperatorGoodsRequest">
             <summary>
             
@@ -1612,6 +1617,14 @@
             <summary>
             адреса торговых точек
             </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.BonusService.BonusesNoChequeReport(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
+            <summary>
+            Отчет по бонусам не за покупки
+            </summary>
+            <param name="cnn"></param>
+            <param name="request"></param>
+            <returns></returns>
         </member>
         <member name="T:LCManagerPartner.Implementation.Services.GoodService">
             <summary>

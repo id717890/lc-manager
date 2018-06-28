@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Request
-{
-    using Microsoft.Build.Framework;
-    using System;
+﻿using System;
+using Microsoft.Build.Framework;
 
+namespace LCManager.Infrastructure.Request
+{
     public class ClientPasswordChangeRequest
     {
         /// <summary>

@@ -1,8 +1,8 @@
 ﻿
-namespace Site.Infrastrucure.Response
-{
-    using Data;
+using LCManager.Infrastructure.Data;
 
+namespace LCManager.Infrastructure.Response
+{
     public class ClientInfoResponse: BaseResponse
     {
         //public string Name { get; set; }

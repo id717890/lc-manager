@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Request
-{
-    using System;
-    using Data;
+﻿using System;
+using LCManager.Infrastructure.Data;
 
+namespace LCManager.Infrastructure.Request
+{
     public class ChangeClientRequest
     {
         /// <summary>

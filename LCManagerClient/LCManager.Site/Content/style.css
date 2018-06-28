@@ -1592,8 +1592,9 @@ select::-ms-expand {
             width: 5px;
         }
 
-.table_selling .selling tr:first-child td {
-    border-top: solid 1px #dee2e7!important;
+.table_selling .selling tr:first-child td,
+.datatables-div .selling tr:first-child td {
+    border-top: solid 1px #dee2e7 !important;
 }
 .table_selling .selling thead th, .table_selling .selling thead td {
     border-bottom: none;
@@ -4913,6 +4914,19 @@ select {
 #bookkeeping #line-chart-leg {
     margin-left: 0px;
 }
+
+.datatables-div {
+    position: absolute;
+    top: 170px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: scroll;
+    overflow-x: auto;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
 .client_table {
     position: absolute;
     top: 170px;
@@ -7738,6 +7752,11 @@ select {
     }
 
     .table_selling > .dataTables_wrapper > table > tbody > tr > td {
+        border-bottom: solid 1px #dee2e7;
+        border-top: none !important;
+    }
+
+    .datatables-div > .dataTables_wrapper > table > tbody > tr > td {
         border-bottom: solid 1px #dee2e7;
         border-top: none !important;
     }
@@ -12444,4 +12463,8 @@ select {
     width: 362px;
     height: auto;
     margin: auto;
+}
+
+.w100 {
+    width: 100%;
 }

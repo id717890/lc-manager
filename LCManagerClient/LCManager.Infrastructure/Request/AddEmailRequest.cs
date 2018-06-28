@@ -1,7 +1,8 @@
-﻿namespace Site.Infrastrucure.Request
+﻿using System;
+using Microsoft.Build.Framework;
+
+namespace LCManager.Infrastructure.Request
 {
-    using System;
-    using Microsoft.Build.Framework;
     public class AddEmailRequest
     {
         /// <summary>

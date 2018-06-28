@@ -1,8 +1,8 @@
-﻿namespace Site.Infrastrucure.Response
-{
-    using System.Collections.Generic;
-    using Data;
+﻿using System.Collections.Generic;
+using LCManager.Infrastructure.Data;
 
+namespace LCManager.Infrastructure.Response
+{
     /// <inheritdoc />
     /// <summary>
     /// Класс ответа возвращающий бонусы клиента не за покупки

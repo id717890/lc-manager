@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Site.Infrastrucure.Request
+namespace LCManager.Infrastructure.Request
 {
     /// <summary>
     /// Запрос для получения бонусов не за покупки по номеру карты
@@ -19,6 +19,8 @@ namespace Site.Infrastrucure.Request
         public long PageSize { get; set; }
 
         public string Date { get; set; }
+        public string DateStart { get; set; }
+        public string DateEnd { get; set; }
         public string Name { get; set; }
         public string CardStr { get; set; }
         public string AddedMore { get; set; }
@@ -28,4 +30,5 @@ namespace Site.Infrastrucure.Request
         public string BurnMore { get; set; }
         public string BurnLess { get; set; }
     }
+    
 }

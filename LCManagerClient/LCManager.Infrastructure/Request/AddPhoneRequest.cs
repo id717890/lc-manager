@@ -1,6 +1,7 @@
-﻿namespace Site.Infrastrucure.Request
+﻿using System;
+
+namespace LCManager.Infrastructure.Request
 {
-    using System;
     public class AddPhoneRequest
     {
         /// <summary>
