@@ -92,7 +92,7 @@
     <p> по </p>
     <input type="text" name="date-item " class=" zbz-input-clearable datepicker" id="dateTo">
     <div class="table__clear_meu">
-        <p class="clear-date" id="claerDate">Сбросить даты</p>
+        <p class="clear-date" id="claerDateBonuses">Сбросить даты</p>
         <p id="claerAllFilters">Сбросить все фильтры</p>
     </div>
 </div>
@@ -167,6 +167,20 @@
     <script type="text/javascript">
         var tableBonuses;
         var serchingRowBonuses = false;
+
+        $("#dateFrom, #dateTo").on('change input', function(){
+            tableBonuses.draw();
+        });
+
+        $("#claerDateBonuses").click(function(){
+            clearDateBonuses();
+        });
+
+        function clearDateBonuses(){
+            $("#dateFrom").val("").removeClass("zbz-input-clearable__x");
+            $("#dateTo").val("").removeClass("zbz-input-clearable__x");
+            tableBonuses.draw();
+        }
 
         $(function () {
             tableBonuses = $('#clients-bonuses').DataTable({

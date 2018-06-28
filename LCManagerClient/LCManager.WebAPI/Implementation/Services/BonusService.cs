@@ -52,6 +52,24 @@ namespace LCManagerPartner.Implementation.Services
                     }
                 }
 
+                //Фильтр по дате (Верхний фильтр с диапазоном)
+                if (!string.IsNullOrEmpty(request.DateStart))
+                {
+                    if (DateTime.TryParseExact(request.DateStart, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+                    {
+                        cmd.Parameters.AddWithValue("@f_date_start", date.ToString("yyyy-MM-dd"));
+                    }
+                }
+
+                //Фильтр по дате (Верхний фильтр с диапазоном)
+                if (!string.IsNullOrEmpty(request.DateEnd))
+                {
+                    if (DateTime.TryParseExact(request.DateEnd, new[] { "dd.MM.yyyy" }, CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var date))
+                    {
+                        cmd.Parameters.AddWithValue("@f_date_end", date.ToString("yyyy-MM-dd"));
+                    }
+                }
+
                 //Фильтр по названию
                 if (!string.IsNullOrEmpty(request.Name)) cmd.Parameters.AddWithValue("@f_name", request.Name);
                 //Фильтр по начислению
