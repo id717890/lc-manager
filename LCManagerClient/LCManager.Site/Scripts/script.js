@@ -387,7 +387,8 @@ $(document).ready(function() {
         "ordering": false,
         initComplete: function () {
             $("#clientsTable_length").appendTo($(".client_nav")).addClass("table-length");
-            $("#clientsTable_length").css('display', 'flex');
+            $("#clientsTable_length").css("display", "flex");
+            $("#clientsTable_length p").remove();
 
             this.api().columns([5, 6, 8]).every(function () {
                 addSelectFilter(this);
