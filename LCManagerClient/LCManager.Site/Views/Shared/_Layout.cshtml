@@ -57,7 +57,6 @@
                         @if (ViewBag.RoleName.Contains("BonusNoCheque"))
                         {
                             <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "bonus" ? "active" : "")">
-
                                 <a href="@Url.Action("Index", "Bonus")" class="aside-link">
                                     <i class="icon-nav icon-nav_action"></i>
                                     <span>Бонусы</span>
@@ -97,6 +96,14 @@
                         <ul class="aside__links-ul aside__links-ul_two">
                             <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "bookkeeping" ? "active" : "")">
                                 <a href="@Url.Action("Bookkeeping", "Home")" class="aside-link">
+                                    <i class="icon-nav icon-nav_bux"></i>
+                                    <span>Сверка</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="aside__links-ul aside__links-ul_two">
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "bookkeeping" ? "active" : "")">
+                                <a href="@Url.Action("Index", "Bookkeeping")" class="aside-link">
                                     <i class="icon-nav icon-nav_bux"></i>
                                     <span>Сверка</span>
                                 </a>

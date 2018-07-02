@@ -764,44 +764,44 @@ $(document).ready(function() {
 		showHideRow(tr, row, format);
 	});
 
-    bokepingTable = $('#bookkeeping').DataTable({
-        "ajax": "../bas/bookkeeping.txt",
-        "columns": [
-            { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
-			{ "data": "partner" },
-			{ "data": "buys" },
-            { "data": "payment" },
-            { "data": "ipayment" },
-            { "data": "client" }
-        ],
-        "ordering": false,
-        "lengthChange": false,
-        initComplete: function () {
-            $(".bokepingcount").html(this.api().data().count());
-            this.api().columns([1]).every(function () {
-                addInputFilter(this);
-            });
-            this.api().columns([2, 3, 4, 5]).every(function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .bind('keyup change', function () {
-                        table.draw();
-                    });
+   // bokepingTable = $('#bookkeeping').DataTable({
+   //     "ajax": "../bas/bookkeeping.txt",
+   //     "columns": [
+   //         { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
+			//{ "data": "partner" },
+			//{ "data": "buys" },
+   //         { "data": "payment" },
+   //         { "data": "ipayment" },
+   //         { "data": "client" }
+   //     ],
+   //     "ordering": false,
+   //     "lengthChange": false,
+   //     initComplete: function () {
+   //         $(".bokepingcount").html(this.api().data().count());
+   //         this.api().columns([1]).every(function () {
+   //             addInputFilter(this);
+   //         });
+   //         this.api().columns([2, 3, 4, 5]).every(function () {
+   //             var column = this;
+   //             var select = $('<select><option value=""></option></select>')
+   //                 .appendTo($(column.header()))
+   //                 .bind('keyup change', function () {
+   //                     table.draw();
+   //                 });
 
-                select.append('<option value="0-5000">0 - 5 000р.</option>');
-                select.append('<option value="5000-10000">5 000 - 10 000р.</option>');
-                select.append('<option value="10000-50000">10 000 - 50 000р.</option>');
-            });
-            niceSelect();
-        }
-    });
+   //             select.append('<option value="0-5000">0 - 5 000р.</option>');
+   //             select.append('<option value="5000-10000">5 000 - 10 000р.</option>');
+   //             select.append('<option value="10000-50000">10 000 - 50 000р.</option>');
+   //         });
+   //         niceSelect();
+   //     }
+   // });
 
-    $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
-        var tr = $(this).closest('tr');
-        var row = bokepingTable.row(tr);
-        showHideRow(tr, row, bookkeepingData);
-    });
+   // $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
+   //     var tr = $(this).closest('tr');
+   //     var row = bokepingTable.row(tr);
+   //     showHideRow(tr, row, bookkeepingData);
+   // });
 
 });
 

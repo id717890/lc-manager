@@ -176,6 +176,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BonusController.cs" />
+    <Compile Include="Controllers\BookkeepingController.cs" />
     <Compile Include="Controllers\GoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -546,6 +547,7 @@
     <Content Include="Views\Good\Index.cshtml" />
     <Content Include="Templates\goods.xltx" />
     <Content Include="Views\Bonus\Index.cshtml" />
+    <Content Include="Views\Bookkeeping\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
