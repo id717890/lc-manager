@@ -1,0 +1,991 @@
+﻿
+@{
+    ViewBag.Title = "Campaigns";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @*<li><a href="@Url.Action("Terminal", "Home")"><img src="../img/icon-top-menu/surprise.png" alt="surprise"><span>Терминал</span></a></li>
+        <li><a href=""><img src="../img/icon-top-menu/message.png" alt="message"><span>Рассылка</span></a></li>
+        <li><a href=""><img src="../img/icon-top-menu/action.png" alt="action"><span>Акция</span></a></li>
+        <li><a href=""><img src="../img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="tabs__links-head">
+        <div class="terminal-head">
+            @*<div class="terminal-head__left">
+                    <a href="" id="HandBonusAdd" class="terminal-head-link">
+                        <img src="../img/plus.png" alt="" class="terminal-head-link__img">
+                        <span class="terminal-head-link__text">Начислить бонусы</span>
+                    </a>
+                    <a href="" id="HandBonusRedeem" class="terminal-head-link">
+                        <img src="../img/minus.png" alt="" class="terminal-head-link__img">
+                        <span class="terminal-head-link__text">Списать бонусы</span>
+                    </a>
+                </div>*@
+            @*<div class="terminal-head__right">
+                    <span class="terminal-head__text">Всего клиентов:</span>
+                    <span class="terminal-head__count-text">@ViewBag.ClientQty</span>
+                </div>*@
+        </div>
+    </div>
+}
+
+<section>
+    <div class="content__tabs-bl" id="tabs">
+        <div class="forms-terminal">
+            <div class="forms-terminal__col forms-terminal__col_70">
+                <div class="form-terminal">
+                    <h4 class="form-terminal__heading">покупка</h4>
+                    <form id="TerminalAddBuy">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link ">
+                                    <span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">
+                                        В это поле необходимо ввести что-то одно:<br />
+                                        - 4 последние цифры номера телефона участника <br />
+                                        - полный номер без 8 или +7 <br />
+                                        - номер карты <br />
+                                        Также, в этом поле записывается номер карты если его считать сканером штрих-кода с карты или мобильного приложения.
+                                    </span>
+                                </a>
+                            </span>
+                            <div class="form-terminal__input-bl ">
+                                <input type="text" class="form-terminal__input" id="clientIdPurchaseTerminal" oninput="activateBuyButton()" placeholder="Введите идентификатор клиента" autofocus>
+                                <button class="form-terminal__search-btn" id="searchClientPurchaseTerminal"></button>
+                            </div>
+                            <a href="#" class="form-terminal__refresh" id="TerminalBuyRefresh">
+                                <img src="../img/refresh.png" alt="">
+                            </a>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">В это поле необходимо внести сумму покупки. В случае если покупка с копейками, то копейки необходимо указать через запятую или точку. Например: 162.50</span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalBuySum" oninput="activateBuyButton()" placeholder="Введите сумму покупки">
+                            </div>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Необходимо нажать на ссылку, чтобы узнать сколько бонусов участника Программы можно списать в данную покупку.</span></a>
+                            </span>
+                            <a href="" class="form-terminal__link" id="TerminalRedeemInBuy">Узнать, сколько можно списать:</a>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalMaxSumRedeem" readonly>
+                            </div>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Необходимо ввести количество бонусов для списания из доступных для списания в поле сверху.</span></a>
+                            </span>
+                            <span class="form-terminal__text">Укажите, сколько нужно списать:</span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRedeem">
+                            </div>
+                        </div>
+                        @if (ViewBag.RoleName.Contains("TerminalSmsRedeem"))
+                        {
+                            <div class="form-terminal__group">
+                                <span class="form-terminal__ico">
+                                    <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">"Подтвердите списание" - Чтобы подтвердить списание бонусов нажимите на ссылку "Подтвердите списание", а затем введите смс-код  в поле справа.  Покупку со списанием бонусов можно будет провести только если введен верный смс-код.</span></a>
+                                </span>
+                                <a href="" class="form-terminal__link" id="TerminalBuySendSmsCode">Подтвердите списание</a>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                    <input type="text" class="form-terminal__input" id="TerminalBuySmsCode">
+                                    <div id="TerminalBuySmsCodeMessage" style="color: rgb(227, 30, 36); display: none;">Неверный смс-код</div>
+                                </div>
+                            </div>
+                        }
+                        <input type="submit" class="form-terminal__submit" value="Провести покупку" id="TerminalBuySubmit" disabled>
+                    </form>
+                </div>
+                <div class="form-terminal">
+                    <h4 class="form-terminal__heading">возврат</h4>
+                    <form id="TerminalRefund">
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link ">
+                                    <span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">
+                                        В это поле необходимо ввести что-то одно: <br />
+                                        - 4 последние цифры номера телефона участника <br />
+                                        - полный номер без 8 или +7 <br />
+                                        - номер карты <br />
+                                        Также, в этом поле записывается номер карты если его считать сканером штрих-кода с карты или мобильного приложения.
+                                    </span>
+                                </a>
+                            </span>
+                            <div class="form-terminal__input-bl ">
+                                <input type="text" class="form-terminal__input" id="clientIdRefundTerminal" placeholder="Введите идентификатор клиента" oninput="activateRefundButton()">
+                                <button class="form-terminal__search-btn" id="searchClientRefundTerminal"></button>
+                            </div>
+                            <a href="" class="form-terminal__refresh" id="TerminalRefundRefresh">
+                                <img src="../img/refresh.png" alt="">
+                            </a>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">В это поле необходимо внести сумму возврата. Она должна быть равна сумме покупки, которую возвращают. В случае если покупка с копейками, то копейки необходимо указать через запятую или точку. Например: 162.50</span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRefundChequeSum" placeholder="Введите сумму возврата" oninput="activateRefundButton()">
+                            </div>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Необходимо указать номер чека покупки, по которому будет производиться возврат. Номер чека данной покупки можно увидеть в истории покупок участника, в меню под блоком «Покупка» и «Возврат».</span></a>
+                            </span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input" id="TerminalRefundChequeNum" placeholder="Номер чека покупки" oninput="activateRefundButton()">
+                            </div>
+                        </div>
+                        <div class="form-terminal__group">
+                            <span class="form-terminal__ico">
+                                <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Необходимо указать дату чека покупки, по которому будет производиться возврат. Дату чека данной покупки можно увидеть в истории покупок участника, в меню под блоком «Покупка» и «Возврат».</span></a>
+                            </span>
+                            <span class="form-terminal__text">Дата чека покупки:</span>
+                            <div class="form-terminal__input-bl form-terminal__input-bl_mid form-terminal__input-bl_margin-right">
+                                <input type="text" class="form-terminal__input datepicker" id="TerminalRefundDate" oninput="activateRefundButton()" onchange="activateRefundButton()">
+                            </div>
+                        </div>
+                        @if (ViewBag.RoleName.Contains("TerminalSmsRedeem"))
+                        {
+                            <div class="form-terminal__group" style="visibility:collapse;">
+                                <span class="form-terminal__ico">
+                                    <a href="" class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">Необходимо ввести смс-код</span></a>
+                                </span>
+                                <a href="" class="form-terminal__link"></a>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_small form-terminal__input-bl_margin-right">
+                                    <input type="text" class="form-terminal__input">
+                                </div>
+                            </div>
+                        }
+                        <input type="submit" class="form-terminal__submit" value="Провести возврат" id="TerminalRefundSubmit" disabled>
+                    </form>
+                </div>
+                <div class="form-terminal form-terminal_100">
+                    <div class="table__content">
+                        <div class="table_sales_terminal">
+                            <table class="display sales_terminal" id="TerminalCheques" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th><p>Дата операции</p></th>
+                                        <th><p>Операция</p></th>
+                                        <th><p>№ чека</p></th>
+                                        <th><p>Сумма покупки</p></th>
+                                        <th><p>Начислено</p></th>
+                                        <th><p>Списано</p></th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <div class="page-navigation" id="TerminalChequeNavigation">
+                                <div class="table__download_meu">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="forms-terminal__col forms-terminal__col_30">
+                <div class="form-terminal  form-terminal_p60">
+                    <ul class="form-terminal__tabs-link">
+                        <li class="prof"><a href="#prof" class="active"><span class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">После идентификации участника Программы для покупки, в данном блоке отображается профиль участника со всей информацией, которая имеется в базе данных Программы.</span></span><span class="fttext">профиль</span></a></li>
+                        <li class="reg" style="text-align: right"><a href="#reg"><span class="quest-circle-link "><span class="quest-circle quest-circle">?</span><span class="quest-circle-info quest-circle-info_static">В данном блоке нужно регистрировать новых участников Программы. Необходимо заполнить все необходимые поля и подтвердить номер телефона участника. Регистрация пройдет успешно только после подтверждения номера телефона.</span></span><span class="fttext">регистрация</span></a></li>
+                    </ul>
+                    <div class="form-terminal__tabs-content">
+                        <div id="prof" class="active">
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileSurname" placeholder="Фамилия">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Фамилия
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileName" placeholder="Имя">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Имя
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profilePatronymic" placeholder="Отчество">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Отчество
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half nice-select_white">
+                                    <select name="profileGender" id="profileGender" class="select form-terminal__input" disabled>
+                                        <option value="null" class="">Пол</option>
+                                        <option value="1" class="">Мужской</option>
+                                        <option value="0" class="">Женский</option>
+                                    </select>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Пол
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input datepicker" id="profileBirthDate" placeholder="Дата рождения">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Дата рождения
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profilePhone" placeholder="Телефон">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Телефон
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileEmail" placeholder="Email">
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Email
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileCard" placeholder="Номер карты" readonly>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Номер карты
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileBalance" placeholder="Баланс бонусов" readonly>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Баланс бонусов
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileLevel" placeholder="Процент начисления" readonly>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Процент начисления
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileLastPurchaseAmount" placeholder="Сумма послед. покупки" readonly>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Сумма послед. покупки
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-terminal__group">
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <input type="text" class="form-terminal__input" id="profileLastPurchaseDate" placeholder="Дата послед. покупки" readonly>
+                                </div>
+                                <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                    <label for="" class="form-terminal__label">
+                                        Дата послед. покупки
+                                    </label>
+                                </div>
+                            </div>
+                            @*<div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                        <input type="text" class="form-terminal__input" placeholder="Уровень карты" readonly>
+                                    </div>
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                        <label for="" class="form-terminal__label">
+                                            Уровень карты
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                        <input type="text" class="form-terminal__input" placeholder="Тип клиента" readonly>
+                                    </div>
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_half">
+                                        <label for="" class="form-terminal__label">
+                                            Тип клиента
+                                        </label>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div id="reg">
+                            @*@using (Html.BeginForm("Terminal", "Home", FormMethod.Post))
+                                {*@
+                            <form id="TerminalRegisterNewUser">
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Name" placeholder="Имя" id="TerminalRegisterNewUserName">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Surname" placeholder="Фамилия" id="TerminalRegisterNewUserSurname">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Patronymic" placeholder="Отчество" id="TerminalRegisterNewUserPatronymic">
+                                    </div>
+                                </div>
+
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Card" placeholder="Номер карты">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Phone" placeholder="Номер телефона" id="Phone">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Email" placeholder="Email" id="TerminalRegisterNewUserEmail">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group form-terminal__group_mb">
+                                    <div class="form-terminal__input-bl ">
+                                        <input type="text" class="form-terminal__input" name="Promocode" placeholder="Промокод" id="Promocode">
+                                    </div>
+                                </div>
+                                <div class="form-terminal__group form-terminal__group_date form-terminal__group_mb">
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_half-mr nice-select_white">
+                                        <select name="Gender" id="TerminalRegisterNewUserGender" class="select  nice-select">
+                                            <option class="" value="null">Пол</option>
+                                            <option class="" value="1">Мужской</option>
+                                            <option class="" value="0">Женский</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-terminal__input-bl">
+                                        <input type="text" class="datepicker" name="BirthDate" id="TeminalBirthDate" placeholder="Дата рождения">
+                                    </div>
+                                </div>
+                                @*<div class="form-terminal__group">
+                                        <div class="form-terminal__action ">
+                                            Акция “Приведи друга”
+                                        </div>
+                                    </div>
+                                    <div class="form-terminal__group form-terminal__group_mb">
+                                        <div class="form-terminal__input-bl ">
+                                            <input type="text" class="form-terminal__input" name="FriendPhone" placeholder="Введите телефон друга" id="FriendPhone">
+                                        </div>
+                                    </div>*@
+                                <div class="form-terminal__group form-terminal__group_mb">
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_55-perc">
+                                        <a href="#" class="send-sms" id="sendRegisterCode">Отправить SMS-код</a>
+                                    </div>
+                                    <div class="form-terminal__input-bl form-terminal__input-bl_45-perc">
+                                        <input type="text" class="form-terminal__input" name="Code" id="TerminalRegisterSmsCode" placeholder="Введите SMS-код">
+                                        <div id="TerminalModalWrongSmsCode">Неверный смс-код.</div>
+                                    </div>
+                                </div>
+                                <div class="client_body_check" style="height: 50px;">
+                                    <input type="checkbox" class="checkbox" name="sms" id="ClientsClientCreateAllowSms" checked>
+                                    <label for="ClientsClientCreateAllowSms">Уведомлять по SMS</label>
+                                    <input type="checkbox" class="checkbox" name="emails" id="ClientsClientCreateAllowEmail" checked>
+                                    <label for="ClientsClientCreateAllowEmail">Уведомлять по E-mail</label>
+                                </div>
+                                <div class="form-terminal__group form-terminal__group_mb" style="display:block;">
+                                    <input type="submit" class="form-terminal__submit form-terminal__submit_no-marg" id="TerminalRegisterSubmit" value="Завершить регистрацию" disabled>
+                                </div>
+                            </form>
+                            @*}*@
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    ﻿
+</section>
+
+@section scripts
+{
+    @*@Scripts.Render("~/bundles/terminal")*@
+    <script type="text/javascript">
+
+
+        function smsCodeMessage(innerTxt, colorCode) {
+            var codeMessage = document.getElementById('TerminalModalWrongSmsCode');
+            codeMessage.innerHTML = innerTxt;
+            codeMessage.style.color = colorCode;
+            codeMessage.style.display = "block";
+        }
+
+        function buySmsCodeMessage(innerTxt, colorCode) {
+            var codeMessage = document.getElementById('TerminalBuySmsCodeMessage');
+            codeMessage.innerHTML = innerTxt;
+            codeMessage.style.color = colorCode;
+            codeMessage.style.display = "block";
+        }
+
+        function activateBuyButton() {
+            var inputClientIdPurchaseTerminal = document.getElementById('clientIdPurchaseTerminal');
+            var inputTerminalBuySum = document.getElementById('TerminalBuySum');
+            var inputTerminalBuySubmit = document.getElementById("TerminalBuySubmit");
+            var phone = document.getElementById("profilePhone");
+            @*var containsTerminalSmsRedeem = new Boolean(@(ViewBag.RoleName.Contains("TerminalSmsRedeem").ToString().ToLower()));
+            if (!containsTerminalSmsRedeem) {*@
+                if (inputClientIdPurchaseTerminal.value.length > 0 && inputTerminalBuySum.value.length > 0 && phone.value.length > 0) {
+                    inputTerminalBuySubmit.disabled = 0;
+                }
+                else {
+                    inputTerminalBuySubmit.disabled = 1;
+                }
+            //}
+            //else {
+            //    console.log("првоерка");
+            //}
+        }
+
+        $("#sendRegisterCode").click(function (e) {
+            e.preventDefault();
+            var phone = $("#Phone").val();
+            phone = phone.replace("+7", "").replace(/\D/g, "");
+            if (phone.length === 10) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AjaxRegister", "Home")",
+                    data: '{phone:\'' + phone + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        console.log("send code");
+                        document.getElementById("Phone").style.borderColor = "#C5CBD1";
+                        smsCodeMessage('Отправлен смс-код', "#11B9A3");
+                        var regSubmit = document.getElementById('TerminalRegisterSubmit');
+                        regSubmit.disabled = 0;
+                    }
+                });
+            }
+            else {
+                document.getElementById("Phone").style.borderColor = "#D4614A";
+            }
+        });
+
+        $("#TerminalBuySendSmsCode").click(function (e) {
+            e.preventDefault();
+            var phone = $("#profilePhone").val();
+            phone = phone.replace("+7", "").replace(/\D/g, "");
+            if (phone.length === 10) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AjaxRegister", "Home")",
+                    data: '{phone:\'' + phone + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function () {
+                        console.log("send code");
+                        //document.getElementById("Phone").style.borderColor = "#C5CBD1";
+                        buySmsCodeMessage('Отправлен смс-код', "#11B9A3");
+                        //var regSubmit = document.getElementById('TerminalRegisterSubmit');
+                        //regSubmit.disabled = 0;
+                    }
+                });
+            }
+            else {
+                //document.getElementById("Phone").style.borderColor = "#D4614A";
+            }
+        });
+
+        var inputTerminalBuySmsCode = document.getElementById('TerminalBuySmsCode');
+        if (inputTerminalBuySmsCode != null) {
+            inputTerminalBuySmsCode.oninput = function () {
+                var inputTerminalBuySubmit = document.getElementById("TerminalBuySubmit");
+                if (inputTerminalBuySmsCode.value != null && inputTerminalBuySmsCode.value.length === 4) {
+                    var code = inputTerminalBuySmsCode.value;
+                    var phone = $("#profilePhone").val();
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("TerminalConfirmCode", "Home")",
+                        data: '{phone: \'' + phone + '\', code: \'' + code + '\'}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (confirmCodeResult) {
+                            if (confirmCodeResult.ErrorCode === 0) {
+                                //var regSubmit = document.getElementById('TerminalRegisterSubmit');
+                                inputTerminalBuySubmit.disabled = 0;
+                                buySmsCodeMessage('Верный смс-код', "#11B9A3");
+                            } else {
+                                buySmsCodeMessage("Неверный смс-код", "#e31e24");
+                            }
+                        }
+                    });
+                }
+                else {
+                    inputTerminalBuySubmit.disabled = 1;
+                }
+            }
+        }
+
+        
+
+        function activateRefundButton() {
+            var inputclientIdRefundTerminal = document.getElementById('clientIdRefundTerminal');
+            var inputTerminalRefundChequeSum = document.getElementById('TerminalRefundChequeSum');
+            var inputTerminalRefundChequeNum = document.getElementById('TerminalRefundChequeNum');
+            var inputTerminalRefundDate = document.getElementById('TerminalRefundDate');
+            var inputTerminalRefundSubmit = document.getElementById("TerminalRefundSubmit");
+            var phone = document.getElementById("profilePhone");
+            if (inputclientIdRefundTerminal.value.length > 0 &&
+                inputTerminalRefundChequeSum.value.length > 0 &&
+                inputTerminalRefundChequeNum.value.length > 0 &&
+                inputTerminalRefundDate.value.length > 0 &&
+                phone.value.length > 0) {
+                inputTerminalRefundSubmit.disabled = 0;
+            }
+            else {
+                inputTerminalRefundSubmit.disabled = 1;
+            }
+        }
+
+        var inputTerminalRegisterSmsCode = document.getElementById('TerminalRegisterSmsCode');
+        inputTerminalRegisterSmsCode.oninput = function () {
+            //console.log(inputTerminalRegisterSmsCode.value);
+            //alert(inputTerminalRegisterSmsCode.value);
+            if (inputTerminalRegisterSmsCode.value.length === 4) {
+                var code = inputTerminalRegisterSmsCode.value;
+                var phone = $("#Phone").val();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("TerminalConfirmCode", "Home")",
+                    data: '{phone: \'' + phone + '\', code: \'' + code + '\'}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (confirmCodeResult) {
+                        if (confirmCodeResult.ErrorCode === 0) {
+                            var regSubmit = document.getElementById('TerminalRegisterSubmit');
+                            regSubmit.disabled = 0;
+                            smsCodeMessage('Верный смс-код', "#11B9A3");
+                        }
+                        else {
+                            smsCodeMessage("Неверный смс-код", "#e31e24");
+                        }
+                    }
+                })
+            }
+        }
+
+        $("#searchClientPurchaseTerminal").click(function (e) {
+            e.preventDefault();
+            var clientinfo = $("#clientIdPurchaseTerminal").val();
+            searchClient(clientinfo);
+        });
+
+        $("#TerminalAddBuy").submit(function (e) {
+            e.preventDefault();
+            var url = "@Url.Action("TerminalChequeAdd", "Home")";
+            //$("#profileCard").val
+            var card = document.getElementById("profileCard").value;
+            var amount = document.getElementById("TerminalBuySum").value;
+            var paidbybonus = document.getElementById("TerminalRedeem").value;
+            var maxRedeem = document.getElementById("TerminalMaxSumRedeem").value;
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: '{Card: \'' + card + '\', Amount: \'' + amount + '\', PaidByBonus: \'' + paidbybonus + '\', MaxRedeem: \'' + maxRedeem + '\'}',
+                success: function (data) {
+                    console.log(data);
+                    if (data != "") {
+                        //var chequeAdd = JSON.parse(data);
+                        if (data.ErrorCode == 0) {
+                            document.getElementById("TerminalModalChequeAddAmount").innerText = data.Amount;
+                            document.getElementById("TerminalModalChequeAddBonusAdd").innerText = data.BonusAdd;
+                            document.getElementById("TerminalModalChequeAddBonusRedeemed").innerText = data.BonusRedeem;
+                            document.getElementById("TerminalModalChequeAddCash").innerText = data.Cash;
+                            var modal = document.getElementById("TerminalModalChequeAdd");
+                            var btn = document.getElementById("TerminalModalChequeAddClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+
+                            $("#profileName").val("");
+                            $("#profileSurname").val("");
+                            document.getElementById("profilePatronymic").value = "";
+                            document.getElementById("profileBirthDate").value = "";
+                            $("#profilePhone").val("");
+                            $("#profileEmail").val("");
+                            $("#profileCard").val("");
+                            $("#profileBalance").val("");
+                            $("#profileLevel").val("");
+                            $("#profileGender").val("null").niceSelect('update');
+                            $("#profileLastPurchaseAmount").val("");
+                            document.getElementById("profileLastPurchaseDate").value = "";
+                            var table = $('table#TerminalCheques').DataTable();
+                            table.clear().draw();
+                            document.getElementById("clientIdRefundTerminal").value = "";
+                            document.getElementById("clientIdPurchaseTerminal").value = "";
+                            document.getElementById("TerminalBuySum").value = "";
+                            document.getElementById("TerminalMaxSumRedeem").value = "";
+                            document.getElementById("TerminalRedeem").value = "";
+                            document.getElementById("TerminalBuySmsCode").value = "";
+                            document.getElementById("TerminalBuySmsCodeMessage").style.display = "none";
+                            document.getElementById("TerminalBuySubmit").disabled = 1;
+                            document.getElementById("TerminalRefundDate").value = "";
+                            document.getElementById("TerminalRefundChequeNum").value = "";
+                            document.getElementById("TerminalRefundChequeSum").value = "";
+                        }
+                        else {
+                            var modal = document.getElementById("TerminalModalOperationError");
+                            var btn = document.getElementById("TerminalModalOperationErrorClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+        });
+
+        $("#TerminalRefund").submit(function (e) {
+            e.preventDefault();
+            var url = "@Url.Action("TerminalRefund", "Home")";
+            var card = document.getElementById("profileCard").value;
+            var chequesum = document.getElementById("TerminalRefundChequeSum").value;
+            var chequedate = document.getElementById("TerminalRefundDate").value;
+            var chequenum = document.getElementById("TerminalRefundChequeNum").value;
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",
+                data: '{Card: \'' + card + '\', ChequeDate: \'' + chequedate + '\', ChequeNum: \'' + chequenum + '\', ChequeSum: \'' + chequesum + '\'}',
+                success: function (data) {
+                    console.log(data);
+                    if (data != "") {
+                        var refund = JSON.parse(data);
+                        if (refund.ErrorCode == 0) {
+                            document.getElementById("TerminalModalRefundAmount").innerText = (-1)*refund.Amount;
+                            document.getElementById("TerminalModalRefundBonusAdd").innerText = refund.Added;
+                            document.getElementById("TerminalModalRefundBonusRedeem").innerText = refund.Redeemed;
+                            var modal = document.getElementById("TerminalModalRefund");
+                            var btn = document.getElementById("TerminalModalRefundClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                            $("#profileName").val("");
+                            $("#profileSurname").val("");
+                            document.getElementById("profilePatronymic").value = "";
+                            document.getElementById("profileBirthDate").value = "";
+                            $("#profilePhone").val("");
+                            $("#profileEmail").val("");
+                            $("#profileCard").val("");
+                            $("#profileBalance").val("");
+                            $("#profileLevel").val("");
+                            $("#profileGender").val("null").niceSelect('update');
+                            $("#profileLastPurchaseAmount").val("");
+                            document.getElementById("profileLastPurchaseDate").value = "";
+                            var table = $('table#TerminalCheques').DataTable();
+                            table.clear().draw();
+                            document.getElementById("clientIdRefundTerminal").value = "";
+                            document.getElementById("clientIdPurchaseTerminal").value = "";
+                            document.getElementById("TerminalBuySum").value = "";
+                            document.getElementById("TerminalMaxSumRedeem").value = "";
+                            document.getElementById("TerminalRedeem").value = "";
+                            document.getElementById("TerminalRefundDate").value = "";
+                            document.getElementById("TerminalRefundChequeNum").value = "";
+                            document.getElementById("TerminalRefundChequeSum").value = "";
+                        }
+                        else {
+                            var modal = document.getElementById("TerminalModalOperationError");
+                            var btn = document.getElementById("TerminalModalOperationErrorClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                            // When the user clicks anywhere outside of the modal, close it
+                            window.onclick = function (event) {
+                                if (event.target == modal) {
+                                    modal.style.display = "none";
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        var modal = document.getElementById("TerminalModalOperationError");
+                        var btn = document.getElementById("TerminalModalOperationErrorClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                }
+            })
+        });
+
+        $("#TerminalRegisterNewUser").submit(function (e) {
+            e.preventDefault();
+            var url = "@Url.Action("Terminal", "Home")";
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                data: $("#TerminalRegisterNewUser").serialize(),
+                success: function (data) {
+                    console.log(data.ErrorCode);
+                    if (data.ErrorCode == 4) {
+                        var modalErrorCode = document.getElementById('TerminalModalWrongSmsCode');
+                        modalErrorCode.style.display = "block";
+                    }
+                    else if (data.ErrorCode > 0) {
+                        console.log("error");
+                        var modal = document.getElementById('TerminalModalErrorRegister');
+
+                        // Get the button that opens the modal
+                        var btn = document.getElementById("TerminalModalErrorRegisterClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                    else {
+                        console.log("success");
+                        document.getElementById("TerminalRegisterNewUserName").value = "";
+                        document.getElementById("TerminalRegisterNewUserSurname").value = "";
+                        document.getElementById("TerminalRegisterNewUserPatronymic").value = "";
+                        document.getElementById("Phone").value = "";
+                        document.getElementById("TerminalRegisterNewUserEmail").value = "";
+                        document.getElementById("TeminalBirthDate").value = "";
+                        document.getElementById("TerminalRegisterSmsCode").value = "";
+                        document.getElementById("TerminalModalWrongSmsCode").style.display = "none";
+                        $("#TerminalRegisterNewUserGender").val("null").niceSelect('update');
+
+                        var modal = document.getElementById("TerminalModalSuccessRegister");
+                        modal.style.display = "block";
+                        var btn = document.getElementById("TerminalModalSuccessRegisterClose");
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                }
+            })
+        });
+
+        $("#TerminalRedeem").bind('input', function () {
+            var maxRedeem = parseInt(document.getElementById("TerminalMaxSumRedeem").value, 10);
+            var redeem = parseInt($(this).val(), 10);
+            if (maxRedeem >= 0 && redeem > maxRedeem) {
+                $(this).val(maxRedeem);
+            }
+            var containsTerminalSmsRedeem = new Boolean(@(ViewBag.RoleName.Contains("TerminalSmsRedeem").ToString().ToLower()));
+            if (containsTerminalSmsRedeem == true) {
+                var inputTerminalBuySubmit = document.getElementById("TerminalBuySubmit");
+                if (redeem > 0) {                    
+                    inputTerminalBuySubmit.disabled = 1;
+                }
+                else {
+                    inputTerminalBuySubmit.disabled = 0;
+                }
+            }
+            console.log($(this).val());
+        });
+
+        $("#TerminalRedeemInBuy").click(function (e) {
+            e.preventDefault();
+            var summBuy = $("#TerminalBuySum").val();
+            var card = $("#profileCard").val();
+            //if (summBuy > 0) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("TerminalMaxSumRedeem", "Home")",
+                data: '{Card: \'' + card + '\', ' + 'Sum: \'' + summBuy + '\' }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (maxSumRedeemResult) {
+                    $("#TerminalMaxSumRedeem").val(maxSumRedeemResult.MaxSum);
+                    console.log(maxSumRedeemResult);
+                },
+                error: function (message) {
+                    console.log(message);
+                }
+            })
+            //}
+        });
+
+        function searchClient(clientInfo) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SearchClient", "Home")",
+                data: '{searchClient: \'' + clientInfo + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (clientInfoResult) {
+                    if (clientInfoResult.ErrorCode == 0) {
+                        $("#profileName").val(clientInfoResult.Name);
+                        $("#profileSurname").val(clientInfoResult.Surname);
+                        document.getElementById("profilePatronymic").value = clientInfoResult.Patronymic;
+                        var birthDate = new Date(clientInfoResult.Birthdate);
+                        if (birthDate > new Date('01-01-1900')) {
+                            document.getElementById("profileBirthDate").value = $.format.date(clientInfoResult.Birthdate, "dd.MM.yyyy");
+                        }
+                        $("#profilePhone").val(clientInfoResult.Phone).mask("+7 (999) 999-99-99");
+                        $("#profileEmail").val(clientInfoResult.Email);
+                        $("#profileCard").val(clientInfoResult.Card);
+                        $("#profileBalance").val(clientInfoResult.FullBalance);
+                        $("#profileLevel").val(clientInfoResult.Condition);
+                        if (clientInfoResult.Gender == 1) {
+                            $("#profileGender").val("1").niceSelect('update');
+                        }
+                        $("#profileLastPurchaseAmount").val(clientInfoResult.LastPurchaseAmount);
+                        var date = new Date(clientInfoResult.LastPurchaseDate);
+                        if (date > new Date('01-01-1900')) {
+                            document.getElementById("profileLastPurchaseDate").value = $.format.date(clientInfoResult.LastPurchaseDate, "dd.MM.yyyy");
+                        }
+                        //document.getElementById("profileBirthDate").value = new Date(parseInt(clientInfoResult.Birthdate.substr(6)));
+                        var table = $('table#TerminalCheques').DataTable();
+                        table.clear().draw();
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("TerminalGetCheques", "Home")",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: '{Card: \'' + clientInfoResult.Card + '\'}',
+                            success: function (cheques) {
+                                table.rows.add(cheques).draw();
+                            }
+                        })
+                    }
+                    else if (clientInfoResult.ErrorCode == 6) {
+                        var modal = document.getElementById('TerminalModalClientCoincidence');
+
+                        // Get the button that opens the modal
+                        var btn = document.getElementById("TerminalModalClientCoincidenceClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                    else {
+                        var modal = document.getElementById('TerminalModalClientNotFound');
+
+                        // Get the button that opens the modal
+                        var btn = document.getElementById("TerminalModalClientNotFoundClose");
+                        modal.style.display = "block";
+                        btn.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
+        $("#searchClientRefundTerminal").click(function (e) {
+            e.preventDefault();
+            var clientinfo = $("#clientIdRefundTerminal").val();
+            searchClient(clientinfo);
+        });
+
+    </script>
+}
+
+@Html.Partial("~/Views/Partial/Terminal.cshtml")

@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Applications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+    @if (ViewBag.RoleName.Contains("Admin"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        <div><div>?<p>Мои заявки</p></div><a href="#my_applications" class="this-p">Мои заявки</a></div>
+        <div><div>?<p>Создать заявку</p></div><a href="#create_applications">Создать заявку</a></div>
+        <div><p>Всего заявок: <span id="appcol"></span></p></div>
+    </div>
+}
+
+<section class="table-min-width">
+    <div class="my_action_waper">
+        <div class="form-terminal__tabs-content">
+            <div id="my_applications" class="active">
+                <div class="my_applications_body">
+                    <table id="applicationsTable" class="display my_applications_table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><p>Тема заявки</p></th>
+                                <th><p>Дата заявки</p></th>
+                                <th><p>Приоритет</p></th>
+                                <th><p>Статус заявки</p></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div id="create_applications">
+                <div class="client_body">
+                    <div class="left-container">
+                        <div class="mailling-wrap">
+                            <form>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Тема заявки</p>
+                                    </div>
+                                    <div class="param-input">
+                                        <input type="text" name="name" placeholder="Введите тему заявки">
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Описание условий</p>
+                                    </div>
+                                    <div class="param-input">
+                                        <textarea name="smsText" placeholder="Введите текст заявки"></textarea>
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Тема заявки</p>
+                                    </div>
+                                    <div class="param-input">
+                                        <label class="fileContainer">
+                                            <div class="file-upload"></div>Загрузить файл
+                                            <input type="file" />
+                                        </label>
+                                        <!--<input type="file" name="file" id="file" class="inputfile">
+                            <label for="file">Choose a file</label>-->
+                                    </div>
+                                </div>
+                                <div class="param">
+                                    <div class="param-title">
+                                        <div class="hover_detail">?<p>123123</p></div><p>Приоритет</p>
+                                    </div>
+                                    <div class="param-input" id="clientListSelect">
+                                        <select name="clientList" class="select">
+                                            <option value="">Выбрать приоритет</option>
+                                            <option>Срочный</option>
+                                            <option>Высокий</option>
+                                            <option>Нормальный</option>
+                                            <option>Низкий</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="submit-box">
+                                    <input type="submit" name="submit" id="submit" value="Создать заявку"><div class="hover_detail">?<p>123123</p></div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+

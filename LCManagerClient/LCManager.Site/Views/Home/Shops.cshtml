@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Shops";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("ShopsMyShops"))
+        {
+            <div class="tab_shops"><div>?<p>В данном разделе отображаются все точки продаж, подключенные к Программе лояльности. Здесь, также, можно сформировать список точек продаж для настройки акции.</p></div><a href="#tab_shops" class="this-p">Точки продаж</a></div>
+        }
+        @if (ViewBag.RoleName.Contains("ShopsCreateShopList"))
+        {
+            <div class="tab_mylist_shop"><div>?<p>В данном разделе отображаются все списки точек продаж, которые были сформированы для проведения акции.</p></div><a href="#tab_shopslist">Мои списки точек продаж</a></div>
+        }
+        <div class="shopvievshop"><p>Всего точек продаж:<span class="shopslistcount"></span></p></div>
+    </div>
+}
+
+<section class="table-min-width">
+    <div class="my_action_waper shops">
+        <div class="form-terminal__tabs-content">
+            @if (ViewBag.RoleName.Contains("ShopsMyShops"))
+            {
+                <div id="tab_shops" class="@(ViewBag.RoleName.Contains("ShopsMyShops") ? "active" : "")">
+                    <table id="shopsTable" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th><div>?<p>123</p></div><input type='checkbox' class='checkbox' name='checkbox1' id='checkbox0'><label for='checkbox0'></label></th>
+                                <th><p>Регион</p></th>
+                                <th><p>Город</p></th>
+                                <th><p>Адрес</p></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="shops_add_block">
+                        <a class="shops_add_fbut">Создать список для акции</a>
+                        <input type="text" name="addshops" class="addshopinput" placeholder="Введите наименование списка">
+                        <div class="add_shops_graph">13 маг.</div>
+                        <button class="add_shop_submit">Сохранить в мои списки</button>
+                        <div class="modal_ask">?<p>1231231231</p></div>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.RoleName.Contains("ShopsCreateShopList"))
+            {
+                <div id="tab_shopslist" class="@(ViewBag.RoleName.Contains("ShopsCreateShopList") && !ViewBag.RoleName.Contains("ShopsMyShops") ? "active" : "")">
+                    <table id="shopslistTable" class="display clientlist" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th><p>Наименование списка</p></th>
+                                <th><p>Кол-во ТТ</p></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</section>

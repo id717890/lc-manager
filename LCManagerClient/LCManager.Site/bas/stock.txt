@@ -1,0 +1,82 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "name": "Велком бонус!",
+      "status": "Активна",
+      "margin": "",
+      "refresh": " ",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г.",
+      "conditions": "За регистрацию в программе каждый участник получает 300 приветственных бонусов!",
+      "header": "",
+      "clarification": "",
+      "diagram": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-leg'></div></div><div class='line-chart__bottom'><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Начислено',borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Не активно',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+    },
+    {
+      "id": "2",
+      "name": "Сгораемые бонусы на День Рождения!",
+      "status": "Активна",
+      "margin": "",
+      "refresh": "",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г.",
+      "conditions": "Каждому участнику в День Рождения начисляется 500 бонусов. Эти бонусы или часть из них <br>должны быть использваны в течение 7 дней с момента начисления, в противном случае они сгорят! ",
+      "header": "",
+      "clarification": "",
+      "diagram": "<div class='line-chart-bl'><div class='line-chart__head'><div id='line-chart-leg' class='line-chart-leg'></div></div><div class='line-chart__bottom' ><canvas id='canvas' class='line-chart' ></canvas><div id='chartjs-tooltip-1' class='linejs-tooltip'></div></div></div><script>var lineChartData={labels:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],datasets:[{label:'Начислено',borderColor:'#58AEDC',pointBackgroundColor:'#58AEDC',pointRadius:2,backgroundColor:'#58AEDC',data:[650,359,290,481,156,255,640,481,156,255,640,255],fill:!1,borderWidth:2,},{label:'Списано',borderColor:'#11B9A3',pointBackgroundColor:'#11B9A3',pointRadius:2,backgroundColor:'#11B9A3',data:[750,500,678,300,96,270,400,381,156,255,240,378,300],fill:!1,borderWidth:2,},{label:'Не активно',borderColor:'#E5C861',pointBackgroundColor:'#E5C861',pointRadius:2,backgroundColor:'#E5C861',data:[600,159,190,381,156,455,340,234,111,234,687,241,234],fill:!1,borderWidth:2,}]};typeDiagram='line';</script>"
+    },
+    {
+      "id": "3",
+      "name": "Сгораемые промо бонусы!",
+      "status": "Завершена",
+      "margin": "",
+      "refresh": "<a href='/'><img src='../img/refresh.png'></a>",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г. по 30.09.2017г.",
+      "conditions": "Каждому участнику из списка сегментации 12.09.2017. начисляется 500 бонусов. Эти бонусы или часть <br>из них должны быть использваны в течение 7 дней с момента начисления, в противном случае они сгорят!",
+      "header": "Результаты акции",
+      "clarification": "Список клиентов: #Увеличить частоту покупок",
+      "diagram": "<div class='two_pie_chart'><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='left-pie'></canvas><div class='graphs__col-graph-text'>100 000 ч.</div><div id='chartjs-tooltip-left' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='left-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Начислено промо-бонусов</p></div><p>Начислено промо-бонусов: <span class='blue-text'>1 000 000 б.</span></p></div><div><div>?<p>Списано промо-бонусов</p></div><p>Списано промо-бонусов: <span class='blue-text'>750 000 б.</span></p></div><div><div>?<p>Сгорело промо-бонусов</p></div><p>Сгорело промо-бонусов: <span class='blue-text'>250 000 б.</span></p></div></div></div></div><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='right-pie'></canvas><div class='graphs__col-graph-text'>1 000 000 р.</div><div id='chartjs-tooltip-right' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='right-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Затраты на коммуникации</p></div><p>Затраты на коммуникации: <span class='orange-text'>70 000 руб.</span></p></div><div><div>?<p>Всего скидок предоставлено</p></div><p>Всего скидок предоставлено: <span class='blue-text'>90 000 руб.</span></p></div><div><div>?<p>Выручка по акции</p></div><p>Выручка по акции: <span class='blue-text'>1 000 000 руб.</span></p></div></div></div></div></div><script>var leftPieConfig={type:'pie',data:{labels:[' Получили SMS',' Получили E-mail',' С покупками',' Без покупок',],datasets:[{data:[90000,10000,20000,80000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendChel(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};var rightPieConfig={type:'pie',data:{labels:[' Женщины',' Мужчины',' Пол не указан',' Стоимость SMS',' Стоимость E-mail',],datasets:[{data:[100000,200000,100000,20000,50000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A','#373636',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendRub(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};typeDiagram='two-pie';</script>"
+    },
+    {
+      "id": "4",
+      "name": "Дополнительные бонусы за чек от 2500 руб.",
+      "status": "Завершена",
+      "margin": "",
+      "refresh": "<a href='/'><img src='../img/refresh.png'></a>",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г. по 30.09.2017г.",
+      "conditions": "Каждому участнику из списка сегментации с 12.09.2017г. по 02.10.2017г. за покупку, стоимость которой составляет <br>2500 рублей и более, дополнительно к основной механике начисляется 3% от суммы чека покупки в виде бонусов.",
+      "header": "Результаты акции",
+      "clarification": "Список клиентов: #Увеличить средний чек ",
+      "diagram": "<div class='two_pie_chart'><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='left-pie'></canvas><div class='graphs__col-graph-text'>100 000 ч.</div><div id='chartjs-tooltip-left' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='left-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Начислено промо-бонусов</p></div><p>Начислено промо-бонусов: <span class='blue-text'>1 000 000 б.</span></p></div><div><div>?<p>Дополнительных бонусов</p></div><p>Дополнительных бонусов: <span class='blue-text'>750 000 б.</span></p></div><div><div>?<p>Покупок по акции</p></div><p>Покупок по акции: <span class='blue-text'>250 шт.</span></p></div></div></div></div><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='right-pie'></canvas><div class='graphs__col-graph-text'>1 000 000 р.</div><div id='chartjs-tooltip-right' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='right-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Затраты на коммуникации</p></div><p>Затраты на коммуникации: <span class='orange-text'>70 000 руб.</span></p></div><div><div>?<p>Средний чек по акции</p></div><p>Средний чек по акции: <span class='blue-text'>2 800 руб.</span></p></div><div><div>?<p>Выручка по акции</p></div><p>Выручка по акции: <span class='blue-text'>1 000 000 руб.</span></p></div></div></div></div></div><script>var leftPieConfig={type:'pie',data:{labels:[' Получили SMS',' Получили E-mail',' С покупками',' Без покупок',],datasets:[{data:[90000,10000,20000,80000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendChel(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};var rightPieConfig={type:'pie',data:{labels:[' Женщины',' Мужчины',' Пол не указан',' Стоимость SMS',' Стоимость E-mail',],datasets:[{data:[100000,200000,100000,20000,50000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A','#373636',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendRub(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};typeDiagram='two-pie';</script>"
+    },
+    {
+      "id": "5",
+      "name": "Двойные бонусы на помаду!",
+      "status": "Завершена",
+      "margin": "",
+      "refresh": "<a href='/'><img src='../img/refresh.png'></a>",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г. по 10.10.2017г.",
+      "conditions": "Каждому участнику из списка сегментации с 12.09.2017г. по 02.10.2017г. за покупку,<br>в которой указан артикул товара №3456 бонусы начисляются по следующей формуле:<br>- на стоимость чека покупки без артикула товара №3456 - по основной бонусной механике;<br>- на стоимость артикула №3456 - размер бонуса по основной бонусной механике * 2.",
+      "header": "Условия акции",
+      "clarification": "Список клиентов: #Двойные бонусы за помаду в чеке.",
+      "diagram": "<div class='two_pie_chart'><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='left-pie'></canvas><div class='graphs__col-graph-text'>100 000 ч.</div><div id='chartjs-tooltip-left' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='left-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Начислено промо бонусов</p></div><p>Начислено промо-бонусов: <span class='blue-text'>1 000 000 б.</span></p></div><div><div>?<p>Дополнительных бонусов</p></div><p>Дополнительных бонусов: <span class='blue-text'>750 000 б.</span></p></div><div><div>?<p>Куплено единиц товара</p></div><p>Куплено единиц товара: <span class='blue-text'>250 шт.</span></p></div></div></div></div><div class='graphs-ib graphs-ib_first'><div class='graphs-bl'><div class='graphs__col-graph'><canvas id='right-pie'></canvas><div class='graphs__col-graph-text'>1 000 000 р.</div><div id='chartjs-tooltip-right' class='chartjs-tooltip-left'></div></div><div class='graphs__col-params'><div id='right-pie-leg' class='chart-legend'></div></div></div><div class='graphs-text'><div class='graphs-text__full'><div><div>?<p>Затраты на коммуникации</p></div><p>Затраты на коммуникации: <span class='orange-text'>70 000 руб.</span></p></div><div><div>?<p>Средний чек по акции</p></div><p>Средний чек по акции: <span class='blue-text'>2 800 руб.</span></p></div><div><div>?<p>Выручка по акции</p></div><p>Выручка по акции: <span class='blue-text'>1 000 000 руб.</span></p></div></div></div></div></div><script>var leftPieConfig={type:'pie',data:{labels:[' Получили SMS',' Получили E-mail',' С покупками',' Без покупок',],datasets:[{data:[90000,10000,20000,80000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendChel(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};var rightPieConfig={type:'pie',data:{labels:[' Женщины',' Мужчины',' Пол не указан',' Стоимость SMS',' Стоимость E-mail',],datasets:[{data:[100000,200000,100000,20000,50000,],backgroundColor:['#11B9A3','#58AEDC','#E5C861','#D4614A','#373636',],borderWidth:0,}],},options:{responsive:!0,legend:!1,legendCallback:function(chart){return legendRub(chart)},segmentShowStroke:!0,animation:{animateScale:!0,animateRotate:!0},tooltips:{mydata:122,enabled:!1,mode:'index',position:'nearest',custom:customTooltips},cutoutPercentage:55,tooltipTemplate:'<%= value %>%',}};typeDiagram='two-pie';</script>"
+    },
+    {
+      "id": "6",
+      "name": "Дополнительные бонусы за количество покупок!",
+      "status": "<p>Планируется<p>",
+      "margin": "",
+      "refresh": " ",
+      "download": "<a href='/'>XLSX</a>",
+      "period": "Период действия: с 12.09.2017г. по 10.10.2017г.",
+      "conditions": "Каждому участнику из списка сегментации с 12.09.2017г. по 02.10.2017г. за покупку,<br>в которой указан артикул товара №3456 бонусы начисляются по следующей формуле:<br>- на стоимость чека покупки без артикула товара №3456 - по основной бонусной механике;<br>- на стоимость артикула №3456 - размер бонуса по основной бонусной механике * 2.",
+      "header": "",
+      "clarification": "",
+      "diagram": ""
+    }
+  ]
+}

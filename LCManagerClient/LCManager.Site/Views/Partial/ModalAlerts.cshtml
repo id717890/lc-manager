@@ -1,0 +1,50 @@
+﻿<div id="TerminalModalClientNotFound" class="modal">
+    <div class="modal_error4">
+        <h3 class="modal_ochibka">ПРОИЗОШЛА ОШИБКА!</h3>
+        <p class="modal_paragraph">
+            <br>Клиент не найден<br><br>Введите полный номер телефона без «8» или «+7»<br>
+            или номер карты клиента
+        </p>
+        <button class="modal_button" id="TerminalModalClientNotFoundClose">
+            Закрыть
+        </button>
+    </div>
+</div>
+
+<div id="DialogError" class="modal">
+    <div class="modal_error_dialog">
+        <h3 class="modal_ochibka" id="modal_ochibka">ПРОИЗОШЛА ОШИБКА!</h3>
+        <p class="modal_paragraph" id="dialog_error_message"></p>
+        <button class="modal_button" onclick="$('#DialogError').hide();">
+            Закрыть
+        </button>
+    </div>
+</div>
+
+<div id="DialogSuccess" class="modal">
+    <div class="modal_success_dialog">
+        <div class="modal_uspeh">
+            <div class="modal_uspesho">
+                <h3 class="modal_success">УСПЕШНО!</h3>
+                <p class="modal_paragraph" id="dialog_success_message"></p>
+            </div>
+            <button class="modal_button" onclick="location.reload();">
+                Закрыть
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="ConfirmDialog">
+    <div class="modal_confirm_dialog">
+        <p id="confirm-dialog-message">Подтверждаете добавление?</p>
+        <div class="modal_button3">
+            <button class="modal_clients_addclient_agree" id="BtnYesConfirmDialog">
+                Да
+            </button>
+            <button class="modal_clients_addclient_disagree" id="BtnNoConfirmDialog">
+                Нет
+            </button>
+        </div>
+    </div>
+</div>

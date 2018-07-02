@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "ShopsGoods";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section ContentHeaderNav
+{
+    @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
+    {
+        <li><a href="" id="HandBonusAdd"><img src="../img/plus.png" alt="addbonus"><span>Начислить бонусы</span></a></li>
+    }
+    @if (ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a href="" id="HandBonusRedeem"><img src="../img/minus.png" alt="message"><span>Списать бонусы</span></a></li>
+    }
+    @if (!ViewBag.RoleName.Contains("OperatorBonusAdd") && !ViewBag.RoleName.Contains("OperatorBonusRedeem"))
+    {
+        <li><a style="visibility:hidden;">.</a></li>
+    }
+    @if (ViewBag.RoleName.Contains("ActivateCard"))
+    {
+        <li><a href="#" id="activateCard"><img src="../img/plus.png" alt="addclient"><span>Активировать карту</span></a></li>
+    }
+    @*<li><a href="@(Url.Action("Clients", "Home"))"><img src="../img/plus.png" alt="addclient"><span>Добавить клиентов</span></a></li>*@
+    @*<li><a href=""><img src="~/img/icon-top-menu/help.png" alt="help"><span>Помощь</span></a></li>*@
+}
+
+@section ContentHeader
+{
+    <div class="client_nav">
+        @if (ViewBag.RoleName.Contains("FaqManual"))
+        {
+            <div><div>?<p>В данном разделе Вы найдете подборку кратких инструкций по использованию данного интерфейса и обслуживанию участников Программы лояльности.</p></div><a href="#my_itte" class="this-p">Вопросы-ответы</a></div>
+        }
+        @*<div><div>?<p>Мои списки товаров</p></div><a href="#my_list_itte">Мои списки товаров</a></div>*@
+        <div style="visibility:hidden;"><p>Всего товаров: <span class="goodshopTablecont">13 650</span></p></div>
+    </div>
+}
+
+<section class="table-min-width">
+    <div class="my_action_waper goodshop">
+        <div class="form-terminal__tabs-content">
+            @if (ViewBag.RoleName.Contains("FaqManual"))
+            {
+                <div id="my_itte" class="@(ViewBag.RoleName.Contains("FaqManual") ? "active" : "")">
+                    <div class="addclientlist-left">
+                        <table id="faqTable" class="display clientlist" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><p>Вопрос</p></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

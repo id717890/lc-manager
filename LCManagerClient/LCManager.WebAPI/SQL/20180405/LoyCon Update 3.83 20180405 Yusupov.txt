@@ -1,0 +1,3 @@
+﻿-- В таблицу clientoperator добавлен столбец refresh_token
+-- RefreshTokenUpdateForClient - Новая хранимая процедура. Обновляет поле refresh_token в таблице clientoperator
+-- RefreshTokenCheckForClient - Новая хранимая процедура. Проверяет наличие refresh_token в таблице clientoperator

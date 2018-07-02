@@ -1,0 +1,106 @@
+﻿<div class="modal" id="ModalActivateCard">
+    <div class="modal_active_cart">
+        <h2>Активация карты</h2>
+        <div class="modal_active_inp">
+            <div class="p_modal_left">?<p>13-значный номер карты расположен на обратной стороне карты, под штрих-кодом. Если Вы указали не существующий номер карты, поле подсветится красным цветом. </p></div>
+            <input type="text" placeholder="Введите номер карты" id="activate_modal_card" />
+        </div>
+        <div class="modal_active_inp">
+            <div class="p_modal_left">?<p>Введите номер телефона в формате: +7**********</p></div>
+            <input type="text" placeholder="Введите номер телефона" id="activate_modal_phone" />
+        </div>
+        <div class="modal_active_inp email">
+            <div class="p_modal_left">?<p>Для подтверждения номера телефона и действий по активации карты необходимо нажать на кнопку «Запросить код подтверждения». Четырехзначный код подтверждения будет отправлен Вам в смс-сообщении. Его необходимо ввести в поле «Введите код».</p></div>
+            <button id="activate_modal_request_code">Запросить код подтверждения</button>
+            <input type="text" placeholder="Введите код" id="activate_modal_code" />
+        </div>
+        <p>Вам не пришел код подтверждения?</p>
+        <a id="activate_modal_request_code_repeat">Отправить код повторно</a>
+        <button class="accept_active_cart" id="activate_modal_submit">Активировать карту</button>
+    </div>
+</div>
+
+<div class="modal" id="ModalActivateSuccess">
+    <div class="modal-successful-activation">
+        <h2>Успешно!</h2>
+        <p>Карта успешно активирована для списания бонусов!<br> Для доступа в личный кабинет Вам будет выслан <br> одноразовый пароль в смс-сообщении.</p>
+        <a href="#" class="btn-activation" id="modal-success-close">Закрыть</a>
+    </div>
+</div>
+
+<div class="modal" id="ModalActivateError">
+    <div class="modal-alien-card">
+        <h2>Произошла ошибка!</h2>
+        <p>Указанный номер карты<br> принадлежит другому участнику!</p>
+        <a href="#" class="btn-alien-card" id="modal-error-close">Закрыть</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#activate_modal_request_code, #activate_modal_request_code_repeat").click(function (e) {
+        e.preventDefault();
+        var phone = $("#activate_modal_phone").val();
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AjaxRegister", "Home")",
+            data: '{phone:\'' + phone + '\'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                console.log("send code");
+            }
+        });
+    });
+
+    $("#activate_modal_submit").click(function (e) {
+        e.preventDefault();
+        var phone = $("#activate_modal_phone").val();
+        var card = $("#activate_modal_card").val();
+        var code = $("#activate_modal_code").val();
+        phone = phone.replace("+7", "").replace(/\D/g, "");
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "@Url.Action("ActivateCard", "Home")",
+            dataType: "json",
+            data: '{Phone:\'' + phone + '\', Card:\'' + card + '\', Code:\'' + code + '\'}',
+            success: function (data) {
+                var modalActivate = document.getElementById("ModalActivateCard");
+                modalActivate.style.display = "none";
+                if (data.ErrorCode != 0) {
+                    var modal = document.getElementById('ModalActivateError');
+
+                    // Get the button that opens the modal
+                    var btn = document.getElementById("modal-error-close");
+                    modal.style.display = "block";
+                    btn.onclick = function () {
+                        modal.style.display = "none";
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                }
+                else {
+                    var modal = document.getElementById('ModalActivateSuccess');
+
+                    // Get the button that opens the modal
+                    var btn = document.getElementById("modal-success-close");
+                    modal.style.display = "block";
+                    btn.onclick = function () {
+                        modal.style.display = "none";
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                }
+                console.log("activation");
+            }
+        })
+    });
+</script>

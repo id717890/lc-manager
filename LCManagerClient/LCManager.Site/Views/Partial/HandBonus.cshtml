@@ -1,0 +1,243 @@
+﻿
+<script type="text/javascript">
+    var handBonusCard = "";
+
+    $("#HandBonusAdd").click(function (e) {
+        e.preventDefault();
+        var modalBonusAdd = document.getElementById("TerminalModalHandBonusAdd");
+        //var btn = document.getElementById("")
+        modalBonusAdd.style.display = "block";
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modalBonusAdd) {
+                modalBonusAdd.style.display = "none";
+            }
+        }
+
+        $("#TerminalSearchClientHandBonusAdd").click(function (e) {
+            e.preventDefault();
+            var clientinfo = $("#TerminalClientIdHandBonusAdd").val();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SearchClient", "Home")",
+                data: '{searchClient: \'' + clientinfo + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (clientInfoResult) {
+                    if (clientInfoResult.ErrorCode == 0) {
+                        handBonusCard = clientInfoResult.Card;
+                        //$("#profileName").val(clientInfoResult.Name);
+                        //$("#profileSurname").val(clientInfoResult.Surname);
+                        //document.getElementById("profilePatronymic").value = clientInfoResult.Patronymic;
+                        //document.getElementById("profileBirthDate").value = $.format.date(clientInfoResult.Birthdate, "dd.MM.yyyy");
+                        //$("#profilePhone").val(clientInfoResult.Phone).mask("+7 (999) 999-99-99");
+                        //$("#profileEmail").val(clientInfoResult.Email);
+                        //$("#profileCard").val(clientInfoResult.Card);
+                        //$("#profileBalance").val(clientInfoResult.FullBalance);
+                        //$("#profileLevel").val(clientInfoResult.Condition);
+                        //if (clientInfoResult.Gender == 1) {
+                        //    $("#profileGender").val("1").niceSelect('update');
+                        //}
+                        document.getElementById("TerminalHandBonusAddBonus").readOnly = false;
+                        document.getElementById("TerminalHandBonusAddSubmit").disabled = false;
+                    }
+                    else {
+                        //modal.style.display = "none";
+
+                        var modalError = document.getElementById('TerminalModalClientNotFound');
+
+                        // Get the button that opens the modal
+                        var btnError = document.getElementById("TerminalModalClientNotFoundClose");
+                        modalError.style.display = "block";
+                        btnError.onclick = function () {
+                            modalError.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        //window.onclick = function (event) {
+                        //    if (event.target == modal) {
+                        //        modalError.style.display = "none";
+                        //    }
+                        //}
+                        //modal.style.display = "block";
+                    }
+                }
+            })
+        });
+
+        $("#TerminalHandBonusAddForm").submit(function (e) {
+            e.preventDefault();
+            var url = "@Url.Action("HandBonusAdd", "Home")";
+            //var card = document.getElementById("profileCard").value;
+            var card = handBonusCard;
+            var bonus = document.getElementById("TerminalHandBonusAddBonus").value;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: '{Card: \'' + card + '\', Bonus: ' + bonus + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        if (data.ErrorCode == 0) {
+                            modalBonusAdd.style.display = "none";
+                            var modal = document.getElementById("TerminalModalSuccessAdd");
+                            var btn = document.getElementById("TerminalModalSuccessAddClose");
+                            document.getElementById("TerminalModalSuccessAddInfo").innerText = "Начислено " + data.Bonus + " бонусов!";
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                        }
+                        else {
+                            var modal = document.getElementById("TerminalModalOperationError");
+                            var btn = document.getElementById("TerminalModalOperationErrorClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                }
+            })
+        });
+    });
+
+    $("#HandBonusRedeem").click(function (e) {
+        e.preventDefault();
+        var modalBonusRedeem = document.getElementById("TerminalModalHandBonusRedeem");
+        //var btn = document.getElementById("")
+        modalBonusRedeem.style.display = "block";
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modalBonusRedeem) {
+                modalBonusRedeem.style.display = "none";
+            }
+        }
+
+        $("#TerminalModalHandBonusRedeemSearchClient").click(function (e) {
+            e.preventDefault();
+            var clientinfo = $("#TerminalModalHandBonusRedeemClientId").val();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("SearchClient", "Home")",
+                data: '{searchClient: \'' + clientinfo + '\'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (clientInfoResult) {
+                    if (clientInfoResult.ErrorCode == 0) {
+                        handBonusCard = clientInfoResult.Card;
+                        //$("#profileName").val(clientInfoResult.Name);
+                        //$("#profileSurname").val(clientInfoResult.Surname);
+                        //document.getElementById("profilePatronymic").value = clientInfoResult.Patronymic;
+                        //document.getElementById("profileBirthDate").value = $.format.date(clientInfoResult.Birthdate, "dd.MM.yyyy");
+                        //$("#profilePhone").val(clientInfoResult.Phone).mask("+7 (999) 999-99-99");
+                        //$("#profileEmail").val(clientInfoResult.Email);
+                        //$("#profileCard").val(clientInfoResult.Card);
+                        //$("#profileBalance").val(clientInfoResult.FullBalance);
+                        //$("#profileLevel").val(clientInfoResult.Condition);
+                        //if (clientInfoResult.Gender == 1) {
+                        //    $("#profileGender").val("1").niceSelect('update');
+                        //}
+                        document.getElementById("TerminalHandBonusRedeemBonus").readOnly = false;
+                        document.getElementById("TerminalHandBonusRedeemSubmit").disabled = false;
+                    }
+                    else {
+                        //modal.style.display = "none";
+
+                        var modalError = document.getElementById('TerminalModalClientNotFound');
+
+                        // Get the button that opens the modal
+                        var btnError = document.getElementById("TerminalModalClientNotFoundClose");
+                        modalError.style.display = "block";
+                        btnError.onclick = function () {
+                            modalError.style.display = "none";
+                        }
+                        // When the user clicks anywhere outside of the modal, close it
+                        //window.onclick = function (event) {
+                        //    if (event.target == modal) {
+                        //        modalError.style.display = "none";
+                        //    }
+                        //}
+                        //modal.style.display = "block";
+                    }
+                }
+            })
+        })
+
+        $("#TerminalHandBonusRedeemForm").submit(function (e) {
+            e.preventDefault();
+            var url = "@Url.Action("HandBonusRedeem", "Home")";
+            //var card = document.getElementById("profileCard").value;
+            var card = handBonusCard;
+            var bonus = document.getElementById("TerminalHandBonusRedeemBonus").value;
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: '{Card: \'' + card + '\', Bonus: ' + bonus + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data != "") {
+                        if (data.ErrorCode == 0) {
+                            modalBonusRedeem.style.display = "none";
+                            var modal = document.getElementById("TerminalModalSuccessAdd");
+                            var btn = document.getElementById("TerminalModalSuccessAddClose");
+                            document.getElementById("TerminalModalSuccessAddInfo").innerText = "Списано " + (-1)*data.Bonus + " бонусов!";
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                        }
+                        else {
+                            var modal = document.getElementById("TerminalModalOperationError");
+                            var btn = document.getElementById("TerminalModalOperationErrorClose");
+                            modal.style.display = "block";
+                            btn.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                        }
+                    }
+                }
+            })
+        });
+    });
+
+
+
+
+
+</script>
+
+<div id="TerminalModalHandBonusAdd" class="modal">
+    <div class="modal_form modal_form1">
+        <h3 class="modal_bonus">Ручное начисление бонусов</h3>
+        <form id="TerminalHandBonusAddForm" action="" method="post">
+            <div class="modal_form-terminal__input-bl">
+                <input type="text" class="modal_form-terminal__input" id="TerminalClientIdHandBonusAdd" placeholder="Введите идентификатор клиента">
+                <button class="modal_form-terminal__search-btn" id="TerminalSearchClientHandBonusAdd"></button>
+            </div>
+            <div class="modal_form-terminal__input-bl">
+                <input type="text" class="modal_form-terminal__input modal_bonus2" id="TerminalHandBonusAddBonus" placeholder="Введите количество бонусов" readonly>
+            </div>
+            <div class="modal_form-terminal__group modal_form-terminal__group_mb modal_bonus1">
+                <input type="submit" class="modal_form-terminal__submit modal_form-terminal__submit_no-marg" id="TerminalHandBonusAddSubmit" value="Начислить бонусы" disabled>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="TerminalModalHandBonusRedeem" class="modal">
+    <div class="modal_form modal_form1">
+        <h3 class="modal_bonus">РУЧНОЕ СПИСАНИЕ БОНУСОВ</h3>
+        <form id="TerminalHandBonusRedeemForm" action="" method="post">
+            <div class="modal_form-terminal__input-bl">
+                <input type="text" class="modal_form-terminal__input" id="TerminalModalHandBonusRedeemClientId" placeholder="Введите идентификатор клиента">
+                <button class="modal_form-terminal__search-btn" id="TerminalModalHandBonusRedeemSearchClient"></button>
+                <input type="text" class="modal_form-terminal__input  modal_bonus2" id="TerminalHandBonusRedeemBonus" placeholder="Введите количество бонусов" readonly>
+            </div>
+            <div class="modal_form-terminal__group modal_form-terminal__group_mb  modal_bonus1">
+                <input type="submit" class="modal_form-terminal__submit modal_form-terminal__submit_no-marg" id="TerminalHandBonusRedeemSubmit" value="Списать бонусы" disabled>
+            </div>
+        </form>
+    </div>
+</div>
