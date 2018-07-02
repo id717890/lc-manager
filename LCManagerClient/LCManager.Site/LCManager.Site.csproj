@@ -197,6 +197,7 @@
     <Compile Include="Implementation\ResponseData\OperatorGoodResponse.cs" />
     <Compile Include="Implementation\ResponseData\OperatorPosResponse.cs" />
     <Compile Include="Models\BonusModel.cs" />
+    <Compile Include="Models\BookkeepingModel.cs" />
     <Compile Include="Models\GoodModel.cs" />
     <Compile Include="Models\JQueryDataTableParamModel.cs" />
     <Compile Include="Models\PosModel.cs" />

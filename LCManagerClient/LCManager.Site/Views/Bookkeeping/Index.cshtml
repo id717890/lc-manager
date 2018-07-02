@@ -190,14 +190,24 @@
 
         $(function () {
             tableBookkeeping = $('#bookkeeping').DataTable({
-                "ajax": "../bas/bookkeeping.txt",
+                "searchDelay": 1000,
+                "serverSide": true,
+                "ajax": 
+                {
+                    method: "POST",
+                    url: "../Bookkeeping/GetBookkeeping",
+                    data: function (params) {
+                        params.date_from = $("#dateFrom").val();
+                        params.date_to = $("#dateTo").val();
+                    }
+                },
                 "columns": [
                     { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
-                    { "data": "partner" },
-                    { "data": "buys" },
-                    { "data": "payment" },
-                    { "data": "ipayment" },
-                    { "data": "client" }
+                    { "data": "caption" },
+                    { "data": "purchases" },
+                    { "data": "added" },
+                    { "data": "redeemed" },
+                    { "data": "clients" }
                 ],
                 "ordering": false,
                 "lengthChange": false,
