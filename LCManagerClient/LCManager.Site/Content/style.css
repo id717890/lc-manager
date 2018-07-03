@@ -11249,9 +11249,9 @@ select {
         margin-top: 67px;
     }
 
-    #bookkeeping_wrapper {
+    /*#bookkeeping_wrapper {
         max-width: 1010px;
-    }
+    }*/
 
     #bookkeeping #line-chart-legend {
         padding-top: 3px;
@@ -11318,10 +11318,10 @@ select {
             margin-right: 0px;
         }
 
-    #bookkeeping {
+    /*#bookkeeping {
         max-width: 1010px !important;
         margin-left: 10px;
-    }
+    }*/
 
         #bookkeeping thead tr th {
             padding-bottom: 8px;

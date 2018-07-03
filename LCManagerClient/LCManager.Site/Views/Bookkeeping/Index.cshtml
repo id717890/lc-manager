@@ -104,7 +104,7 @@
         {
             <div id="allbonuses" class="@(ViewBag.RoleName.Contains("Total") ? "active" : "")" style="margin-bottom: 100px">
                 <div class="datatables-div">
-                    <table id="bookkeeping" class="display clientlist" cellspacing="0" width="100%">
+                    <table id="bookkeeping" class="display selling hl-table w100" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th></th>
@@ -118,19 +118,19 @@
                     </table>
 
                     @*<table id="clients-bonuses" class="display selling hl-table w100" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th><p>Дата</p></th>
-                                <th><p>Тип бонуса</p></th>
-                                <th><p>Начислено</p></th>
-                                <th><p>Списано</p></th>
-                                <th><p>Сгорело</p></th>
-                                <th><p>Номер карты</p></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>*@
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th><p>Дата</p></th>
+                                    <th><p>Тип бонуса</p></th>
+                                    <th><p>Начислено</p></th>
+                                    <th><p>Списано</p></th>
+                                    <th><p>Сгорело</p></th>
+                                    <th><p>Номер карты</p></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>*@
                     <div class="page-navigation">
                         <div class="table__download_meu">
                             <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
@@ -192,7 +192,7 @@
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
-                "ajax": 
+                "ajax":
                 {
                     method: "POST",
                     url: "../Bookkeeping/GetBookkeeping",
@@ -246,7 +246,62 @@
                     }
                 }
             });
-            
+
         });
     </script>
 }
+
+
+@*<div class='line-chart-bl'>
+    <div class='line-chart__head'>
+        <div id='line-chart-leg' class='line-chart-legend'></div>
+    </div>
+    <div class='line-chart__bottom'><canvas id='canvas' class='line-chart'></canvas>
+        <div id='chartjs-tooltip-1' class='linejs-tooltip'></div>
+    </div>
+</div>
+<script>
+        var lineChartData = {
+            labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            datasets: [
+                {
+                    label: 'Покупки',
+                    borderColor: '#58AEDC',
+                    pointBackgroundColor: '#58AEDC',
+                    pointRadius: 2,
+                    backgroundColor: '#58AEDC',
+                    data: [650, 359, 290, 481, 156, 255, 640, 481, 156, 255, 640, 255],
+                    fill: !1,
+                    borderWidth: 2,
+                },
+                {
+                    label: 'Начислено',
+                    borderColor: '#11B9A3',
+                    pointBackgroundColor: '#11B9A3',
+                    pointRadius: 2,
+                    backgroundColor: '#11B9A3',
+                    data: [750, 500, 678, 300, 96, 270, 400, 381, 156, 255, 240, 378, 300],
+                    fill: !1,
+                    borderWidth: 2,
+                }, {
+                    label: 'Списано',
+                    borderColor: '#E5C861',
+                    pointBackgroundColor: '#E5C861',
+                    pointRadius: 2,
+                    backgroundColor: '#E5C861',
+                    data: [600, 159, 190, 381, 156, 455, 340, 234, 111, 234, 687, 241, 234],
+                    fill: !1,
+                    borderWidth: 2,
+                }, {
+                    label: 'Клиенты',
+                    borderColor: '#567BA5',
+                    pointBackgroundColor: '#567BA5',
+                    pointRadius: 2,
+                    backgroundColor: '#567BA5',
+                    data: [150, 300, 690, 181, 656, 155, 440, 150, 300, 690, 181, 656, 155, 440],
+                    fill: !1,
+                    borderWidth: 2,
+                }]
+        };
+        typeDiagram = 'line';
+</script>*@

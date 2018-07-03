@@ -33,8 +33,8 @@ namespace LC_Manager.Controllers
         {
             BookkeepingsResponse response = new BookkeepingsResponse();
             BookkeepingRequest request = new BookkeepingRequest();
-            try { request.Operator = JwtProps.GetOperator();} catch { }
-            try { request.Partner = JwtProps.GetPartner();} catch { }
+            try { request.Operator = JwtProps.GetOperator(); } catch { }
+            try { request.Partner = JwtProps.GetPartner(); } catch { }
             try { request.Pos = JwtProps.GetPos(); } catch { }
             try
             {
@@ -79,18 +79,131 @@ namespace LC_Manager.Controllers
                     try { response = responseMessage.Content.ReadAsAsync<BookkeepingsResponse>().Result; } catch { }
                     if (response.ErrorCode == 0)
                     {
+                        var longArrayByMonth = new long[12];
+                        var decimalArrayByMonth = new decimal[12];
+
                         BookkeepingDataTableModel bookkeepings = new BookkeepingDataTableModel();
-                        foreach (Bookkeeping c in response.Bookkeepings)
+                        foreach (Bookkeeping item in response.Bookkeepings)
                         {
+                            longArrayByMonth[0] = item.PurchasesMonth1;
+                            longArrayByMonth[1] = item.PurchasesMonth2;
+                            longArrayByMonth[2] = item.PurchasesMonth3;
+                            longArrayByMonth[3] = item.PurchasesMonth4;
+                            longArrayByMonth[4] = item.PurchasesMonth5;
+                            longArrayByMonth[5] = item.PurchasesMonth6;
+                            longArrayByMonth[6] = item.PurchasesMonth7;
+                            longArrayByMonth[7] = item.PurchasesMonth8;
+                            longArrayByMonth[8] = item.PurchasesMonth9;
+                            longArrayByMonth[9] = item.PurchasesMonth10;
+                            longArrayByMonth[10] = item.PurchasesMonth11;
+                            longArrayByMonth[11] = item.PurchasesMonth12;
+                            var buysArrayString = string.Join(",", longArrayByMonth);
+
+                            longArrayByMonth[0] = item.ClientsMonth1;
+                            longArrayByMonth[1] = item.ClientsMonth2;
+                            longArrayByMonth[2] = item.ClientsMonth3;
+                            longArrayByMonth[3] = item.ClientsMonth4;
+                            longArrayByMonth[4] = item.ClientsMonth5;
+                            longArrayByMonth[5] = item.ClientsMonth6;
+                            longArrayByMonth[6] = item.ClientsMonth7;
+                            longArrayByMonth[7] = item.ClientsMonth8;
+                            longArrayByMonth[8] = item.ClientsMonth9;
+                            longArrayByMonth[9] = item.ClientsMonth10;
+                            longArrayByMonth[10] = item.ClientsMonth11;
+                            longArrayByMonth[11] = item.ClientsMonth12;
+                            var clientsArrayString = string.Join(",", longArrayByMonth);
+
+                            decimalArrayByMonth[0] = item.AddedMonth1;
+                            decimalArrayByMonth[1] = item.AddedMonth2;
+                            decimalArrayByMonth[2] = item.AddedMonth3;
+                            decimalArrayByMonth[3] = item.AddedMonth4;
+                            decimalArrayByMonth[4] = item.AddedMonth5;
+                            decimalArrayByMonth[5] = item.AddedMonth6;
+                            decimalArrayByMonth[6] = item.AddedMonth7;
+                            decimalArrayByMonth[7] = item.AddedMonth8;
+                            decimalArrayByMonth[8] = item.AddedMonth9;
+                            decimalArrayByMonth[9] = item.AddedMonth10;
+                            decimalArrayByMonth[10] = item.AddedMonth11;
+                            decimalArrayByMonth[11] = item.AddedMonth12;
+                            var addedArrayString = string.Join(",", decimalArrayByMonth);
+
+                            decimalArrayByMonth[0] = item.RedeemedMonth1;
+                            decimalArrayByMonth[1] = item.RedeemedMonth2;
+                            decimalArrayByMonth[2] = item.RedeemedMonth3;
+                            decimalArrayByMonth[3] = item.RedeemedMonth4;
+                            decimalArrayByMonth[4] = item.RedeemedMonth5;
+                            decimalArrayByMonth[5] = item.RedeemedMonth6;
+                            decimalArrayByMonth[6] = item.RedeemedMonth7;
+                            decimalArrayByMonth[7] = item.RedeemedMonth8;
+                            decimalArrayByMonth[8] = item.RedeemedMonth9;
+                            decimalArrayByMonth[9] = item.RedeemedMonth10;
+                            decimalArrayByMonth[10] = item.RedeemedMonth11;
+                            decimalArrayByMonth[11] = item.RedeemedMonth12;
+                            var redeemedArrayString = string.Join(",", decimalArrayByMonth);
+
                             BookkeepingViewModel bonus = new BookkeepingViewModel
                             {
-                                id = c.Id,
-                                caption = c.Caption,
-                                purchases = c.Purchases.ToString(CultureInfo.InvariantCulture),
-                                added = c.Added.ToString(CultureInfo.InvariantCulture),
-                                redeemed = c.Redeemed.ToString(CultureInfo.InvariantCulture),
-                                clients = c.Clients.ToString(CultureInfo.InvariantCulture),
-                                diagrams = ""
+                                id = item.Id,
+                                caption = item.Caption,
+                                purchases = item.Purchases.ToString(CultureInfo.InvariantCulture),
+                                added = item.Added.ToString(CultureInfo.InvariantCulture),
+                                redeemed = item.Redeemed.ToString(CultureInfo.InvariantCulture),
+                                clients = item.Clients.ToString(CultureInfo.InvariantCulture),
+                                diagrams = @"
+                                <div class='line-chart-bl'>
+                                    <div class='line-chart__head'>
+                                        <div id='line-chart-leg' class='line-chart-legend'></div>
+                                    </div>
+                                    <div class='line-chart__bottom'><canvas id='canvas' class='line-chart'></canvas>
+                                        <div id='chartjs-tooltip-1' class='linejs-tooltip'></div>
+                                    </div>
+                                </div>
+                                <script>
+                                        var lineChartData = {
+                                            labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                                            datasets: [
+                                                {
+                                                    label: 'Покупки',
+                                                    borderColor: '#58AEDC',
+                                                    pointBackgroundColor: '#58AEDC',
+                                                    pointRadius: 2,
+                                                    backgroundColor: '#58AEDC',
+                                                    data: [" + buysArrayString + @"],
+                                                    fill: !1,
+                                                    borderWidth: 2,
+                                                },
+                                                {
+                                                    label: 'Начислено',
+                                                    borderColor: '#11B9A3',
+                                                    pointBackgroundColor: '#11B9A3',
+                                                    pointRadius: 2,
+                                                    backgroundColor: '#11B9A3',
+                                                    data: [" + addedArrayString + @"],
+                                                    fill: !1,
+                                                    borderWidth: 2,
+                                                }, {
+                                                    label: 'Списано',
+                                                    borderColor: '#E5C861',
+                                                    pointBackgroundColor: '#E5C861',
+                                                    pointRadius: 2,
+                                                    backgroundColor: '#E5C861',
+                                                    data: [" + redeemedArrayString + @"],
+                                                    fill: !1,
+                                                    borderWidth: 2,
+                                                }, {
+                                                    label: 'Клиенты',
+                                                    borderColor: '#567BA5',
+                                                    pointBackgroundColor: '#567BA5',
+                                                    pointRadius: 2,
+                                                    backgroundColor: '#567BA5',
+                                                    data: [" + clientsArrayString + @"],
+                                                    fill: !1,
+                                                    borderWidth: 2,
+                                                }
+                                                ]
+                                        };
+                                        typeDiagram = 'line';
+                                </script>"
                             };
                             bookkeepings.data.Add(bonus);
                         }
