@@ -4756,6 +4756,11 @@
             Номер карты на которую начислены бонусы
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.Bonus.Phone">
+            <summary>
+            Номер телефона клиента ПЛ
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Id">
             <summary>
             ID участника

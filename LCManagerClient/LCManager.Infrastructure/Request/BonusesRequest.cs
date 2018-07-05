@@ -23,6 +23,7 @@ namespace LCManager.Infrastructure.Request
         public string DateEnd { get; set; }
         public string Name { get; set; }
         public string CardStr { get; set; }
+        public string Phone { get; set; }
         public string AddedMore { get; set; }
         public string AddedLess { get; set; }
         public string RedeemedMore { get; set; }

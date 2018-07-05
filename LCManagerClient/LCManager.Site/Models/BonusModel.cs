@@ -11,6 +11,8 @@ namespace LC_Manager.Models
         public string redeemed { get; set; }
         public string fireed { get; set; }
         public string card { get; set; }
+        public string phone { get; set; }
+        public string reason { get; set; }
         public string lorem { get; set; }
     }
 

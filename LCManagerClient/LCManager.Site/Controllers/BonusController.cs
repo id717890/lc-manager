@@ -47,7 +47,7 @@ namespace LC_Manager.Controllers
                     Date = Request["columns[1][search][value]"],
                     DateStart = Request["date_from"],
                     DateEnd = Request["date_to"],
-                    CardStr = Request["columns[6][search][value]"],
+                    Phone = Request["columns[3][search][value]"],
                     Page = Convert.ToInt64(param.start),
                     PageSize = Convert.ToInt64(param.length)
                 };
@@ -57,21 +57,21 @@ namespace LC_Manager.Controllers
                     request.Name = Request["columns[2][search][value]"]
                         .Substring(1, Request["columns[2][search][value]"].Length - 2);
                 }
-                if (!string.IsNullOrEmpty(Request["columns[3][search][value]"]))
-                {
-                    var values = Request["columns[3][search][value]"].Split('-');
-                    try { request.AddedMore = values[0]; } catch { };
-                    try { request.AddedLess = values[1]; } catch { };
-                }
-                if (!string.IsNullOrEmpty(Request["columns[4][search][value]"]))
-                {
-                    var values = Request["columns[4][search][value]"].Split('-');
-                    try { request.RedeemedMore = values[0]; } catch { };
-                    try { request.RedeemedLess = values[1]; } catch { };
-                }
                 if (!string.IsNullOrEmpty(Request["columns[5][search][value]"]))
                 {
                     var values = Request["columns[5][search][value]"].Split('-');
+                    try { request.AddedMore = values[0]; } catch { };
+                    try { request.AddedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(Request["columns[6][search][value]"]))
+                {
+                    var values = Request["columns[6][search][value]"].Split('-');
+                    try { request.RedeemedMore = values[0]; } catch { };
+                    try { request.RedeemedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(Request["columns[7][search][value]"]))
+                {
+                    var values = Request["columns[7][search][value]"].Split('-');
                     try { request.BurnMore = values[0]; } catch { };
                     try { request.BurnLess = values[1]; } catch { };
                 }
@@ -94,6 +94,8 @@ namespace LC_Manager.Controllers
                                 redeemed = c.BonusRedeemed.ToString(CultureInfo.InvariantCulture),
                                 fireed = c.BonusBurn.ToString(CultureInfo.InvariantCulture),
                                 card = c.BonusCard.ToString(CultureInfo.CurrentCulture),
+                                phone = c.Phone,
+                                reason = "Механика ПЛ",
                                 lorem = ""
                             };
                             bonuses.data.Add(bonus);
@@ -141,7 +143,7 @@ namespace LC_Manager.Controllers
             string bonus_added,
             string bonus_redeemed,
             string bonus_burned,
-            string bonus_card)
+            string bonus_phone)
         {
             try
             {
@@ -151,7 +153,7 @@ namespace LC_Manager.Controllers
                     Date = bonus_date,
                     DateStart = bonus_from,
                     DateEnd = bonus_to,
-                    CardStr = bonus_card,
+                    Phone = bonus_phone,
                     Page = -1,
                     PageSize = -1
                 };
