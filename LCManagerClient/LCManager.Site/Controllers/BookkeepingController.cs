@@ -28,16 +28,48 @@ namespace LC_Manager.Controllers
             return View();
         }
 
-        [AuthorizeJwt(Roles = "Total"), HttpPost]
+        [HttpGet]
+        [AuthorizeJwt]
         public string GetBookkeeping(JQueryDataTableParamModel param)
         {
             BookkeepingsResponse response = new BookkeepingsResponse();
             BookkeepingRequest request = new BookkeepingRequest();
+
             try { request.Operator = JwtProps.GetOperator(); } catch { }
             try { request.Partner = JwtProps.GetPartner(); } catch { }
             try { request.Pos = JwtProps.GetPos(); } catch { }
             try
             {
+                if(!string.IsNullOrEmpty(Request["columns[1][search][value]"]))
+                request.Name = Request["columns[1][search][value]"];
+                request.DateStart = Request["date_from"];
+                request.DateEnd = Request["date_to"];
+
+                if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
+                {
+                    var values = Request["columns[2][search][value]"].Split('-');
+                    try { request.PurchasesMore = values[0]; } catch { };
+                    try { request.PurchasesLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(Request["columns[3][search][value]"]))
+                {
+                    var values = Request["columns[3][search][value]"].Split('-');
+                    try { request.AddedMore = values[0]; } catch { };
+                    try { request.AddedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(Request["columns[4][search][value]"]))
+                {
+                    var values = Request["columns[4][search][value]"].Split('-');
+                    try { request.RedeemedMore = values[0]; } catch { };
+                    try { request.RedeemedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(Request["columns[5][search][value]"]))
+                {
+                    var values = Request["columns[5][search][value]"].Split('-');
+                    try { request.ClientsMore = values[0]; } catch { };
+                    try { request.ClientsLess = values[1]; } catch { };
+                }
+
                 //BookkeepingRequest request = new BookkeepingRequest
                 //{
                 //    Operator = JwtProps.GetOperator(),
@@ -54,12 +86,8 @@ namespace LC_Manager.Controllers
                 //    request.Name = Request["columns[2][search][value]"]
                 //        .Substring(1, Request["columns[2][search][value]"].Length - 2);
                 //}
-                //if (!string.IsNullOrEmpty(Request["columns[3][search][value]"]))
-                //{
-                //    var values = Request["columns[3][search][value]"].Split('-');
-                //    try { request.AddedMore = values[0]; } catch { };
-                //    try { request.AddedLess = values[1]; } catch { };
-                //}
+
+
                 //if (!string.IsNullOrEmpty(Request["columns[4][search][value]"]))
                 //{
                 //    var values = Request["columns[4][search][value]"].Split('-');
@@ -113,33 +141,33 @@ namespace LC_Manager.Controllers
                             longArrayByMonth[11] = item.ClientsMonth12;
                             var clientsArrayString = string.Join(",", longArrayByMonth);
 
-                            decimalArrayByMonth[0] = item.AddedMonth1;
-                            decimalArrayByMonth[1] = item.AddedMonth2;
-                            decimalArrayByMonth[2] = item.AddedMonth3;
-                            decimalArrayByMonth[3] = item.AddedMonth4;
-                            decimalArrayByMonth[4] = item.AddedMonth5;
-                            decimalArrayByMonth[5] = item.AddedMonth6;
-                            decimalArrayByMonth[6] = item.AddedMonth7;
-                            decimalArrayByMonth[7] = item.AddedMonth8;
-                            decimalArrayByMonth[8] = item.AddedMonth9;
-                            decimalArrayByMonth[9] = item.AddedMonth10;
-                            decimalArrayByMonth[10] = item.AddedMonth11;
-                            decimalArrayByMonth[11] = item.AddedMonth12;
-                            var addedArrayString = string.Join(",", decimalArrayByMonth);
+                            longArrayByMonth[0] = item.AddedMonth1;
+                            longArrayByMonth[1] = item.AddedMonth2;
+                            longArrayByMonth[2] = item.AddedMonth3;
+                            longArrayByMonth[3] = item.AddedMonth4;
+                            longArrayByMonth[4] = item.AddedMonth5;
+                            longArrayByMonth[5] = item.AddedMonth6;
+                            longArrayByMonth[6] = item.AddedMonth7;
+                            longArrayByMonth[7] = item.AddedMonth8;
+                            longArrayByMonth[8] = item.AddedMonth9;
+                            longArrayByMonth[9] = item.AddedMonth10;
+                            longArrayByMonth[10] = item.AddedMonth11;
+                            longArrayByMonth[11] = item.AddedMonth12;
+                            var addedArrayString = string.Join(",", longArrayByMonth);
 
-                            decimalArrayByMonth[0] = item.RedeemedMonth1;
-                            decimalArrayByMonth[1] = item.RedeemedMonth2;
-                            decimalArrayByMonth[2] = item.RedeemedMonth3;
-                            decimalArrayByMonth[3] = item.RedeemedMonth4;
-                            decimalArrayByMonth[4] = item.RedeemedMonth5;
-                            decimalArrayByMonth[5] = item.RedeemedMonth6;
-                            decimalArrayByMonth[6] = item.RedeemedMonth7;
-                            decimalArrayByMonth[7] = item.RedeemedMonth8;
-                            decimalArrayByMonth[8] = item.RedeemedMonth9;
-                            decimalArrayByMonth[9] = item.RedeemedMonth10;
-                            decimalArrayByMonth[10] = item.RedeemedMonth11;
-                            decimalArrayByMonth[11] = item.RedeemedMonth12;
-                            var redeemedArrayString = string.Join(",", decimalArrayByMonth);
+                            longArrayByMonth[0] = item.RedeemedMonth1;
+                            longArrayByMonth[1] = item.RedeemedMonth2;
+                            longArrayByMonth[2] = item.RedeemedMonth3;
+                            longArrayByMonth[3] = item.RedeemedMonth4;
+                            longArrayByMonth[4] = item.RedeemedMonth5;
+                            longArrayByMonth[5] = item.RedeemedMonth6;
+                            longArrayByMonth[6] = item.RedeemedMonth7;
+                            longArrayByMonth[7] = item.RedeemedMonth8;
+                            longArrayByMonth[8] = item.RedeemedMonth9;
+                            longArrayByMonth[9] = item.RedeemedMonth10;
+                            longArrayByMonth[10] = item.RedeemedMonth11;
+                            longArrayByMonth[11] = item.RedeemedMonth12;
+                            var redeemedArrayString = string.Join(",", longArrayByMonth);
 
                             BookkeepingViewModel bonus = new BookkeepingViewModel
                             {

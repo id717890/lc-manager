@@ -22,31 +22,31 @@
         public long PurchasesMonth11 { get; set; }
         public long PurchasesMonth12 { get; set; }
 
-        public decimal AddedMonth1 { get; set; }
-        public decimal AddedMonth2 { get; set; }
-        public decimal AddedMonth3 { get; set; }
-        public decimal AddedMonth4 { get; set; }
-        public decimal AddedMonth5 { get; set; }
-        public decimal AddedMonth6 { get; set; }
-        public decimal AddedMonth7 { get; set; }
-        public decimal AddedMonth8 { get; set; }
-        public decimal AddedMonth9 { get; set; }
-        public decimal AddedMonth10 { get; set; }
-        public decimal AddedMonth11 { get; set; }
-        public decimal AddedMonth12 { get; set; }
+        public long AddedMonth1 { get; set; }
+        public long AddedMonth2 { get; set; }
+        public long AddedMonth3 { get; set; }
+        public long AddedMonth4 { get; set; }
+        public long AddedMonth5 { get; set; }
+        public long AddedMonth6 { get; set; }
+        public long AddedMonth7 { get; set; }
+        public long AddedMonth8 { get; set; }
+        public long AddedMonth9 { get; set; }
+        public long AddedMonth10 { get; set; }
+        public long AddedMonth11 { get; set; }
+        public long AddedMonth12 { get; set; }
 
-        public decimal RedeemedMonth1 { get; set; }
-        public decimal RedeemedMonth2 { get; set; }
-        public decimal RedeemedMonth3 { get; set; }
-        public decimal RedeemedMonth4 { get; set; }
-        public decimal RedeemedMonth5 { get; set; }
-        public decimal RedeemedMonth6 { get; set; }
-        public decimal RedeemedMonth7 { get; set; }
-        public decimal RedeemedMonth8 { get; set; }
-        public decimal RedeemedMonth9 { get; set; }
-        public decimal RedeemedMonth10 { get; set; }
-        public decimal RedeemedMonth11 { get; set; }
-        public decimal RedeemedMonth12 { get; set; }
+        public long RedeemedMonth1 { get; set; }
+        public long RedeemedMonth2 { get; set; }
+        public long RedeemedMonth3 { get; set; }
+        public long RedeemedMonth4 { get; set; }
+        public long RedeemedMonth5 { get; set; }
+        public long RedeemedMonth6 { get; set; }
+        public long RedeemedMonth7 { get; set; }
+        public long RedeemedMonth8 { get; set; }
+        public long RedeemedMonth9 { get; set; }
+        public long RedeemedMonth10 { get; set; }
+        public long RedeemedMonth11 { get; set; }
+        public long RedeemedMonth12 { get; set; }
 
         public long ClientsMonth1 { get; set; }
         public long ClientsMonth2 { get; set; }

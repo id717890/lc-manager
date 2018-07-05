@@ -200,6 +200,10 @@ var tableTooltipsLine = function (tooltip) {
                     end = " руб.";
                     break;
                 }
+                case "Клиенты": {
+                    end = "";
+                    break;
+                }
             }
             var newbody = '<span class="line-tool">' + parts[0].trim() + '</span> :  <span style="color:' + colors.backgroundColor + '">' + parts[1].trim().toLocaleString('ru') + end + '</span>';
 

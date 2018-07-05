@@ -113,40 +113,27 @@
                                 <th><div class="modal_ask">?<span>123</span></div><p>Начислено</p></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Списано</p></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Клиенты</p></th>
+
                             </tr>
                         </thead>
                     </table>
 
-                    @*<table id="clients-bonuses" class="display selling hl-table w100" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th><p>Дата</p></th>
-                                    <th><p>Тип бонуса</p></th>
-                                    <th><p>Начислено</p></th>
-                                    <th><p>Списано</p></th>
-                                    <th><p>Сгорело</p></th>
-                                    <th><p>Номер карты</p></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>*@
                     <div class="page-navigation">
                         <div class="table__download_meu">
                             <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
-                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
-                            {
-                                @Html.Hidden("bonus_from", string.Empty)
-                                @Html.Hidden("bonus_to", string.Empty)
-                                @Html.Hidden("bonus_date", string.Empty)
-                                @Html.Hidden("bonus_type", string.Empty)
-                                @Html.Hidden("bonus_added", string.Empty)
-                                @Html.Hidden("bonus_redeemed", string.Empty)
-                                @Html.Hidden("bonus_burned", string.Empty)
-                                @Html.Hidden("bonus_card", string.Empty)
-                                <p>Скачать отчет: </p>
-                                <a href="#" id="export-bonuses-no-cheque-to-file">XLSX</a>
-                            }
+                            @*@using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
+                                {
+                                    @Html.Hidden("bonus_from", string.Empty)
+                                    @Html.Hidden("bonus_to", string.Empty)
+                                    @Html.Hidden("bonus_date", string.Empty)
+                                    @Html.Hidden("bonus_type", string.Empty)
+                                    @Html.Hidden("bonus_added", string.Empty)
+                                    @Html.Hidden("bonus_redeemed", string.Empty)
+                                    @Html.Hidden("bonus_burned", string.Empty)
+                                    @Html.Hidden("bonus_card", string.Empty)
+                                    <p>Скачать отчет: </p>
+                                    <a href="#" id="export-bonuses-no-cheque-to-file">XLSX</a>
+                                }*@
 
                         </div>
                     </div>
@@ -161,13 +148,19 @@
         var tableBookkeeping;
         var serchingRowBookkeeping = false;
 
-        //$("#dateFrom, #dateTo").on('change input', function(){
-        //    tableBonuses.draw();
-        //});
+        $("#dateFrom, #dateTo").on('change input', function () {
+            tableBookkeeping.draw();
+        });
 
-        //$("#claerDateBonuses").on("click", function(){
-        //    clearDateBonuses();
-        //});
+        $("#claerDateBonuses").on("click", function () {
+            clearDateBookkeepings();
+        });
+
+        function clearDateBookkeepings() {
+            $("#dateFrom").val("").removeClass("zbz-input-clearable__x");
+            $("#dateTo").val("").removeClass("zbz-input-clearable__x");
+            tableBookkeeping.draw();
+        }
 
         $("#export-bonuses-no-cheque-to-file").on("click", function (e) {
             e.preventDefault();
@@ -192,9 +185,10 @@
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
+                "processing": true,
                 "ajax":
                 {
-                    method: "POST",
+                    method: "GET",
                     url: "../Bookkeeping/GetBookkeeping",
                     data: function (params) {
                         params.date_from = $("#dateFrom").val();
@@ -221,21 +215,20 @@
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
                             .bind('keyup change', function () {
-                                table.draw();
+                                column.search($(this).val());
+                                tableBookkeeping.draw();
                             });
 
-                        select.append('<option value="0-5000">0 - 5 000р.</option>');
-                        select.append('<option value="5000-10000">5 000 - 10 000р.</option>');
-                        select.append('<option value="10000-50000">10 000 - 50 000р.</option>');
+                        select.append('<option value="0-5000">0 - 5 т.р.</option>');
+                        select.append('<option value="5000-10000">5 т.р. - 10 т.р.</option>');
+                        select.append('<option value="10000-50000">10 т.р. - 50 т.р.</option>');
+                        select.append('<option value="50000-250000">50 т.р. - 250 т.р.</option>');
+                        select.append('<option value="250000-500000">250 т.р. - 500 т.р.</option>');
+                        select.append('<option value="500000-1000000">500 т.р. - 1 млн.р.</option>');
+                        select.append('<option value="1000000-10000000">1 млн.р. - 10 млн.р.</option>');
                     });
                     niceSelect();
                 }
-            });
-
-            $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
-                var tr = $(this).closest('tr');
-                var row = tableBookkeeping.row(tr);
-                showHideRow(tr, row, bookkeepingData);
             });
 
             tableBookkeeping.on("draw", function () {
@@ -247,61 +240,12 @@
                 }
             });
 
+            $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
+                var tr = $(this).closest('tr');
+                var row = tableBookkeeping.row(tr);
+                showHideRow(tr, row, bookkeepingData);
+            });
+
         });
     </script>
 }
-
-
-@*<div class='line-chart-bl'>
-    <div class='line-chart__head'>
-        <div id='line-chart-leg' class='line-chart-legend'></div>
-    </div>
-    <div class='line-chart__bottom'><canvas id='canvas' class='line-chart'></canvas>
-        <div id='chartjs-tooltip-1' class='linejs-tooltip'></div>
-    </div>
-</div>
-<script>
-        var lineChartData = {
-            labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-            datasets: [
-                {
-                    label: 'Покупки',
-                    borderColor: '#58AEDC',
-                    pointBackgroundColor: '#58AEDC',
-                    pointRadius: 2,
-                    backgroundColor: '#58AEDC',
-                    data: [650, 359, 290, 481, 156, 255, 640, 481, 156, 255, 640, 255],
-                    fill: !1,
-                    borderWidth: 2,
-                },
-                {
-                    label: 'Начислено',
-                    borderColor: '#11B9A3',
-                    pointBackgroundColor: '#11B9A3',
-                    pointRadius: 2,
-                    backgroundColor: '#11B9A3',
-                    data: [750, 500, 678, 300, 96, 270, 400, 381, 156, 255, 240, 378, 300],
-                    fill: !1,
-                    borderWidth: 2,
-                }, {
-                    label: 'Списано',
-                    borderColor: '#E5C861',
-                    pointBackgroundColor: '#E5C861',
-                    pointRadius: 2,
-                    backgroundColor: '#E5C861',
-                    data: [600, 159, 190, 381, 156, 455, 340, 234, 111, 234, 687, 241, 234],
-                    fill: !1,
-                    borderWidth: 2,
-                }, {
-                    label: 'Клиенты',
-                    borderColor: '#567BA5',
-                    pointBackgroundColor: '#567BA5',
-                    pointRadius: 2,
-                    backgroundColor: '#567BA5',
-                    data: [150, 300, 690, 181, 656, 155, 440, 150, 300, 690, 181, 656, 155, 440],
-                    fill: !1,
-                    borderWidth: 2,
-                }]
-        };
-        typeDiagram = 'line';
-</script>*@
