@@ -44,6 +44,8 @@ namespace LC_Manager.Controllers
                 request.Name = Request["columns[1][search][value]"];
                 request.DateStart = Request["date_from"];
                 request.DateEnd = Request["date_to"];
+                request.Page = Convert.ToInt64(param.start);
+                request.PageSize = Convert.ToInt64(param.length);
 
                 if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
                 {
@@ -69,37 +71,6 @@ namespace LC_Manager.Controllers
                     try { request.ClientsMore = values[0]; } catch { };
                     try { request.ClientsLess = values[1]; } catch { };
                 }
-
-                //BookkeepingRequest request = new BookkeepingRequest
-                //{
-                //    Operator = JwtProps.GetOperator(),
-                //    Partner = JwtProps.GetPartner(),
-                //    Pos = JwtProps.GetPos(),
-                //    //DateStart = Request["date_from"],
-                //    //DateEnd = Request["date_to"],
-                //    //Page = Convert.ToInt64(param.start),
-                //    //PageSize = Convert.ToInt64(param.length)
-                //};
-
-                //if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
-                //{
-                //    request.Name = Request["columns[2][search][value]"]
-                //        .Substring(1, Request["columns[2][search][value]"].Length - 2);
-                //}
-
-
-                //if (!string.IsNullOrEmpty(Request["columns[4][search][value]"]))
-                //{
-                //    var values = Request["columns[4][search][value]"].Split('-');
-                //    try { request.RedeemedMore = values[0]; } catch { };
-                //    try { request.RedeemedLess = values[1]; } catch { };
-                //}
-                //if (!string.IsNullOrEmpty(Request["columns[5][search][value]"]))
-                //{
-                //    var values = Request["columns[5][search][value]"].Split('-');
-                //    try { request.BurnMore = values[0]; } catch { };
-                //    try { request.BurnLess = values[1]; } catch { };
-                //}
                 try { request.Page++; } catch { }
                 HttpResponseMessage responseMessage = HttpClientService.PostAsync("api/bookkeeping/GetBookkeepings", request).Result;
                 if (responseMessage.IsSuccessStatusCode)

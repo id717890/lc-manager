@@ -33,24 +33,25 @@ namespace LCManagerPartner.Implementation.Services
                 var cmd = _cnn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "TotalStatistics";
+                cmd.CommandTimeout = 300;
 
                 if (request.Operator > 0) cmd.Parameters.AddWithValue("@operator", request.Operator);
                 if (request.Partner > 0) cmd.Parameters.AddWithValue("@partner", request.Partner);
                 if (request.Pos > 0) cmd.Parameters.AddWithValue("@pos", request.Pos);
-                //if (request.Page == 0) request.Page++;
+                if (request.Page == 0) request.Page++;
 
-                //cmd.Parameters.AddWithValue("@start", request.Page);
+                cmd.Parameters.AddWithValue("@start", request.Page);
 
                 //Если start = -1 и length = -1 это значит выгрузить все без пагинации
-                //if (request.Page != -1) cmd.Parameters.AddWithValue("@length", request.Page + request.PageSize);
-                //else cmd.Parameters.AddWithValue("@length", request.PageSize);
+                if (request.Page != -1) cmd.Parameters.AddWithValue("@length", request.Page + request.PageSize);
+                else cmd.Parameters.AddWithValue("@length", request.PageSize);
 
                 cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
                 cmd.Parameters.Add("@result", SqlDbType.Int);
                 cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
-                //cmd.Parameters.Add("@total_rows", SqlDbType.Int);
-                //cmd.Parameters["@total_rows"].Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("@total_rows", SqlDbType.Int);
+                cmd.Parameters["@total_rows"].Direction = ParameterDirection.Output;
 
                 //Фильтр по дате (Верхний фильтр с диапазоном)
                 if (!string.IsNullOrEmpty(request.DateStart))
@@ -158,8 +159,8 @@ namespace LCManagerPartner.Implementation.Services
                 reader.Close();
                 response.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
                 response.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-                //response.RecordTotal = Convert.ToInt32(cmd.Parameters["@total_rows"].Value);
-                //response.RecordFilterd = response.RecordTotal;
+                response.RecordTotal = Convert.ToInt32(cmd.Parameters["@total_rows"].Value);
+                response.RecordFilterd = response.RecordTotal;
 
                 response.Bookkeepings = bookkeepings;
             }

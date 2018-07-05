@@ -185,6 +185,9 @@
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
+                "language": {
+                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'},
+ 
                 "processing": true,
                 "ajax":
                 {
