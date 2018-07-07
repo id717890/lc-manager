@@ -144,7 +144,7 @@ namespace LC_Manager.Controllers
                             {
                                 id = item.Id,
                                 caption = item.Caption,
-                                purchases = item.Purchases.ToString(CultureInfo.InvariantCulture),
+                                purchases = item.Gain.ToString(CultureInfo.InvariantCulture),
                                 added = item.Added.ToString(CultureInfo.InvariantCulture),
                                 redeemed = item.Redeemed.ToString(CultureInfo.InvariantCulture),
                                 clients = item.Clients.ToString(CultureInfo.InvariantCulture),
