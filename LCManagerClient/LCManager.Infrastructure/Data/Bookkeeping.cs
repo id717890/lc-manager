@@ -9,18 +9,18 @@
         public decimal Redeemed { get; set; }
         public long Clients { get; set; }
 
-        public long PurchasesMonth1 { get; set; }
-        public long PurchasesMonth2 { get; set; }
-        public long PurchasesMonth3 { get; set; }
-        public long PurchasesMonth4 { get; set; }
-        public long PurchasesMonth5 { get; set; }
-        public long PurchasesMonth6 { get; set; }
-        public long PurchasesMonth7 { get; set; }
-        public long PurchasesMonth8 { get; set; }
-        public long PurchasesMonth9 { get; set; }
-        public long PurchasesMonth10 { get; set; }
-        public long PurchasesMonth11 { get; set; }
-        public long PurchasesMonth12 { get; set; }
+        public long GainMonth1 { get; set; }
+        public long GainMonth2 { get; set; }
+        public long GainMonth3 { get; set; }
+        public long GainMonth4 { get; set; }
+        public long GainMonth5 { get; set; }
+        public long GainMonth6 { get; set; }
+        public long GainMonth7 { get; set; }
+        public long GainMonth8 { get; set; }
+        public long GainMonth9 { get; set; }
+        public long GainMonth10 { get; set; }
+        public long GainMonth11 { get; set; }
+        public long GainMonth12 { get; set; }
 
         public long AddedMonth1 { get; set; }
         public long AddedMonth2 { get; set; }

@@ -21,6 +21,7 @@ namespace LCManagerPartner.Controllers
     public class ReportsController : ApiController
     {
         private readonly BonusService _bonusService;
+        private readonly BookkeepingService _bookkeepingService;
 
         /// <inheritdoc />
         /// <summary>
@@ -28,6 +29,7 @@ namespace LCManagerPartner.Controllers
         public ReportsController()
         {
             _bonusService = new BonusService();
+            _bookkeepingService = new BookkeepingService();
         }
 
         static string connectionString = ConfigurationManager.ConnectionStrings["SqlConnection"].ConnectionString;
@@ -191,6 +193,16 @@ namespace LCManagerPartner.Controllers
         public LCManager.Infrastructure.Response.ReportResponse BonusesNoChequeReport(BonusesNotForPurchasesRequest request)
         {
             return _bonusService.BonusesNoChequeReport(request);
+        }
+
+        /// <summary>
+        /// Отчёт по сверке
+        /// </summary>
+        [HttpPost]
+        [Route("BookkeepingReport")]
+        public LCManager.Infrastructure.Response.ReportResponse BookkeepingReport(BookkeepingRequest request)
+        {
+            return _bookkeepingService.BookkeepingReport(request);
         }
     }
 }

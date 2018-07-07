@@ -109,7 +109,7 @@
                             <tr>
                                 <th></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Партнер</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Покупки</p></th>
+                                <th><div class="modal_ask">?<span>123</span></div><p>Выручка</p></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Начислено</p></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Списано</p></th>
                                 <th><div class="modal_ask">?<span>123</span></div><p>Клиенты</p></th>
@@ -120,20 +120,19 @@
 
                     <div class="page-navigation">
                         <div class="table__download_meu">
-                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
-                            @*@using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
-                                {
-                                    @Html.Hidden("bonus_from", string.Empty)
-                                    @Html.Hidden("bonus_to", string.Empty)
-                                    @Html.Hidden("bonus_date", string.Empty)
-                                    @Html.Hidden("bonus_type", string.Empty)
-                                    @Html.Hidden("bonus_added", string.Empty)
-                                    @Html.Hidden("bonus_redeemed", string.Empty)
-                                    @Html.Hidden("bonus_burned", string.Empty)
-                                    @Html.Hidden("bonus_card", string.Empty)
-                                    <p>Скачать отчет: </p>
-                                    <a href="#" id="export-bonuses-no-cheque-to-file">XLSX</a>
-                                }*@
+                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по сверке за период, с фильтрацией.</p></div>
+                            @using (Html.BeginForm("BookkeepingReport", "Bookkeeping", FormMethod.Post, new { id = "export-bookkeeping-to-file-form", style = "display: flex" }))
+                            {
+                                @Html.Hidden("from", string.Empty)
+                                @Html.Hidden("to", string.Empty)
+                                @Html.Hidden("name", string.Empty)
+                                @Html.Hidden("buys", string.Empty)
+                                @Html.Hidden("added", string.Empty)
+                                @Html.Hidden("redeemed", string.Empty)
+                                @Html.Hidden("clients", string.Empty)
+                                <p>Скачать отчет: </p>
+                                <a href="#" id="export-bookkeeping-to-file">XLSX</a>
+                            }
 
                         </div>
                     </div>
@@ -162,17 +161,16 @@
             tableBookkeeping.draw();
         }
 
-        $("#export-bonuses-no-cheque-to-file").on("click", function (e) {
+        $("#export-bookkeeping-to-file").on("click", function (e) {
             e.preventDefault();
-            $("#bonus_from").val($("#dateFrom").val());
-            $("#bonus_to").val($("#dateTo").val());
-            $("#bonus_date").val(tableBonuses.column(1).search());
-            $("#bonus_type").val(tableBonuses.column(2).search());
-            $("#bonus_added").val(tableBonuses.column(3).search());
-            $("#bonus_redeemed").val(tableBonuses.column(4).search());
-            $("#bonus_burned").val(tableBonuses.column(5).search());
-            $("#bonus_card").val(tableBonuses.column(6).search());
-            $("#export-bonuses-no-cheque-to-file-form").submit();
+            $("#from").val($("#dateFrom").val());
+            $("#to").val($("#dateTo").val());
+            $("#name").val(tableBookkeeping.column(1).search());
+            $("#buys").val(tableBookkeeping.column(2).search());
+            $("#added").val(tableBookkeeping.column(3).search());
+            $("#redeemed").val(tableBookkeeping.column(4).search());
+            $("#clients").val(tableBookkeeping.column(5).search());
+            $("#export-bookkeeping-to-file-form").submit();
         });
 
         //function clearDateBonuses(){
@@ -186,8 +184,9 @@
                 "searchDelay": 1000,
                 "serverSide": true,
                 "language": {
-                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'},
- 
+                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'
+                },
+
                 "processing": true,
                 "ajax":
                 {
@@ -213,7 +212,7 @@
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });
-                    this.api().columns([2, 3, 4, 5]).every(function () {
+                    this.api().columns([2]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
@@ -229,6 +228,22 @@
                         select.append('<option value="250000-500000">250 т.р. - 500 т.р.</option>');
                         select.append('<option value="500000-1000000">500 т.р. - 1 млн.р.</option>');
                         select.append('<option value="1000000-10000000">1 млн.р. - 10 млн.р.</option>');
+                    });
+                    this.api().columns([3, 4, 5]).every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.header()))
+                            .bind('keyup change', function () {
+                                column.search($(this).val());
+                                tableBookkeeping.draw();
+                            });
+
+                        select.append('<option value="0-1000">0 - 1000</option>');
+                        select.append('<option value="1000-5000">1000 - 5000 </option>');
+                        select.append('<option value="5000-10000">5000 - 10000 </option>');
+                        select.append('<option value="10000-50000">10000 - 50000 </option>');
+                        select.append('<option value="50000-100000">50000 - 100000 </option>');
+                        select.append('<option value="100000-500000">100000 - 500000</option>');
                     });
                     niceSelect();
                 }
@@ -248,7 +263,6 @@
                 var row = tableBookkeeping.row(tr);
                 showHideRow(tr, row, bookkeepingData);
             });
-
         });
     </script>
 }

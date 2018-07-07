@@ -11,6 +11,7 @@ using LCManager.Infrastructure.Response;
 using LCManager.JWT;
 using LC_Manager.Models;
 using Newtonsoft.Json;
+using ReportResponse = LCManager.Infrastructure.Response.ReportResponse;
 
 namespace LC_Manager.Controllers
 {
@@ -84,18 +85,18 @@ namespace LC_Manager.Controllers
                         BookkeepingDataTableModel bookkeepings = new BookkeepingDataTableModel();
                         foreach (Bookkeeping item in response.Bookkeepings)
                         {
-                            longArrayByMonth[0] = item.PurchasesMonth1;
-                            longArrayByMonth[1] = item.PurchasesMonth2;
-                            longArrayByMonth[2] = item.PurchasesMonth3;
-                            longArrayByMonth[3] = item.PurchasesMonth4;
-                            longArrayByMonth[4] = item.PurchasesMonth5;
-                            longArrayByMonth[5] = item.PurchasesMonth6;
-                            longArrayByMonth[6] = item.PurchasesMonth7;
-                            longArrayByMonth[7] = item.PurchasesMonth8;
-                            longArrayByMonth[8] = item.PurchasesMonth9;
-                            longArrayByMonth[9] = item.PurchasesMonth10;
-                            longArrayByMonth[10] = item.PurchasesMonth11;
-                            longArrayByMonth[11] = item.PurchasesMonth12;
+                            longArrayByMonth[0] = item.GainMonth1;
+                            longArrayByMonth[1] = item.GainMonth2;
+                            longArrayByMonth[2] = item.GainMonth3;
+                            longArrayByMonth[3] = item.GainMonth4;
+                            longArrayByMonth[4] = item.GainMonth5;
+                            longArrayByMonth[5] = item.GainMonth6;
+                            longArrayByMonth[6] = item.GainMonth7;
+                            longArrayByMonth[7] = item.GainMonth8;
+                            longArrayByMonth[8] = item.GainMonth9;
+                            longArrayByMonth[9] = item.GainMonth10;
+                            longArrayByMonth[10] = item.GainMonth11;
+                            longArrayByMonth[11] = item.GainMonth12;
                             var buysArrayString = string.Join(",", longArrayByMonth);
 
                             longArrayByMonth[0] = item.ClientsMonth1;
@@ -223,6 +224,82 @@ namespace LC_Manager.Controllers
                 response.Message = ex.Message;
             }
             return JsonConvert.SerializeObject(response);
+        }
+
+        /// <summary>
+        /// Отчет по бонусам не за покупки
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <param name="name"></param>
+        /// <param name="buys"></param>
+        /// <param name="added"></param>
+        /// <param name="redeemed"></param>
+        /// <param name="clients"></param>
+        /// <returns></returns>
+        [AuthorizeJwt]
+        [HttpPost]
+        public FileResult BookkeepingReport(
+            string from,
+            string to,
+            string name,
+            string buys,
+            string added,
+            string redeemed,
+            string clients)
+        {
+            ReportResponse response = new ReportResponse();
+            BookkeepingRequest request = new BookkeepingRequest();
+
+            try { request.Operator = JwtProps.GetOperator(); } catch { }
+            try { request.Partner = JwtProps.GetPartner(); } catch { }
+            try { request.Pos = JwtProps.GetPos(); } catch { }
+            try
+            {
+                if (!string.IsNullOrEmpty(name)) request.Name = name;
+                request.DateStart = from;
+                request.DateEnd = to;
+                request.Page = -1;
+                request.PageSize = -1;
+
+                if (!string.IsNullOrEmpty(buys))
+                {
+                    var values = buys.Split('-');
+                    try { request.PurchasesMore = values[0]; } catch { };
+                    try { request.PurchasesLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(added))
+                {
+                    var values = added.Split('-');
+                    try { request.AddedMore = values[0]; } catch { };
+                    try { request.AddedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(redeemed))
+                {
+                    var values = redeemed.Split('-');
+                    try { request.RedeemedMore = values[0]; } catch { };
+                    try { request.RedeemedLess = values[1]; } catch { };
+                }
+                if (!string.IsNullOrEmpty(clients))
+                {
+                    var values = clients.Split('-');
+                    try { request.ClientsMore = values[0]; } catch { };
+                    try { request.ClientsLess = values[1]; } catch { };
+                }
+                HttpResponseMessage responseMessage = HttpClientService.PostAsync("api/reports/BookkeepingReport", request).Result;
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    response = responseMessage.Content.ReadAsAsync<ReportResponse>().Result;
+                    if (response.ErrorCode != 0 || !string.IsNullOrEmpty(response.Message)) return null;
+                    var reportName = "Отчёт по сверке";
+                    if (!string.IsNullOrEmpty(from)) reportName = reportName + " с " + from;
+                    if (!string.IsNullOrEmpty(to)) reportName = reportName + " по " + to;
+                    reportName = reportName + ".xlsx";
+                    return File(response.Report, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", reportName);
+                }
+                return null;
+            }
+            catch { return null; }
         }
     }
 }

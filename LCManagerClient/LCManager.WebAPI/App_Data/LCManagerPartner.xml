@@ -881,6 +881,11 @@
             Отчёт по бонусам не за покупки
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.BookkeepingReport(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Отчёт по сверке
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.SiteController.GetSegments(LCManagerPartner.Models.GetSegmentsRequest)">
             <summary>
             Получение списка сегментов
@@ -1657,6 +1662,13 @@
         <member name="M:LCManagerPartner.Implementation.Services.BookkeepingService.GetAllBookkeeping(LCManager.Infrastructure.Request.BookkeepingRequest)">
             <summary>
             Получает всю сверку по партнерам или торговым точкам
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.BookkeepingService.BookkeepingReport(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Отчет по сверке
             </summary>
             <param name="request"></param>
             <returns></returns>
