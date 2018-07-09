@@ -5818,6 +5818,10 @@ namespace LCManagerPartner.Models
         /// Номер карты на которую начислены бонусы
         /// </summary>
         public long BonusCard { get; set; }
+        /// <summary>
+        /// Номер телефона клиента ПЛ
+        /// </summary>
+        public string Phone { get; set; }
     }
 
     public class OperatorClientsManagerBuys

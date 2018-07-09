@@ -15,6 +15,9 @@ namespace LCManager.JWT
         /// <returns></returns>
         public static dynamic GetPayloadFromToken()
         {
+            //var v1 = JwtProvider.GetInstance();
+            //var v2 = ReadJwtTokenFromCookie();
+            //var v3 = v1.DecodePayload(v2.Value);
             return !IsExistTokenInCookie() ? null : JwtProvider.GetInstance().DecodePayload(ReadJwtTokenFromCookie().Value);
         }
 

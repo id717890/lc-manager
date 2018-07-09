@@ -1,4 +1,7 @@
-﻿namespace LCManagerPartner.Controllers
+﻿using LCManager.Infrastructure.Request;
+using LCManager.Infrastructure.Response;
+
+namespace LCManagerPartner.Controllers
 {
     using Implementation.Request;
     using Implementation.Response;
@@ -17,6 +20,7 @@
         SqlConnection cnn = new SqlConnection(connectionString);
 
         private readonly GoodService _operatorGoodService;
+        private readonly BookkeepingService _bookkeepingService;
 
         /// <summary>
         /// 
@@ -826,5 +830,17 @@
         //    var returnValue = result.ProcessRequest(cnn, request);
         //    return returnValue;
         //}
+
+
+        /// <summary>
+        /// Получает сверку по оператору, партнеру или торговой точке
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetBookkeepings")]
+        public BookkeepingsResponse GetBookkeepings(BookkeepingRequest request)
+        {
+            return _bookkeepingService.GetAllBookkeeping(request);
+        }
     }
 }

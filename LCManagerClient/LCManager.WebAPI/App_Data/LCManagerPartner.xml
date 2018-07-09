@@ -543,6 +543,23 @@
             <param name="context"></param>
             <returns></returns>
         </member>
+        <member name="T:LCManagerPartner.Controllers.BookkeepingController">
+            <inheritdoc />
+            <summary>
+            СВЕРКА или БУХГАЛТЕРИЯ
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.BookkeepingController.#ctor">
+            <inheritdoc />
+            <summary>
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.BookkeepingController.GetBookkeepings(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Получает сверку по оператору, партнеру или торговой точке
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ClientController.GetConfirmCode(LCManagerPartner.Models.GetConfirmCodeRequest)">
             <summary>
             Проверка кода и валидация номера телефона
@@ -862,6 +879,11 @@
         <member name="M:LCManagerPartner.Controllers.ReportsController.BonusesNoChequeReport(LCManager.Infrastructure.Request.BonusesNotForPurchasesRequest)">
             <summary>
             Отчёт по бонусам не за покупки
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ReportsController.BookkeepingReport(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Отчёт по сверке
             </summary>
         </member>
         <member name="M:LCManagerPartner.Controllers.SiteController.GetSegments(LCManagerPartner.Models.GetSegmentsRequest)">
@@ -1252,6 +1274,12 @@
             Проверка промокода
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.GetBookkeepings(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Получает сверку по оператору, партнеру или торговой точке
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:LCManagerPartner.Implementation.Abstractions.BaseResponse">
             <summary>
             Абстрактный класс для ответа сервера
@@ -1623,6 +1651,25 @@
             Отчет по бонусам не за покупки
             </summary>
             <param name="cnn"></param>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:LCManagerPartner.Implementation.Services.BookkeepingService">
+            <summary>
+            Сервис для работы со Сверкой
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.BookkeepingService.GetAllBookkeeping(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Получает всю сверку по партнерам или торговым точкам
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.BookkeepingService.BookkeepingReport(LCManager.Infrastructure.Request.BookkeepingRequest)">
+            <summary>
+            Отчет по сверке
+            </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
@@ -4719,6 +4766,11 @@
         <member name="P:LCManagerPartner.Models.Bonus.BonusCard">
             <summary>
             Номер карты на которую начислены бонусы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.Bonus.Phone">
+            <summary>
+            Номер телефона клиента ПЛ
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Id">

@@ -245,6 +245,7 @@
     <Compile Include="AuthorizeAttribute.cs" />
     <Compile Include="AuthClientProvider.cs" />
     <Compile Include="AuthManagerRefreshTokenProvider.cs" />
+    <Compile Include="Controllers\BookkeepingController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
     <Compile Include="Implementation\Services\BonusService.cs" />
+    <Compile Include="Implementation\Services\BookkeepingService.cs" />
     <Compile Include="Implementation\Services\GoodService.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Implementation\Services\RefreshTokenService.cs" />
@@ -370,6 +372,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SQL\20180404\" />
+    <Folder Include="Views\Bookkeeping\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
