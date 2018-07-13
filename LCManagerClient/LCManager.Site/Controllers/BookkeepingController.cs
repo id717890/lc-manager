@@ -150,7 +150,7 @@ namespace LC_Manager.Controllers
                                 redeemed = item.Redeemed.ToString(CultureInfo.InvariantCulture),
                                 clients = item.Clients.ToString(CultureInfo.InvariantCulture),
                                 diagrams = @"
-                                <div class='line-chart-bl'>
+                                <div class='line-chart-bl' style='padding-bottom: 20px;'>
                                     <div class='line-chart__head'>
                                         <div id='line-chart-leg' class='line-chart-legend'></div>
                                     </div>

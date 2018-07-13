@@ -4,58 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style type="text/css">
-    /*#clientsTable_length label {
-        display: flex;
-    }
-
-    .table-length span {
-        color: #fff !important;
-    }
-
-    .table-length div {
-        cursor: pointer !important;
-        position: relative !important;
-        text-align: left !important;
-        -webkit-transition: all 0.2s ease-in-out !important;
-        transition: all 0.2s ease-in-out !important;
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
-        white-space: nowrap !important;
-        display: inline-block !important;
-        vertical-align: middle !important;
-        background-color: #58AEDC !important;
-        width: 150px !important;
-        border: none !important;
-        color: #fff !important;
-        -webkit-border-radius: 6px !important;
-        border-radius: 6px !important;
-        padding: 0px 5px 0px 15px !important;
-        height: 36px !important;
-        line-height: 36px !important;
-        font-weight: 400 !important;
-        font-family: 'a_FuturicaMedium' !important;
-        font-size: 16rem !important;
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        appearance: none !important;
-        -webkit-box-sizing: border-box !important;
-        box-sizing: border-box !important;
-        outline: none !important;
-        margin: auto 0 !important;
-    }
-
-    .table-length .nice-select {
-        width: 65px !important;
-        margin-top: 6px !important;
-        float: left !important;
-    }*/
-</style>
-
-
-
 @section ContentHeaderNav
 {
     @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
@@ -78,14 +26,6 @@
 
 @section ContentHeader
 {
-    @*<div class="client_nav">
-            @if (ViewBag.RoleName.Contains("BonusNoChequeList"))
-            {
-                <div><div>?<p>В данном разделе можно фильтровать и просматривать информацию по бонусам не относящимся к покупкам.</p></div><a href="#allbonuses" class="this-p">Все бонусы</a></div>
-            }
-            <div style="float: right"><p>Всего бонусов: <span id="bonusesCount"></span></p></div>
-        </div>*@
-
     <div class="filters">
         <p>Показать бонусы с </p>
         <input type="text" name=" date-item" class=" zbz-input-clearable datepicker" id="dateFrom">
@@ -95,6 +35,7 @@
             <p class="clear-date" id="claerDateBonuses">Сбросить даты</p>
             <p id="claerAllFilters">Сбросить все фильтры</p>
         </div>
+        <div style="float: right"><p>Всего партнёров: <span id="bokepingcount" style="color: #00aeef;"></span></p></div>
     </div>
 }
 
@@ -173,12 +114,6 @@
             $("#export-bookkeeping-to-file-form").submit();
         });
 
-        //function clearDateBonuses(){
-        //    $("#dateFrom").val("").removeClass("zbz-input-clearable__x");
-        //    $("#dateTo").val("").removeClass("zbz-input-clearable__x");
-        //    tableBonuses.draw();
-        //}
-
         $(function () {
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
@@ -207,7 +142,7 @@
                 "ordering": false,
                 "lengthChange": false,
                 initComplete: function () {
-                    $(".bokepingcount").html(this.api().data().count());
+                    $("#bokepingcount").html(this.api().data().count());
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });
