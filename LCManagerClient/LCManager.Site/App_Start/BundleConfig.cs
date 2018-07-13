@@ -14,10 +14,7 @@ namespace LC_Manager
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
-                "~/Scripts/bundles/jquery-ui.1.12.1.js",
-                "~/Scripts/jquery-formstyler/jquery.formstyler.min.js",
-                "~/Scripts/jquery-ui/jquery-ui.min.js",
-                "~/Scripts/jquery-ui/datepicker-ru.js"
+                "~/Scripts/bundles/jquery-ui.1.12.1.js"                
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include(
@@ -60,6 +57,28 @@ namespace LC_Manager
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+
+
+            #region Используется преимущественно для календаря
+            bundles.Add(new StyleBundle("~/Style/jquery-ui.theme").Include(
+                          "~/Scripts/jquery-ui/jquery-ui.min.css",
+                          "~/Scripts/jquery-ui/Scripts/jquery-ui/jquery-ui.theme.min.css"));
+            bundles.Add(new StyleBundle("~/Style/jquery.formstyler").Include(
+                          "~/Scripts/jquery-formstyler/jquery.formstyler.css",
+                          "~/Scripts/jquery-formstyler/jquery.formstyler.theme.css"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/jquery.formstyler").Include("~/Scripts/jquery-formstyler/jquery.formstyler.min.js"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/jquery.ui").Include("~/Scripts/jquery-ui/jquery-ui.min.js"));
+
+            bundles.Add(new ScriptBundle("~/Scripts/datepicker").Include("~/Scripts/jquery-ui/datepicker-ru.js"));
+
+            #endregion
+
+
+
+
         }
     }
 }
