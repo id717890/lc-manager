@@ -175,7 +175,6 @@
     <Compile Include="App_Start\AuthorizeJwtAttribute.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Connected Services\LoyconClient\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -380,6 +379,7 @@
     <Content Include="img\mes.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\next.png" />
+    <Content Include="img\Open_Icon.png" />
     <Content Include="img\pen_active.png" />
     <Content Include="img\pen_not_active.png" />
     <Content Include="img\plus.png" />
@@ -416,6 +416,13 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.css" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.theme.css" />
+    <Content Include="Scripts\jquery-ui\datepicker-ru.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Scripts\jquery.dateFormat-1.0.js" />
     <Content Include="Scripts\jquery.knob.min.js" />
     <Content Include="Scripts\lineChart1.js" />

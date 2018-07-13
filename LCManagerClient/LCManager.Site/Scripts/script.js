@@ -1,5 +1,27 @@
 
 $(function () {
+    $.datepicker._updateDatepicker_original = $.datepicker._updateDatepicker;
+    $.datepicker._updateDatepicker = function (inst) {
+        $.datepicker._updateDatepicker_original(inst);
+        var afterShow = this._get(inst, 'afterShow');
+        if (afterShow)
+            afterShow.apply((inst.input ? inst.input[0] : null));
+    }; 
+    $('#dateFrom').datepicker({
+        dateFormat: 'dd.mm.yy',
+        yearRange: '1950:2020',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: false,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        afterShow: function (input) {
+            $('.ui-datepicker-month, .ui-datepicker-year').styler();
+        }
+    });
+
+    $('select').styler();   
+
     //$.getJSON("/bas/options.txt", function (data) {
     //    $.each(data, function (key, val) {
     //        $("#addactionList").append('<option value="' + key + '">' + val + '</option>');
@@ -733,7 +755,7 @@ $(document).ready(function() {
     });
 
     $(function () {
-        $(".datepicker").datepicker();
+        //$(".datepicker").datepicker();
     });
     
 	faqTable = $('#faqTable').DataTable({
@@ -812,7 +834,7 @@ function niceSelect(){
     $('.dataTable .nice-select .list li:first-child').html('Выбрать');
     $('.dataTables_length select').niceSelect();
     $( function() {
-    $   ( ".datepicker" ).datepicker();
+    //$   ( ".datepicker" ).datepicker();
     } );
 }
 

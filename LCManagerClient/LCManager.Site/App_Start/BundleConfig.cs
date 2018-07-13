@@ -14,7 +14,10 @@ namespace LC_Manager
                         ));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery-ui").Include(
-                "~/Scripts/bundles/jquery-ui.1.12.1.js"
+                "~/Scripts/bundles/jquery-ui.1.12.1.js",
+                "~/Scripts/jquery-formstyler/jquery.formstyler.min.js",
+                "~/Scripts/jquery-ui/jquery-ui.min.js",
+                "~/Scripts/jquery-ui/datepicker-ru.js"
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/main").Include(
@@ -25,7 +28,7 @@ namespace LC_Manager
             ));
 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
-                "~/Scripts/datepicker-ru.js",
+                //"~/Scripts/datepicker-ru.js",
                 "~/Scripts/jquery.maskedinput.min.js",
                 "~/Scripts/jquery.dateFormat-1.0.js",
                 "~/Scripts/tablegraph.js",
