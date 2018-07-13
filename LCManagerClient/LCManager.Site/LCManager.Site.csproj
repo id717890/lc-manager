@@ -376,6 +376,7 @@
     <Content Include="img\download.png" />
     <Content Include="img\hide-pass.png" />
     <Content Include="img\input-clearable-x.png" />
+    <Content Include="img\loading-element-1.svg" />
     <Content Include="img\mes.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\next.png" />
