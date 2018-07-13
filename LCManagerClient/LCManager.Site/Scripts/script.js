@@ -172,6 +172,10 @@ $(document).ready(function() {
     tableSales = $('table#clients-sales').DataTable({
         "searchDelay": 1000,
         "serverSide": true,
+        "processing": true,
+        "language": {
+            processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+        },
         "ajax":
         {
             method: "POST",
@@ -380,6 +384,10 @@ $(document).ready(function() {
     clientsTable = $('table#clientsTable').DataTable({
         "searchDelay": 1000,
         "serverSide": true,
+        "processing": true,
+        "language": {
+            processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+        },
         "ajax":
         {
             method: "POST",
