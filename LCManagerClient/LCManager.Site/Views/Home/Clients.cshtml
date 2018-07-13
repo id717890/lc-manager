@@ -601,14 +601,14 @@
             <div class='table_sales_terminal'>
                 <table class='display client_bonuses' id='ClientBonuses' cellspacing='0' width='100%'>
                     <thead>
-                        <tr>
-                            <th></th>
-                            <th><p>Дата</p></th>
-                            <th><p>Тип бонуса</p></th>
-                            <th><p>Начислено</p></th>
-                            <th><p>Списано</p></th>
-                            <th><p>Сгорело</p></th>
-                        </tr>
+                    <tr>
+                        <th></th>
+                        <th><p>Дата</p></th>
+                        <th><p>Тип бонуса</p></th>
+                        <th><p>Начислено</p></th>
+                        <th><p>Списано</p></th>
+                        <th><p>Сгорело</p></th>
+                    </tr>
                     </thead>
                 </table>
 
@@ -620,15 +620,166 @@
         </div>
     </div>
 </div>
+<div class='modal' id='clientChangeWindow' style="font-size: 14px !important">
+    <div class='modal_client_change_form'>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Welcome: </p>
+            <span></span>
+            <input type="text" name="last-name" placeholder="Фамилия" class="last-name">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Welcome: </p>
+            <span></span>
+            <input type="text" name="first-name" placeholder="Имя" class="first-name">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Welcome: </p>
+            <span></span>
+            <input type="text" name="middle-name" placeholder="Отчество" class="middle-name">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Дата рождения: </p>
+            <span></span>
+            <input type="text" name="birthday" class="birthday datepicker">
+        </div>
+        @*<div class="client_list_ifo_h">
+                <div>?<p>123123</p></div>
+                <p>Пол: </p>
+                <span></span>
+                <input type="text" name="gender" class="gender">
+                <select class="nice-select">
+                    <option>tqtqt</option>
+                </select>
+            </div>*@
+        <div class="nice-select select open" tabindex="0"><span class="current">Пол</span><ul class="list"><li data-value="0" class="option selected focus">Пол</li><li data-value="1" class="option">Мужской</li><li data-value="-1" class="option">Женский</li></ul></div>
+        <select class="select" id="ClientsClientCreateGender" style="display: none;">
+            <option value="0">Пол</option>
+            <option value="1">Мужской</option>
+            <option value="-1">Женский</option>
+        </select>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Телефон: </p>
+            <span></span>
+            <input type="text" name="phone" placeholder="телефон" class="phone">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Email: </p>
+            <span></span>
+            <input type="text" name="email" placeholder="Email" class="email">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>% поощрения: </p>
+            <span></span>
+            <input type="text" name="level" placeholder="% поощрения" class="level">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Номер карты: </p>
+            <span></span>
+            <input type="text" name="card" placeholder="Номер карты" class="card">
+        </div>
+        <div class="client_list_ifo_h">
+            <div>?<p>123123</p></div>
+            <p>Статус карты: </p>
+            <span></span>
+            <input type="text" name="status" placeholder="status" class="status">
+        </div>
+        <a href="#" id="save-client-data">SAVE</a>
+    </div>
+</div>
 @section scripts
     {
         <script type="text/javascript">
-        @*$("#OperatorClientReport").click(function (e) {
+            @*$("#OperatorClientReport").click(function (e) {
             e.preventDefault();
             var beginDate = document.getElementById("dateFrom").value;
             var endDate = document.getElementById("dateTo").value;
             window.location = '@Url.Action("OperatorClientReport", "Home")?From=' + beginDate + '&To=' + endDate;
         })*@
+            $("#save-client-data").on("click", function (e) {
+                e.preventDefault();
+                var data = {};
+                data.FirstName = $(".modal_client_change_form .first-name").val();
+                data.LastName = $(".modal_client_change_form .last-name").val();
+                data.MiddleName = $(".modal_client_change_form .middle-name").val();
+                //data.Sex = $("#client-sex").val();
+                //data.Birthdate = $("#client-birthday").val();
+                //data.AllowSms = $("#client-allow-sms").val() === "1" ? true : false;
+                //data.AllowEmail = $("#client-allow-email").val() === "1" ? true : false;
+                const token = $('input[name="__RequestVerificationToken"]').val();
+                //console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: "/Client/SaveClientData",
+                    data: { __RequestVerificationToken: token, model: data },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            $("#open-addtional-user-settings-panel").show();
+                            $("#addtional-user-settings-panel").hide();
+                            $("#client-user-surname, #client-user-name, #client-user-patronymic").attr("disabled", "disabled");
+                        } else {
+                            console.log(response);
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            });
+
+            function showClientChangeModalWindow(card) {
+                const token = $('input[name="__RequestVerificationToken"]').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Client/GetClientInfo",
+                    data: { __RequestVerificationToken: token, card },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.ErrorCode === 0) {
+                            console.log(response);
+                            var window = document.getElementById("clientChangeWindow");
+                            window.style.display = "block";
+
+                            $(".modal_client_change_form .last-name").val(response.Surname);
+                            $(".modal_client_change_form .first-name").val(response.Name);
+                            $(".modal_client_change_form .middle-name").val(response.Patronymic);
+                            $(".modal_client_change_form .phone").val(response.phone);
+                            $(".modal_client_change_form .email").val(response.email);
+                            $(".modal_client_change_form .level").val(response.level);
+                            $(".modal_client_change_form .card").val(response.card);
+                            $(".modal_client_change_form .gender").val(response.gender);
+
+                            window.onclick = function (event) {
+                                if (event.target == window) {
+                                    window.style.display = "none";
+                                }
+                            }
+                        } else {
+                            console.log(response);
+                        }
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+
+
+
+
+                //console.log(card);
+
+
+            };
+
+
             $("#upload-clients-from-file").click(function(e) {
                 e.preventDefault();
                 $("#file-clients").click();

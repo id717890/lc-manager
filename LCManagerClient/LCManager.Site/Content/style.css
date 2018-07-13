@@ -12594,3 +12594,20 @@ select {
 }
 
 /*END Анимированная загрузка для Datatables*/
+
+/*Modal window client change*/
+.modal_client_change_form {
+    display: block;
+    border-radius: 15px;
+    background-color: white;
+    padding-top: 35px;
+    padding-left: 38px;
+    padding-right: 45px;
+    padding-bottom: 21px;
+    width: 450px;
+    height: 400px;
+    margin: auto;
+    border: 20px solid #fff;
+}
+/* END Modal window client change*/
+
