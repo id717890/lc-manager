@@ -5,6 +5,13 @@
 }
 
 <style type="text/css">
+    .selectbox div{
+        width: auto;
+        border-radius: inherit;
+        background: inherit;
+    }
+
+
     #clientsTable_length label {
         display: flex;
     }
@@ -655,12 +662,25 @@
                     <option>tqtqt</option>
                 </select>
             </div>*@
-        <div class="nice-select select open" tabindex="0"><span class="current">Пол</span><ul class="list"><li data-value="0" class="option selected focus">Пол</li><li data-value="1" class="option">Мужской</li><li data-value="-1" class="option">Женский</li></ul></div>
+        @*<div class="nice-select select open" tabindex="0"><span class="current">Пол</span><ul class="list"><li data-value="0" class="option selected focus">Пол</li><li data-value="1" class="option">Мужской</li><li data-value="-1" class="option">Женский</li></ul></div>
         <select class="select" id="ClientsClientCreateGender" style="display: none;">
             <option value="0">Пол</option>
             <option value="1">Мужской</option>
             <option value="-1">Женский</option>
-        </select>
+        </select>*@
+        <div class="client_list_ifo_h2">
+            <div class="i2">?<p>123123</p></div>
+            <p>Пол: </p>
+            <span></span>
+            <select class="select gender">
+                <option value="0">Пол</option>
+                <option value="1">Мужской</option>
+                <option value="-1">Женский</option>
+            </select>
+        </div>
+
+       
+
         <div class="client_list_ifo_h">
             <div>?<p>123123</p></div>
             <p>Телефон: </p>
@@ -677,7 +697,7 @@
             <div>?<p>123123</p></div>
             <p>% поощрения: </p>
             <span></span>
-            <input type="text" name="level" placeholder="% поощрения" class="level">
+            <input type="number" min="0" max="100" name="level" placeholder="% поощрения" class="level">
         </div>
         <div class="client_list_ifo_h">
             <div>?<p>123123</p></div>
@@ -685,12 +705,23 @@
             <span></span>
             <input type="text" name="card" placeholder="Номер карты" class="card">
         </div>
-        <div class="client_list_ifo_h">
+        @*<div class="client_list_ifo_h">
             <div>?<p>123123</p></div>
             <p>Статус карты: </p>
             <span></span>
             <input type="text" name="status" placeholder="status" class="status">
+        </div>*@
+        <div class="client_list_ifo_h2">
+            <div class="i2">?<p>123123</p></div>
+            <p>Статус карты: </p>
+            <span></span>
+            <select class="select gender">
+                <option value="0">Активна</option>
+                <option value="1">Заблокирована</option>
+                <option value="2">Ограничена</option>
+            </select>
         </div>
+
         <a href="#" id="save-client-data">SAVE</a>
     </div>
 </div>
@@ -743,19 +774,22 @@
                     data: { __RequestVerificationToken: token, card },
                     dataType: "json",
                     success: function (response) {
-                        if (response.ErrorCode === 0) {
+                        if (!response.ErrorCode || (response.ErrorCode && response.ErrorCode === 0)) {
                             console.log(response);
                             var window = document.getElementById("clientChangeWindow");
                             window.style.display = "block";
 
-                            $(".modal_client_change_form .last-name").val(response.Surname);
-                            $(".modal_client_change_form .first-name").val(response.Name);
-                            $(".modal_client_change_form .middle-name").val(response.Patronymic);
-                            $(".modal_client_change_form .phone").val(response.phone);
-                            $(".modal_client_change_form .email").val(response.email);
-                            $(".modal_client_change_form .level").val(response.level);
-                            $(".modal_client_change_form .card").val(response.card);
-                            $(".modal_client_change_form .gender").val(response.gender);
+                            $(".modal_client_change_form .last-name").val(response.data1.Surname);
+                            $(".modal_client_change_form .first-name").val(response.data1.Name);
+                            $(".modal_client_change_form .middle-name").val(response.data1.Patronymic);
+                            $(".modal_client_change_form .phone").val(response.data1.Phone);
+                            $(".modal_client_change_form .email").val(response.data1.Email);
+                            $(".modal_client_change_form .level").val(response.data1.level);
+                            $(".modal_client_change_form .card").val(response.data1.Card);
+                            $(".modal_client_change_form .gender").val(response.data1.Gender).change();
+                            $(".modal_client_change_form .birthday").val(moment(response.data1.Birthdate).format("DD.MM.YYYY"));
+
+                            
 
                             window.onclick = function (event) {
                                 if (event.target == window) {

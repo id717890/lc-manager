@@ -75,7 +75,7 @@ $("#FriendPhone").mask("+7 (999) 999-99-99");
 
 $("#profilePhone").mask("+7 (999) 999-99-99");
 
-$("#ClientsClientCreatePhone").mask("+7 (999) 999-99-99");
+$("#ClientsClientCreatePhone, .modal_client_change_form .phone").mask("+7 (999) 999-99-99");
 $("#activate_modal_phone").mask("+7 (999) 999-99-99");
 
 $("#activateCard").click(function (ev) {

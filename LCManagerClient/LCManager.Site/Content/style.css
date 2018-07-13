@@ -4352,7 +4352,8 @@ select {
         color: #58afdd;
         font-weight: 100;
     }
-.client_list_ifo_h {
+.client_list_ifo_h,
+.client_list_ifo_h2 {
     width: 100%;
     font-size: 14px;
     font-family: 'a_FuturicaBook';
@@ -4361,34 +4362,36 @@ select {
     min-height: 28px;
 }
 
-    .client_list_ifo_h > p {
+    .client_list_ifo_h > p, .client_list_ifo_h2 > p {
         width: 40%;
         margin: 0px;
         float: left;
         max-width: 150px;
     }
 
-    .client_list_ifo_h > p, .client_list_ifo_h > span {
+    .client_list_ifo_h > p, .client_list_ifo_h2 > p, .client_list_ifo_h > span, .client_list_ifo_h2 > span {
         border-bottom: solid 1px #dce0e3;
         height: 16px;
         padding-top: 11px;
     }
 
-    .client_list_ifo_h > span {
+    .client_list_ifo_h > span, .client_list_ifo_h2 > span{
         float: left;
         width: 26%;
         color: #567ca6;
         max-width: 95px;
     }
 
-    .client_list_ifo_h > p, .client_list_ifo_h > span {
+    .client_list_ifo_h > p, .client_list_ifo_h > span,
+    .client_list_ifo_h2 > p, .client_list_ifo_h2 > span {
         border-bottom: solid 1px #dce0e3;
         height: 16px;
         padding-top: 11px;
         white-space: nowrap;
     }
 
-        .client_list_ifo_h > span:last-child {
+        .client_list_ifo_h > span:last-child,
+        .client_list_ifo_h2 > span:last-child {
             color: #14baa3;
             max-width: 70px;
             padding-left: 2%;
@@ -4440,6 +4443,58 @@ select {
         }
 
             .client_list_ifo_h > div:hover p:before {
+                content: " ";
+                border: 7px solid transparent;
+                border-bottom: 7px solid #1a1a1a;
+                position: absolute;
+                margin: -20px 0px 0px -34px;
+                left: 37px;
+            }
+
+    .client_list_ifo_h2 > .i2 {
+        margin-right: 10px;
+        padding: 0 5px;
+        width: 6px;
+        height: 16px;
+        background: #c2c7cc;
+        border-radius: 100%;
+        color: #fff;
+        font-size: 13px;
+        text-align: center;
+        font-family: 'a_FuturicaMedium';
+        line-height: 16px;
+        cursor: pointer;
+        display: -webkit-inline-box;
+        float: left;
+        margin-top: 11px;
+        text-align: left;
+    }
+
+        .client_list_ifo_h2 > .i2:hover {
+            background: #1a1a1a;
+        }
+
+        .client_list_ifo_h2 > .i2 > p {
+            display: none;
+        }
+
+        .client_list_ifo_h2 > .i2:hover p {
+            display: table;
+            margin: 29px 0px 0px -15px;
+            padding: 6px;
+            min-height: 16px;
+            height: max-content;
+            position: relative;
+            background: #1a1a1a;
+            color: #fff;
+            z-index: 50;
+            border-radius: 5px;
+            width: max-content;
+            max-width: 253px;
+            min-width: 100px;
+        }
+
+            .client_list_ifo_h2 > .i2:hover p:before {
                 content: " ";
                 border: 7px solid transparent;
                 border-bottom: 7px solid #1a1a1a;

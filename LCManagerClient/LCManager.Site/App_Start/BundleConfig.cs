@@ -34,7 +34,8 @@ namespace LC_Manager
                 "~/Scripts/jquery.nice-select.min.js",
                 "~/Scripts/table.js",
                 "~/Scripts/add-list-client-input.js",
-                "~/Scripts/timepicker.js"
+                "~/Scripts/timepicker.js",
+                "~/Scripts/moment.min.js"
             ));
 
             /*Пока отключен, при публикации на продакшен нужно будет скрипты из Terminal.cshtml перенести в бандл
