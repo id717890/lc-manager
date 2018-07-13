@@ -116,6 +116,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -177,6 +183,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BonusController.cs" />
     <Compile Include="Controllers\BookkeepingController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\GoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -372,6 +379,7 @@
     <Content Include="img\mes.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\next.png" />
+    <Content Include="img\Open_Icon.png" />
     <Content Include="img\pen_active.png" />
     <Content Include="img\pen_not_active.png" />
     <Content Include="img\plus.png" />
@@ -408,6 +416,13 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.css" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.theme.css" />
+    <Content Include="Scripts\jquery-ui\datepicker-ru.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Scripts\jquery.dateFormat-1.0.js" />
     <Content Include="Scripts\jquery.knob.min.js" />
     <Content Include="Scripts\lineChart1.js" />

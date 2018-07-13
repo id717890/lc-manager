@@ -49,7 +49,7 @@ $(".addclientlist-block").on('click', '.openblocklist', function () {
     }
 });
 
-$(".datepicker").datepicker();
+//$(".datepicker").datepicker();
 $(".clear-date").click(function () {
     $('#date2').val('');
     $('#ClientsClientCreateBirthdate').val('');

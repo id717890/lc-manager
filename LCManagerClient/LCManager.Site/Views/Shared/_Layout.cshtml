@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LC-Manager</title>
+    
+    <!-- #region Подключаем стили календаря -->
+    @Styles.Render("~/Style/jquery-ui.theme")
+    @Styles.Render("~/Style/jquery.formstyler")
+    <!-- #endregion -->
+    @RenderSection("Styles", required: false)
     <link rel="stylesheet" href="~/Content/animate.css">
     <link rel="stylesheet" href="~/Content/style.css">
 </head>
@@ -163,6 +169,14 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/plugins")
     @Scripts.Render("~/bundles/main")
+
+    <!-- #region Подключаем скрипты календаря -->
+    @Scripts.Render("~/Scripts/jquery.formstyler")
+    @Scripts.Render("~/Scripts/jquery.ui")
+    @Scripts.Render("~/Scripts/datepicker")
+    <!-- #endregion -->
+
+
 
     @Html.Partial("~/Views/Partial/Layout.cshtml")
     @RenderSection("Scripts", required: false)
