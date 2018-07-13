@@ -4949,7 +4949,8 @@ select {
     font-size: 15px;
 }
 
-    .client_table .clientlist thead tr th p {
+    .client_table .clientlist thead tr th p,
+    #clients-bonuses thead tr th p {
         color: #b4bbc2;
         margin: 0;
         font-size: 16rem;
