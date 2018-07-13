@@ -106,23 +106,32 @@
                 <div class="datatables-div">
                     <table id="clients-bonuses" class="display selling hl-table w100" cellspacing="0">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th><p>Дата</p></th>
-                                <th><p>Тип бонуса</p></th>
-                                <th><p>Телефон</p></th>
-                                <th><p>Основание</p></th>
-                                <th><p>Начислено</p></th>
-                                <th><p>Списано</p></th>
-                                <th><p>Сгорело</p></th>
-                            </tr>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <p>Дата</p></th>
+                            <th>
+                                <p>Тип бонуса</p></th>
+                            <th>
+                                <p>Телефон</p></th>
+                            <th>
+                                <p>Основание</p></th>
+                            <th>
+                                <p>Начислено</p></th>
+                            <th>
+                                <p>Списано</p></th>
+                            <th>
+                                <p>Сгорело</p></th>
+                        </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                     <div class="page-navigation">
                         <div class="table__download_meu">
-                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
-                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
+                            <div>?
+                                <p style="font-family: 'a_Futurica'; text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p>
+                            </div>
+                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new {id = "export-bonuses-no-cheque-to-file-form", style = "display: flex"}))
                             {
                                 @Html.Hidden("bonus_from", string.Empty)
                                 @Html.Hidden("bonus_to", string.Empty)
@@ -182,7 +191,7 @@
                 "serverSide": true,
                 "processing": true,
                 "language": {
-                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'
+                    processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
                 },
                 //"lengthChange": false,
                 "info": false,
