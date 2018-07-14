@@ -62,16 +62,16 @@ namespace LC_Manager
 
 
             #region Используется преимущественно для календаря
-            bundles.Add(new StyleBundle("~/Style/jquery-ui.theme").Include(
+            bundles.Add(new StyleBundle("~/Style/jquery-uitheme").Include(
                           "~/Scripts/jquery-ui/jquery-ui.min.css",
                           "~/Scripts/jquery-ui/Scripts/jquery-ui/jquery-ui.theme.min.css"));
-            bundles.Add(new StyleBundle("~/Style/jquery.formstyler").Include(
+            bundles.Add(new StyleBundle("~/Style/jqueryformstyler").Include(
                           "~/Scripts/jquery-formstyler/jquery.formstyler.css",
                           "~/Scripts/jquery-formstyler/jquery.formstyler.theme.css"));
 
-            bundles.Add(new ScriptBundle("~/Scripts/jquery.formstyler").Include("~/Scripts/jquery-formstyler/jquery.formstyler.min.js"));
+            bundles.Add(new ScriptBundle("~/Scripts/jqueryformstyler").Include("~/Scripts/jquery-formstyler/jquery.formstyler.min.js"));
 
-            bundles.Add(new ScriptBundle("~/Scripts/jquery.ui").Include("~/Scripts/jquery-ui/jquery-ui.min.js"));
+            bundles.Add(new ScriptBundle("~/Scripts/jqueryui").Include("~/Scripts/jquery-ui/jquery-ui.min.js"));
 
             bundles.Add(new ScriptBundle("~/Scripts/datepicker").Include("~/Scripts/jquery-ui/datepicker-ru.js"));
 
