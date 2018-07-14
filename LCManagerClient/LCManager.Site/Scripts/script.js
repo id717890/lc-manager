@@ -108,7 +108,7 @@ function personData(d) {
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
             '<div class="userlist_info_t"><h3><a href="#" onclick="showBonusesModalWindow(); return false;" style="text-decoration: none; color: #58afdd;">Бонусы не за покупки:</a>' +
-            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd;">Редактирование карточки клиента</a></h3>'+
+            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd; display:none;">Редактирование карточки клиента</a></h3>'+
             '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Welcome: </p><span>'+
             ((d.welcomeBonusDate === undefined)?"-":(d.welcomeBonusDate))+'</span>'+
             '<span>'+((d.welcomeBonusAmount === undefined)?"-":(d.welcomeBonusAmount+' б.'))+'</span>'+
@@ -425,11 +425,44 @@ $(document).ready(function() {
             $("#clientsTable_length").css("display", "flex");
             $("#clientsTable_length p").remove();
 
-            this.api().columns([5, 6, 8]).every(function () {
+            this.api().columns([6]).every(function () {
                 addSelectFilter(this);
             });
             this.api().columns([1, 2, 3, 7]).every(function () {
                 addInputFilter(this);
+            });
+            this.api().columns([5]).every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .bind('keyup change',
+                        function () {
+                            column.search($(this).val());
+                            clientsTable.draw();
+                        });
+
+                select.append('<option value="Мужской">Мужской</option>');
+                select.append('<option value="Женский">Женский</option>');
+            });
+            this.api().columns([8]).every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .bind('keyup change',
+                        function () {
+                            column.search($(this).val());
+                            clientsTable.draw();
+                        });
+
+                select.append('<option value="_1.00%_">1%</option>');
+                select.append('<option value="_2.00%_">2%</option>');
+                select.append('<option value="_3.00%_">3%</option>');
+                select.append('<option value="_4.00%_">4%</option>');
+                select.append('<option value="_5.00%_">5%</option>');
+                select.append('<option value="_7.00%_">7%</option>');
+                select.append('<option value="_10.00%_">10%</option>');
+                select.append('<option value="_15.00%_">15%</option>');
+                select.append('<option value="_20.00%_">20%</option>');
             });
             this.api().columns([4]).every(function () {
                 addInputFilter(this, ' datepicker');
