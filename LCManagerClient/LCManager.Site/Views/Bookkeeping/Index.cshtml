@@ -142,7 +142,8 @@
                 "ordering": false,
                 "lengthChange": false,
                 initComplete: function () {
-                    $("#bokepingcount").html(this.api().data().count());
+                    //$("#bokepingcount").html(this.api().data().count());
+                    $("#bokepingcount").html(tableBookkeeping.page.info().recordsTotal);
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });

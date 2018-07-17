@@ -163,7 +163,7 @@ namespace LC_Manager.Controllers
                                             labels: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                                             datasets: [
                                                 {
-                                                    label: 'Покупки',
+                                                    label: 'Выручка',
                                                     borderColor: '#58AEDC',
                                                     pointBackgroundColor: '#58AEDC',
                                                     pointRadius: 2,

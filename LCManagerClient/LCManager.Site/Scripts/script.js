@@ -443,6 +443,7 @@ $(document).ready(function() {
 
                 select.append('<option value="Мужской">Мужской</option>');
                 select.append('<option value="Женский">Женский</option>');
+                select.append('<option value="Не указан">Не указан</option>');
             });
             this.api().columns([8]).every(function () {
                 var column = this;
