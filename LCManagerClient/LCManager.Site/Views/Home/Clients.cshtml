@@ -803,15 +803,18 @@
                             $(".select.gender").next(".nice-select.gender").find("ul.list li[data-value='" + response.data1.Gender+"']").addClass("selected");
 
                             /* Устанавливаем статус карты */
-                            if (response.data2.Gender === 1) {
-                                $(".select.gender").next(".nice-select.gender").find(".current").html("Мужской");
-                            } else if (response.data1.Gender === -1) {
-                                $(".select.gender").next(".nice-select.gender").find(".current").html("Женский");
-                            } else if (response.data1.Gender === 0) {
-                                $(".select.gender").next(".nice-select.gender").find(".current").html("Пол");
+                            var statusCode = 0;
+                            if (response.data2.Status === "Активна") {
+                                $(".select.status-card").next(".nice-select.status-card").find(".current").html("Активна");
+                            } else if (response.data2.Status === "Блокирована") {
+                                $(".select.status-card").next(".nice-select.status-card").find(".current").html("Заблокирована");
+                                statusCode = 1;
+                            } else if (response.data2.Status === "Ограничена") {
+                                $(".select.status-card").next(".nice-select.status-card").find(".current").html("Ограничена");
+                                statusCode = 2;
                             }
-                            $(".select.gender").next(".nice-select.gender").find("ul.list li").removeClass("selected");
-                            $(".select.gender").next(".nice-select.gender").find("ul.list li[data-value='" + response.data1.Gender + "']").addClass("selected");
+                            $(".select.status-card").next(".nice-select.status-card").find("ul.list li").removeClass("selected");
+                            $(".select.status-card").next(".nice-select.status-card").find("ul.list li[data-value='" + statusCode + "']").addClass("selected");
 
 
                             window.onclick = function (event) {

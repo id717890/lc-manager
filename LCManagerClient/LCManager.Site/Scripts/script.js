@@ -108,7 +108,7 @@ function personData(d) {
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
             '<div class="userlist_info_t"><h3><a href="#" onclick="showBonusesModalWindow(); return false;" style="text-decoration: none; color: #58afdd;">Бонусы не за покупки:</a>' +
-            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd; display:none;">Редактирование карточки клиента</a></h3>'+
+            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd;">Редактирование карточки клиента</a></h3>'+
             '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Welcome: </p><span>'+
             ((d.welcomeBonusDate === undefined)?"-":(d.welcomeBonusDate))+'</span>'+
             '<span>'+((d.welcomeBonusAmount === undefined)?"-":(d.welcomeBonusAmount+' б.'))+'</span>'+

@@ -45,16 +45,15 @@ namespace LC_Manager.Controllers
                 LCManager.Infrastructure.Response.GetClientInfoResponse clientInfoResponse = response.Content.ReadAsAsync<LCManager.Infrastructure.Response.GetClientInfoResponse>().Result;
                 if (clientInfoResponse.ErrorCode == 0)
                 {
-                    ClientInfoResponse response2 = new ClientInfoResponse();
-                    ClientInfoRequest request2 = new ClientInfoRequest
+                    CardInfoResponse response2 = new CardInfoResponse();
+                    CardStatisticsRequest request2 = new CardStatisticsRequest
                     {
-                        ClientId = Convert.ToInt32(clientInfoResponse.Id),
-                        OperatorId = JwtProps.GetOperator()
+                        Card = clientInfoResponse.Card
                     };
-                    HttpResponseMessage responseMessage2 = HttpClientService.PostAsync("api/client/GetClient", request2).Result;
+                    HttpResponseMessage responseMessage2 = HttpClientService.PostAsync("api/card/GetCard", request2).Result;
                     if (responseMessage2.IsSuccessStatusCode)
                     {
-                        response2 = responseMessage2.Content.ReadAsAsync<ClientInfoResponse>().Result;
+                        response2 = responseMessage2.Content.ReadAsAsync<CardInfoResponse>().Result;
                         if (response2.ErrorCode == 0)
                         {
                             return Json(new { data1 = clientInfoResponse, data2 = response2 });
