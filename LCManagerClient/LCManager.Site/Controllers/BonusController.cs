@@ -54,8 +54,7 @@ namespace LC_Manager.Controllers
 
                 if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
                 {
-                    request.Name = Request["columns[2][search][value]"]
-                        .Substring(1, Request["columns[2][search][value]"].Length - 2);
+                    request.Name = Request["columns[2][search][value]"];
                 }
                 if (!string.IsNullOrEmpty(Request["columns[5][search][value]"]))
                 {

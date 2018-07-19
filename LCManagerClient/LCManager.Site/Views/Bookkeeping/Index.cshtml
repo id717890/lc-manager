@@ -4,6 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles
+{
+    <style type="text/css">
+        #bookkeeping .modal_ask {
+            margin-left: 0 !important;
+        }
+
+        #bookkeeping thead tr th p {
+            margin-left: 20px !important;
+        }
+
+        #bookkeeping .modal_ask span {
+            font-family: 'a_Futurica' !important;
+            text-align: left !important;
+        }
+
+        #bookkeeping thead tr th .nice-select .list li {
+            font-size: 12px !important;
+        }
+    </style>
+}
+
 @section ContentHeaderNav
 {
     @if (ViewBag.RoleName.Contains("OperatorBonusAdd"))
@@ -27,7 +49,7 @@
 @section ContentHeader
 {
     <div class="filters">
-        <p>Показать бонусы с </p>
+        <p>Показать расчеты с </p>
         <input type="text" name=" date-item" class=" zbz-input-clearable datepicker" id="dateFrom">
         <p> по </p>
         <input type="text" name="date-item " class=" zbz-input-clearable datepicker" id="dateTo">
@@ -49,11 +71,11 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Партнер</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Выручка</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Начислено</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Списано</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Клиенты</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Партнеры. Партнеру в данном блоке отображаются все подклюенные к ПЛ точки продаж этого Партнера</span></div><p>Партнер</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается выручка (деньги в кассу) отдельно взятого подключенного Партнера к ПЛ за период. Партнеру отображается выручка (деньги в кассу) отдельной взятой точки продаж этого Партнера, подключенной к ПЛ, за период</span></div><p>Выручка</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается сумма начисленных бонусов за покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма начисленных бонусов за покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Начислено</p></th>
+                                <th><div class="modal_ask">?<span>Оператора в данном блоке отображается сумма списанных бонусов в покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма списанных бонусов в покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Списано</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается количество клиентов, которых зарегистрировал Партнер за период. Партнеру отображается количество клиентов, которых зарегистрировала каждая точка продаж этого Партнера, за период</span></div><p>Клиенты</p></th>
 
                             </tr>
                         </thead>

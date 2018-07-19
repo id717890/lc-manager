@@ -11397,8 +11397,8 @@ select {
         }
 
             #bookkeeping thead tr th p {
-                font-family: 'a_FuturicaBook regular';
-                font-size: 16px;
+                font-family: 'a_Futurica', sans-serif;
+                font-size: 16rem;
                 color: #b4bbc2;
                 font-weight: 100;
                 margin-left: 34px;

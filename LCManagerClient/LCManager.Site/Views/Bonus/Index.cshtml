@@ -230,7 +230,24 @@
                     this.api().columns([3]).every(function () {
                         addInputFilter(this);
                     });
-                    this.api().columns([2,4]).every(function () {
+                    this.api().columns([2]).every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.header()))
+                            .bind('keyup change',
+                                function () {
+                                    column.search($(this).val());
+                                    tableBonuses.draw();
+                                });
+
+                        select.append('<option value="Operator Bonus">Operator Bonus</option>');
+                        select.append('<option value="Birthday Bonus">Birthday Bonus</option>');
+                        select.append('<option value="Friend Bonus">Friend Bonus</option>');
+                        select.append('<option value="Promo Bonus">Promo Bonus</option>');
+                        select.append('<option value="Friend Cashback">Friend Cashback</option>');
+                        select.append('<option value="Welcome Bonus">Welcome Bonus</option>');
+                    });
+                    this.api().columns([4]).every(function () {
                         addSelectFilter(this);
                     });
                     this.api().columns([5, 6, 7]).every(function () {
