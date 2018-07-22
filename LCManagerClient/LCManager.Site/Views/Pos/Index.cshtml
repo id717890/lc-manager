@@ -140,6 +140,10 @@
                 });
 
             $('#shopsTable').DataTable({
+                "processing": true,
+                "language": {
+                    processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+                },
                 "ajax": "@Url.Action("GetOperatorPos", "Pos")",
                 "columns": [
                     { "data": "Check" },

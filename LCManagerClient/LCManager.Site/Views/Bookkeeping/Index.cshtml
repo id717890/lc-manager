@@ -4,57 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style type="text/css">
-    /*#clientsTable_length label {
-        display: flex;
-    }
+@section Styles
+{
+    <style type="text/css">
+        #bookkeeping .modal_ask {
+            margin-left: 0 !important;
+        }
 
-    .table-length span {
-        color: #fff !important;
-    }
+        #bookkeeping thead tr th p {
+            margin-left: 20px !important;
+        }
 
-    .table-length div {
-        cursor: pointer !important;
-        position: relative !important;
-        text-align: left !important;
-        -webkit-transition: all 0.2s ease-in-out !important;
-        transition: all 0.2s ease-in-out !important;
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
-        white-space: nowrap !important;
-        display: inline-block !important;
-        vertical-align: middle !important;
-        background-color: #58AEDC !important;
-        width: 150px !important;
-        border: none !important;
-        color: #fff !important;
-        -webkit-border-radius: 6px !important;
-        border-radius: 6px !important;
-        padding: 0px 5px 0px 15px !important;
-        height: 36px !important;
-        line-height: 36px !important;
-        font-weight: 400 !important;
-        font-family: 'a_FuturicaMedium' !important;
-        font-size: 16rem !important;
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        appearance: none !important;
-        -webkit-box-sizing: border-box !important;
-        box-sizing: border-box !important;
-        outline: none !important;
-        margin: auto 0 !important;
-    }
+        #bookkeeping .modal_ask span {
+            font-family: 'a_Futurica' !important;
+            text-align: left !important;
+            font-size: 15rem !important;
+        }
 
-    .table-length .nice-select {
-        width: 65px !important;
-        margin-top: 6px !important;
-        float: left !important;
-    }*/
-</style>
-
-
+        #bookkeeping thead tr th .nice-select .list li {
+            font-size: 12px !important;
+        }
+    </style>
+}
 
 @section ContentHeaderNav
 {
@@ -78,16 +49,8 @@
 
 @section ContentHeader
 {
-    @*<div class="client_nav">
-            @if (ViewBag.RoleName.Contains("BonusNoChequeList"))
-            {
-                <div><div>?<p>В данном разделе можно фильтровать и просматривать информацию по бонусам не относящимся к покупкам.</p></div><a href="#allbonuses" class="this-p">Все бонусы</a></div>
-            }
-            <div style="float: right"><p>Всего бонусов: <span id="bonusesCount"></span></p></div>
-        </div>*@
-
     <div class="filters">
-        <p>Показать бонусы с </p>
+        <p>Показать расчеты с </p>
         <input type="text" name=" date-item" class=" zbz-input-clearable datepicker" id="dateFrom">
         <p> по </p>
         <input type="text" name="date-item " class=" zbz-input-clearable datepicker" id="dateTo">
@@ -95,6 +58,7 @@
             <p class="clear-date" id="claerDateBonuses">Сбросить даты</p>
             <p id="claerAllFilters">Сбросить все фильтры</p>
         </div>
+        <div style="float: right"><p>Всего партнёров: <span id="bokepingcount" style="color: #00aeef;"></span></p></div>
     </div>
 }
 
@@ -108,11 +72,11 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Партнер</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Выручка</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Начислено</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Списано</p></th>
-                                <th><div class="modal_ask">?<span>123</span></div><p>Клиенты</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Партнеры. Партнеру в данном блоке отображаются все подклюенные к ПЛ точки продаж этого Партнера</span></div><p>Партнер</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается выручка (деньги в кассу) отдельно взятого подключенного Партнера к ПЛ за период. Партнеру отображается выручка (деньги в кассу) отдельной взятой точки продаж этого Партнера, подключенной к ПЛ, за период</span></div><p>Выручка</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается сумма начисленных бонусов за покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма начисленных бонусов за покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Начислено</p></th>
+                                <th><div class="modal_ask">?<span>Оператора в данном блоке отображается сумма списанных бонусов в покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма списанных бонусов в покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Списано</p></th>
+                                <th><div class="modal_ask">?<span>Оператору в данном блоке отображается количество клиентов, которых зарегистрировал Партнер за период. Партнеру отображается количество клиентов, которых зарегистрировала каждая точка продаж этого Партнера, за период</span></div><p>Клиенты</p></th>
 
                             </tr>
                         </thead>
@@ -173,21 +137,14 @@
             $("#export-bookkeeping-to-file-form").submit();
         });
 
-        //function clearDateBonuses(){
-        //    $("#dateFrom").val("").removeClass("zbz-input-clearable__x");
-        //    $("#dateTo").val("").removeClass("zbz-input-clearable__x");
-        //    tableBonuses.draw();
-        //}
-
         $(function () {
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
-                "language": {
-                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'
-                },
-
                 "processing": true,
+                "language": {
+                    processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+                },
                 "ajax":
                 {
                     method: "GET",
@@ -208,7 +165,8 @@
                 "ordering": false,
                 "lengthChange": false,
                 initComplete: function () {
-                    $(".bokepingcount").html(this.api().data().count());
+                    //$("#bokepingcount").html(this.api().data().count());
+                    $("#bokepingcount").html(tableBookkeeping.page.info().recordsTotal);
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });

@@ -106,23 +106,32 @@
                 <div class="datatables-div">
                     <table id="clients-bonuses" class="display selling hl-table w100" cellspacing="0">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th><p>Дата</p></th>
-                                <th><p>Тип бонуса</p></th>
-                                <th><p>Телефон</p></th>
-                                <th><p>Основание</p></th>
-                                <th><p>Начислено</p></th>
-                                <th><p>Списано</p></th>
-                                <th><p>Сгорело</p></th>
-                            </tr>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <p>Дата</p></th>
+                            <th>
+                                <p>Тип бонуса</p></th>
+                            <th>
+                                <p>Телефон</p></th>
+                            <th>
+                                <p>Основание</p></th>
+                            <th>
+                                <p>Начислено</p></th>
+                            <th>
+                                <p>Списано</p></th>
+                            <th>
+                                <p>Сгорело</p></th>
+                        </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                     <div class="page-navigation">
                         <div class="table__download_meu">
-                            <div>?<p style="font-family: 'a_Futurica';  text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p></div>
-                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new { id = "export-bonuses-no-cheque-to-file-form", style = "display: flex" }))
+                            <div>?
+                                <p style="font-family: 'a_Futurica'; text-align: left;">Скачать отчёт по движению бонусов не за покупки, за период, с фильтрацией.</p>
+                            </div>
+                            @using (Html.BeginForm("BonusNoChequeReport", "Bonus", FormMethod.Post, new {id = "export-bonuses-no-cheque-to-file-form", style = "display: flex"}))
                             {
                                 @Html.Hidden("bonus_from", string.Empty)
                                 @Html.Hidden("bonus_to", string.Empty)
@@ -182,7 +191,7 @@
                 "serverSide": true,
                 "processing": true,
                 "language": {
-                    processing: '<div class="wrapper-for-loading-datatable"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div> <span class="sr-only">Загрузка...</span></div>'
+                    processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
                 },
                 //"lengthChange": false,
                 "info": false,
@@ -221,7 +230,24 @@
                     this.api().columns([3]).every(function () {
                         addInputFilter(this);
                     });
-                    this.api().columns([2,4]).every(function () {
+                    this.api().columns([2]).every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.header()))
+                            .bind('keyup change',
+                                function () {
+                                    column.search($(this).val());
+                                    tableBonuses.draw();
+                                });
+
+                        select.append('<option value="Operator Bonus">Operator Bonus</option>');
+                        select.append('<option value="Birthday Bonus">Birthday Bonus</option>');
+                        select.append('<option value="Friend Bonus">Friend Bonus</option>');
+                        select.append('<option value="Promo Bonus">Promo Bonus</option>');
+                        select.append('<option value="Friend Cashback">Friend Cashback</option>');
+                        select.append('<option value="Welcome Bonus">Welcome Bonus</option>');
+                    });
+                    this.api().columns([4]).every(function () {
                         addSelectFilter(this);
                     });
                     this.api().columns([5, 6, 7]).every(function () {
