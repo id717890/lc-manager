@@ -18,6 +18,7 @@ Create PROCEDURE [dbo].[OperatorBookkeepingPaging]
 		@f_date_start DATE = '1900-01-01',
 		@f_date_end DATE = '2900-01-01',
 		@f_name NVARCHAR(250) = '',
+		@pos_name NVARCHAR(250) = '',
 		@f_added_more INT = 0,
 		@f_added_less INT = 999999999,
 		@f_redeemed_more INT = 0,
@@ -151,43 +152,43 @@ Create PROCEDURE [dbo].[OperatorBookkeepingPaging]
 					JOIN partner p ON p.id=r.partner
 					join pos pos on pos.id = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @f_date_start, @f_date_end)) res 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @f_date_start, @f_date_end)) res 
 						on res.partner = r.partner and res.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m1, @m2)) 
+					left join (select * from select_by_time_period(@operator, @f_name, @pos_name,@m1, @m2)) 
 						Jan on Jan.partner = r.partner and Jan.pos = r.pos
 		
-					left join (select * from select_by_time_period(@operator, @f_name, @m2, @m3)) Feb 
+					left join (select * from select_by_time_period(@operator, @f_name, @pos_name,@m2, @m3)) Feb 
 						on Feb.partner = r.partner and Feb.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m3, @m4)) Mar 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m3, @m4)) Mar 
 						on Mar.partner = r.partner and Mar.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m4, @m5)) Apr 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m4, @m5)) Apr 
 						on Apr.partner = r.partner and Apr.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m5, @m6)) May 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m5, @m6)) May 
 						on May.partner = r.partner and May.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m6, @m7)) Jun 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m6, @m7)) Jun 
 						on Jun.partner = r.partner and Jun.pos = r.pos
 					
-					left join (select * from select_by_time_period(@operator, @f_name, @m7, @m8)) Jul 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m7, @m8)) Jul 
 						on Jul.partner = r.partner and Jul.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m8, @m9)) Aug 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m8, @m9)) Aug 
 						on Aug.partner = r.partner and Aug.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m9, @m10)) Sep 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m9, @m10)) Sep 
 						on Sep.partner = r.partner and Sep.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m10, @m11)) Oct 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m10, @m11)) Oct 
 						on Oct.partner = r.partner and Oct.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m11, @m12)) Nov 
+					left join (select * from select_by_time_period(@operator, @f_name,@pos_name, @m11, @m12)) Nov 
 						on Nov.partner = r.partner and Nov.pos = r.pos
 
-					left join (select * from select_by_time_period(@operator, @f_name, @m12, @m13)) Dec 
+					left join (select * from select_by_time_period(@operator, @f_name, @pos_name,@m12, @m13)) Dec 
 						on Dec.partner = r.partner and Dec.pos = r.pos
 
 				
@@ -196,6 +197,7 @@ Create PROCEDURE [dbo].[OperatorBookkeepingPaging]
 						AND r.pos IS NOT NULL 
 						and pos.shown = 1
 						AND p.name LIKE '%'+@f_name+'%'
+						AND pos.name LIKE '%'+@pos_name+'%'
 						AND CAST(COALESCE(res.gain,0) AS BIGINT)>=@f_buy_more AND CAST(COALESCE(res.gain,0) AS BIGINT)<@f_buy_less
 						AND CAST(COALESCE(res.added,0) AS BIGINT)>=@f_added_more AND CAST(COALESCE(res.added,0) AS BIGINT)<@f_added_less 
 						AND	CAST(COALESCE(res.redeemed,0) AS BIGINT)>=@f_redeemed_more AND CAST(COALESCE(res.redeemed,0) AS BIGINT)<@f_redeemed_less

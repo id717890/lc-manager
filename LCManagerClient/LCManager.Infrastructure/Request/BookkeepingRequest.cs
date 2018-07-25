@@ -14,6 +14,7 @@ namespace LCManager.Infrastructure.Request
         public string DateStart { get; set; }
         public string DateEnd { get; set; }
         public string Name { get; set; }
+        public string PosName { get; set; }
         public string PurchasesMore { get; set; }
         public string PurchasesLess { get; set; }
         public string AddedMore { get; set; }

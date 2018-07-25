@@ -5,7 +5,7 @@ IF EXISTS (
     DROP FUNCTION SelectBookkeepingByTimePeriod
 GO
 
-CREATE function SelectBookkeepingByTimePeriod (@operator INT, @f_name NVARCHAR(10), @f_date_start datetime, @f_date_end datetime)
+CREATE function SelectBookkeepingByTimePeriod (@operator INT, @f_name NVARCHAR(10), @pos_name NVARCHAR(50), @f_date_start datetime, @f_date_end datetime)
 RETURNS @rtnTable TABLE 
 (
     partner int NOT NULL,
@@ -33,6 +33,7 @@ BEGIN
 		and pos.shown = 1
 		and r.operator = @operator
 		AND p.name LIKE '%'+@f_name+'%'
+		AND pos.name LIKE '%'+@f_name+'%'
 		AND r.date>=@f_date_start AND r.date<@f_date_end
 		group by r.partner,pos
 	return

@@ -41,34 +41,44 @@ namespace LC_Manager.Controllers
             try { request.Pos = JwtProps.GetPos(); } catch { }
             try
             {
-                if(!string.IsNullOrEmpty(Request["columns[1][search][value]"]))
-                request.Name = Request["columns[1][search][value]"];
+                if (!string.IsNullOrEmpty(Request["columns[1][search][value]"]))
+                    request.Name = Request["columns[1][search][value]"];
                 request.DateStart = Request["date_from"];
                 request.DateEnd = Request["date_to"];
                 request.Page = Convert.ToInt64(param.start);
                 request.PageSize = Convert.ToInt64(param.length);
 
-                if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
+                var i = 0;
+                if (request.Operator > 0 && request.Partner == 0)
                 {
-                    var values = Request["columns[2][search][value]"].Split('-');
+                    i = 1;
+                    if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
+                    {
+                        request.PosName = Request["columns[2][search][value]"];
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(Request["columns[" + (2 + i) + "][search][value]"]))
+                {
+                    var values = Request["columns[" + (2 + i) + "][search][value]"].Split('-');
                     try { request.PurchasesMore = values[0]; } catch { };
                     try { request.PurchasesLess = values[1]; } catch { };
                 }
-                if (!string.IsNullOrEmpty(Request["columns[3][search][value]"]))
+                if (!string.IsNullOrEmpty(Request["columns[" + (3 + i) + "][search][value]"]))
                 {
-                    var values = Request["columns[3][search][value]"].Split('-');
+                    var values = Request["columns[" + (3 + i) + "][search][value]"].Split('-');
                     try { request.AddedMore = values[0]; } catch { };
                     try { request.AddedLess = values[1]; } catch { };
                 }
-                if (!string.IsNullOrEmpty(Request["columns[4][search][value]"]))
+                if (!string.IsNullOrEmpty(Request["columns[" + (4 + i) + "][search][value]"]))
                 {
-                    var values = Request["columns[4][search][value]"].Split('-');
+                    var values = Request["columns[" + (4 + i) + "][search][value]"].Split('-');
                     try { request.RedeemedMore = values[0]; } catch { };
                     try { request.RedeemedLess = values[1]; } catch { };
                 }
-                if (!string.IsNullOrEmpty(Request["columns[5][search][value]"]))
+                if (!string.IsNullOrEmpty(Request["columns[" + (5 + i) + "][search][value]"]))
                 {
-                    var values = Request["columns[5][search][value]"].Split('-');
+                    var values = Request["columns[" + (5 + i) + "][search][value]"].Split('-');
                     try { request.ClientsMore = values[0]; } catch { };
                     try { request.ClientsLess = values[1]; } catch { };
                 }

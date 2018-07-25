@@ -200,7 +200,12 @@
 
                     @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
                     {
-                        <text> i = 1; </text>
+                        <text> 
+                    i = 1; 
+                            this.api().columns([2]).every(function () {
+                                addInputFilter(this);
+                            });
+                        </text>
                     }
 
 
