@@ -1,4 +1,5 @@
-﻿
+﻿@using LCManager.JWT
+
 @{
     ViewBag.Title = "Сверка";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -73,6 +74,17 @@
                             <tr>
                                 <th></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Партнеры. Партнеру в данном блоке отображаются все подклюенные к ПЛ точки продаж этого Партнера</span></div><p>Партнер</p></th>
+                                
+
+
+                                @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+                                {
+                                    <th>
+                                        <div class="modal_ask">?<span></span>
+                                        </div>
+                                        <p>Точка продаж</p></th>
+                                }
+                                
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается выручка (деньги в кассу) отдельно взятого подключенного Партнера к ПЛ за период. Партнеру отображается выручка (деньги в кассу) отдельной взятой точки продаж этого Партнера, подключенной к ПЛ, за период</span></div><p>Выручка</p></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается сумма начисленных бонусов за покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма начисленных бонусов за покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Начислено</p></th>
                                 <th><div class="modal_ask">?<span>Оператора в данном блоке отображается сумма списанных бонусов в покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма списанных бонусов в покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Списано</p></th>
@@ -138,6 +150,27 @@
         });
 
         $(function () {
+
+            var columns = [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": '<img src="/img/tableiconopen.png">'
+                },
+                { "data": "caption" },
+                { "data": "purchases" },
+                { "data": "added" },
+                { "data": "redeemed" },
+                { "data": "clients" }
+            ];
+
+             
+            @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+            {
+                <text>columns.splice(2, 0, { "data": "posname" }); </text>
+            }
+
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
@@ -154,14 +187,7 @@
                         params.date_to = $("#dateTo").val();
                     }
                 },
-                "columns": [
-                    { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
-                    { "data": "caption" },
-                    { "data": "purchases" },
-                    { "data": "added" },
-                    { "data": "redeemed" },
-                    { "data": "clients" }
-                ],
+                "columns": columns,
                 "ordering": false,
                 "lengthChange": false,
                 initComplete: function () {
@@ -170,7 +196,15 @@
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });
-                    this.api().columns([2]).every(function () {
+                    var i = 0;
+
+                    @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+                    {
+                        <text> i = 1; </text>
+                    }
+
+
+                    this.api().columns([2 + i]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
@@ -187,7 +221,7 @@
                         select.append('<option value="500000-1000000">500 т.р. - 1 млн.р.</option>');
                         select.append('<option value="1000000-10000000">1 млн.р. - 10 млн.р.</option>');
                     });
-                    this.api().columns([3, 4, 5]).every(function () {
+                    this.api().columns([3 + i, 4 + i, 5 + i]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
