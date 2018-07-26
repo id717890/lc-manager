@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Сверка";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool IsOperator = JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0 && JwtProps.GetPos() == 0;
+
 }
 
 @section Styles
@@ -74,17 +77,19 @@
                             <tr>
                                 <th></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Партнеры. Партнеру в данном блоке отображаются все подклюенные к ПЛ точки продаж этого Партнера</span></div><p>Партнер</p></th>
-                                
 
 
-                                @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+
+                                @if (IsOperator)
                                 {
                                     <th>
-                                        <div class="modal_ask">?<span></span>
+                                        <div class="modal_ask">
+                                            ?<span></span>
                                         </div>
-                                        <p>Точка продаж</p></th>
+                                        <p>Точка продаж</p>
+                                    </th>
                                 }
-                                
+
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается выручка (деньги в кассу) отдельно взятого подключенного Партнера к ПЛ за период. Партнеру отображается выручка (деньги в кассу) отдельной взятой точки продаж этого Партнера, подключенной к ПЛ, за период</span></div><p>Выручка</p></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается сумма начисленных бонусов за покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма начисленных бонусов за покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Начислено</p></th>
                                 <th><div class="modal_ask">?<span>Оператора в данном блоке отображается сумма списанных бонусов в покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма списанных бонусов в покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Списано</p></th>
@@ -165,8 +170,8 @@
                 { "data": "clients" }
             ];
 
-             
-            @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+
+            @if (IsOperator)
             {
                 <text>columns.splice(2, 0, { "data": "posname" }); </text>
             }
@@ -198,10 +203,10 @@
                     });
                     var i = 0;
 
-                    @if (JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0)
+                    @if (IsOperator)
                     {
-                        <text> 
-                    i = 1; 
+                        <text>
+                            i = 1;
                             this.api().columns([2]).every(function () {
                                 addInputFilter(this);
                             });

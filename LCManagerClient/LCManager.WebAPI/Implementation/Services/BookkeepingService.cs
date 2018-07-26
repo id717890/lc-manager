@@ -35,7 +35,7 @@ namespace LCManagerPartner.Implementation.Services
                 _cnn.Open();
                 var cmd = _cnn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = request.Operator > 0 && request.Partner == 0 ? "OperatorBookkeepingPaging" : "BookkeepingPaging";
+                cmd.CommandText = request.IsOperator ? "OperatorBookkeepingPaging" : "BookkeepingPaging";
                 cmd.CommandTimeout = 300;
 
                 if (request.Operator > 0) cmd.Parameters.AddWithValue("@operator", request.Operator);
@@ -76,7 +76,7 @@ namespace LCManagerPartner.Implementation.Services
 
                 //Фильтр по названию
                 if (!string.IsNullOrEmpty(request.Name)) cmd.Parameters.AddWithValue("@f_name", request.Name);
-                if (cmd.CommandText == "OperatorBookkeepingPaging" && !string.IsNullOrEmpty(request.PosName)) cmd.Parameters.AddWithValue("@pos_name", request.PosName);
+                if (request.IsOperator && !string.IsNullOrEmpty(request.PosName)) cmd.Parameters.AddWithValue("@pos_name", request.PosName);
                 //Фильтр по Покупкам
                 if (!string.IsNullOrEmpty(request.PurchasesMore)) cmd.Parameters.AddWithValue("@f_buy_more", Convert.ToInt64(request.PurchasesMore));
                 if (!string.IsNullOrEmpty(request.PurchasesLess)) cmd.Parameters.AddWithValue("@f_buy_less", Convert.ToInt64(request.PurchasesLess));

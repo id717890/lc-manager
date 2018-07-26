@@ -49,7 +49,7 @@ namespace LC_Manager.Controllers
                 request.PageSize = Convert.ToInt64(param.length);
 
                 var i = 0;
-                if (request.Operator > 0 && request.Partner == 0)
+                if (request.IsOperator)
                 {
                     i = 1;
                     if (!string.IsNullOrEmpty(Request["columns[2][search][value]"]))
