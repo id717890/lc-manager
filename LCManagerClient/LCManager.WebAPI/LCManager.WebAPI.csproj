@@ -355,6 +355,8 @@
     <Content Include="SQL\20180328\LoyCon Update 3.80 20180328 Yusupov.sql" />
     <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.sql" />
     <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.txt" />
+    <Content Include="SQL\20180406\OperatorBookkeepingPaging.sql" />
+    <Content Include="SQL\20180406\SelectBookkeepingByTimePeriod.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
