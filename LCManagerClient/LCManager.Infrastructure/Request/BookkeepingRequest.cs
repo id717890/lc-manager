@@ -4,6 +4,10 @@ namespace LCManager.Infrastructure.Request
 {
     public class BookkeepingRequest
     {
+        public bool IsOperator => Operator > 0 && Partner == 0 && Pos == 0;
+        public bool IsPartner => Operator > 0 && Partner > 0 && Pos == 0;
+        public bool IsPos => Operator > 0 && Partner > 0 && Pos > 0;
+
         public Int16 Operator { get; set; }
         public Int16 Partner { get; set; }
         public Int16 Pos { get; set; }

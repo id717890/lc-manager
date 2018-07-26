@@ -194,6 +194,12 @@ namespace LCManagerPartner.Implementation.Services
         /// <returns></returns>
         public ReportResponse BookkeepingReport(BookkeepingRequest request)
         {
+
+            if (request.IsOperator)
+            {
+                return BookkeepingOperatorReport(request);
+            }
+
             var response = new ReportResponse();
             try
             {
@@ -256,6 +262,88 @@ namespace LCManagerPartner.Implementation.Services
                         worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
                     }
                     worksheet.Cells["A1:E" + cellNum].Style.Font.Size = 10;
+                    response.Report = package.GetAsByteArray();
+                }
+                return response;
+            }
+            catch (Exception e)
+            {
+                response.ErrorCode = 10;
+                response.Message = e.Message;
+            }
+            return response;
+        }
+
+        private ReportResponse BookkeepingOperatorReport(BookkeepingRequest request)
+        {
+            var response = new ReportResponse();
+            try
+            {
+                var data = GetAllBookkeeping(request);
+                using (var package = new ExcelPackage())
+                {
+                    var workbook = package.Workbook;
+                    var workSheetName = $"с {request.DateStart} по {request.DateEnd}";
+                    var worksheet = workbook.Worksheets.Add(workSheetName);
+                    worksheet.View.FreezePanes(2, 1);
+                    worksheet.Cells["A1"].Value = "Партнер";
+                    worksheet.Cells["A1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["B1"].Value = "Точка продаж";
+                    worksheet.Cells["B1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["C1"].Value = "Выручка";
+                    worksheet.Cells["C1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["D1"].Value = "Начислено";
+                    worksheet.Cells["D1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["E1"].Value = "Списано";
+                    worksheet.Cells["E1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                    worksheet.Cells["F1"].Value = "Клиентов";
+                    worksheet.Cells["F1"].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                    worksheet.Cells["A1:F1"].AutoFilter = true;
+                    worksheet.Cells["A1:F1"].Style.WrapText = true;
+                    worksheet.Cells["A1:F1"].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    worksheet.Cells["A1:F1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    var color = ColorTranslator.FromHtml("#0070C0");
+                    worksheet.Cells["A1:F1"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Cells["A1:F1"].Style.Fill.BackgroundColor.SetColor(color);
+                    worksheet.Cells["A1:F1"].Style.Font.Color.SetColor(ColorTranslator.FromHtml("#ffffff"));
+                    worksheet.Cells["A1:F1"].Style.Font.Size = 11;
+
+                    for (var i = 1; i < 7; i++)
+                    {
+                        worksheet.Column(i).Width = 20;
+                    }
+
+                    var row = 1;
+                    var cellNum = string.Empty;
+                    foreach (var item in data.Bookkeepings)
+                    {
+                        row++;
+
+                        cellNum = row.ToString();
+                        worksheet.Cells["A" + cellNum].Value = item.Caption;
+                        worksheet.Cells["A" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                        worksheet.Cells["B" + cellNum].Value = item.PosName;
+                        worksheet.Cells["B" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+                        worksheet.Cells["C" + cellNum].Value = item.Gain;
+                        worksheet.Cells["C" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                        worksheet.Cells["C" + cellNum].Style.Numberformat.Format = "0";
+
+                        worksheet.Cells["D" + cellNum].Value = item.Added;
+                        worksheet.Cells["D" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                        worksheet.Cells["D" + cellNum].Style.Numberformat.Format = "0";
+
+                        worksheet.Cells["E" + cellNum].Value = item.Redeemed;
+                        worksheet.Cells["E" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                        worksheet.Cells["E" + cellNum].Style.Numberformat.Format = "0";
+
+                        worksheet.Cells["F" + cellNum].Value = item.Clients;
+                        worksheet.Cells["F" + cellNum].Style.Border.BorderAround(ExcelBorderStyle.Hair);
+                        worksheet.Cells["F" + cellNum].Style.Numberformat.Format = "0";
+                    }
+                    worksheet.Cells["A1:F" + cellNum].Style.Font.Size = 10;
                     response.Report = package.GetAsByteArray();
                 }
                 return response;
