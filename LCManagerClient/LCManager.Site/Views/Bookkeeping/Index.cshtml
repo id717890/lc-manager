@@ -72,7 +72,7 @@
         {
             <div id="allbonuses" class="@(ViewBag.RoleName.Contains("Total") ? "active" : "")" style="margin-bottom: 100px">
                 <div class="datatables-div">
-                    <table id="bookkeeping" class="display selling hl-table w100" cellspacing="0" width="100%">
+                    <table id="bookkeeping" class="@(IsOperator?"operator":"") display selling hl-table w100" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th></th>
