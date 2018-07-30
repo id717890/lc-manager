@@ -2111,9 +2111,17 @@
                 {
                     partner = JwtProps.GetDefaultPartner();
                 }
+
+                string posCode = JwtProps.GetPosCode();
+                if (String.IsNullOrEmpty(posCode))
+                {
+                    posCode = JwtProps.GetDefaultPosCode();
+                }
+
                 ClientImportRequest importRequest = new ClientImportRequest();
                 importRequest.Operator = JwtProps.GetOperator();
                 importRequest.Partner = partner;
+                importRequest.PosCode = posCode;
                 using (var binaryReader = new BinaryReader(Request.Files[0].InputStream))
                 {
                     importRequest.ExcelFile = binaryReader.ReadBytes(Request.Files[0].ContentLength);

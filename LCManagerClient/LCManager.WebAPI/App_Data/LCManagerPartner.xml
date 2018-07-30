@@ -3861,6 +3861,11 @@
             идентификатор Оператора программы лояльности
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.ClientImportRequest.PosCode">
+            <summary>
+            Код Торговой точки
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.ClientImportResponse.Imported">
             <summary>
             импортировано
