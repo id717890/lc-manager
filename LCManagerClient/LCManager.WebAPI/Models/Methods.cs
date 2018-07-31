@@ -3740,11 +3740,21 @@ namespace LCManagerPartner.Models
 
                 SqlCommand cmd = cnn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "BonusAdd";
+                cmd.CommandText = "BonusImport";
+
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+                cmd.Parameters.AddWithValue("@phone", b.Phone);
+                cmd.Parameters.AddWithValue("@card", b.Card);
+                cmd.Parameters.AddWithValue("@sourcename", b.BonusType);
+                cmd.Parameters.AddWithValue("@date", b.Date);
+                cmd.Parameters.AddWithValue("@AccuredCount", b.AccuredCount);
+                cmd.Parameters.AddWithValue("@BurnedCount", b.WrittenOffCount);
+                cmd.Parameters.AddWithValue("@WrittenOffCount", b.BurnedCount);
 
                 try
                 {
-                    //cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {

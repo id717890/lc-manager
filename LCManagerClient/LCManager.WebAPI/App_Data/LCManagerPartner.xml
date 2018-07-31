@@ -1078,6 +1078,16 @@
             Импорт клиентской базы
             </summary>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.BonusImport(LCManagerPartner.Models.BonusImportRequest)">
+            <summary>
+            Импорт бонусов
+            </summary>
+        </member>
+        <member name="M:LCManagerPartner.Controllers.ValuesController.CheckImport(LCManagerPartner.Models.CheckImportRequest)">
+            <summary>
+            Импорт чеков
+            </summary>
+        </member>
         <member name="M:LCManagerPartner.Controllers.ValuesController.Merge(LCManagerPartner.Models.MergeRequest)">
             <summary>
             Замена карты клиента
@@ -3892,6 +3902,146 @@
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.ClientImportResponse.Message">
+            <summary>
+            сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.Phone">
+            <summary>
+            Телефон
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.Card">
+            <summary>
+            Номер кары
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.BonusType">
+            <summary>
+            Тип бонуса
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.Date">
+            <summary>
+            Дата
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.AccuredCount">
+            <summary>
+            Начислено
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.WrittenOffCount">
+            <summary>
+            Списано
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImport.BurnedCount">
+            <summary>
+            Сгорело
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportRequest.Operator">
+            <summary>
+            идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportResponse.Successful">
+            <summary>
+            успешно
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportResponse.ErrorCode">
+            <summary>
+            код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.BonusImportResponse.Message">
+            <summary>
+            сообщение об ошибке
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.Phone">
+            <summary>
+            Телефон
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.Card">
+            <summary>
+            Номер кары
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.Address">
+            <summary>
+            Торговая точка
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.Operation">
+            <summary>
+            Операция (0 - Возврат, 1 - Покупка)
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.Date">
+            <summary>
+            Дата операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.OpertionSum">
+            <summary>
+            Сумма операции
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.CashSum">
+            <summary>
+            Деньги в кассу
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.AccuredCount">
+            <summary>
+            Начислено бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImport.WrittenOffCount">
+            <summary>
+            Списано бонусов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportRequest.ExcelFile">
+            <summary>
+            файл базы
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportRequest.Partner">
+            <summary>
+            идентификатор Партнера программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportRequest.Operator">
+            <summary>
+            идентификатор Оператора программы лояльности
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportResponse.Successful">
+            <summary>
+            успешно
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportResponse.ErrorCode">
+            <summary>
+            код ошибки
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.CheckImportResponse.Message">
             <summary>
             сообщение об ошибке
             </summary>
