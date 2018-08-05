@@ -3496,31 +3496,55 @@ namespace LCManagerPartner.Models
 
                 SqlCommand cmd = cnn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "ClientCreate";
+                if (c.NewClient == true)
+                {
+                    cmd.CommandText = "ClientCreate";
+                }
+                else
+                {
+                    cmd.CommandText = "ClientImport";
+                    cmd.Parameters.AddWithValue("@address", c.Address);
+                }
+                
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+                cmd.Parameters.AddWithValue("@poscode", request.PosCode);
+                cmd.Parameters.AddWithValue("@phone", c.Phone);
+                cmd.Parameters.AddWithValue("@allowsms", c.AllowSms);
+                cmd.Parameters.AddWithValue("@allowemail", c.AllowEmail);
+                cmd.Parameters.AddWithValue("@name", c.Name);
+                cmd.Parameters.AddWithValue("@surname", c.Surname);
+                cmd.Parameters.AddWithValue("@patronymic", c.Patronymic);
+                cmd.Parameters.AddWithValue("@email", c.Email);
+                cmd.Parameters.AddWithValue("@birthdate", c.Birthdate);
+                cmd.Parameters.AddWithValue("@gender", c.Gender);                
+                cmd.Parameters.AddWithValue("@card", c.Card);
 
-                //cmd.Parameters.AddWithValue("@partner", request.Partner);
-                //cmd.Parameters.AddWithValue("@operator", request.Operator);
-                //cmd.Parameters.AddWithValue("@poscode", request.PosCode);
-                //cmd.Parameters.AddWithValue("@phone", c.Phone);
-                //cmd.Parameters.AddWithValue("@allowsms", c.AllowSms);
-                //cmd.Parameters.AddWithValue("@allowemail", c.AllowEmail);
-                //cmd.Parameters.AddWithValue("@name", c.Name);
-                //cmd.Parameters.AddWithValue("@surname", c.Surname);
-                //cmd.Parameters.AddWithValue("@patronymic", c.Patronymic);
-                //cmd.Parameters.AddWithValue("@email", c.Email);
-                //cmd.Parameters.AddWithValue("@birthdate", c.Birthdate);
-                //cmd.Parameters.AddWithValue("@gender", c.Gender);
-                //cmd.Parameters.AddWithValue("@address", c.Address);
-                //cmd.Parameters.AddWithValue("@card", c.Card);
-                //cmd.Parameters.AddWithValue("@newclient", c.NewClient);
+                cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
+                cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
 
+                cmd.Parameters.Add("@client", SqlDbType.Int);
+                cmd.Parameters["@client"].Direction = ParameterDirection.Output;
+
+                cmd.Parameters.Add("@result", SqlDbType.Int);
+                cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                
                 try
                 {
-                    //cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
                     retValue.Message = ex.Message;
+                    return retValue;
+                }
+
+                int sqlErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                string sqlError = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                if (sqlErrorCode != 0 && !String.IsNullOrEmpty(sqlError))
+                {
+                    retValue.ErrorCode = sqlErrorCode;
+                    retValue.Message = sqlError;
                     return retValue;
                 }
 
