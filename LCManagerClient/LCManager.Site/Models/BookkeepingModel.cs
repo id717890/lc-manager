@@ -6,6 +6,7 @@ namespace LC_Manager.Models
     {
         public long id { get; set; }
         public string caption { get; set; }
+        public string posname { get; set; }
         public string purchases { get; set; }
         public string added { get; set; }
         public string redeemed { get; set; }
