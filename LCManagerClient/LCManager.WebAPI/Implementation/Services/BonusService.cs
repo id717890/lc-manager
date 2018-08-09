@@ -1,8 +1,6 @@
 ﻿using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using LCManager.Infrastructure.Request;
-using LCManager.Infrastructure.Response;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -13,7 +11,6 @@ namespace LCManagerPartner.Implementation.Services
     using System.Configuration;
     using System.Data;
     using System.Data.SqlClient;
-    using Request;
     using Response;
     using Models;
     using Serilog;

@@ -9,6 +9,7 @@ using LCManager.JWT;
 using LC_Manager.Models;
 using LCManager.Infrastructure.Response;
 using LCManager.Infrastructure.Request;
+using Site.Infrastrucure;
 
 namespace LC_Manager.Controllers
 {
@@ -23,9 +24,17 @@ namespace LC_Manager.Controllers
         [AuthorizeJwt]
         public ActionResult SaveClientData(ClientChangeModel model)
         {
+            var t1 = CheckPhoneOrCardNumberIsFree(model.Phone, string.Empty);
+            var t2 = CheckPhoneOrCardNumberIsFree(string.Empty, model.Card);
+            var t3 = CheckEmailIsFree(model.Email);
             return null;
         }
 
+        /// <summary>
+        /// Получает инфу по клиенту для карточки редактирования
+        /// </summary>
+        /// <param name="card"></param>
+        /// <returns></returns>
         [AuthorizeJwt]
         public JsonResult GetClientInfo(string card)
         {
@@ -63,6 +72,58 @@ namespace LC_Manager.Controllers
                 }
             }
             return Json(new DefaultResponse { ErrorCode = 11, Message = "Ошибка запроса к ClientInfo" });
+        }
+
+        private bool CheckPhoneOrCardNumberIsFree(string phone, string card)
+        {
+            if (string.IsNullOrEmpty(phone) && string.IsNullOrEmpty(card)) return false;
+            LCManager.Infrastructure.Request.GetClientInfoRequest request = new LCManager.Infrastructure.Request.GetClientInfoRequest();
+            if (!string.IsNullOrEmpty(card))
+            {
+                try { request.Card = Convert.ToInt64(card); } catch { }
+            }
+            if (!string.IsNullOrEmpty(phone))
+            {
+                try { request.Phone = Convert.ToInt64(PhoneService.GetPhoneFromStr(phone)); } catch { }
+            }
+            try { request.Operator = Convert.ToInt16(JwtProps.GetOperator()); } catch { }
+            HttpResponseMessage response = HttpClientService.PostAsync("api/values/ClientInfo", request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                LCManager.Infrastructure.Response.GetClientInfoResponse data = response.Content.ReadAsAsync<LCManager.Infrastructure.Response.GetClientInfoResponse>().Result;
+                if (data.ErrorCode == 0)
+                {
+                    return
+                        string.IsNullOrEmpty(data.Name)
+                        && string.IsNullOrEmpty(data.Surname)
+                        && string.IsNullOrEmpty(data.Patronymic)
+                        && data.Id == 0
+                        && data.Card == 0;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private bool CheckEmailIsFree(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return false;
+            ClientEmailIsFreeRequest request = new ClientEmailIsFreeRequest();
+            if (!string.IsNullOrEmpty(email))
+            {
+                try { request.Email= email; } catch { }
+            }
+            try { request.Operator = Convert.ToInt16(JwtProps.GetOperator()); } catch { }
+            HttpResponseMessage response = HttpClientService.PostAsync("api/client/CheckEmailForFree", request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                ClientEmailIsFreeResponse data = response.Content.ReadAsAsync<ClientEmailIsFreeResponse>().Result;
+                if (string.IsNullOrEmpty(data.Message))
+                {
+                    return data.IsFree;
+                }
+            }
+            return false;
         }
     }
 }

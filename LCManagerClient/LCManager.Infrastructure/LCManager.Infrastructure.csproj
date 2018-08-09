@@ -65,6 +65,7 @@
     <Compile Include="Request\ChequesRequest.cs" />
     <Compile Include="Request\ClientBonusesRequest.cs" />
     <Compile Include="Request\ClientCreateRequest.cs" />
+    <Compile Include="Request\ClientEmailIsFreeRequest.cs" />
     <Compile Include="Request\ClientInfoRequest.cs" />
     <Compile Include="Request\ClientPasswordChangeRequest.cs" />
     <Compile Include="Request\GetClientInfoRequest.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Response\ChequesResponse.cs" />
     <Compile Include="Response\ClientBonusesResponse.cs" />
     <Compile Include="Response\ClientCreateResponse.cs" />
+    <Compile Include="Response\ClientEmailIsFreeResponse.cs" />
     <Compile Include="Response\ClientInfoResponse.cs" />
     <Compile Include="Response\DefaultResponse.cs" />
     <Compile Include="Response\GetClientInfoResponse.cs" />

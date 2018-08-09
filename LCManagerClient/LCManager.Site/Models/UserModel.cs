@@ -103,6 +103,7 @@ namespace LC_Manager.Models
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string Phone { get; set; }
+        public string Card { get; set; }
         public string Email { get; set; }
         public string Promocode { get; set; }
         public string Birthdate { get; set; }

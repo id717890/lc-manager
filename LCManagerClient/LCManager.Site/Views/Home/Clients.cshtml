@@ -721,6 +721,14 @@
                 <option value="2">Ограничена</option>
             </select>
         </div>
+        <div class="client_body_check">
+            <input type="checkbox" class="checkbox" name="sms" id="AllowSms">
+            <label for="AllowSms">Уведомлять по SMS</label>
+            <input type="checkbox" class="checkbox" name="emails" id="AllowEmail">
+            <label for="AllowEmail">Уведомлять по E-mail</label>
+            <input type="checkbox" class="checkbox" name="pushes" id="AllowPush">
+            <label for="AllowPush">Push уведомления</label>
+        </div>
 
         <a href="#" id="save-client-data">SAVE</a>
     </div>
@@ -741,7 +749,9 @@
                 data.LastName = $(".modal_client_change_form .last-name").val();
                 data.MiddleName = $(".modal_client_change_form .middle-name").val();
                 data.Sex = $(".select.gender").next(".nice-select.gender").find("ul.list li.selected").data("value");
-
+                data.Phone = $(".modal_client_change_form .phone").val();
+                data.Card = $(".modal_client_change_form .card").val();
+                data.Email = $(".modal_client_change_form .email").val();
                 
 
                 //data.Birthdate = $("#client-birthday").val();
@@ -816,9 +826,18 @@
                             $(".select.status-card").next(".nice-select.status-card").find("ul.list li").removeClass("selected");
                             $(".select.status-card").next(".nice-select.status-card").find("ul.list li[data-value='" + statusCode + "']").addClass("selected");
 
+                            if (response.data1.AllowSms) {
+                                $(".modal_client_change_form #AllowSms").attr("checked", "checked");
+                            }
+                            if (response.data1.AllowEmail) {
+                                $(".modal_client_change_form #AllowEmail").attr("checked", "checked");
+                            }
+                            if (response.data1.AllowPush) {
+                                $(".modal_client_change_form #AllowPush").attr("checked", "checked");
+                            }
 
                             window.onclick = function (event) {
-                                if (event.target == window) {
+                                if (event.target === window) {
                                     window.style.display = "none";
                                 }
                             }

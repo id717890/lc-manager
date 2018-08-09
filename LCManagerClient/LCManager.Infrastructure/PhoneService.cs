@@ -4,7 +4,7 @@
     {
         public static long GetPhoneFromStr(string phone)
         {
-            if (long.TryParse(phone.Replace("+7", "").Replace("-", "").Replace("(", "").Replace(")", ""), out var number))
+            if (long.TryParse(phone.Replace("+7", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace(" ",""), out var number))
             {
                 return number;
             }
