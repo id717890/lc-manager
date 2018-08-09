@@ -3551,6 +3551,11 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetClientInfoResponse.AllowPush">
+            <summary>
+            Прислыать push уведомления?
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetClientInfoArrayResponse.ErrorCode">
             <summary>
             код ошибки

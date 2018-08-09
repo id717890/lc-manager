@@ -2449,6 +2449,10 @@ namespace LCManagerPartner.Models
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
         public string Promocode { get; set; }
+        /// <summary>
+        /// Прислыать push уведомления?
+        /// </summary>
+        public bool AllowPush { get; set; }
     }
 
     public class ServerGetClientInfoResponse
@@ -2507,6 +2511,7 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(16)) returnValue.EmailValidated = reader.GetBoolean(16);
                     if (!reader.IsDBNull(17)) returnValue.RegDate = reader.GetDateTime(17);
                     if (!reader.IsDBNull(18)) returnValue.Promocode = reader.GetString(18);
+                    if (!reader.IsDBNull(19)) returnValue.AllowPush = reader.GetBoolean(19);
                 }
 
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
