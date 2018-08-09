@@ -1,7 +1,11 @@
-﻿
+﻿@using LCManager.JWT
+
 @{
     ViewBag.Title = "Сверка";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool IsOperator = JwtProps.GetOperator() > 0 && JwtProps.GetPartner() == 0 && JwtProps.GetPos() == 0;
+
 }
 
 @section Styles
@@ -68,11 +72,22 @@
         {
             <div id="allbonuses" class="@(ViewBag.RoleName.Contains("Total") ? "active" : "")" style="margin-bottom: 100px">
                 <div class="datatables-div">
-                    <table id="bookkeeping" class="display selling hl-table w100" cellspacing="0" width="100%">
+                    <table id="bookkeeping" class="@(IsOperator?"operator":"") display selling hl-table w100" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Партнеры. Партнеру в данном блоке отображаются все подклюенные к ПЛ точки продаж этого Партнера</span></div><p>Партнер</p></th>
+
+                                @if (IsOperator)
+                                {
+                                    <th>
+                                        <div class="modal_ask">
+                                            ?<span>Оператору в данном блоке отображаются все подключенные к ПЛ Точки продаж конкретного Партнера.</span>
+                                        </div>
+                                        <p>Точка продаж</p>
+                                    </th>
+                                }
+
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается выручка (деньги в кассу) отдельно взятого подключенного Партнера к ПЛ за период. Партнеру отображается выручка (деньги в кассу) отдельной взятой точки продаж этого Партнера, подключенной к ПЛ, за период</span></div><p>Выручка</p></th>
                                 <th><div class="modal_ask">?<span>Оператору в данном блоке отображается сумма начисленных бонусов за покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма начисленных бонусов за покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Начислено</p></th>
                                 <th><div class="modal_ask">?<span>Оператора в данном блоке отображается сумма списанных бонусов в покупки, по которым не было возврата, Партнерами ПЛ, за период. Партнеру отображается сумма списанных бонусов в покупки, по которым не было возврата, в точках продаж этого Партнера, за период</span></div><p>Списано</p></th>
@@ -138,6 +153,27 @@
         });
 
         $(function () {
+
+            var columns = [
+                {
+                    "className": 'details-control',
+                    "orderable": false,
+                    "data": null,
+                    "defaultContent": '<img src="/img/tableiconopen.png">'
+                },
+                { "data": "caption" },
+                { "data": "purchases" },
+                { "data": "added" },
+                { "data": "redeemed" },
+                { "data": "clients" }
+            ];
+
+
+            @if (IsOperator)
+            {
+                <text>columns.splice(2, 0, { "data": "posname" }); </text>
+            }
+
             tableBookkeeping = $('#bookkeeping').DataTable({
                 "searchDelay": 1000,
                 "serverSide": true,
@@ -154,14 +190,7 @@
                         params.date_to = $("#dateTo").val();
                     }
                 },
-                "columns": [
-                    { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
-                    { "data": "caption" },
-                    { "data": "purchases" },
-                    { "data": "added" },
-                    { "data": "redeemed" },
-                    { "data": "clients" }
-                ],
+                "columns": columns,
                 "ordering": false,
                 "lengthChange": false,
                 initComplete: function () {
@@ -170,7 +199,20 @@
                     this.api().columns([1]).every(function () {
                         addInputFilter(this);
                     });
-                    this.api().columns([2]).every(function () {
+                    var i = 0;
+
+                    @if (IsOperator)
+                    {
+                        <text>
+                            i = 1;
+                            this.api().columns([2]).every(function () {
+                                addInputFilter(this);
+                            });
+                        </text>
+                    }
+
+
+                    this.api().columns([2 + i]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
@@ -179,7 +221,7 @@
                                 tableBookkeeping.draw();
                             });
 
-                        select.append('<option value="0-5000">0 - 5 т.р.</option>');
+                        select.append('<option value="1-5000">1 - 5 т.р.</option>');
                         select.append('<option value="5000-10000">5 т.р. - 10 т.р.</option>');
                         select.append('<option value="10000-50000">10 т.р. - 50 т.р.</option>');
                         select.append('<option value="50000-250000">50 т.р. - 250 т.р.</option>');
@@ -187,7 +229,7 @@
                         select.append('<option value="500000-1000000">500 т.р. - 1 млн.р.</option>');
                         select.append('<option value="1000000-10000000">1 млн.р. - 10 млн.р.</option>');
                     });
-                    this.api().columns([3, 4, 5]).every(function () {
+                    this.api().columns([3 + i, 4 + i, 5 + i]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.header()))
@@ -196,7 +238,7 @@
                                 tableBookkeeping.draw();
                             });
 
-                        select.append('<option value="0-1000">0 - 1000</option>');
+                        select.append('<option value="1-1000">1 - 1000</option>');
                         select.append('<option value="1000-5000">1000 - 5000 </option>');
                         select.append('<option value="5000-10000">5000 - 10000 </option>');
                         select.append('<option value="10000-50000">10000 - 50000 </option>');

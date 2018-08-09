@@ -4,6 +4,7 @@
     {
         public long Id { get; set; }
         public string Caption { get; set; }
+        public string PosName { get; set; }
         public decimal Gain { get; set; }
         public decimal Added { get; set; }
         public decimal Redeemed { get; set; }

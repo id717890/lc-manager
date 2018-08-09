@@ -11456,6 +11456,29 @@ select {
                 width: 15% !important;
             }
 
+            #bookkeeping.operator thead tr th:nth-child(2) {
+                width: 14.8% !important;
+            }
+
+            #bookkeeping.operator thead tr th:nth-child(3) {
+                width: 14% !important;
+            }
+
+            #bookkeeping.operator thead tr th:nth-child(4),
+            #bookkeeping.operator thead tr th:nth-child(5),
+            #bookkeeping.operator thead tr th:nth-child(6) {
+                width: 14.5% !important;
+            }
+
+            #bookkeeping.operator thead tr th:nth-child(7) {
+                width: 14% !important;
+            }
+
+            #bookkeeping.operator .line-chart__bottom {
+                max-width:90%;
+            }
+
+
     bookkeeping tbody tr {
         cursor: pointer;
     }
