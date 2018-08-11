@@ -22,12 +22,28 @@ namespace LC_Manager.Controllers
         //}
 
         [AuthorizeJwt]
-        public ActionResult SaveClientData(ClientChangeModel model)
+        public JsonResult SaveClientData(ClientChangeModel model)
         {
-            var t1 = CheckPhoneOrCardNumberIsFree(model.Phone, string.Empty);
-            var t2 = CheckPhoneOrCardNumberIsFree(string.Empty, model.Card);
-            var t3 = CheckEmailIsFree(model.Email);
-            return null;
+            try
+            {
+                if (model.Phone != model.PhoneInitial)
+                {
+                    if (!CheckPhoneOrCardNumberIsFree(model.Phone, string.Empty)) throw new Exception("Данный номер телефона принадлежит другому клиенту");
+                }
+                if (model.Card != model.CardInitial)
+                {
+                    if (!CheckPhoneOrCardNumberIsFree(string.Empty, model.Card)) throw new Exception("Данный номер карты принадлежит другому клиенту");
+                }
+                if (model.Email != model.EmailInitial)
+                {
+                    if (!CheckEmailIsFree(model.Email)) throw new Exception("Данный email принадлежит другому клиенту");
+                }
+                return Json(new { success = true, message = "Процедура успешно выполнена, до заглушки в ПО" });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
         }
 
         /// <summary>

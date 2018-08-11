@@ -685,12 +685,14 @@
             <div>?<p>123123</p></div>
             <p>Телефон: </p>
             <span></span>
+            <input type="text" name="phone-initial" class="phone-initial" hidden>
             <input type="text" name="phone" placeholder="телефон" class="phone">
         </div>
         <div class="client_list_ifo_h">
             <div>?<p>123123</p></div>
             <p>Email: </p>
             <span></span>
+            <input type="text" name="email-initial" class="email-initial" hidden>
             <input type="text" name="email" placeholder="Email" class="email">
         </div>
         <div class="client_list_ifo_h">
@@ -703,6 +705,7 @@
             <div>?<p>123123</p></div>
             <p>Номер карты: </p>
             <span></span>
+            <input type="text" name="card-initial" class="card-initial" hidden>
             <input type="text" name="card" placeholder="Номер карты" class="card">
         </div>
         @*<div class="client_list_ifo_h">
@@ -722,15 +725,26 @@
             </select>
         </div>
         <div class="client_body_check">
-            <input type="checkbox" class="checkbox" name="sms" id="AllowSms">
-            <label for="AllowSms">Уведомлять по SMS</label>
-            <input type="checkbox" class="checkbox" name="emails" id="AllowEmail">
-            <label for="AllowEmail">Уведомлять по E-mail</label>
-            <input type="checkbox" class="checkbox" name="pushes" id="AllowPush">
-            <label for="AllowPush">Push уведомления</label>
+            <div style="display: flex; flex-flow: row wrap">
+                <div style="width: 100%">
+                    <input type="checkbox" class="checkbox" name="sms" id="AllowSms">
+                    <label for="AllowSms">Уведомлять по SMS</label>
+                </div>
+                <div style="width: 100%">
+                    <input type="checkbox" class="checkbox" name="emails" id="AllowEmail">
+                    <label for="AllowEmail">Уведомлять по E-mail</label>
+                </div>
+                <div style="width: 100%">
+                    <input type="checkbox" class="checkbox" name="pushes" id="AllowPush">
+                    <label for="AllowPush">Push уведомления</label>
+                </div>
+            </div>
         </div>
 
-        <a href="#" id="save-client-data">SAVE</a>
+        <div class="client_list_ifo_h2" style="display: flex; flex-flow: row; justify-content: flex-end; align-items: center">
+            <div class="i2" style="margin-top: 0">?<p>123123</p></div>
+            <a href="#" id="save-client-data">Сохранить</a>
+        </div>
     </div>
 </div>
 @section scripts
@@ -750,8 +764,11 @@
                 data.MiddleName = $(".modal_client_change_form .middle-name").val();
                 data.Sex = $(".select.gender").next(".nice-select.gender").find("ul.list li.selected").data("value");
                 data.Phone = $(".modal_client_change_form .phone").val();
+                data.PhoneInitial = $(".modal_client_change_form .phone-initial").val();
                 data.Card = $(".modal_client_change_form .card").val();
+                data.CardInitial = $(".modal_client_change_form .card-initial").val();
                 data.Email = $(".modal_client_change_form .email").val();
+                data.EmailInitial = $(".modal_client_change_form .email-initial").val();
                 
 
                 //data.Birthdate = $("#client-birthday").val();
@@ -766,15 +783,14 @@
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
-                            $("#open-addtional-user-settings-panel").show();
-                            $("#addtional-user-settings-panel").hide();
-                            $("#client-user-surname, #client-user-name, #client-user-patronymic").attr("disabled", "disabled");
+                            if (response.message !== '') DialogError('Ошибка!', response.message)
+                            else DialogSuccess('Данные о клиенте успешно обновлены!')
                         } else {
-                            console.log(response);
+                            DialogError('Ошибка!', response.message)
                         }
                     },
                     error: function (response) {
-                        console.log(response);
+                        DialogError('Ошибка!', response.message)
                     }
                 });
             });
@@ -795,10 +811,10 @@
                             $(".modal_client_change_form .last-name").val(response.data1.Surname);
                             $(".modal_client_change_form .first-name").val(response.data1.Name);
                             $(".modal_client_change_form .middle-name").val(response.data1.Patronymic);
-                            $(".modal_client_change_form .phone").val(response.data1.Phone).mask("+7 (999) 999-99-99");
-                            $(".modal_client_change_form .email").val(response.data1.Email);
+                            $(".modal_client_change_form .phone, .modal_client_change_form .phone-initial").val(response.data1.Phone).mask("+7 (999) 999-99-99");
+                            $(".modal_client_change_form .email, .modal_client_change_form .email-initial").val(response.data1.Email);
                             $(".modal_client_change_form .level").val(response.data1.level);
-                            $(".modal_client_change_form .card").val(response.data1.Card);
+                            $(".modal_client_change_form .card, .modal_client_change_form .card-initial").val(response.data1.Card);
                             $(".modal_client_change_form .birthday").val(moment(response.data1.Birthdate).format("DD.MM.YYYY"));
 
                             /* Устанавливаем пол */
