@@ -1283,6 +1283,10 @@ namespace LC_Manager.Models
         /// идентификатор Оператора программы лояльности
         /// </summary>
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Код Торговой точки
+        /// </summary>
+        public string PosCode { get; set; }
     }
 
     public class ClientImportResponse
