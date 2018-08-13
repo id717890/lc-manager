@@ -116,6 +116,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -176,6 +182,8 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BonusController.cs" />
+    <Compile Include="Controllers\BookkeepingController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\GoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -196,6 +204,7 @@
     <Compile Include="Implementation\ResponseData\OperatorGoodResponse.cs" />
     <Compile Include="Implementation\ResponseData\OperatorPosResponse.cs" />
     <Compile Include="Models\BonusModel.cs" />
+    <Compile Include="Models\BookkeepingModel.cs" />
     <Compile Include="Models\GoodModel.cs" />
     <Compile Include="Models\JQueryDataTableParamModel.cs" />
     <Compile Include="Models\PosModel.cs" />
@@ -367,9 +376,11 @@
     <Content Include="img\download.png" />
     <Content Include="img\hide-pass.png" />
     <Content Include="img\input-clearable-x.png" />
+    <Content Include="img\loading-element-1.svg" />
     <Content Include="img\mes.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\next.png" />
+    <Content Include="img\Open_Icon.png" />
     <Content Include="img\pen_active.png" />
     <Content Include="img\pen_not_active.png" />
     <Content Include="img\plus.png" />
@@ -406,6 +417,13 @@
     <Content Include="Scripts\jquery-3.1.1.min.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.js" />
     <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.css" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.min.js" />
+    <Content Include="Scripts\jquery-formstyler\jquery.formstyler.theme.css" />
+    <Content Include="Scripts\jquery-ui\datepicker-ru.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Scripts\jquery.dateFormat-1.0.js" />
     <Content Include="Scripts\jquery.knob.min.js" />
     <Content Include="Scripts\lineChart1.js" />
@@ -495,6 +513,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -546,6 +565,7 @@
     <Content Include="Views\Good\Index.cshtml" />
     <Content Include="Templates\goods.xltx" />
     <Content Include="Views\Bonus\Index.cshtml" />
+    <Content Include="Views\Bookkeeping\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

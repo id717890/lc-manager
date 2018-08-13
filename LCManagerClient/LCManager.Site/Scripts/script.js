@@ -1,5 +1,31 @@
 
 $(function () {
+
+    /* КАЛЕНДАРЬ */
+    $.datepicker._updateDatepicker_original = $.datepicker._updateDatepicker;
+    $.datepicker._updateDatepicker = function (inst) {
+        $.datepicker._updateDatepicker_original(inst);
+        var afterShow = this._get(inst, 'afterShow');
+        if (afterShow)
+            afterShow.apply((inst.input ? inst.input[0] : null));
+    }; 
+    $('#dateFrom, #dateTo, .datepicker').datepicker({
+        dateFormat: 'dd.mm.yy',
+        yearRange: '1950:2020',
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: false,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        afterShow: function (input) {
+            $('.ui-datepicker-month, .ui-datepicker-year').styler();
+        }
+    });
+
+    $('.ui-datepicker-year, .ui-datepicker-month').styler();   
+    /* END КАЛЕНДАРЬ */
+
+
     //$.getJSON("/bas/options.txt", function (data) {
     //    $.each(data, function (key, val) {
     //        $("#addactionList").append('<option value="' + key + '">' + val + '</option>');
@@ -81,7 +107,8 @@ function personData(d) {
             ((d.posRegister === undefined)?"-":(d.posRegister))+'</span>'+
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
-            '<div class="userlist_info_t"><h3><a href="#" onclick="showBonusesModalWindow(); return false;" style="text-decoration: none; color: #58afdd;">Бонусы не за покупки:</a></h3>'+
+            '<div class="userlist_info_t"><h3><a href="#" onclick="showBonusesModalWindow(); return false;" style="text-decoration: none; color: #58afdd;">Бонусы не за покупки:</a>' +
+            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd; display: none;">Редактирование карточки клиента</a></h3>'+
             '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Welcome: </p><span>'+
             ((d.welcomeBonusDate === undefined)?"-":(d.welcomeBonusDate))+'</span>'+
             '<span>'+((d.welcomeBonusAmount === undefined)?"-":(d.welcomeBonusAmount+' б.'))+'</span>'+
@@ -145,6 +172,10 @@ $(document).ready(function() {
     tableSales = $('table#clients-sales').DataTable({
         "searchDelay": 1000,
         "serverSide": true,
+        "processing": true,
+        "language": {
+            processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+        },
         "ajax":
         {
             method: "POST",
@@ -353,6 +384,10 @@ $(document).ready(function() {
     clientsTable = $('table#clientsTable').DataTable({
         "searchDelay": 1000,
         "serverSide": true,
+        "processing": true,
+        "language": {
+            processing: '<div class="wrapper-for-loading-datatable"><img src="/img/loading-element-1.svg" alt="Alternate Text" /><span class="sr-only">Загрузка...</span></div>'
+        },
         "ajax":
         {
             method: "POST",
@@ -390,11 +425,45 @@ $(document).ready(function() {
             $("#clientsTable_length").css("display", "flex");
             $("#clientsTable_length p").remove();
 
-            this.api().columns([5, 6, 8]).every(function () {
+            this.api().columns([6]).every(function () {
                 addSelectFilter(this);
             });
             this.api().columns([1, 2, 3, 7]).every(function () {
                 addInputFilter(this);
+            });
+            this.api().columns([5]).every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .bind('keyup change',
+                        function () {
+                            column.search($(this).val());
+                            clientsTable.draw();
+                        });
+
+                select.append('<option value="Мужской">Мужской</option>');
+                select.append('<option value="Женский">Женский</option>');
+                select.append('<option value="Не указан">Не указан</option>');
+            });
+            this.api().columns([8]).every(function () {
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo($(column.header()))
+                    .bind('keyup change',
+                        function () {
+                            column.search($(this).val());
+                            clientsTable.draw();
+                        });
+
+                select.append('<option value="_1.00%_">1%</option>');
+                select.append('<option value="_2.00%_">2%</option>');
+                select.append('<option value="_3.00%_">3%</option>');
+                select.append('<option value="_4.00%_">4%</option>');
+                select.append('<option value="_5.00%_">5%</option>');
+                select.append('<option value="_7.00%_">7%</option>');
+                select.append('<option value="_10.00%_">10%</option>');
+                select.append('<option value="_15.00%_">15%</option>');
+                select.append('<option value="_20.00%_">20%</option>');
             });
             this.api().columns([4]).every(function () {
                 addInputFilter(this, ' datepicker');
@@ -732,7 +801,7 @@ $(document).ready(function() {
     });
 
     $(function () {
-        $(".datepicker").datepicker();
+        //$(".datepicker").datepicker();
     });
     
 	faqTable = $('#faqTable').DataTable({
@@ -764,44 +833,44 @@ $(document).ready(function() {
 		showHideRow(tr, row, format);
 	});
 
-    bokepingTable = $('#bookkeeping').DataTable({
-        "ajax": "../bas/bookkeeping.txt",
-        "columns": [
-            { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
-			{ "data": "partner" },
-			{ "data": "buys" },
-            { "data": "payment" },
-            { "data": "ipayment" },
-            { "data": "client" }
-        ],
-        "ordering": false,
-        "lengthChange": false,
-        initComplete: function () {
-            $(".bokepingcount").html(this.api().data().count());
-            this.api().columns([1]).every(function () {
-                addInputFilter(this);
-            });
-            this.api().columns([2, 3, 4, 5]).every(function () {
-                var column = this;
-                var select = $('<select><option value=""></option></select>')
-                    .appendTo($(column.header()))
-                    .bind('keyup change', function () {
-                        table.draw();
-                    });
+   // bokepingTable = $('#bookkeeping').DataTable({
+   //     "ajax": "../bas/bookkeeping.txt",
+   //     "columns": [
+   //         { "className": 'details-control', "orderable": false, "data": null, "defaultContent": '<img src="/img/tableiconopen.png">' },
+			//{ "data": "partner" },
+			//{ "data": "buys" },
+   //         { "data": "payment" },
+   //         { "data": "ipayment" },
+   //         { "data": "client" }
+   //     ],
+   //     "ordering": false,
+   //     "lengthChange": false,
+   //     initComplete: function () {
+   //         $(".bokepingcount").html(this.api().data().count());
+   //         this.api().columns([1]).every(function () {
+   //             addInputFilter(this);
+   //         });
+   //         this.api().columns([2, 3, 4, 5]).every(function () {
+   //             var column = this;
+   //             var select = $('<select><option value=""></option></select>')
+   //                 .appendTo($(column.header()))
+   //                 .bind('keyup change', function () {
+   //                     table.draw();
+   //                 });
 
-                select.append('<option value="0-5000">0 - 5 000р.</option>');
-                select.append('<option value="5000-10000">5 000 - 10 000р.</option>');
-                select.append('<option value="10000-50000">10 000 - 50 000р.</option>');
-            });
-            niceSelect();
-        }
-    });
+   //             select.append('<option value="0-5000">0 - 5 000р.</option>');
+   //             select.append('<option value="5000-10000">5 000 - 10 000р.</option>');
+   //             select.append('<option value="10000-50000">10 000 - 50 000р.</option>');
+   //         });
+   //         niceSelect();
+   //     }
+   // });
 
-    $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
-        var tr = $(this).closest('tr');
-        var row = bokepingTable.row(tr);
-        showHideRow(tr, row, bookkeepingData);
-    });
+   // $('#bookkeeping tbody').on('click', 'tr.odd td, tr.even td', function () {
+   //     var tr = $(this).closest('tr');
+   //     var row = bokepingTable.row(tr);
+   //     showHideRow(tr, row, bookkeepingData);
+   // });
 
 });
 
@@ -811,8 +880,20 @@ function niceSelect(){
     $('.dataTable .nice-select .list li:first-child').html('Выбрать');
     $('.dataTables_length select').niceSelect();
     $( function() {
-    $   ( ".datepicker" ).datepicker();
-    } );
+        //$(".datepicker").datepicker();
+        $(".datepicker").datepicker({
+            dateFormat: 'dd.mm.yy',
+            yearRange: '1950:2020',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: false,
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            afterShow: function (input) {
+                $('.ui-datepicker-month, .ui-datepicker-year').styler();
+            }
+        });
+    });
 }
 
 function addSelectFilter(column){

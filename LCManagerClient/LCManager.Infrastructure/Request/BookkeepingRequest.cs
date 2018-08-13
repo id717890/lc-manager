@@ -2,15 +2,12 @@
 
 namespace LCManager.Infrastructure.Request
 {
-    /// <summary>
-    /// Запрос для получения бонусов не за покупки по номеру карты
-    /// </summary>
-    public class BonusesNotForPurchasesRequest
+    public class BookkeepingRequest
     {
-        /// <summary>
-        /// Номер карты
-        /// </summary>
-        public long Card { get; set; }
+        public bool IsOperator => Operator > 0 && Partner == 0 && Pos == 0;
+        public bool IsPartner => Operator > 0 && Partner > 0 && Pos == 0;
+        public bool IsPos => Operator > 0 && Partner > 0 && Pos > 0;
+
         public Int16 Operator { get; set; }
         public Int16 Partner { get; set; }
         public Int16 Pos { get; set; }
@@ -18,18 +15,17 @@ namespace LCManager.Infrastructure.Request
         public long Page { get; set; }
         public long PageSize { get; set; }
 
-        public string Date { get; set; }
         public string DateStart { get; set; }
         public string DateEnd { get; set; }
         public string Name { get; set; }
-        public string CardStr { get; set; }
-        public string Phone { get; set; }
+        public string PosName { get; set; }
+        public string PurchasesMore { get; set; }
+        public string PurchasesLess { get; set; }
         public string AddedMore { get; set; }
         public string AddedLess { get; set; }
         public string RedeemedMore { get; set; }
         public string RedeemedLess { get; set; }
-        public string BurnMore { get; set; }
-        public string BurnLess { get; set; }
+        public string ClientsMore { get; set; }
+        public string ClientsLess { get; set; }
     }
-    
 }

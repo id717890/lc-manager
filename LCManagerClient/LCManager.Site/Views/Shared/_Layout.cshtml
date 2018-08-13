@@ -7,6 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>LC-Manager</title>
+    
+    <!-- #region Подключаем стили календаря -->
+    @Styles.Render("~/Style/jquery-uitheme")
+    @Styles.Render("~/Style/jqueryformstyler")
+    <!-- #endregion -->
+    @RenderSection("Styles", required: false)
     <link rel="stylesheet" href="~/Content/animate.css">
     <link rel="stylesheet" href="~/Content/style.css">
 </head>
@@ -57,7 +63,6 @@
                         @if (ViewBag.RoleName.Contains("BonusNoCheque"))
                         {
                             <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "bonus" ? "active" : "")">
-
                                 <a href="@Url.Action("Index", "Bonus")" class="aside-link">
                                     <i class="icon-nav icon-nav_action"></i>
                                     <span>Бонусы</span>
@@ -95,8 +100,8 @@
                     @if (ViewBag.RoleName.Contains("Total"))
                     {
                         <ul class="aside__links-ul aside__links-ul_two">
-                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "bookkeeping" ? "active" : "")">
-                                <a href="@Url.Action("Bookkeeping", "Home")" class="aside-link">
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString().ToLower() == "index" && ViewContext.RouteData.Values["Controller"].ToString().ToLower() == "bookkeeping" ? "active" : "")">
+                                <a href="@Url.Action("Index", "Bookkeeping")" class="aside-link">
                                     <i class="icon-nav icon-nav_bux"></i>
                                     <span>Сверка</span>
                                 </a>
@@ -164,6 +169,14 @@
     @Scripts.Render("~/bundles/jquery-ui")
     @Scripts.Render("~/bundles/plugins")
     @Scripts.Render("~/bundles/main")
+
+    <!-- #region Подключаем скрипты календаря -->
+    @Scripts.Render("~/Scripts/jqueryformstyler")
+    @Scripts.Render("~/Scripts/jqueryui")
+    @Scripts.Render("~/Scripts/datepicker")
+    <!-- #endregion -->
+
+
 
     @Html.Partial("~/Views/Partial/Layout.cshtml")
     @RenderSection("Scripts", required: false)

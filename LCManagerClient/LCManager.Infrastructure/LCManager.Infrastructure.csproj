@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Data\Bonus.cs" />
+    <Compile Include="Data\Bookkeeping.cs" />
     <Compile Include="Data\CardBonus.cs" />
     <Compile Include="Data\Cheque.cs" />
     <Compile Include="Data\ChequeItem.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Request\AddEmailRequest.cs" />
     <Compile Include="Request\AddPhoneRequest.cs" />
     <Compile Include="Request\BonusesRequest.cs" />
+    <Compile Include="Request\BookkeepingRequest.cs" />
     <Compile Include="Request\CardBonusesRequest.cs" />
     <Compile Include="Request\CardStatisticsRequest.cs" />
     <Compile Include="Request\ChangeClientRequest.cs" />
@@ -73,7 +75,9 @@
     <Compile Include="Request\SetClientPasswordRequest.cs" />
     <Compile Include="Request\ValidateEmailRequest.cs" />
     <Compile Include="Response\BonusesNotForPurchasesResponse.cs" />
+    <Compile Include="Response\BookkeepingsResponse.cs" />
     <Compile Include="Response\CardBonusesResponse.cs" />
+    <Compile Include="Response\CardInfoResponse.cs" />
     <Compile Include="Response\CardStatisticsResponse.cs" />
     <Compile Include="Response\ChequesResponse.cs" />
     <Compile Include="Response\ClientBonusesResponse.cs" />

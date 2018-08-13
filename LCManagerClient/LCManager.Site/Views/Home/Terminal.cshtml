@@ -462,6 +462,9 @@
     @*@Scripts.Render("~/bundles/terminal")*@
     <script type="text/javascript">
 
+        $("#clientIdPurchaseTerminal").on("keypress", function() {
+            $("#TerminalBuySmsCode, #TerminalRedeem, #TerminalMaxSumRedeem, #TerminalBuySum").val("");
+        });
 
         function smsCodeMessage(innerTxt, colorCode) {
             var codeMessage = document.getElementById('TerminalModalWrongSmsCode');
@@ -478,22 +481,17 @@
         }
 
         function activateBuyButton() {
+            $("#TerminalBuySmsCode, #TerminalRedeem, #TerminalMaxSumRedeem").val("");
             var inputClientIdPurchaseTerminal = document.getElementById('clientIdPurchaseTerminal');
             var inputTerminalBuySum = document.getElementById('TerminalBuySum');
             var inputTerminalBuySubmit = document.getElementById("TerminalBuySubmit");
             var phone = document.getElementById("profilePhone");
-            @*var containsTerminalSmsRedeem = new Boolean(@(ViewBag.RoleName.Contains("TerminalSmsRedeem").ToString().ToLower()));
-            if (!containsTerminalSmsRedeem) {*@
                 if (inputClientIdPurchaseTerminal.value.length > 0 && inputTerminalBuySum.value.length > 0 && phone.value.length > 0) {
                     inputTerminalBuySubmit.disabled = 0;
                 }
                 else {
                     inputTerminalBuySubmit.disabled = 1;
                 }
-            //}
-            //else {
-            //    console.log("првоерка");
-            //}
         }
 
         $("#sendRegisterCode").click(function (e) {
@@ -512,7 +510,7 @@
                         document.getElementById("Phone").style.borderColor = "#C5CBD1";
                         smsCodeMessage('Отправлен смс-код', "#11B9A3");
                         var regSubmit = document.getElementById('TerminalRegisterSubmit');
-                        regSubmit.disabled = 0;
+                        //regSubmit.disabled = 0;
                     }
                 });
             }
@@ -860,6 +858,7 @@
         });
 
         $("#TerminalRedeem").bind('input', function () {
+            //$("#TerminalBuySmsCode").val("");
             var maxRedeem = parseInt(document.getElementById("TerminalMaxSumRedeem").value, 10);
             var redeem = parseInt($(this).val(), 10);
             if (maxRedeem >= 0 && redeem > maxRedeem) {

@@ -38,6 +38,15 @@ namespace Site.Infrastrucure
         }
 
         /// <summary>
+        /// Получает издателя токена jwt
+        /// </summary>
+        /// <returns></returns>
+        public static string GetIssuer()
+        {
+            return ConfigurationManager.AppSettings["issuer"];
+        }
+
+        /// <summary>
         /// Получает из конфигурации срок действия cookie для jwt refresh token
         /// </summary>
         /// <returns></returns>

@@ -245,6 +245,8 @@
     <Compile Include="AuthorizeAttribute.cs" />
     <Compile Include="AuthClientProvider.cs" />
     <Compile Include="AuthManagerRefreshTokenProvider.cs" />
+    <Compile Include="Controllers\BookkeepingController.cs" />
+    <Compile Include="Controllers\CardController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosController.cs" />
@@ -270,6 +272,8 @@
     <Compile Include="Implementation\Response\GoodResponse.cs" />
     <Compile Include="Implementation\Response\PosResponse.cs" />
     <Compile Include="Implementation\Services\BonusService.cs" />
+    <Compile Include="Implementation\Services\BookkeepingService.cs" />
+    <Compile Include="Implementation\Services\CardService.cs" />
     <Compile Include="Implementation\Services\GoodService.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Implementation\Services\RefreshTokenService.cs" />
@@ -351,6 +355,8 @@
     <Content Include="SQL\20180328\LoyCon Update 3.80 20180328 Yusupov.sql" />
     <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.sql" />
     <Content Include="SQL\20180405\LoyCon Update 3.83 20180405 Yusupov.txt" />
+    <Content Include="SQL\20180406\OperatorBookkeepingPaging.sql" />
+    <Content Include="SQL\20180406\SelectBookkeepingByTimePeriod.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -370,6 +376,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SQL\20180404\" />
+    <Folder Include="Views\Bookkeeping\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
