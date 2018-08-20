@@ -426,6 +426,7 @@
     <Content Include="Scripts\jquery-ui\jquery-ui.theme.min.css" />
     <Content Include="Scripts\jquery.dateFormat-1.0.js" />
     <Content Include="Scripts\jquery.knob.min.js" />
+    <Content Include="Scripts\jquery.mask.min.js" />
     <Content Include="Scripts\lineChart1.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Content\style.css" />

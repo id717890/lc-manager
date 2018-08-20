@@ -9,7 +9,10 @@ using LCManager.JWT;
 using LC_Manager.Models;
 using LCManager.Infrastructure.Response;
 using LCManager.Infrastructure.Request;
+using Newtonsoft.Json;
 using Site.Infrastrucure;
+using ChangeClientRequest = LCManager.Infrastructure.Request.ChangeClientRequest;
+using Client = LCManager.Infrastructure.Data.Client;
 
 namespace LC_Manager.Controllers
 {
@@ -38,7 +41,14 @@ namespace LC_Manager.Controllers
                 {
                     if (!CheckEmailIsFree(model.Email)) throw new Exception("Данный email принадлежит другому клиенту");
                 }
-                return Json(new { success = true, message = "Процедура успешно выполнена, до заглушки в ПО" });
+                else model.Email = null;
+                var response = ClientChangeInfo(model);
+                if (response.ErrorCode == 0 && response.Message == string.Empty)
+                {
+                    return Json(new { success = true, message = string.Empty});
+                }
+                return Json(new { success = false, message = response.Message});
+                //return Json(new { success = true, message = "Процедура успешно выполнена, до заглушки в ПО" });
             }
             catch (Exception e)
             {
@@ -140,6 +150,76 @@ namespace LC_Manager.Controllers
                 }
             }
             return false;
+        }
+
+        private DefaultResponse ClientChangeInfo(ClientChangeModel model)
+        {
+            var response = new DefaultResponse();
+            try
+            {
+                var client = new Client
+                {
+                    allowemail = model.AllowEmail,
+                    allowpush = model.AllowPush,
+                    allowsms = model.AllowSms,
+                    email = model.Email,
+                    birthdate = Convert.ToDateTime(model.Birthdate),
+                    firstname = model.FirstName,
+                    lastname = model.LastName,
+                    middlename = model.MiddleName,
+                    id = model.Id,
+                    phone = Convert.ToInt64(PhoneService.GetPhoneFromStr(model.Phone)),
+                    gender = Convert.ToInt32(model.Sex)
+                };
+                ChangeClientRequest request = new ChangeClientRequest
+                {
+                    ClientData = client,
+                    Operator = JwtProps.GetOperator()
+                };
+
+                HttpResponseMessage changeResponse = HttpClientService.PostAsync("api/values/ChangeClient", request).Result;
+                if (changeResponse.IsSuccessStatusCode)
+                {
+                    response = changeResponse.Content.ReadAsAsync<DefaultResponse>().Result;
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                response.ErrorCode = 500;
+                response.Message = e.Message;
+            }
+            return response;
+        }
+
+        private DefaultResponse ClientChangePhone(ClientChangeModel model)
+        {
+            var response = new DefaultResponse();
+            try
+            {
+                AddPhoneRequest request = new AddPhoneRequest
+                {
+                    ClientID = model.Id,
+                    Phone = Convert.ToInt64(PhoneService.GetPhoneFromStr(model.Phone))
+                };
+                HttpResponseMessage changeResponse = HttpClientService.PostAsync("api/client/AddPhone", request).Result;
+                if (changeResponse.IsSuccessStatusCode)
+                {
+                    response = changeResponse.Content.ReadAsAsync<DefaultResponse>().Result;
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                response.ErrorCode = 500;
+                response.Message = e.Message;
+            }
+            return response;
+        }
+
+        private DefaultResponse ClientChangeLevel(string phone)
+        {
+            return new DefaultResponse();
         }
     }
 }

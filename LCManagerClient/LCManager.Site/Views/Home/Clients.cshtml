@@ -5,7 +5,7 @@
 }
 
 <style type="text/css">
-    .selectbox div{
+    .selectbox div {
         width: auto;
         border-radius: inherit;
         background: inherit;
@@ -17,52 +17,52 @@
     }
 
     .dataTables_length {
-        width: auto;    
-    } 
-    
+        width: auto;
+    }
+
     .table-length span {
         color: #fff !important;
     }
 
-        .table-length div {
-            cursor: pointer!important;
-            position: relative!important;
-            text-align: left !important;
-            -webkit-transition: all 0.2s ease-in-out!important;
-            transition: all 0.2s ease-in-out!important;
-            -webkit-user-select: none!important;
-            -moz-user-select: none!important;
-            -ms-user-select: none!important;
-            user-select: none!important;
-            white-space: nowrap!important;
-            display: inline-block!important;
-            vertical-align: middle!important;
-            background-color: #58AEDC!important;
-            width: 150px!important;
-            border: none!important;
-            color: #fff!important;
-            -webkit-border-radius: 6px!important;
-            border-radius: 6px!important;
-            padding: 0px 5px 0px 15px!important;
-            height: 36px!important;
-            line-height: 36px!important;
-            font-weight: 400!important;
-            font-family: 'a_FuturicaMedium'!important;
-            font-size: 16rem!important;
-            -webkit-appearance: none!important;
-            -moz-appearance: none!important;
-            appearance: none!important;
-            -webkit-box-sizing: border-box!important;
-            box-sizing: border-box!important;
-            outline: none!important;
-            margin: auto 0!important;
-        }
+    .table-length div {
+        cursor: pointer !important;
+        position: relative !important;
+        text-align: left !important;
+        -webkit-transition: all 0.2s ease-in-out !important;
+        transition: all 0.2s ease-in-out !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+        white-space: nowrap !important;
+        display: inline-block !important;
+        vertical-align: middle !important;
+        background-color: #58AEDC !important;
+        width: 150px !important;
+        border: none !important;
+        color: #fff !important;
+        -webkit-border-radius: 6px !important;
+        border-radius: 6px !important;
+        padding: 0px 5px 0px 15px !important;
+        height: 36px !important;
+        line-height: 36px !important;
+        font-weight: 400 !important;
+        font-family: 'a_FuturicaMedium' !important;
+        font-size: 16rem !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        -webkit-box-sizing: border-box !important;
+        box-sizing: border-box !important;
+        outline: none !important;
+        margin: auto 0 !important;
+    }
 
-        .table-length .nice-select {
-            width: 65px !important;
-            margin-top: 6px !important;
-            float: left !important;
-        }
+    .table-length .nice-select {
+        width: 65px !important;
+        margin-top: 6px !important;
+        float: left !important;
+    }
 </style>
 
 @section ContentHeaderNav
@@ -608,14 +608,14 @@
             <div class='table_sales_terminal'>
                 <table class='display client_bonuses' id='ClientBonuses' cellspacing='0' width='100%'>
                     <thead>
-                    <tr>
-                        <th></th>
-                        <th><p>Дата</p></th>
-                        <th><p>Тип бонуса</p></th>
-                        <th><p>Начислено</p></th>
-                        <th><p>Списано</p></th>
-                        <th><p>Сгорело</p></th>
-                    </tr>
+                        <tr>
+                            <th></th>
+                            <th><p>Дата</p></th>
+                            <th><p>Тип бонуса</p></th>
+                            <th><p>Начислено</p></th>
+                            <th><p>Списано</p></th>
+                            <th><p>Сгорело</p></th>
+                        </tr>
                     </thead>
                 </table>
 
@@ -629,26 +629,27 @@
 </div>
 <div class='modal' id='clientChangeWindow' style="font-size: 14px !important">
     <div class='modal_client_change_form'>
+        <input type="hidden" name="client-id" id="client-id">
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
-            <p>Welcome: </p>
+            <div>?<p>Фамилия</p></div>
+            <p>Фамилия: </p>
             <span></span>
             <input type="text" name="last-name" placeholder="Фамилия" class="last-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
-            <p>Welcome: </p>
+            <div>?<p>Имя</p></div>
+            <p>Имя: </p>
             <span></span>
             <input type="text" name="first-name" placeholder="Имя" class="first-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
-            <p>Welcome: </p>
+            <div>?<p>Отчество</p></div>
+            <p>Отчество: </p>
             <span></span>
             <input type="text" name="middle-name" placeholder="Отчество" class="middle-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
+            <div>?<p>Дата рождения</p></div>
             <p>Дата рождения: </p>
             <span></span>
             <input type="text" name="birthday" class="birthday datepicker">
@@ -663,13 +664,13 @@
                 </select>
             </div>*@
         @*<div class="nice-select select open" tabindex="0"><span class="current">Пол</span><ul class="list"><li data-value="0" class="option selected focus">Пол</li><li data-value="1" class="option">Мужской</li><li data-value="-1" class="option">Женский</li></ul></div>
-        <select class="select" id="ClientsClientCreateGender" style="display: none;">
-            <option value="0">Пол</option>
-            <option value="1">Мужской</option>
-            <option value="-1">Женский</option>
-        </select>*@
+            <select class="select" id="ClientsClientCreateGender" style="display: none;">
+                <option value="0">Пол</option>
+                <option value="1">Мужской</option>
+                <option value="-1">Женский</option>
+            </select>*@
         <div class="client_list_ifo_h2">
-            <div class="i2">?<p>123123</p></div>
+            <div class="i2">?<p>Пол</p></div>
             <p>Пол: </p>
             <span></span>
             <select class="select gender">
@@ -679,43 +680,42 @@
             </select>
         </div>
 
-       
 
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
+            <div>?<p>Телефон</p></div>
             <p>Телефон: </p>
             <span></span>
             <input type="text" name="phone-initial" class="phone-initial" hidden>
             <input type="text" name="phone" placeholder="телефон" class="phone">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
+            <div>?<p>Email</p></div>
             <p>Email: </p>
             <span></span>
             <input type="text" name="email-initial" class="email-initial" hidden>
             <input type="text" name="email" placeholder="Email" class="email">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
+            <div>?<p>% поощрения</p></div>
             <p>% поощрения: </p>
             <span></span>
-            <input type="number" min="0" max="100" name="level" placeholder="% поощрения" class="level">
+            <input type="text" name="level" placeholder="% поощрения" class="level">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
+            <div>?<p>Номер карты</p></div>
             <p>Номер карты: </p>
             <span></span>
             <input type="text" name="card-initial" class="card-initial" hidden>
             <input type="text" name="card" placeholder="Номер карты" class="card">
         </div>
         @*<div class="client_list_ifo_h">
-            <div>?<p>123123</p></div>
-            <p>Статус карты: </p>
-            <span></span>
-            <input type="text" name="status" placeholder="status" class="status">
-        </div>*@
+                <div>?<p>123123</p></div>
+                <p>Статус карты: </p>
+                <span></span>
+                <input type="text" name="status" placeholder="status" class="status">
+            </div>*@
         <div class="client_list_ifo_h2">
-            <div class="i2">?<p>123123</p></div>
+            <div class="i2">?<p>Статус карты</p></div>
             <p>Статус карты: </p>
             <span></span>
             <select class="select status-card">
@@ -748,17 +748,29 @@
     </div>
 </div>
 @section scripts
-    {
-        <script type="text/javascript">
-            @*$("#OperatorClientReport").click(function (e) {
+{
+    <script src="@Url.Content("~/Scripts/jquery.mask.min.js")"></script>
+    <script type="text/javascript">
+        @*$("#OperatorClientReport").click(function (e) {
             e.preventDefault();
             var beginDate = document.getElementById("dateFrom").value;
             var endDate = document.getElementById("dateTo").value;
             window.location = '@Url.Action("OperatorClientReport", "Home")?From=' + beginDate + '&To=' + endDate;
         })*@
+
+        $("#AllowSms, #AllowEmail, #AllowPush").change(function () {
+            if ($(this).attr('checked')) {
+                $(this).removeAttr('checked');
+            } else {
+                $(this).attr('checked', 'checked');
+            }
+
+        });
+
             $("#save-client-data").on("click", function (e) {
                 e.preventDefault();
                 var data = {};
+                data.Id = $(".modal_client_change_form #client-id").val();
                 data.FirstName = $(".modal_client_change_form .first-name").val();
                 data.LastName = $(".modal_client_change_form .last-name").val();
                 data.MiddleName = $(".modal_client_change_form .middle-name").val();
@@ -769,11 +781,11 @@
                 data.CardInitial = $(".modal_client_change_form .card-initial").val();
                 data.Email = $(".modal_client_change_form .email").val();
                 data.EmailInitial = $(".modal_client_change_form .email-initial").val();
-                
-
-                //data.Birthdate = $("#client-birthday").val();
-                //data.AllowSms = $("#client-allow-sms").val() === "1" ? true : false;
-                //data.AllowEmail = $("#client-allow-email").val() === "1" ? true : false;
+                data.Birthdate = $(".modal_client_change_form .birthday").val();
+                data.AllowSms = $(".modal_client_change_form #AllowSms")[0].hasAttribute("checked");
+                data.AllowEmail = $(".modal_client_change_form #AllowEmail")[0].hasAttribute("checked");
+                data.AllowPush = $(".modal_client_change_form #AllowPush")[0].hasAttribute("checked");
+                data.Level = $(".modal_client_change_form .level").val();
                 const token = $('input[name="__RequestVerificationToken"]').val();
                 //console.log(data);
                 $.ajax({
@@ -783,14 +795,14 @@
                     dataType: "json",
                     success: function (response) {
                         if (response.success) {
-                            if (response.message !== '') DialogError('Ошибка!', response.message)
-                            else DialogSuccess('Данные о клиенте успешно обновлены!')
+                            if (response.message !== '') DialogError('Ошибка!', response.message);
+                            else DialogSuccess('Данные о клиенте (ФИО, дата рождения, пол, email) успешно обновлены! Поля телефон, номер карты, % пооощерния находятся в разработке');
                         } else {
-                            DialogError('Ошибка!', response.message)
+                            DialogError('Ошибка!', response.message);
                         }
                     },
                     error: function (response) {
-                        DialogError('Ошибка!', response.message)
+                        DialogError('Ошибка!', response.message);
                     }
                 });
             });
@@ -808,12 +820,13 @@
                             var window = document.getElementById("clientChangeWindow");
                             window.style.display = "block";
 
+                            $(".modal_client_change_form #client-id").val(response.data1.Id);
                             $(".modal_client_change_form .last-name").val(response.data1.Surname);
                             $(".modal_client_change_form .first-name").val(response.data1.Name);
                             $(".modal_client_change_form .middle-name").val(response.data1.Patronymic);
                             $(".modal_client_change_form .phone, .modal_client_change_form .phone-initial").val(response.data1.Phone).mask("+7 (999) 999-99-99");
                             $(".modal_client_change_form .email, .modal_client_change_form .email-initial").val(response.data1.Email);
-                            $(".modal_client_change_form .level").val(response.data1.level);
+                            $(".modal_client_change_form .level").val(response.data1.Condition).mask('##0.00%', { reverse: true });
                             $(".modal_client_change_form .card, .modal_client_change_form .card-initial").val(response.data1.Card);
                             $(".modal_client_change_form .birthday").val(moment(response.data1.Birthdate).format("DD.MM.YYYY"));
 
@@ -913,7 +926,37 @@
                     }
                 });
             });
-        </script>
-    }
+    </script>
+}
+
+@section Styles
+{
+    <style type="text/css">
+        .client_list_ifo_h2 span, .client_list_ifo_h span {
+            margin-right: 10px
+        }
+        
+        #clientChangeWindow {
+            padding-top: 50px;
+        } 
+        
+        .modal_client_change_form {
+            padding: 10px !important;
+        }
+
+        .modal_success_dialog {
+            padding: 0 !important;
+        }
+
+        .modal_uspeh {
+            height: auto !important;
+            width: auto !important;
+        }
+
+        /*.modal_client_change_form input {
+            margin-left: 10px
+        }*/
+    </style>
+}
 
 

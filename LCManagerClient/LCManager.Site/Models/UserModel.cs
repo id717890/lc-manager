@@ -99,6 +99,7 @@ namespace LC_Manager.Models
 
     public class ClientChangeModel
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
@@ -111,10 +112,12 @@ namespace LC_Manager.Models
         public string Promocode { get; set; }
         public string Birthdate { get; set; }
         public string Sex { get; set; }
+        public string Level { get; set; }
         public string Password { get; set; }
         public string PasswordConfirm { get; set; }
         public bool ConfirmTerms { get; set; }
         public bool AllowSms { get; set; }
         public bool AllowEmail { get; set; }
+        public bool AllowPush { get; set; }
     }
 }
