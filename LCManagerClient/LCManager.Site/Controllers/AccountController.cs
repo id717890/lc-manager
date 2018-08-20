@@ -17,8 +17,8 @@
         public ActionResult Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
-            //return View(new UserModel { Login = "9097866252", Password = "1" });
-            return View();
+            return View(new UserModel { Login = "9286669315", Password = "Unk-bonus" });
+            //return View();
         }
 
         [HttpPost]

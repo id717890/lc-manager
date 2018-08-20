@@ -381,9 +381,35 @@ namespace LCManagerPartner.Controllers
         public ClientImportResponse ClientImport(ClientImportRequest request)
         {
             Log.Information("LCManagerPartner ClientImport {Operator}", request.Operator);
-            var result = new ServerClientImportResponse();
-            var returnValue = result.ProcessRequest(cnn, request);
-            return returnValue;
+            var sciResponce = new ServerClientImportResponse();
+
+            return sciResponce.ProcessRequest(cnn, request);
+        }
+
+        /// <summary>
+        /// Импорт бонусов
+        /// </summary>
+        [HttpPost]
+        [Route("BonusImport")]
+        public BonusImportResponse BonusImport(BonusImportRequest request)
+        {
+            Log.Information("LCManagerPartner BonusImport {Operator}", request.Operator);
+            var sciResponce = new ServerBonusImportResponse();
+
+            return sciResponce.ProcessRequest(cnn, request);
+        }
+
+        /// <summary>
+        /// Импорт чеков
+        /// </summary>
+        [HttpPost]
+        [Route("CheckImport")]
+        public CheckImportResponse CheckImport(CheckImportRequest request)
+        {
+            Log.Information("LCManagerPartner CheckImport {Operator}", request.Operator);
+            var sciResponce = new ServerCheckImportResponse();
+
+            return sciResponce.ProcessRequest(cnn, request);
         }
 
         /// <summary>

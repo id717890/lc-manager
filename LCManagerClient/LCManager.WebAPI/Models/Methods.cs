@@ -3235,22 +3235,20 @@ namespace LCManagerPartner.Models
 
     public class ClientImport
     {
-        public Int64 Card { get; set; }
         public Int64 Phone { get; set; }
-        public string Email { get; set; }
-        public string Surname { get; set; }
-        public string Name { get; set; }
-        public string Patronymic { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public bool? Gender { get; set; }
-        public string Address { get; set; }
-        public bool? HasChildren { get; set; }
         public bool AllowSms { get; set; }
         public bool AllowEmail { get; set; }
-        public DateTime RegDate { get; set; }
-        public decimal TotalPurchase { get; set; }
-        public string PosRegister { get; set; }
-        public string ErrorMessage { get; set; }
+
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Patronymic { get; set; }
+        public string Email { get; set; }
+        public DateTime? Birthdate { get; set; }
+        public bool? Gender { get; set; }
+        public string Address { get; set; }        
+        public Int64 Card { get; set; }
+        public decimal AcumSum { get; set; }
+        public bool NewClient { get; set; }
     }
 
     public class ClientImportRequest
@@ -3267,6 +3265,10 @@ namespace LCManagerPartner.Models
         /// идентификатор Оператора программы лояльности
         /// </summary>
         public Int16 Operator { get; set; }
+        /// <summary>
+        /// Код Торговой точки
+        /// </summary>
+        public string PosCode { get; set; }
     }
 
     public class ClientImportResponse
@@ -3301,357 +3303,771 @@ namespace LCManagerPartner.Models
     {
         public ClientImportResponse ProcessRequest(SqlConnection cnn, ClientImportRequest request)
         {
-            ClientImportResponse returnValue = new ClientImportResponse();
-            string path = @"c:\ImportClient\";
-            string fileName = "ImportClient" + DateTime.Now.ToString("ddMMyyyyHHMMss") + ".xlsx";
-            string filePath = path + fileName;
+            var retValue = new ClientImportResponse();
+
+            string tmpFile = Path.GetTempPath() + "ImportClient_" + DateTime.Now.ToString("ddMMyyyyHHMMss") + ".xlsx";
+
             try
             {
-                System.IO.File.WriteAllBytes(filePath, request.ExcelFile);
+                File.WriteAllBytes(tmpFile, request.ExcelFile);
             }
             catch (Exception ex)
             {
-                returnValue.Message = ex.Message;
-                return returnValue;
+                retValue.Message = ex.Message;
+                return retValue;
             }
+
             List<ClientImport> clients = new List<ClientImport>();
-            using (var package = new ExcelPackage(new FileInfo(filePath)))
+            using (var package = new ExcelPackage(new FileInfo(tmpFile)))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                 for (int i = 2; i <= worksheet.Dimension.End.Row; i++)
                 {
                     ClientImport client = new ClientImport();
-                    //try
-                    //{
-                    //    if (worksheet.Cells[i, 1].Value != null)
-                    //    {
-                    //        client.Card = Convert.ToInt64(worksheet.Cells[i, 1].Value);
-                    //    }
-                    //}
-                    //catch
-                    //{ }
-                    try
-                    {
-                        if (worksheet.Cells[i, 1].Value != null)
-                        {
-                            string phone = worksheet.Cells[i, 1].Value.ToString();
-                            if (phone.Length == 11)
-                            {
-                                phone = phone.Substring(1);
-                            }
-                            client.Phone = Convert.ToInt64(phone);
-                        }
-                        else
-                        {
-                            client.ErrorMessage = "Не заполнен номер телефона";
-                        }
-                    }
-                    catch
-                    {
-                        client.ErrorMessage = "Не заполнен номер телефона";
-                    }
-                    try
-                    {
-                        if (worksheet.Cells[i, 2].Value != null)
-                        {
-                            client.Email = worksheet.Cells[i, 2].Value.ToString();
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 3].Value != null)
-                        {
-                            client.Surname = worksheet.Cells[i, 3].Value.ToString();
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 4].Value != null)
-                        {
-                            client.Name = worksheet.Cells[i, 4].Value.ToString();
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 5].Value != null)
-                        {
-                            client.Patronymic = worksheet.Cells[i, 5].Value.ToString();
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 6].Value != null)
-                        {
-                            //client.BirthDate = Convert.ToDateTime(worksheet.Cells[i, 6].Value);
-                            client.BirthDate = DateTime.ParseExact(worksheet.Cells[i, 6].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                        }
-                    }
-                    catch { }
-                    try
-                    {
-                        if (worksheet.Cells[i, 7].Value != null)
-                        {
-                            string gender = Convert.ToString(worksheet.Cells[i, 7].Value);
-                            if (gender.ToLower().Equals("женский"))
-                            {
-                                client.Gender = false;
-                            }
-                            else if (gender.ToLower().Equals("мужской"))
-                            {
-                                client.Gender = true;
-                            }
-                        }
 
-                        //if (worksheet.Cells[i, 7].Value != null)
-                        //{
-                        //    client.Gender = Convert.ToBoolean(worksheet.Cells[i, 7].Value);
-                        //}
-                    }
-                    catch { }
-                    try
+                    // Номер телефона с 9-ки
+                    var objPhone = worksheet.Cells[i, 1].Value;
+                    if (objPhone != null)
                     {
-                        if (worksheet.Cells[i, 8].Value != null)
+                        string phone = objPhone.ToString().Trim();
+                        if (phone.Length == 11)
                         {
-                            //client.Address = worksheet.Cells[i, 8].Value.ToString();
-                            client.RegDate = DateTime.ParseExact(worksheet.Cells[i, 8].Value.ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture); ;                            
+                            client.Phone = Convert.ToInt64(phone.Substring(1));
                         }
                         else
                         {
-                            client.RegDate = DateTime.Now;
+                            retValue.Message = $"В {i} строке не верный формат заполнения номера телефона";
+                            return retValue;
                         }
-                    }
-                    catch { }
-                    try
+                    }                     
+                    else
                     {
-                        if(worksheet.Cells[i, 9].Value != null)
-                        {
-                            client.PosRegister = worksheet.Cells[i, 9].Value.ToString();
-                        }
+                        retValue.Message = $"В {i} строке не заполнен номер телефона";
+                        return retValue;                        
                     }
-                    catch { }
-                    try
+
+                    // Согласие на отправку СМС
+                    var objAllowSms = worksheet.Cells[i, 8].Value;
+                    if (objAllowSms != null)
                     {
-                        if (worksheet.Cells[i, 10].Value != null)
+                        string allowSms = objAllowSms.ToString().Trim().ToLower();
+                        if (allowSms == "да")
                         {
-                            client.AllowSms = Convert.ToBoolean(worksheet.Cells[i, 10].Value);
+                            client.AllowSms = true;
+                        }
+                        else
+                        {
+                            client.AllowSms = false;
                         }
                     }
-                    catch { }
-                    try
+                    else
                     {
-                        if (worksheet.Cells[i, 11].Value != null)
-                        {
-                            client.AllowEmail = Convert.ToBoolean(worksheet.Cells[i, 11].Value);
-                        }
+                        retValue.Message = $"В {i} строке не заполнено согласие на отправку СМС";
+                        return retValue;
                     }
-                    catch { }
-                    //try
-                    //{
-                    //    if (worksheet.Cells[i, 13].Value != null)
-                    //    {
-                    //        client.RegDate = Convert.ToDateTime(worksheet.Cells[i, 13].Value);
-                    //    }
-                    //    else
-                    //    {
-                    //        client.RegDate = DateTime.Now;
-                    //    }
-                    //}
-                    //catch { }
-                    try
+
+                    // Согласие на отправку Email
+                    var objAllowEmail = worksheet.Cells[i, 9].Value;
+                    if (objAllowEmail != null)
                     {
-                        if (worksheet.Cells[i, 12].Value != null)
+                        string allowEmail = objAllowEmail.ToString().Trim().ToLower();
+                        if (allowEmail == "да")
                         {
-                            client.TotalPurchase = Convert.ToDecimal(worksheet.Cells[i, 12].Value);
+                            client.AllowEmail = true;
+                        }
+                        else
+                        {
+                            client.AllowEmail = false;
                         }
                     }
-                    catch { }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнено согласие на отправку Email";
+                        return retValue;
+                    }
+
+                    // Фамилия Имя Отчество из ФИО
+                    var objFio = worksheet.Cells[i, 4].Value;
+                    if (objFio != null)
+                    {
+                        string[] fio = objFio.ToString().Trim().Split(new char[] { ' ' });
+                        if (fio.Length > 0)
+                        {
+                            client.Name = fio[0];
+                            if (fio.Length > 1)
+                            {
+                                client.Surname = fio[1];
+                                if (fio.Length > 2)
+                                {
+                                    client.Patronymic = fio[2];
+                                }
+                            }
+                        }
+                    }
+
+                    // E-mail
+                    var objEmail = worksheet.Cells[i, 3].Value;
+                    if (objEmail != null)
+                    {
+                        string email = objEmail.ToString().Trim();
+                        if (!String.IsNullOrEmpty(email))
+                        {
+                            client.Email = email;
+                        }
+                    }
+
+                    // Дата рождения
+                    var objBirthdate = worksheet.Cells[i, 5].Value;
+                    if (objBirthdate != null)
+                    {
+                        string birthdate = objBirthdate.ToString().Trim();
+                        if (!String.IsNullOrEmpty(birthdate))
+                        {
+                            client.Birthdate = Convert.ToDateTime(birthdate);
+                            //client.Birthdate = DateTime.ParseExact(birthdate, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+
+                        }
+                    }
+
+                    // Пол (1 - мужской, 0 - женский, null - не определен)
+                    var objGender = worksheet.Cells[i, 6].Value;
+                    if (objGender != null)
+                    {
+                        string gender = objGender.ToString().Trim().ToLower();
+                        if (gender == "мужской")
+                        {
+                            client.Gender = true;
+                        }
+                        else if (gender == "женский")
+                        {
+                            client.Gender = false;
+                        }
+                    }
+
+                    // Адрес регистрации
+                    var objAddress = worksheet.Cells[i, 7].Value;
+                    if (objAddress != null)
+                    {
+                        string address = objAddress.ToString().Trim();
+                        if (!String.IsNullOrEmpty(address))
+                        {
+                            client.Address = address;
+                        }
+                    }
+
+                    // Номер карты
+                    var objCard = worksheet.Cells[i, 2].Value;
+                    if (objCard != null)
+                    {
+                        string card = objCard.ToString().Trim();
+                        if (!String.IsNullOrEmpty(card))
+                        {
+                            client.Card = Convert.ToInt64(card);
+                        }
+                    }
+
+                    // Сумма накоплений
+                    var objAcumSum = worksheet.Cells[i, 10].Value;
+                    if (objAcumSum != null)
+                    {
+                        string acumSum = objAcumSum.ToString().Trim();
+                        if (!String.IsNullOrEmpty(acumSum))
+                        {
+                            client.AcumSum = Convert.ToDecimal(acumSum);
+                        }
+                    }
+
+                    var objNewClient = worksheet.Cells[i, 11].Value;
+                    if (objNewClient != null)
+                    {
+                        string newClient = objNewClient.ToString().Trim().ToLower();
+                        if (newClient == "cтарый")
+                        {
+                            client.NewClient = false;
+                        }
+                        else
+                        {
+                            client.NewClient = true;
+                        }
+                    }
+
                     clients.Add(client);
                 }
             }
 
-            //using (var table = new DataTable())
-            //{
-            //    table.Columns.Add("card", typeof(Int64));
-            //    table.Columns.Add("phone", typeof(Int64));
-            //    table.Columns.Add("surname", typeof(string));
-            //    table.Columns.Add("name", typeof(string));
-            //    table.Columns.Add("patronymic", typeof(string));
-
-            //    DataColumn column;
-            //    column = new DataColumn("birthdate", typeof(DateTime));
-            //    column.AllowDBNull = true;
-
-            //    //table.Columns.Add("birthdate", typeof(DateTime));
-            //    table.Columns.Add(column);
-
-            //    table.Columns.Add("gender", typeof(bool));
-            //    table.Columns.Add("address", typeof(string));
-            //    table.Columns.Add("haschildren", typeof(bool));
-            //    table.Columns.Add("email", typeof(string));
-            //    table.Columns.Add("allowsms", typeof(bool));
-            //    table.Columns.Add("allowemail", typeof(bool));
-            //    table.Columns.Add("partner", typeof(Int16));
-            //    table.Columns.Add("operator", typeof(Int16));
-            //    table.Columns.Add("regdate", typeof(DateTime));
-            //    table.Columns.Add("totalpurchase", typeof(decimal));
-            //    table.Columns.Add("rownum", typeof(int));
-            //    int i = 0;
-            //    foreach (var c in clients)
-            //    {                    
-            //        DataRow row = table.NewRow();
-            //        row["card"] = c.Card;
-            //        row["phone"] = c.Phone;
-            //        row["surname"] = c.Surname;
-            //        row["name"] = c.Name;
-            //        row["patronymic"] = c.Patronymic;
-            //        row["birthdate"] = c.BirthDate.HasValue ? (object)c.BirthDate.Value : DBNull.Value;
-            //        row["gender"] = c.Gender;
-            //        row["address"] = c.Address;
-            //        row["haschildren"] = c.HasChildren.HasValue ? (object)c.HasChildren.Value : DBNull.Value;
-            //        row["email"] = c.Email;
-            //        row["allowsms"] = c.AllowSms;
-            //        row["allowemail"] = c.AllowEmail;
-            //        row["partner"] = request.Partner;
-            //        row["operator"] = request.Operator;
-            //        row["regdate"] = c.RegDate;
-            //        row["totalpurchase"] = c.TotalPurchase;
-            //        row["rownum"] = i;
-            //        table.Rows.Add(row);
-            //        i++;
-            //    }
-            //    cnn.Open();
-            //    SqlCommand cmd = cnn.CreateCommand();
-            //    cmd = cnn.CreateCommand();
-            //    cmd.CommandType = CommandType.StoredProcedure;
-            //    cmd.CommandText = "ClientImport";
-            //    var clientsImport = new SqlParameter("@clients", SqlDbType.Structured);
-            //    clientsImport.TypeName = "dbo.Clients";
-            //    clientsImport.Value = table;
-            //    cmd.Parameters.Add(clientsImport);
-            //    cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
-            //    cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
-            //    try
-            //    {
-            //        cmd.ExecuteNonQuery();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        //c.ErrorMessage = ex.Message;
-            //        returnValue.Message = ex.Message;
-            //    }
-            //    //if (string.IsNullOrEmpty(c.ErrorMessage))
-            //    //{
-            //    //    c.ErrorMessage = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            //    //}
-            //    returnValue.Message = Convert.ToString(cmd.Parameters["@errormessage"].Value);
-            //    cnn.Close();
-            //}
-
             foreach (var c in clients)
             {
                 cnn.Open();
+
                 SqlCommand cmd = cnn.CreateCommand();
-                cmd = cnn.CreateCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "ClientImport";
-                if (c.Card > 0)
+                if (c.NewClient == true)
                 {
-                    cmd.Parameters.AddWithValue("@card", c.Card);
+                    cmd.CommandText = "ClientCreate";
                 }
-                cmd.Parameters.AddWithValue("@phone", c.Phone);
-                cmd.Parameters.AddWithValue("@surname", c.Surname);
-                cmd.Parameters.AddWithValue("@name", c.Name);
-                cmd.Parameters.AddWithValue("@patronymic", c.Patronymic);
-                cmd.Parameters.AddWithValue("@birthdate", c.BirthDate);
-                cmd.Parameters.AddWithValue("@gender", c.Gender);
-                cmd.Parameters.AddWithValue("@address", c.Address);
-                cmd.Parameters.AddWithValue("@haschildren", c.HasChildren);
-                cmd.Parameters.AddWithValue("@email", c.Email);
-                cmd.Parameters.AddWithValue("@allowsms", c.AllowSms);
-                cmd.Parameters.AddWithValue("@allowemail", c.AllowEmail);
+                else
+                {
+                    cmd.CommandText = "ClientImport";
+                    cmd.Parameters.AddWithValue("@address", c.Address);
+                }
+                
                 cmd.Parameters.AddWithValue("@partner", request.Partner);
                 cmd.Parameters.AddWithValue("@operator", request.Operator);
-                cmd.Parameters.AddWithValue("@regdate", c.RegDate);
-                cmd.Parameters.AddWithValue("@totalpurchase", c.TotalPurchase);
-                cmd.Parameters.AddWithValue("@posCode", c.PosRegister);
+                cmd.Parameters.AddWithValue("@poscode", request.PosCode);
+                cmd.Parameters.AddWithValue("@phone", c.Phone);
+                cmd.Parameters.AddWithValue("@allowsms", c.AllowSms);
+                cmd.Parameters.AddWithValue("@allowemail", c.AllowEmail);
+                cmd.Parameters.AddWithValue("@name", c.Name);
+                cmd.Parameters.AddWithValue("@surname", c.Surname);
+                cmd.Parameters.AddWithValue("@patronymic", c.Patronymic);
+                cmd.Parameters.AddWithValue("@email", c.Email);
+                cmd.Parameters.AddWithValue("@birthdate", c.Birthdate);
+                cmd.Parameters.AddWithValue("@gender", c.Gender);                
+                cmd.Parameters.AddWithValue("@card", c.Card);
+
                 cmd.Parameters.Add("@errormessage", SqlDbType.NVarChar, 100);
                 cmd.Parameters["@errormessage"].Direction = ParameterDirection.Output;
+
+                cmd.Parameters.Add("@client", SqlDbType.Int);
+                cmd.Parameters["@client"].Direction = ParameterDirection.Output;
+
+                cmd.Parameters.Add("@result", SqlDbType.Int);
+                cmd.Parameters["@result"].Direction = ParameterDirection.ReturnValue;
+                
                 try
                 {
                     cmd.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
-                    c.ErrorMessage = ex.Message;
+                    retValue.Message = ex.Message;
+                    return retValue;
                 }
-                if (string.IsNullOrEmpty(c.ErrorMessage))
+
+                int sqlErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
+                string sqlError = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                if (sqlErrorCode != 0 && !String.IsNullOrEmpty(sqlError))
                 {
-                    c.ErrorMessage = Convert.ToString(cmd.Parameters["@errormessage"].Value);
+                    retValue.ErrorCode = sqlErrorCode;
+                    retValue.Message = sqlError;
+                    return retValue;
                 }
+
                 cnn.Close();
             }
-            returnValue.Imported = clients.Count;
-            returnValue.Successful = clients.Where(c => string.IsNullOrEmpty(c.ErrorMessage)).Count();
-            returnValue.Unsuccessful = clients.Where(c => !string.IsNullOrEmpty(c.ErrorMessage)).Count();
-            if (returnValue.Unsuccessful > 0)
+
+            retValue.ErrorCode = 0;
+            return retValue;
+        }
+    }
+
+    public class BonusImport
+    {
+        /// <summary>
+        /// Телефон
+        /// </summary>
+        public Int64 Phone { get; set; }
+        /// <summary>
+        /// Номер кары
+        /// </summary>
+        public Int64 Card { get; set; }
+        /// <summary>
+        /// Тип бонуса
+        /// </summary>
+        public string BonusType { get; set; }
+
+        /// <summary>
+        /// Дата
+        /// </summary>
+        public DateTime Date { get; set; }
+        /// <summary>
+        /// Начислено
+        /// </summary>
+        public decimal AccuredCount { get; set; }
+        /// <summary>
+        /// Списано
+        /// </summary>
+        public decimal WrittenOffCount { get; set; }
+        /// <summary>
+        /// Сгорело
+        /// </summary>
+        public decimal BurnedCount { get; set; }
+    }
+
+    public class BonusImportRequest
+    {
+        /// <summary>
+        /// файл базы
+        /// </summary>
+        public byte[] ExcelFile { get; set; }
+        /// <summary>
+        /// идентификатор Партнера программы лояльности
+        /// </summary>
+        public Int16 Partner { get; set; }
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        public Int16 Operator { get; set; }
+    }
+
+    public class BonusImportResponse
+    {
+        /// <summary>
+        /// успешно
+        /// </summary>
+        public bool Successful { get; set; }
+        /// <summary>
+        /// код ошибки
+        /// </summary>
+        public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
+        public string Message { get; set; }
+    }
+
+    public class ServerBonusImportResponse
+    {
+        public BonusImportResponse ProcessRequest(SqlConnection cnn, BonusImportRequest request)
+        {
+            var retValue = new BonusImportResponse();
+
+            string tmpFile = Path.GetTempPath() + "ImportBonus_" + DateTime.Now.ToString("ddMMyyyyHHMMss") + ".xlsx";
+
+            try
             {
-                using (ExcelPackage package = new ExcelPackage())
+                File.WriteAllBytes(tmpFile, request.ExcelFile);
+            }
+            catch (Exception ex)
+            {
+                retValue.Message = ex.Message;
+                return retValue;
+            }
+
+            List<BonusImport> bonuses = new List<BonusImport>();
+            using (var package = new ExcelPackage(new FileInfo(tmpFile)))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                for (int i = 2; i <= worksheet.Dimension.End.Row; i++)
                 {
-                    var workbook = package.Workbook;
-                    var worksheet = workbook.Worksheets.Add("Sheet1");
-                    worksheet.Cells["A1"].Value = "Номер телефона";
-                    worksheet.Cells["B1"].Value = "Номер карты";
-                    worksheet.Cells["C1"].Value = "Ошибка";
+                    BonusImport bonus = new BonusImport();
 
-                    worksheet.Cells["A1:C1"].Style.WrapText = true;
-                    worksheet.Cells["A1:C1"].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                    worksheet.Cells["A1:C1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    for (int i = 1; i <= 2; i++)
+                    // Номер телефона с 9-ки
+                    var objPhone = worksheet.Cells[i, 3].Value;
+                    if (objPhone != null)
                     {
-                        worksheet.Column(i).Width = 20;
+                        string phone = objPhone.ToString().Trim();
+                        if (phone.Length == 11)
+                        {
+                            bonus.Phone = Convert.ToInt64(phone.Substring(1));
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не верный формат заполнения номера телефона";
+                            return retValue;
+                        }
                     }
-                    List<ClientImport> clientsError = new List<ClientImport>(clients.Where(c => c.ErrorMessage != null));
-                    for (int i = 0; i < clientsError.Count; i++)
+                    else
                     {
-                        worksheet.Cells["A" + (i + 2).ToString()].Value = clientsError[i].Phone;
-                        worksheet.Cells["A" + (i + 2).ToString()].Style.Numberformat.Format = "#";
-                        worksheet.Cells["B" + (i + 2).ToString()].Value = clientsError[i].Card;
-                        worksheet.Cells["B" + (i + 2).ToString()].Style.Numberformat.Format = "#";
-
-                        worksheet.Cells["C" + (i + 2).ToString()].Value = clientsError[i].ErrorMessage;
-
+                        retValue.Message = $"В {i} строке не заполнен номер телефона";
+                        return retValue;
                     }
-                    returnValue.ExcelFile = package.GetAsByteArray();
+
+                    // Номер карты
+                    var objCard = worksheet.Cells[i, 4].Value;
+                    if (objCard != null)
+                    {
+                        string card = objCard.ToString().Trim();
+                        if (!String.IsNullOrEmpty(card))
+                        {
+                            bonus.Card = Convert.ToInt64(card);
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не заполнен номер карты";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнен номер карты";
+                        return retValue;
+                    }
+
+                    // Тип бонуса строкой
+                    var objBonusType = worksheet.Cells[i, 2].Value;
+                    if (objBonusType != null)
+                    {
+                        string bonusType = objBonusType.ToString().Trim();
+                        if (!String.IsNullOrEmpty(bonusType))
+                        {
+                            bonus.BonusType = bonusType;
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не заполнен тип бонуса";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнен тип бонуса";
+                        return retValue;
+                    }
+
+                    // Дата
+                    var objDate = worksheet.Cells[i, 1].Value;
+                    if (objDate != null)
+                    {
+                        string date = objDate.ToString().Trim();
+                        if (!String.IsNullOrEmpty(date))
+                        {
+                            bonus.Date = Convert.ToDateTime(date);
+                        }
+                    }
+
+                    // Начислено
+                    var objAccuredCount = worksheet.Cells[i, 5].Value;
+                    if (objAccuredCount != null)
+                    {
+                        string accuredCount = objAccuredCount.ToString().Trim();
+                        if (!String.IsNullOrEmpty(accuredCount))
+                        {
+                            bonus.AccuredCount = Convert.ToDecimal(accuredCount);
+                        }
+                    }
+
+                    // Списано
+                    var objWrittenOffCount = worksheet.Cells[i, 6].Value;
+                    if (objWrittenOffCount != null)
+                    {
+                        string writtenOffCount = objWrittenOffCount.ToString().Trim();
+                        if (!String.IsNullOrEmpty(writtenOffCount))
+                        {
+                            bonus.WrittenOffCount = Convert.ToDecimal(writtenOffCount);
+                        }
+                    }
+
+                    // Сгорело
+                    var objBurnedCount = worksheet.Cells[i, 7].Value;
+                    if (objBurnedCount != null)
+                    {
+                        string burnedCount = objBurnedCount.ToString().Trim();
+                        if (!String.IsNullOrEmpty(burnedCount))
+                        {
+                            bonus.BurnedCount = Convert.ToDecimal(burnedCount);
+                        }
+                    }
+
+                    bonuses.Add(bonus);
                 }
             }
 
-            //cmd = cnn.CreateCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "ClientImport";
-            //try
-            //{
-            //    cmd.ExecuteNonQuery();
-            //}
-            //catch (Exception ex)
-            //{
-            //    returnValue.Message = ex.Message;
-            //    return returnValue;
-            //}
+            foreach (var b in bonuses)
+            {
+                cnn.Open();
 
-            //cmd = cnn.CreateCommand();
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandText = "ClientImportErrors";
-            //SqlDataReader reader = cmd.ExecuteReader();
-            //List<string> errors = new List<string>();
-            //while (reader.Read())
-            //{
-            //    if (!reader.IsDBNull(0)) errors.Add(reader[0].ToString());
-            //}
-            return returnValue;
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "BonusImport";
+
+                cmd.Parameters.AddWithValue("@operator", request.Operator);
+                cmd.Parameters.AddWithValue("@partner", request.Partner);
+                cmd.Parameters.AddWithValue("@phone", b.Phone);
+                cmd.Parameters.AddWithValue("@card", b.Card);
+                cmd.Parameters.AddWithValue("@sourcename", b.BonusType);
+                cmd.Parameters.AddWithValue("@date", b.Date);
+                cmd.Parameters.AddWithValue("@AccuredCount", b.AccuredCount);
+                cmd.Parameters.AddWithValue("@BurnedCount", b.WrittenOffCount);
+                cmd.Parameters.AddWithValue("@WrittenOffCount", b.BurnedCount);
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    retValue.Message = ex.Message;
+                    return retValue;
+                }
+
+                cnn.Close();
+            }
+
+            retValue.ErrorCode = 0;
+            return retValue;
+        }
+    }
+
+    public class CheckImport
+    {
+        /// <summary>
+        /// Телефон
+        /// </summary>
+        public Int64 Phone { get; set; }
+        /// <summary>
+        /// Номер кары
+        /// </summary>
+        public Int64 Card { get; set; }
+        /// <summary>
+        /// Торговая точка
+        /// </summary>
+        public string Address { get; set; }
+        /// <summary>
+        /// Операция (0 - Возврат, 1 - Покупка)
+        /// </summary>
+        public int Operation { get; set; }
+
+        /// <summary>
+        /// Дата операции
+        /// </summary>
+        public DateTime Date { get; set; }
+        /// <summary>
+        /// Сумма операции
+        /// </summary>
+        public decimal OpertionSum { get; set; }
+        /// <summary>
+        /// Деньги в кассу
+        /// </summary>
+        public decimal CashSum { get; set; }
+        /// <summary>
+        /// Начислено бонусов
+        /// </summary>
+        public decimal AccuredCount { get; set; }
+        /// <summary>
+        /// Списано бонусов
+        /// </summary>
+        public decimal WrittenOffCount { get; set; }        
+    }
+
+    public class CheckImportRequest
+    {
+        /// <summary>
+        /// файл базы
+        /// </summary>
+        public byte[] ExcelFile { get; set; }
+        /// <summary>
+        /// идентификатор Партнера программы лояльности
+        /// </summary>
+        public Int16 Partner { get; set; }
+        /// <summary>
+        /// идентификатор Оператора программы лояльности
+        /// </summary>
+        public Int16 Operator { get; set; }
+    }
+
+    public class CheckImportResponse
+    {
+        /// <summary>
+        /// успешно
+        /// </summary>
+        public bool Successful { get; set; }
+        /// <summary>
+        /// код ошибки
+        /// </summary>
+        public int ErrorCode { get; set; }
+        /// <summary>
+        /// сообщение об ошибке
+        /// </summary>
+        public string Message { get; set; }
+    }
+
+    public class ServerCheckImportResponse
+    {
+        public CheckImportResponse ProcessRequest(SqlConnection cnn, CheckImportRequest request)
+        {
+            var retValue = new CheckImportResponse();
+
+            string tmpFile = Path.GetTempPath() + "ImportBonus_" + DateTime.Now.ToString("ddMMyyyyHHMMss") + ".xlsx";
+
+            try
+            {
+                File.WriteAllBytes(tmpFile, request.ExcelFile);
+            }
+            catch (Exception ex)
+            {
+                retValue.Message = ex.Message;
+                return retValue;
+            }
+
+            List<CheckImport> checks = new List<CheckImport>();
+            using (var package = new ExcelPackage(new FileInfo(tmpFile)))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
+                for (int i = 2; i <= worksheet.Dimension.End.Row; i++)
+                {
+                    CheckImport check = new CheckImport();
+
+                    // Номер телефона с 9-ки
+                    var objPhone = worksheet.Cells[i, 2].Value;
+                    if (objPhone != null)
+                    {
+                        string phone = objPhone.ToString().Trim();
+                        if (phone.Length == 11)
+                        {
+                            check.Phone = Convert.ToInt64(phone.Substring(1));
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не верный формат заполнения номера телефона";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнен номер телефона";
+                        return retValue;
+                    }
+
+                    // Номер карты
+                    var objCard = worksheet.Cells[i, 3].Value;
+                    if (objCard != null)
+                    {
+                        string card = objCard.ToString().Trim();
+                        if (!String.IsNullOrEmpty(card))
+                        {
+                            check.Card = Convert.ToInt64(card);
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не заполнен номер карты";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнен номер карты";
+                        return retValue;
+                    }
+
+                    // Торговая точка
+                    var objAddress = worksheet.Cells[i, 1].Value;
+                    if (objAddress != null)
+                    {
+                        string address = objAddress.ToString().Trim();
+                        if (!String.IsNullOrEmpty(address))
+                        {
+                            check.Address = address;
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не заполнена торговая точка";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнена торговая точка";
+                        return retValue;
+                    }
+
+                    // Операция (0 - Возврат, 1 - Покупка)
+                    var objOperation = worksheet.Cells[i, 5].Value;
+                    if (objOperation != null)
+                    {
+                        string operation = objOperation.ToString().Trim().ToLower();
+                        if (operation == "возврат")
+                        {
+                            check.Operation = 0;
+                        }
+                        else if (operation == "покупка")
+                        {
+                            check.Operation = 1;
+                        }
+                        else
+                        {
+                            retValue.Message = $"В {i} строке не верно заполнена операция";
+                            return retValue;
+                        }
+                    }
+                    else
+                    {
+                        retValue.Message = $"В {i} строке не заполнена операция";
+                        return retValue;
+                    }
+
+                    // Дата операции
+                    var objDate = worksheet.Cells[i, 4].Value;
+                    if (objDate != null)
+                    {
+                        string date = objDate.ToString().Trim();
+                        if (!String.IsNullOrEmpty(date))
+                        {
+                            check.Date = Convert.ToDateTime(date);
+                        }
+                    }
+
+                    // Сумма операции
+                    var objOpertionSum = worksheet.Cells[i, 6].Value;
+                    if (objOpertionSum != null)
+                    {
+                        string opertionSum = objOpertionSum.ToString().Trim();
+                        if (!String.IsNullOrEmpty(opertionSum))
+                        {
+                            check.OpertionSum = Convert.ToDecimal(opertionSum);
+                        }
+                    }
+
+                    // Деньги в кассу
+                    var objCashSum = worksheet.Cells[i, 7].Value;
+                    if (objCashSum != null)
+                    {
+                        string cashSum = objCashSum.ToString().Trim();
+                        if (!String.IsNullOrEmpty(cashSum))
+                        {
+                            check.CashSum = Convert.ToDecimal(cashSum);
+                        }
+                    }
+
+                    // Начислено
+                    var objAccuredCount = worksheet.Cells[i, 8].Value;
+                    if (objAccuredCount != null)
+                    {
+                        string accuredCount = objAccuredCount.ToString().Trim();
+                        if (!String.IsNullOrEmpty(accuredCount))
+                        {
+                            check.AccuredCount = Convert.ToDecimal(accuredCount);
+                        }
+                    }
+
+                    // Списано
+                    var objWrittenOffCount = worksheet.Cells[i, 9].Value;
+                    if (objWrittenOffCount != null)
+                    {
+                        string writtenOffCount = objWrittenOffCount.ToString().Trim();
+                        if (!String.IsNullOrEmpty(writtenOffCount))
+                        {
+                            check.WrittenOffCount = Convert.ToDecimal(writtenOffCount);
+                        }
+                    }
+
+                    checks.Add(check);
+                }
+            }
+
+            foreach (var c in checks)
+            {
+                cnn.Open();
+
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "CheckAdd";
+
+                try
+                {
+                    //cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    retValue.Message = ex.Message;
+                    return retValue;
+                }
+
+                cnn.Close();
+            }
+
+            retValue.ErrorCode = 0;
+            return retValue;
         }
     }
 
