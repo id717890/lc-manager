@@ -78,7 +78,7 @@ function personData(d) {
     //return '<div>123</div>';
     return '<div>'+
             '<div>'+((d.diagram === null)?"":d.diagram)+'</div>'+
-            '<div><div class="userlist_info_o">'+
+            '<div><div class="userlist_info_o">&nbsp;'+
 		    '<div class="client_list_ifo_h"><div>?<p>Указано общее количество и сумма покупок участника за всё время участия в программе, включающее в себя покупки, по которым был возврат и списанные бонусы, которыми участник оплатил часть покупки. <br/>'+
 	'Важно!<br/>'+
 	'Покупка - это общая сумма оплаченных денег и бонусов.<br/>' +
@@ -106,10 +106,9 @@ function personData(d) {
             ((d.posRegister === undefined)?"-":(d.posRegister))+'</span>'+
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
-            '<div class="userlist_info_t">' +
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Деньги в кассу: </p><span>'+
-            ((d.welcomeBonusDate1 === undefined)?"-":(d.welcomeBonusDate1))+'</span>'+
-            '<span>'+((d.welcomeBonusAmount1 === undefined)?"-":(d.welcomeBonusAmount1+' б.'))+'</span>'+
+            '<div class="userlist_info_t">&nbsp;' +
+            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Деньги в кассу: </p><span></span>'+
+            '<span>'+((d.welcomeBonusAmount1 === undefined)?"0 б.":(d.welcomeBonusAmount1+' б.'))+'</span>'+
             '</div>'+
             '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Бонусы не за покупки: </p><span>'+
             ((d.promoBonusDate === undefined)?"-":(d.promoBonusDate))+'</span>'+
@@ -1429,7 +1428,14 @@ function DialogError(header, message) {
 
 //Вызывает диалог "Успех"
 // param message - текст сообщения для пользователя
-function DialogSuccess(message) {
+function DialogSuccess(message, reload) {
+    if (reload === true || reload === undefined) {
+        $("#btn-cloes-dialog-success-reload").show();
+        $("#btn-cloes-dialog-success-wo-reload").hide();
+    } else if (reload === false) {
+        $("#btn-cloes-dialog-success-reload").hide();
+        $("#btn-cloes-dialog-success-wo-reload").show();
+    }
     $("#dialog_success_message").html(message);
     $("#DialogSuccess").show();
 }

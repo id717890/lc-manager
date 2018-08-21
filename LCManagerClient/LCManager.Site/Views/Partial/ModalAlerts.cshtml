@@ -28,7 +28,10 @@
                 <h3 class="modal_success">УСПЕШНО!</h3>
                 <p class="modal_paragraph" id="dialog_success_message"></p>
             </div>
-            <button class="modal_button" onclick="location.reload();">
+            <button class="modal_button" id="btn-cloes-dialog-success-reload" onclick="location.reload();">
+                Закрыть
+            </button>
+            <button class="modal_button" style="display: none" id="btn-cloes-dialog-success-wo-reload" onclick="$('#DialogSuccess').hide();">
                 Закрыть
             </button>
         </div>

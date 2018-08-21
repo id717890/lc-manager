@@ -821,7 +821,10 @@
                     success: function (response) {
                         if (response.success) {
                             if (response.message !== '') DialogError('Ошибка!', response.message);
-                            else DialogSuccess('Данные о клиенте успешно обновлены!');
+                            else {
+                                document.getElementById("clientChangeWindow").style.display = "none";
+                                DialogSuccess('Данные о клиенте успешно обновлены!', false);
+                            }
                         } else {
                             document.getElementById("clientChangeWindow").style.display = "none";
                             DialogError('Ошибка!', response.message);
@@ -966,10 +969,11 @@
         
         #clientChangeWindow {
             padding-top: 50px;
-        } 
-        
+        }
+
         .modal_client_change_form {
-            padding: 10px !important;
+            padding: 0 10px !important;
+            border-top: 3px solid #fff !important;
         }
 
         .modal_success_dialog {
