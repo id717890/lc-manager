@@ -629,27 +629,38 @@
 </div>
 <div class='modal' id='clientChangeWindow' style="font-size: 14px !important">
     <div class='modal_client_change_form'>
+        <div class="client_body_title">
+            <p>РЕДАКТИРОВАНИЕ КАРТОЧКИ КЛИЕНТА</p>
+        </div>
         <input type="hidden" name="client-id" id="client-id">
         <div class="client_list_ifo_h">
-            <div>?<p>Фамилия</p></div>
+            <div>?
+                <p>Фамилия</p>
+            </div>
             <p>Фамилия: </p>
             <span></span>
             <input type="text" name="last-name" placeholder="Фамилия" class="last-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>Имя</p></div>
+            <div>?
+                <p>Имя</p>
+            </div>
             <p>Имя: </p>
             <span></span>
             <input type="text" name="first-name" placeholder="Имя" class="first-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>Отчество</p></div>
+            <div>?
+                <p>Отчество</p>
+            </div>
             <p>Отчество: </p>
             <span></span>
             <input type="text" name="middle-name" placeholder="Отчество" class="middle-name">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>Дата рождения</p></div>
+            <div>?
+                <p>Дата рождения</p>
+            </div>
             <p>Дата рождения: </p>
             <span></span>
             <input type="text" name="birthday" class="birthday datepicker">
@@ -670,7 +681,9 @@
                 <option value="-1">Женский</option>
             </select>*@
         <div class="client_list_ifo_h2">
-            <div class="i2">?<p>Пол</p></div>
+            <div class="i2">?
+                <p>Пол</p>
+            </div>
             <p>Пол: </p>
             <span></span>
             <select class="select gender">
@@ -682,27 +695,35 @@
 
 
         <div class="client_list_ifo_h">
-            <div>?<p>Телефон</p></div>
+            <div>?
+                <p>Телефон</p>
+            </div>
             <p>Телефон: </p>
             <span></span>
             <input type="text" name="phone-initial" class="phone-initial" hidden>
             <input type="text" name="phone" placeholder="телефон" class="phone">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>Email</p></div>
+            <div>?
+                <p>Email</p>
+            </div>
             <p>Email: </p>
             <span></span>
             <input type="text" name="email-initial" class="email-initial" hidden>
             <input type="text" name="email" placeholder="Email" class="email">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>% поощрения</p></div>
+            <div>?
+                <p>% поощрения</p>
+            </div>
             <p>% поощрения: </p>
             <span></span>
             <input type="text" name="level" placeholder="% поощрения" class="level">
         </div>
         <div class="client_list_ifo_h">
-            <div>?<p>Номер карты</p></div>
+            <div>?
+                <p>Номер карты</p>
+            </div>
             <p>Номер карты: </p>
             <span></span>
             <input type="text" name="card-initial" class="card-initial" hidden>
@@ -715,7 +736,9 @@
                 <input type="text" name="status" placeholder="status" class="status">
             </div>*@
         <div class="client_list_ifo_h2">
-            <div class="i2">?<p>Статус карты</p></div>
+            <div class="i2">?
+                <p>Статус карты</p>
+            </div>
             <p>Статус карты: </p>
             <span></span>
             <select class="select status-card">
@@ -742,7 +765,9 @@
         </div>
 
         <div class="client_list_ifo_h2" style="display: flex; flex-flow: row; justify-content: flex-end; align-items: center">
-            <div class="i2" style="margin-top: 0">?<p>123123</p></div>
+            <div class="i2" style="margin-top: 0">?
+                <p>123123</p>
+            </div>
             <a href="#" id="save-client-data">Сохранить</a>
         </div>
     </div>
@@ -796,12 +821,15 @@
                     success: function (response) {
                         if (response.success) {
                             if (response.message !== '') DialogError('Ошибка!', response.message);
-                            else DialogSuccess('Данные о клиенте (ФИО, дата рождения, пол, email) успешно обновлены! Поля телефон, номер карты, % пооощерния находятся в разработке');
+                            else DialogSuccess('Данные о клиенте успешно обновлены!');
                         } else {
+                            document.getElementById("clientChangeWindow").style.display = "none";
                             DialogError('Ошибка!', response.message);
                         }
                     },
                     error: function (response) {
+                        document.getElementById("clientChangeWindow").style.display = "none";
+                        //$("#clientChangeWindow").css("display", "none !important");
                         DialogError('Ошибка!', response.message);
                     }
                 });
@@ -816,7 +844,7 @@
                     dataType: "json",
                     success: function (response) {
                         if (!response.ErrorCode || (response.ErrorCode && response.ErrorCode === 0)) {
-                            console.log(response);
+                            //console.log(response);
                             var window = document.getElementById("clientChangeWindow");
                             window.style.display = "block";
 
@@ -953,9 +981,19 @@
             width: auto !important;
         }
 
-        /*.modal_client_change_form input {
-            margin-left: 10px
-        }*/
+        .modal_client_change_form input {
+            position: relative;
+            top: -3px;
+        }
+
+        .modal_client_change_form .nice-select.gender {
+            top: -3px;
+        }
+
+        .modal_client_change_form .client_list_ifo_h2 > p,
+        .modal_client_change_form .client_list_ifo_h2 > span {
+            height: 21px;
+        }
     </style>
 }
 
