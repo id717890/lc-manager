@@ -79,7 +79,7 @@ function personData(d) {
     //return '<div>123</div>';
     return '<div>'+
             '<div>'+((d.diagram === null)?"":d.diagram)+'</div>'+
-            '<div><div class="userlist_info_o">&nbsp;'+
+            '<div><div class="userlist_info_o"><h3>Дополнительная информация: </h3>'+
 		    '<div class="client_list_ifo_h"><div>?<p>Указано общее количество и сумма покупок участника за всё время участия в программе, включающее в себя покупки, по которым был возврат и списанные бонусы, которыми участник оплатил часть покупки. <br/>'+
 	'Важно!<br/>'+
 	'Покупка - это общая сумма оплаченных денег и бонусов.<br/>' +
@@ -107,20 +107,20 @@ function personData(d) {
             ((d.posRegister === undefined)?"-":(d.posRegister))+'</span>'+
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
-            '<div class="userlist_info_t">&nbsp;' +
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Деньги в кассу: </p><span></span>'+
+            '<div class="userlist_info_t"><h3>Дополнительная информация: </h3>' +
+            '<div class="client_list_ifo_h"><div>?<p>Общее количество денег, которые потратил участник программы лояльности за весь период участия.</p></div><p>Деньги в кассу: </p><span></span>'+
             '<span>' + ((d.buyAmount === undefined && d.refunds === undefined) ? "0 руб." : (d.buyAmount - d.refund+' руб.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Бонусы не за покупки: </p><span></span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Общее количество бонусов не за покупки, которые были начислены участнику программы лояльности. Бонусы, которые сгорели или списаны Оператором программы вычитаются из этого показателя.</p></div><p>Бонусы не за покупки: </p><span></span>'+
             '<span>' + ((d.bonusesNotForBuy === undefined) ? "-" : (d.bonusesNotForBuy+' б.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Друзей привёл: </p><span></span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Количество новых участников программы, которых привлёк по своим рекомендациям данный участник.</p></div><p>Друзей привёл: </p><span></span>'+
             '<span>'+((d.operatorBonusAmount === undefined)?"-":' 0 чел.')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус клиента: </p><span></span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Критерий активности участника в программе лояльности.</p></div><p>Статус клиента: </p><span></span>'+
             '<span>'+((d.friendBonusAmount === undefined)?"-":' Активный')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус карты: </p><span></span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Текущий статус пластиковой или виртуальной карты участника программы лояльности. </p></div><p>Статус карты: </p><span></span>'+
             '<span>' + ((d.cardStatus === undefined) ? "-" : d.cardStatus)+'</span>'+
             '</div></div><div class="userlist_info_actions">' +
             '<a href="#" onclick="showClientChangeModalWindow(' + d.card +')" class="actions">Профиль</a>'+

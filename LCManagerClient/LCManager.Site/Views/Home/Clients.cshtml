@@ -630,7 +630,7 @@
 <div class='modal' id='clientChangeWindow' style="font-size: 14px !important">
     <div class='modal_client_change_form'>
         <div class="client_body_title">
-            <p>РЕДАКТИРОВАНИЕ КАРТОЧКИ КЛИЕНТА</p>
+            <p style="margin-bottom: 25px">РЕДАКТИРОВАНИЕ ПРОФИЛЯ УЧАСТНИКА ПРОГРАММЫ</p>
         </div>
         <input type="hidden" name="client-id" id="client-id">
         <div class="client_list_ifo_h">
@@ -718,7 +718,7 @@
             </div>
             <p>% поощрения: </p>
             <span></span>
-            <input type="text" name="level" placeholder="% поощрения" class="level">
+            <input type="text" name="level" placeholder="% поощрения" class="level" disabled>
         </div>
         <div class="client_list_ifo_h">
             <div>?
@@ -727,7 +727,7 @@
             <p>Номер карты: </p>
             <span></span>
             <input type="text" name="card-initial" class="card-initial" hidden>
-            <input type="text" name="card" placeholder="Номер карты" class="card">
+            <input type="text" name="card" placeholder="Номер карты" class="card" disabled>
         </div>
         @*<div class="client_list_ifo_h">
                 <div>?<p>123123</p></div>
@@ -968,12 +968,12 @@
         }
         
         #clientChangeWindow {
-            padding-top: 50px;
+            padding-top: 35px;
         }
 
         .modal_client_change_form {
-            padding: 0 10px !important;
-            border-top: 3px solid #fff !important;
+            padding: 0 10px 10px !important;
+            /*border-top: 3px solid #fff !important;*/
         }
 
         .modal_success_dialog {
@@ -982,7 +982,7 @@
 
         .modal_uspeh {
             height: auto !important;
-            width: auto !important;
+            /*width: auto !important;*/
         }
 
         .modal_client_change_form input {

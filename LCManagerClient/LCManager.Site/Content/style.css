@@ -12562,7 +12562,7 @@ select {
     padding-top: 35px;
     padding-left: 38px;
     padding-bottom: 21px;
-    width: 362px;
+    max-width: 220px;
     height: auto;
     margin: auto;
 }
@@ -12739,8 +12739,8 @@ select {
 #save-client-data,
 .userlist_info_actions .actions {
     font-family: "a_Futurica",sans-serif;
-    font-size: 15px;
-    padding: 8px 22px;
+    font-size: 14px;
+    padding: 7px 22px;
     text-decoration: none;
     border-radius: 20px;
     border: none;
@@ -12750,7 +12750,7 @@ select {
 }
 
 .userlist_info_actions .actions {
-    margin: 3px 0;
+    margin: 2px 0;
     text-align: center;
 }
     /* END Modal window client change*/
