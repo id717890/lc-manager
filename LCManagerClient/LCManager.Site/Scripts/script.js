@@ -123,7 +123,7 @@ function personData(d) {
             '<div class="client_list_ifo_h"><div>?<p>Текущий статус пластиковой или виртуальной карты участника программы лояльности. </p></div><p>Статус карты: </p><span></span>'+
             '<span>' + ((d.cardStatus === undefined) ? "-" : d.cardStatus)+'</span>'+
             '</div></div><div class="userlist_info_actions">' +
-            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +')" class="actions">Профиль</a>'+
+            '<a href="#" style="margin-top: 19px" onclick="showClientChangeModalWindow(' + d.card +')" class="actions">Профиль</a>'+
             '<a href="#" class="actions" onclick="showBuysModalWindow(this); return false">Покупки</a>'+
             '<a href="#" class="actions" onclick="showBonusesModalWindow(); return false;">Бонусы</a>' +
             '<a href="#" class="actions">Маркетинг</a>' +
