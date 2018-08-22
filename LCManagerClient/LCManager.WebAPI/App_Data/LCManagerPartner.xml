@@ -5125,6 +5125,11 @@
             сумма возвратов
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.CardStatus">
+            <summary>
+            статус карты
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.Operator">
             <summary>
             идентификатор Оператора программы лояльности

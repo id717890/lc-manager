@@ -75,6 +75,7 @@ function showBonusesModalWindow() {
 };
 
 function personData(d) {
+    console.log(d)
     //return '<div>123</div>';
     return '<div>'+
             '<div>'+((d.diagram === null)?"":d.diagram)+'</div>'+
@@ -108,23 +109,19 @@ function personData(d) {
             '</div></div>'+
             '<div class="userlist_info_t">&nbsp;' +
             '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Деньги в кассу: </p><span></span>'+
-            '<span>'+((d.welcomeBonusAmount1 === undefined)?"0 б.":(d.welcomeBonusAmount1+' б.'))+'</span>'+
+            '<span>' + ((d.buyAmount === undefined && d.refunds === undefined) ? "0 руб." : (d.buyAmount - d.refund+' руб.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Бонусы не за покупки: </p><span>'+
-            ((d.promoBonusDate === undefined)?"-":(d.promoBonusDate))+'</span>'+
-            '<span>'+((d.promoBonusAmount === undefined)?"-":(d.promoBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Бонусы не за покупки: </p><span></span>'+
+            '<span>' + ((d.bonusesNotForBuy === undefined) ? "-" : (d.bonusesNotForBuy+' б.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Друзей привёл: </p><span>'+
-            ((d.opperatorBonusDate === undefined)?"-":(d.opperatorBonusDate))+'</span>'+
-            '<span>'+((d.operatorBonusAmount === undefined)?"-":(d.operatorBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Друзей привёл: </p><span></span>'+
+            '<span>'+((d.operatorBonusAmount === undefined)?"-":' 0 чел.')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус клиента: </p><span>'+
-            ((d.friendBonusDate === undefined)?"-":(d.friendBonusDate))+'</span>'+
-            '<span>'+((d.friendBonusAmount === undefined)?"-":(d.friendBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус клиента: </p><span></span>'+
+            '<span>'+((d.friendBonusAmount === undefined)?"-":' Активный')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус карты: </p><span>'+
-            ((d.birthdayBonusDate === undefined)?"-":(d.birthdayBonusDate))+'</span>'+
-            '<span>'+((d.birthdayBonusAmount === undefined)?"-":(d.birthdayBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Статус карты: </p><span></span>'+
+            '<span>' + ((d.cardStatus === undefined) ? "-" : d.cardStatus)+'</span>'+
             '</div></div><div class="userlist_info_actions">' +
             '<a href="#" onclick="showClientChangeModalWindow(' + d.card +')" class="actions">Профиль</a>'+
             '<a href="#" class="actions" onclick="showBuysModalWindow(this); return false">Покупки</a>'+
