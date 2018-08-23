@@ -540,6 +540,8 @@ namespace LC_Manager.Models
 
         public List<Bonus> Bonuses { get; set; }
 
+        public string CardStatus { get; set; }
+
         public OperatorClientsManagerBuys()
         {
             CardBuys = new List<CardBuysByMonth>();
@@ -650,7 +652,11 @@ namespace LC_Manager.Models
 
         public decimal refund { get; set; }
 
-        public string diagram { get; set; }        
+        public string diagram { get; set; }
+        
+        public string cardStatus { get; set; }
+
+        public decimal bonusesNotForBuy { get; set; }
     }
 
     public class clientdata

@@ -23,5 +23,6 @@ namespace LCManager.Infrastructure.Response
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
         public string Promocode { get; set; }
+        public bool AllowPush { get; set; }
     }
 }

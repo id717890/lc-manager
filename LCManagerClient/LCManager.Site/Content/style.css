@@ -4342,7 +4342,7 @@ select {
 }
 .userlist_info_o, .userlist_info_t {
     margin-left: 2%;
-    width: 48%;
+    width: 40%;
     float: left;
     margin-top: -50px;
 }
@@ -4352,6 +4352,16 @@ select {
         color: #58afdd;
         font-weight: 100;
     }
+
+.userlist_info_actions {
+    width: auto;
+    margin-top: -25px;
+    float: left;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+}
+
 .client_list_ifo_h,
 .client_list_ifo_h2 {
     width: 100%;
@@ -12552,7 +12562,7 @@ select {
     padding-top: 35px;
     padding-left: 38px;
     padding-bottom: 21px;
-    width: 362px;
+    max-width: 220px;
     height: auto;
     margin: auto;
 }
@@ -12697,23 +12707,62 @@ select {
     padding-right: 45px;
     padding-bottom: 21px;
     width: 450px;
-    height: 400px;
+    height: auto;
     margin: auto;
     border: 20px solid #fff;
 }
-/* END Modal window client change*/
 
+    .modal_client_change_form .nice-select {
+        width: 161px;
+    }
 
+    .modal_client_change_form input {
+        font-family: "a_Futurica",sans-serif;
+        height: 20px;
+        border-radius: 5px;
+        border: solid 1px #c6ccd2;
+        /*border: none;*/
+        /*border-bottom: solid 1px #dce0e3;*/
+        /*margin: 5px;*/
+        font-size: 15px;
+        padding: 5px;
+        width: 150px;
+        /*margin-left: 0px;*/
+        /*text-align: right;*/
+    }
 
-/**календарь**/
-.ui-datepicker.ui-widget.ui-widget-content{
-    padding: 0;
-    border-radius: 15px;
-    margin-top: 15px;
-    padding-bottom: 5px;
-    box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.4);
-    background: #fafafa;
+        .modal_client_change_form input:focus {
+            outline: none;
+            border: solid 1px #58afdd;
+        }
+
+#save-client-data,
+.userlist_info_actions .actions {
+    font-family: "a_Futurica",sans-serif;
+    font-size: 14px;
+    padding: 7px 22px;
+    text-decoration: none;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    background: #4396c3;
+    cursor: pointer;
 }
+
+.userlist_info_actions .actions {
+    margin: 2px 0;
+    text-align: center;
+}
+    /* END Modal window client change*/
+    /**календарь**/
+    .ui-datepicker.ui-widget.ui-widget-content {
+        padding: 0;
+        border-radius: 15px;
+        margin-top: 15px;
+        padding-bottom: 5px;
+        box-shadow: 0px 0px 5px 2px rgba(128, 128, 128, 0.4);
+        background: #fafafa;
+    }
 .ui-datepicker-title{
     position: relative;
 }

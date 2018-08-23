@@ -75,11 +75,11 @@ function showBonusesModalWindow() {
 };
 
 function personData(d) {
+    console.log(d)
     //return '<div>123</div>';
     return '<div>'+
             '<div>'+((d.diagram === null)?"":d.diagram)+'</div>'+
-            '<div><div class="userlist_info_o">'+
-            '<h3><a href="#" id="additionalInformation" onclick="showBuysModalWindow(this); return false" style="text-decoration: none; color: #58afdd;">Дополнительная информация:</a></h3>'+
+            '<div><div class="userlist_info_o"><h3>Дополнительная информация: </h3>'+
 		    '<div class="client_list_ifo_h"><div>?<p>Указано общее количество и сумма покупок участника за всё время участия в программе, включающее в себя покупки, по которым был возврат и списанные бонусы, которыми участник оплатил часть покупки. <br/>'+
 	'Важно!<br/>'+
 	'Покупка - это общая сумма оплаченных денег и бонусов.<br/>' +
@@ -107,29 +107,29 @@ function personData(d) {
             ((d.posRegister === undefined)?"-":(d.posRegister))+'</span>'+
             '<span>'+((d.dateRegister === undefined)?"-":(d.dateRegister))+'</span>'+
             '</div></div>'+
-            '<div class="userlist_info_t"><h3><a href="#" onclick="showBonusesModalWindow(); return false;" style="text-decoration: none; color: #58afdd;">Бонусы не за покупки:</a>' +
-            '<a href="#" onclick="showClientChangeModalWindow(' + d.card +'); return false;" style="text-decoration: none; color: #58afdd; display: none;">Редактирование карточки клиента</a></h3>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Welcome: </p><span>'+
-            ((d.welcomeBonusDate === undefined)?"-":(d.welcomeBonusDate))+'</span>'+
-            '<span>'+((d.welcomeBonusAmount === undefined)?"-":(d.welcomeBonusAmount+' б.'))+'</span>'+
+            '<div class="userlist_info_t"><h3>Дополнительная информация: </h3>' +
+            '<div class="client_list_ifo_h"><div>?<p>Общее количество денег, которые потратил участник программы лояльности за весь период участия.</p></div><p>Деньги в кассу: </p><span></span>'+
+            '<span>' + ((d.buyAmount === undefined && d.refunds === undefined) ? "0 руб." : (d.buyAmount - d.refund+' руб.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Promo: </p><span>'+
-            ((d.promoBonusDate === undefined)?"-":(d.promoBonusDate))+'</span>'+
-            '<span>'+((d.promoBonusAmount === undefined)?"-":(d.promoBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Общее количество бонусов не за покупки, которые были начислены участнику программы лояльности. Бонусы, которые сгорели или списаны Оператором программы вычитаются из этого показателя.</p></div><p>Бонусы не за покупки: </p><span></span>'+
+            '<span>' + ((d.bonusesNotForBuy === undefined) ? "-" : (d.bonusesNotForBuy+' б.'))+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Operator: </p><span>'+
-            ((d.opperatorBonusDate === undefined)?"-":(d.opperatorBonusDate))+'</span>'+
-            '<span>'+((d.operatorBonusAmount === undefined)?"-":(d.operatorBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Количество новых участников программы, которых привлёк по своим рекомендациям данный участник.</p></div><p>Друзей привёл: </p><span></span>'+
+            '<span>'+((d.operatorBonusAmount === undefined)?"-":' 0 чел.')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Friend: </p><span>'+
-            ((d.friendBonusDate === undefined)?"-":(d.friendBonusDate))+'</span>'+
-            '<span>'+((d.friendBonusAmount === undefined)?"-":(d.friendBonusAmount+' б.'))+'</span>'+
+            '<div class="client_list_ifo_h"><div>?<p>Критерий активности участника в программе лояльности.</p></div><p>Статус клиента: </p><span></span>'+
+            '<span>'+((d.friendBonusAmount === undefined)?"-":' Активный')+'</span>'+
             '</div>'+
-            '<div class="client_list_ifo_h"><div>?<p>123123</p></div><p>Birthday: </p><span>'+
-            ((d.birthdayBonusDate === undefined)?"-":(d.birthdayBonusDate))+'</span>'+
-            '<span>'+((d.birthdayBonusAmount === undefined)?"-":(d.birthdayBonusAmount+' б.'))+'</span>'+
-            '</div></div></div>'+
-    '</div>';
+            '<div class="client_list_ifo_h"><div>?<p>Текущий статус пластиковой или виртуальной карты участника программы лояльности. </p></div><p>Статус карты: </p><span></span>'+
+            '<span>' + ((d.cardStatus === undefined) ? "-" : d.cardStatus)+'</span>'+
+            '</div></div><div class="userlist_info_actions">' +
+            '<a href="#" style="margin-top: 19px" onclick="showClientChangeModalWindow(' + d.card +')" class="actions">Профиль</a>'+
+            '<a href="#" class="actions" onclick="showBuysModalWindow(this); return false">Покупки</a>'+
+            '<a href="#" class="actions" onclick="showBonusesModalWindow(); return false;">Бонусы</a>' +
+            '<a href="#" class="actions">Маркетинг</a>' +
+            '<a href="#" class="actions">Корзина</a>'
+            + '</div></div>' +
+            '</div>';
 }
 function stockData(d){
     return '<div>'+
@@ -1425,7 +1425,14 @@ function DialogError(header, message) {
 
 //Вызывает диалог "Успех"
 // param message - текст сообщения для пользователя
-function DialogSuccess(message) {
+function DialogSuccess(message, reload) {
+    if (reload === true || reload === undefined) {
+        $("#btn-cloes-dialog-success-reload").show();
+        $("#btn-cloes-dialog-success-wo-reload").hide();
+    } else if (reload === false) {
+        $("#btn-cloes-dialog-success-reload").hide();
+        $("#btn-cloes-dialog-success-wo-reload").show();
+    }
     $("#dialog_success_message").html(message);
     $("#DialogSuccess").show();
 }

@@ -274,6 +274,7 @@
     <Compile Include="Implementation\Services\BonusService.cs" />
     <Compile Include="Implementation\Services\BookkeepingService.cs" />
     <Compile Include="Implementation\Services\CardService.cs" />
+    <Compile Include="Implementation\Services\ClientService.cs" />
     <Compile Include="Implementation\Services\GoodService.cs" />
     <Compile Include="Implementation\Services\PosService.cs" />
     <Compile Include="Implementation\Services\RefreshTokenService.cs" />

@@ -966,7 +966,8 @@
                             writeOffCount = c.BonusRedeemQty,
                             refund = c.Refund,
                             refundQty = c.RefundQty,
-                            posRegister = c.PosRegister
+                            posRegister = c.PosRegister,
+                            cardStatus = c.CardStatus
                         };
                         if (c.BirthDate > new DateTime(1900, 01, 01))
                         {
@@ -1101,6 +1102,7 @@
                         //string clientBonuses = "[{ \"date\":\"<p>12.02.2018</p> <p>00:34</p>\",\"bonustype\":\"Возврат\",\"added\":\"0\",\"redeemed\":\"20\",\"burn\":\"50\"}]";
                         //string clientBonuses2 = JsonConvert.SerializeObject(c.Bonuses);
                         string clientBonuses = "";
+                        decimal clientBonusesNotForBuy = 0;
                         if (c.Bonuses.Count > 0)
                         {
                             clientBonuses = "[";
@@ -1114,6 +1116,7 @@
                                                "\",\"BonusRedeemed\":\"" + c.Bonuses[i].BonusRedeemed.ToString() +
                                                "\",\"BonusBurn\":\"" + c.Bonuses[i].BonusBurn.ToString() + "\"}";
                                 clientBonuses += bonus;
+                                clientBonusesNotForBuy += c.Bonuses[i].BonusAdded;
                                 if (i < n - 1)
                                 {
                                     clientBonuses += ",";
@@ -1125,6 +1128,7 @@
                         {
                             clientBonuses = "[]";
                         }
+                        client.bonusesNotForBuy = clientBonusesNotForBuy;
                         client.diagram = @"<div class='line-chart-bl'>
                                             <div class='line-chart__head'>
                                                 <div id='line-chart-leg' class='line-chart-leg'>

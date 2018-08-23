@@ -798,6 +798,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="M:LCManagerPartner.Controllers.ClientController.CheckEmailForFree(LCManager.Infrastructure.Request.ClientEmailIsFreeRequest)">
+            <summary>
+            Проверяет принадлежит ли email какому-либо участнику ПЛ
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="M:LCManagerPartner.Controllers.PosController.OperatorPos(LCManagerPartner.Implementation.Request.OperatorPosRequest)">
             <summary>
             Выборка адресов торговых точек Оператора
@@ -1707,6 +1714,13 @@
         <member name="M:LCManagerPartner.Implementation.Services.CardService.GetCard(LCManager.Infrastructure.Request.CardStatisticsRequest)">
             <summary>
             Получает базовую инфу по карте ПЛ (статус, тип, оператор, баланс, кол-во покупок, сумма покупок, кол-во начисленных бонусов, кол-во списанных бонусов
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LCManagerPartner.Implementation.Services.ClientService.CheckEmailForFree(LCManager.Infrastructure.Request.ClientEmailIsFreeRequest)">
+            <summary>
+            Проверяет принадлежит ли email какому-либо участнику ПЛ
             </summary>
             <param name="request"></param>
             <returns></returns>
@@ -3561,6 +3575,11 @@
             сообщение об ошибке
             </summary>
         </member>
+        <member name="P:LCManagerPartner.Models.GetClientInfoResponse.AllowPush">
+            <summary>
+            Прислыать push уведомления?
+            </summary>
+        </member>
         <member name="P:LCManagerPartner.Models.GetClientInfoArrayResponse.ErrorCode">
             <summary>
             код ошибки
@@ -5104,6 +5123,11 @@
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.Refund">
             <summary>
             сумма возвратов
+            </summary>
+        </member>
+        <member name="P:LCManagerPartner.Models.OperatorClientsManagerBuys.CardStatus">
+            <summary>
+            статус карты
             </summary>
         </member>
         <member name="P:LCManagerPartner.Models.OperatorClientsManagerRequest.Operator">

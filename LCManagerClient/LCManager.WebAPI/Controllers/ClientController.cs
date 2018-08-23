@@ -8,20 +8,28 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using LCManager.Infrastructure.Request;
+using LCManager.Infrastructure.Response;
 using LCManagerPartner.Implementation.Request;
-using LCManagerPartner.Implementation.Response;
 using LCManagerPartner.Implementation.Services;
+using Serilog;
 using AddEmailRequest = LCManagerPartner.Models.AddEmailRequest;
 using AddPhoneRequest = LCManagerPartner.Models.AddPhoneRequest;
+using BonusesNotForPurchasesResponse = LCManagerPartner.Implementation.Response.BonusesNotForPurchasesResponse;
 using CardBonusesRequest = LCManagerPartner.Models.CardBonusesRequest;
+using CardBonusesResponse = LCManagerPartner.Models.CardBonusesResponse;
 using CardStatisticsRequest = LCManagerPartner.Models.CardStatisticsRequest;
+using CardStatisticsResponse = LCManagerPartner.Models.CardStatisticsResponse;
 using ChangeClientRequest = LCManagerPartner.Models.ChangeClientRequest;
 using ClientBonusesRequest = LCManagerPartner.Models.ClientBonusesRequest;
+using ClientBonusesResponse = LCManagerPartner.Models.ClientBonusesResponse;
 using ClientCreateRequest = LCManagerPartner.Models.ClientCreateRequest;
+using ClientCreateResponse = LCManagerPartner.Models.ClientCreateResponse;
 using ClientPasswordChangeRequest = LCManagerPartner.Models.ClientPasswordChangeRequest;
 using GetClientInfoRequest = LCManagerPartner.Models.GetClientInfoRequest;
+using GetClientInfoResponse = LCManagerPartner.Models.GetClientInfoResponse;
 using GetConfirmCodeRequest = LCManagerPartner.Models.GetConfirmCodeRequest;
 using GetRegistrationUserRequest = LCManagerPartner.Models.GetRegistrationUserRequest;
+using GetRegistrationUserResponse = LCManagerPartner.Models.GetRegistrationUserResponse;
 using GetSendVerificationCodeRequest = LCManagerPartner.Models.GetSendVerificationCodeRequest;
 using SendEmailCodeRequest = LCManagerPartner.Models.SendEmailCodeRequest;
 using SetClientPasswordRequest = LCManagerPartner.Models.SetClientPasswordRequest;
@@ -37,10 +45,12 @@ namespace LCManagerPartner.Controllers
         SqlConnection cnn = new SqlConnection(connectionString);
 
         private readonly BonusService _bonusService;
+        private readonly ClientService _clientService;
 
         public ClientController()
         {
             _bonusService=new BonusService();
+            _clientService=new ClientService();
         }
 
         //Дублирующиеся методы: GetConfirmCode, SetClientPassword, GetRegistrationUser, GetSendVerificationCode, ClientLogin, GetCheques, GetClient, ChangeClient, BalanceGet
@@ -537,5 +547,19 @@ namespace LCManagerPartner.Controllers
         {
             return _bonusService.GetBonusesNotForPurchases(request);
         }
+
+        /// <summary>
+        /// Проверяет принадлежит ли email какому-либо участнику ПЛ
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CheckEmailForFree")]
+        public ClientEmailIsFreeResponse CheckEmailForFree(ClientEmailIsFreeRequest request)
+        {
+            Log.Information("LCManagerPartner ClientEmailIsFree {email}", request.Email);
+            return _clientService.CheckEmailForFree(request);
+        }
+
     }
 }

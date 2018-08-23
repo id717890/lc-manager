@@ -2449,6 +2449,10 @@ namespace LCManagerPartner.Models
         public bool EmailValidated { get; set; }
         public DateTime RegDate { get; set; }
         public string Promocode { get; set; }
+        /// <summary>
+        /// Прислыать push уведомления?
+        /// </summary>
+        public bool AllowPush { get; set; }
     }
 
     public class ServerGetClientInfoResponse
@@ -2507,6 +2511,7 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(16)) returnValue.EmailValidated = reader.GetBoolean(16);
                     if (!reader.IsDBNull(17)) returnValue.RegDate = reader.GetDateTime(17);
                     if (!reader.IsDBNull(18)) returnValue.Promocode = reader.GetString(18);
+                    if (!reader.IsDBNull(19)) returnValue.AllowPush = reader.GetBoolean(19);
                 }
 
                 returnValue.ErrorCode = Convert.ToInt32(cmd.Parameters["@result"].Value);
@@ -6362,6 +6367,11 @@ namespace LCManagerPartner.Models
         /// сумма возвратов
         /// </summary>
         public decimal Refund { get; set; }
+        /// <summary>
+        /// статус карты
+        /// </summary>
+        public string CardStatus { get; set; }
+
 
         public List<CardBuysByMonth> CardBuys { get; set; }
 
@@ -6540,6 +6550,7 @@ namespace LCManagerPartner.Models
                     if (!reader.IsDBNull(27)) clientBuys.DateRegister = reader.GetDateTime(27);
                     if (!reader.IsDBNull(28)) clientBuys.RefundQty = reader.GetInt32(28);
                     if (!reader.IsDBNull(29)) clientBuys.Refund = reader.GetDecimal(29);
+                    if (!reader.IsDBNull(30)) clientBuys.CardStatus = reader.GetString(30);
                     returnValue.OperatorClients.Add(clientBuys);
                 }
                 reader.Close();
